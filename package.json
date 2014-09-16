@@ -1,0 +1,20 @@
+{
+  "name": "tasktorch-db",
+  "version": "0.1.0",
+  "description": "tasktorch data access",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tasktorch/db.git"
+  },
+  "author": {
+    "name": "Nate Kohari",
+    "email": "nate@tasktorch.com"
+  },
+  "dependencies": {
+    "coffee-script": "1.8.0",
+    "collections": "1.2.1",
+    "lodash": "2.4.1",
+    "rethinkdb": "1.14.0-0"
+  },
+  "devDependencies": {}
+}
