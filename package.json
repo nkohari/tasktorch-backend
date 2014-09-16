@@ -13,8 +13,17 @@
   "dependencies": {
     "coffee-script": "1.8.0",
     "collections": "1.2.1",
+    "forge-di": "0.9.3",
+    "glob": "4.0.5",
+    "hapi": "6.8.1",
+    "humanize": "0.0.9",
     "lodash": "2.4.1",
-    "rethinkdb": "1.14.0-0"
+    "rethinkdb": "1.14.0-0",
+    "winston": "0.8.0"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha",
+    "prepublish": "for LINK in 'common' 'data' 'http'; do ln -snf `pwd`/src/$LINK ./node_modules/$LINK; done"
+  }
 }
