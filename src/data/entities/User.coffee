@@ -1,4 +1,4 @@
-Entity = require './framework/Entity'
+Entity = require '../framework/Entity'
 
 class User extends Entity
 
@@ -7,6 +7,6 @@ class User extends Entity
   @field 'id', Entity.DataType.STRING
   @field 'email', Entity.DataType.STRING
   @field 'name', Entity.DataType.STRING
-  @field 'property', Entity.DataType.STRING
+  @field 'password', Entity.DataType.STRING
 
 module.exports = User

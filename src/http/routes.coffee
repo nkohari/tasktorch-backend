@@ -1,7 +1,8 @@
 module.exports =
 
   '/organizations/{organizationId}/cards':
-    post: 'CardResource.create'
+    get:    'CardResource.search'
+    post:   'CardResource.create'
 
   '/organizations/{organizationId}/cards/{cardId}':
     get:    'CardResource.get'

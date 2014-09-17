@@ -1,4 +1,4 @@
-Entity = require './framework/Entity'
+Entity = require '../framework/Entity'
 
 class Organization extends Entity
 

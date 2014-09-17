@@ -1,4 +1,4 @@
-Enum = require 'tasktorch/common/util/enum'
+Enum = require 'common/Enum'
 
 DataType = Enum [
   'UUID',

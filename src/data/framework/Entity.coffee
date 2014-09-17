@@ -2,8 +2,8 @@ _           = require 'lodash'
 Field       = require './properties/Field'
 HasOne      = require './properties/HasOne'
 HasMany     = require './properties/HasMany'
-DataType    = require '../../enums/DataType'
-EntityState = require '../../enums/EntityState'
+DataType    = require '../enums/DataType'
+EntityState = require '../enums/EntityState'
 
 propertyDeclarator = (kind) ->
   return (name, type, options = {}) ->

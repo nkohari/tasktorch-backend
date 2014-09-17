@@ -1,4 +1,4 @@
-Enum = require 'common/util/enum'
+Enum = require 'common/Enum'
 
 EntityState = Enum [
   'ACTIVE',

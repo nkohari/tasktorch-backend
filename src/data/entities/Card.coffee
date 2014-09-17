@@ -1,4 +1,4 @@
-Entity       = require './framework/Entity'
+Entity       = require '../framework/Entity'
 Organization = require './Organization'
 User         = require './User'
 

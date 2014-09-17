@@ -3,15 +3,13 @@ Query = require './Query'
 
 class SecondaryIndexQuery extends Query
 
-  constructor: (@type, @index, @value) ->
+  constructor: (type, @index, @value) ->
+    super(type)
 
   buildStatement: ->
     r.table(@type.table)
       .getAll @value, {@index}
       .limit(1)
-
-  mapResult: (result) ->
-    new @type(result)
 
   execute: (conn, callback) ->
     statement = @getStatement()

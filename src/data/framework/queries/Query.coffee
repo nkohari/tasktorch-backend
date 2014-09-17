@@ -1,19 +1,19 @@
+_       = require 'lodash'
 async   = require 'async'
 r       = require 'rethinkdb'
-_       = require 'lodash'
-HasOne  = require 'common/data/entities/framework/properties/HasOne'
-HasMany = require 'common/data/entities/framework/properties/HasMany'
+HasOne  = require '../properties/HasOne'
+HasMany = require '../properties/HasMany'
 
 class Query
 
-  constructor: ->
+  constructor: (@type) ->
     @expandProperties = []
 
   getStatement: ->
     throw new Error("You must implement getStatement() on #{@constructor.name}")
 
   mapResult: (result) ->
-    throw new Error("You must implement mapResult() on #{@constructor.name}")
+    if result? then new @type(result) else null
 
   expand: (properties...) ->
     @expandProperties = _.union(@expandProperties, properties)
