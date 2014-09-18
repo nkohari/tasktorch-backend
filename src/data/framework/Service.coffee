@@ -7,8 +7,9 @@ class Service
 
   constructor: (@database) ->
 
-  get: (id, callback) ->
+  get: (id, expansions, callback) ->
     query = new IdQuery(@type, id)
+    query.expand(expansions)
     @database.execute(query, callback)
 
 module.exports = Service

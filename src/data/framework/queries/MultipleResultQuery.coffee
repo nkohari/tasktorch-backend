@@ -8,8 +8,10 @@ class MultipleResultQuery extends Query
     {query, enrichers} = @buildQuery()
     @runQuery conn, query, enrichers, (err, cursor) =>
       return callback(err) if err?
-      cursor.close()
-      callback null, _.map cursor, (item) => @mapResult(item)
+      cursor.toArray (err, items) =>
+        return callback(err) if err?
+        cursor.close()
+        callback(null, items)
 
   createSubqueryFunction: (property) ->
     name  = property.name

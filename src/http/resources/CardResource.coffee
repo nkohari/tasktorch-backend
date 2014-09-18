@@ -1,5 +1,6 @@
-Card     = require 'data/entities/Card'
-Resource = require '../framework/Resource'
+Card      = require 'data/entities/Card'
+CardModel = require '../models/CardModel'
+Resource  = require '../framework/Resource'
 
 class CardResource extends Resource
 
@@ -7,11 +8,10 @@ class CardResource extends Resource
 
   get: (request, reply) ->
     {cardId} = request.params
-    @cardService.get cardId, (err, card) =>
-      @log.inspect arguments
+    @cardService.get cardId, ['owner', 'participants'], (err, card) =>
       return reply @error(err) if err?
       return reply @notFound() unless card?
-      reply(card)
+      reply new CardModel(card)
 
   search: (request, reply) ->
     reply('search')

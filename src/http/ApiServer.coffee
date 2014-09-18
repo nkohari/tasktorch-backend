@@ -13,6 +13,7 @@ class ApiServer
     @server.ext 'onRequest', (request, next) =>
       command = request.headers['x-command']
       request.setMethod(command.toLowerCase()) if command?.length > 0
+      request.baseUrl = "https://#{request.headers['host']}"
       next()
 
   start: ->

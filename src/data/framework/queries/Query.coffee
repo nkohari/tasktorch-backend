@@ -12,11 +12,8 @@ class Query
   getStatement: ->
     throw new Error("You must implement getStatement() on #{@constructor.name}")
 
-  mapResult: (result) ->
-    if result? then new @type(result) else null
-
   expand: (properties...) ->
-    @expandProperties = _.union(@expandProperties, properties)
+    @expandProperties = _.union(@expandProperties, _.flatten(properties))
 
   execute: ->
     throw new Error("You must implement execute() on #{@constructor.name}")
