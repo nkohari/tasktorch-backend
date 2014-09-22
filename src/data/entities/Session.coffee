@@ -5,7 +5,6 @@ class Session extends Entity
 
   @table 'sessions'
 
-  @field 'id', Entity.DataType.STRING
   @field 'isActive', Entity.DataType.BOOLEAN
   
   @hasOne 'user', User

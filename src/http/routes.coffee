@@ -18,4 +18,4 @@ module.exports =
     delete: 'CardController.delete'
 
   '/users/{userId}':
-    changePassword: {handler: 'UserController.changePassword', auth: false}
+    setPassword: 'UserController.changePassword'

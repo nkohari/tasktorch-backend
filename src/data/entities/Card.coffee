@@ -6,7 +6,6 @@ class Card extends Entity
 
   @table 'cards'
 
-  @field 'id', Entity.DataType.STRING
   @field 'title', Entity.DataType.STRING
   
   @hasOne 'organization', Organization

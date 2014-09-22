@@ -11,7 +11,6 @@ class UserService extends Service
 
   changePassword: (user, newPassword, callback) ->
     user.password = @passwordHasher.hash(newPassword)
-    @log.inspect(user)
     event = new PasswordChangedEvent(user)
     @update user, (err) =>
       return callback(err) if err?

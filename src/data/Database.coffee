@@ -25,20 +25,25 @@ class Database
 
   create: @withConnection (conn, entity, callback) ->
     entity.id = @keyGenerator.generate()
-    record    = entity.toJSON()
-    rethinkdb.table(entity.table).insert(record).run conn, (err, results) =>
+    type      = entity.constructor
+    table     = type.schema.table
+    record    = entity.toJSON {flatten: true}
+    rethinkdb.table(table).insert(record).run conn, (err, results) =>
       return callback(err) if err?
       callback()
 
   update: @withConnection (conn, entity, callback) ->
-    diff = entity.toJSON {diff: true}
-    @log.inspect {diff}
-    rethinkdb.table(entity.table).get(entity.id).update(diff).run conn, (err, results) =>
+    type  = entity.constructor
+    table = type.schema.table
+    diff  = entity.toJSON {flatten: true, diff: true}
+    rethinkdb.table(table).get(entity.id).update(diff).run conn, (err, results) =>
       return callback(err) if err?
       callback()
 
   delete: @withConnection (conn, entity, callback) ->
-    rethinkdb.table(entity.table).get(entity.id).delete().run conn, (err, results) =>
+    type  = entity.constructor
+    table = type.schema.table
+    rethinkdb.table(table).get(entity.id).delete().run conn, (err, results) =>
       return callback(err) if err?
       callback()
 

@@ -1,6 +1,6 @@
 class Authenticator
 
-  constructor: (@config, @sessionService) ->
+  constructor: (@log, @config, @sessionService) ->
 
   init: (server) ->
     server.pack.register require('hapi-auth-cookie'), (err) =>

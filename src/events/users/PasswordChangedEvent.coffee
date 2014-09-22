@@ -1,5 +1,5 @@
 class PasswordChangedEvent
 
-  constructor: (@user, @newPassword) ->
+  constructor: (@user) ->
 
 module.exports = PasswordChangedEvent

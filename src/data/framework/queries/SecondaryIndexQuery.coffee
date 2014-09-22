@@ -6,8 +6,8 @@ class SecondaryIndexQuery extends Query
   constructor: (type, @index, @value) ->
     super(type)
 
-  buildStatement: ->
-    r.table(@type.table)
+  getStatement: ->
+    r.table(@type.schema.table)
       .getAll @value, {@index}
       .limit(1)
 

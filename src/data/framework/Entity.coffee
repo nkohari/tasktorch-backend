@@ -36,6 +36,7 @@ class Entity
 
   constructor: (data = {}) ->
     @properties = {}
+    @id = data.id if data.id?
     for name, spec of @constructor.schema.properties
       @properties[name] = property = new spec.kind(name, spec.type, spec.options)
       property.set(data[name] ? spec.default)
@@ -43,9 +44,11 @@ class Entity
 
   merge: (data) ->
     for key, value of data
-      unless @properties[key]?
-        throw new Error("Unknown property #{name} for #{@constructor.name}")
-      @properties[key].set(value)
+      if key == 'id'
+        @id = value
+      else
+        throw new Error("Unknown property #{name} for #{@constructor.name}") unless @properties[key]?
+        @properties[key].set(value)
 
   equals: (other) ->
     other instanceof @constructor and other.id == @id
@@ -53,14 +56,14 @@ class Entity
   toJSON: (options = {}) ->
 
     if @isRef
-      return if options.flatten then @id else {id: @id}
+      return if options.flatten then @id else {@id}
 
     if options.diff
       properties = _.select @properties, (p) -> p.isDirty
     else
       properties = _.values @properties
 
-    data = {_type: @constructor.name.toLowerCase()}
+    data = {@id}
     for property in properties
       value = property.toJSON({flatten: options.flatten})
       data[property.name] = value unless value is undefined

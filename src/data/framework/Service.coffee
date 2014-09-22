@@ -1,3 +1,4 @@
+_                   = require 'lodash'
 IdQuery             = require './queries/IdQuery'
 SecondaryIndexQuery = require './queries/SecondaryIndexQuery'
 
@@ -25,7 +26,7 @@ class Service
   getBy: (hash, varargs...) ->
     {options, callback} = interpret(varargs)
     index = _.first _.keys(hash)
-    query = new SecondaryIndexQuery(@type, index, hash[value])
+    query = new SecondaryIndexQuery(@type, index, hash[index])
     query.expand(options.expand) if options.expand?
     @database.execute(query, callback)
 
