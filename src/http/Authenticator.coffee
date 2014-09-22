@@ -20,6 +20,7 @@ class Authenticator
       return callback(null, false) unless session?
       return callback(null, false) unless session.isActive and session.user?.id == userId
       credentials = {session, user: session.user}
+      @log.debug "Authorized user #{session.user.username} (session #{session.id})"
       callback(null, true, credentials)
 
 module.exports = Authenticator

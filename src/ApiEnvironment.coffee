@@ -13,7 +13,6 @@ UserService    = require 'data/services/UserService'
 EventBus       = require 'events/EventBus'
 ApiServer      = require 'http/ApiServer'
 Authenticator  = require 'http/Authenticator'
-routeMap       = require 'http/routes'
 
 class ApiEnvironment
 
@@ -33,12 +32,11 @@ class ApiEnvironment
     forge.bind('userService').to.type(UserService)
     forge.bind('sessionService').to.type(SessionService)
 
-    forge.bind('routeMap').to.instance(routeMap)
     forge.bind('server').to.type(ApiServer)
     forge.bind('authenticator').to.type(Authenticator)
 
-    for name, type of @loadAllFiles('http/controllers')
-      forge.bind('controller').to.type(type).when(name)
+    for name, type of @loadAllFiles('http/handlers')
+      forge.bind('handler').to.type(type).when(name)
 
   loadAllFiles: (dir) ->
     files = glob.sync("#{dir}/**/*.coffee", {cwd: __dirname})

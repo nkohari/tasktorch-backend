@@ -1,12 +1,16 @@
 Session      = require 'data/entities/Session'
-SessionModel = require '../models/SessionModel'
-Controller   = require '../framework/Controller'
+SessionModel = require '../../models/SessionModel'
+Handler      = require '../../framework/Handler'
 
-class SessionController extends Controller
+class CreateSessionHandler extends Handler
 
-  constructor: (@userService, @sessionService, @passwordHasher) ->
+  @route 'post /sessions'
+  @auth  {mode: 'try'}
 
-  create: (request, reply) ->
+  constructor: (log, @userService, @sessionService, @passwordHasher) ->
+    super(log)
+
+  handle: (request, reply) ->
     {username, password} = request.payload
     @userService.getBy {username}, (err, user) =>
       return reply @error(err)     if err?
@@ -17,12 +21,4 @@ class SessionController extends Controller
         request.auth.session.set {userId: user.id, sessionId: session.id}
         return reply new SessionModel(session)
 
-  end: (request, reply) ->
-    {session} = request.credentials
-    session.isActive = false
-    @sessionService.save session, (err) =>
-      return reply @error(err) if err?
-      request.auth.session.clear()
-      reply()
-
-module.exports = SessionController
+module.exports = CreateSessionHandler

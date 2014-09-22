@@ -4,7 +4,7 @@ Hapi = require 'hapi'
 
 class ApiServer
 
-  constructor: (@forge, @config, @log, @routeMap, @authenticator) ->
+  constructor: (@forge, @config, @log, @authenticator) ->
     @server = new Hapi.Server @config.http.port,
       tls: @getTlsConfig()
     @server.ext 'onRequest', @onRequest.bind(this)
@@ -18,31 +18,21 @@ class ApiServer
     }
 
   start: ->
-    for path, routes of @routeMap
-      @register(path, routes)
+    handlers = @forge.getAll('handler')
+    @register(handler) for handler in @forge.getAll('handler')
     @server.start =>
       @log.info 'Server listening'
 
-  register: (path, routes) ->
-    for command, spec of routes
-      if _.isString(spec)
-        handler = spec
-        options = undefined
-      else
-        handler = spec.handler
-        options = _.omit(spec, 'handler')
-      [type, func] = handler.split(/\./, 2)
-      controller = @forge.get('controller', type)
-      @log.debug "#{type}.#{func} - #{command} #{path}"
-      @server.route
-        method:  command
-        path:    path
-        handler: controller[func].bind(controller)
-        config:  options
+  register: (handler) ->
+    {route, config} = handler.constructor.options
+    @server.route
+      method:  route.verb
+      path:    route.path
+      handler: handler.handle.bind(handler)
+      config:  config
+    @log.debug "Mounted #{handler.constructor.name} at #{route.verb} #{route.path}"
 
   onRequest: (request, next) ->
-    command = request.headers['x-command']
-    request.setMethod(command.toLowerCase()) if command?.length > 0
     request.baseUrl = "https://#{request.headers['host']}"
     next()
 

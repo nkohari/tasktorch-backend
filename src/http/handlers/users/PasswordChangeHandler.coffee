@@ -1,11 +1,13 @@
-User       = require 'data/entities/User'
-Controller = require '../framework/Controller'
+Handler = require '../../framework/Handler'
 
-class UserController extends Controller
+class PasswordChangeHandler extends Handler
 
-  constructor: (@log, @userService) ->
+  @route 'post /users/{userId}/passwordChange'
 
-  changePassword: (request, reply) ->
+  constructor: (log, @userService) ->
+    super(log)
+
+  handle: (request, reply) ->
     {userId}   = request.params
     {password} = request.payload
     @userService.get userId, (err, user) =>
@@ -13,6 +15,6 @@ class UserController extends Controller
       return reply @notFound() unless user?
       @userService.changePassword user, password, (err) =>
         return reply @error(err) if err?
-        return reply()
+        reply()
 
-module.exports = UserController
+module.exports = PasswordChangeHandler
