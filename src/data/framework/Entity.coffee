@@ -3,7 +3,6 @@ Field       = require './properties/Field'
 HasOne      = require './properties/HasOne'
 HasMany     = require './properties/HasMany'
 DataType    = require '../enums/DataType'
-EntityState = require '../enums/EntityState'
 
 propertyDeclarator = (kind) ->
   return (name, type, options = {}) ->
@@ -15,7 +14,6 @@ propertyDeclarator = (kind) ->
 
 class Entity
 
-  @State    = EntityState
   @DataType = DataType
 
   @table: (name) ->
@@ -38,13 +36,13 @@ class Entity
 
   constructor: (data = {}) ->
     @properties = {}
-    _.each @constructor.schema.properties, (spec, name) =>
+    for name, spec of @constructor.schema.properties
       @properties[name] = property = new spec.kind(name, spec.type, spec.options)
       property.set(data[name] ? spec.default)
       property.isDirty = false
 
   merge: (data) ->
-    _.each data, (value, key) =>
+    for key, value of data
       unless @properties[key]?
         throw new Error("Unknown property #{name} for #{@constructor.name}")
       @properties[key].set(value)
@@ -63,7 +61,7 @@ class Entity
       properties = _.values @properties
 
     data = {_type: @constructor.name.toLowerCase()}
-    _.each properties, (property) ->
+    for property in properties
       value = property.toJSON({flatten: options.flatten})
       data[property.name] = value unless value is undefined
 

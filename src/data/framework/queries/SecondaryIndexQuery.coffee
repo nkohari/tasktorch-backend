@@ -19,6 +19,6 @@ class SecondaryIndexQuery extends Query
         cursor.close()
         return callback(err) if err?
         return callback(null, null) if records.length == 0
-        callback(null, records[0])
+        callback null, new @type(records[0])
 
 module.exports = SecondaryIndexQuery

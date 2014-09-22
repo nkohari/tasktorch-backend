@@ -5,7 +5,7 @@ class User extends Entity
   @table 'users'
 
   @field 'id', Entity.DataType.STRING
-  @field 'email', Entity.DataType.STRING
+  @field 'username', Entity.DataType.STRING
   @field 'name', Entity.DataType.STRING
   @field 'password', Entity.DataType.STRING
 

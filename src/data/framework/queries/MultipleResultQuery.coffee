@@ -8,10 +8,10 @@ class MultipleResultQuery extends Query
     {query, enrichers} = @buildQuery()
     @runQuery conn, query, enrichers, (err, cursor) =>
       return callback(err) if err?
-      cursor.toArray (err, items) =>
+      cursor.toArray (err, records) =>
         return callback(err) if err?
         cursor.close()
-        callback(null, items)
+        callback null, _.map records, (record) => new @type(record)
 
   createSubqueryFunction: (property) ->
     name  = property.name
@@ -23,8 +23,9 @@ class MultipleResultQuery extends Query
       query.run conn, (err, childDocuments) ->
         return callback(err) if err?
         childDocuments = _.object _.map childDocuments, (item) -> [item[field], item]
-        _.each parentDocuments, (parent) ->
-          parent[name] = _.map parent[name], (id) -> childDocuments[id]
+        for parent in parentDocuments
+          do (parent) ->
+            parent[name] = _.map parent[name], (id) -> childDocuments[id]
         callback()
 
 module.exports = MultipleResultQuery

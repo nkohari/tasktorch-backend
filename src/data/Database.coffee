@@ -12,7 +12,7 @@ class Database
           callback.apply(null, results)
         func.apply this, _.flatten [conn, args, cleanup]
 
-  constructor: (@connectionPool, @keyGenerator) ->
+  constructor: (@log, @connectionPool, @keyGenerator) ->
 
   execute: @withConnection (conn, query, callback) ->
     query.execute(conn, callback)
@@ -31,7 +31,8 @@ class Database
       callback()
 
   update: @withConnection (conn, entity, callback) ->
-    diff = entity.diff()
+    diff = entity.toJSON {diff: true}
+    @log.inspect {diff}
     rethinkdb.table(entity.table).get(entity.id).update(diff).run conn, (err, results) =>
       return callback(err) if err?
       callback()

@@ -4,10 +4,15 @@ _              = require 'lodash'
 Config         = require 'common/Config'
 KeyGenerator   = require 'common/KeyGenerator'
 Log            = require 'common/Log'
+PasswordHasher = require 'common/PasswordHasher'
 Database       = require 'data/Database'
 ConnectionPool = require 'data/ConnectionPool'
 CardService    = require 'data/services/CardService'
+SessionService = require 'data/services/SessionService'
+UserService    = require 'data/services/UserService'
+EventBus       = require 'events/EventBus'
 ApiServer      = require 'http/ApiServer'
+Authenticator  = require 'http/Authenticator'
 routeMap       = require 'http/routes'
 
 class ApiEnvironment
@@ -18,17 +23,22 @@ class ApiEnvironment
     forge.bind('config').to.type(Config)
     forge.bind('keyGenerator').to.type(KeyGenerator)
     forge.bind('log').to.type(Log)
+    forge.bind('passwordHasher').to.type(PasswordHasher)
+    forge.bind('eventBus').to.type(EventBus)
 
     forge.bind('connectionPool').to.type(ConnectionPool)
     forge.bind('database').to.type(Database)
 
     forge.bind('cardService').to.type(CardService)
+    forge.bind('userService').to.type(UserService)
+    forge.bind('sessionService').to.type(SessionService)
 
     forge.bind('routeMap').to.instance(routeMap)
     forge.bind('server').to.type(ApiServer)
+    forge.bind('authenticator').to.type(Authenticator)
 
-    _.each @loadAllFiles('http/resources'), (type, name) ->
-      forge.bind('resource').to.type(type).when(name)
+    for name, type of @loadAllFiles('http/controllers')
+      forge.bind('controller').to.type(type).when(name)
 
   loadAllFiles: (dir) ->
     files = glob.sync("#{dir}/**/*.coffee", {cwd: __dirname})

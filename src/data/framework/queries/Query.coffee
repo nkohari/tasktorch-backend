@@ -23,7 +23,7 @@ class Query
     enrichers = []
 
     properties = _.map @expandProperties, (name) => @type.schema.properties[name]
-    _.each properties, (property) =>
+    for property in properties
       if property.kind is HasOne  then query = @addJoin(query, property)
       if property.kind is HasMany then enrichers.push @createSubqueryFunction(property)
 

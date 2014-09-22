@@ -4,17 +4,18 @@ Hapi = require 'hapi'
 
 class ApiServer
 
-  constructor: (@forge, @config, @log, @routeMap) ->
+  constructor: (@forge, @config, @log, @routeMap, @authenticator) ->
+    @server = new Hapi.Server @config.http.port,
+      tls: @getTlsConfig()
+    @server.ext 'onRequest', @onRequest.bind(this)
+    @authenticator.init(@server)
+
+  getTlsConfig: ->
     {key, cert} = @config.security.ssl
-    tls =
+    return {
       key:  fs.readFileSync(key)
       cert: fs.readFileSync(cert)
-    @server = new Hapi.Server(@config.http.port, {tls})
-    @server.ext 'onRequest', (request, next) =>
-      command = request.headers['x-command']
-      request.setMethod(command.toLowerCase()) if command?.length > 0
-      request.baseUrl = "https://#{request.headers['host']}"
-      next()
+    }
 
   start: ->
     for path, routes of @routeMap
@@ -23,13 +24,26 @@ class ApiServer
       @log.info 'Server listening'
 
   register: (path, routes) ->
-    _.each routes, (handler, command) =>
-      [type, func] = handler.split(/\./, 2)      
-      resource = @forge.get('resource', type)
+    for command, spec of routes
+      if _.isString(spec)
+        handler = spec
+        options = undefined
+      else
+        handler = spec.handler
+        options = _.omit(spec, 'handler')
+      [type, func] = handler.split(/\./, 2)
+      controller = @forge.get('controller', type)
       @log.debug "#{type}.#{func} - #{command} #{path}"
       @server.route
         method:  command
         path:    path
-        handler: resource[func].bind(resource)
+        handler: controller[func].bind(controller)
+        config:  options
+
+  onRequest: (request, next) ->
+    command = request.headers['x-command']
+    request.setMethod(command.toLowerCase()) if command?.length > 0
+    request.baseUrl = "https://#{request.headers['host']}"
+    next()
 
 module.exports = ApiServer

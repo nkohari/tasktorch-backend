@@ -6,7 +6,9 @@ class SingleResultQuery extends Query
   execute: (conn, callback) ->
     {query, enrichers} = @buildQuery()
     query = query.nth(0).default(null)
-    @runQuery(conn, query, enrichers, callback)
+    @runQuery conn, query, enrichers, (err, result) =>
+      return callback(err) if err?
+      callback null, new @type(result)
 
   createSubqueryFunction: (property) ->
     name  = property.name

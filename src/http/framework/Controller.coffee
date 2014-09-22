@@ -1,6 +1,6 @@
 Hapi = require 'hapi'
 
-class Resource
+class Controller
 
   error: (err) ->
     Hapi.error.internal('Something bad happened', err)
@@ -8,4 +8,7 @@ class Resource
   notFound: ->
     Hapi.error.notFound()
 
-module.exports = Resource
+  unauthorized: ->
+    Hapi.error.unauthorized()
+
+module.exports = Controller
