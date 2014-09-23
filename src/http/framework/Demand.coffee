@@ -2,7 +2,7 @@ Hapi = require 'hapi'
 
 class Demand
 
-  test: (request, reply) ->
+  execute: (request, reply) ->
     @satisfies request, (err, satisfied) =>
       return reply Hapi.error.internal('Something bad happened', err) if err?
       return reply Hapi.error.unauthorized() unless satisfied

@@ -2,9 +2,6 @@ Hapi = require 'hapi'
 
 class Handler
 
-  @table: (name) ->
-    (@schema ?= {}).table = name
-
   @route: (route) ->
     [verb, path] = route.split(/\s+/, 2)
     (@options ?= {}).route = {verb, path}

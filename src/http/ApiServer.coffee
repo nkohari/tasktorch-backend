@@ -25,16 +25,18 @@ class ApiServer
 
   register: (handler) ->
     {route, demand, config} = handler.constructor.options
+    config ?= {}
 
     if demand?
       demand = @forge.get('demand', demand)
-      (config ?= {}).pre = [demand.test.bind(demand)]
+      (config.pre ?= []).push demand.execute.bind(demand)
 
     @server.route
       method:  route.verb
       path:    route.path
       handler: handler.handle.bind(handler)
       config:  config
+
     @log.debug "Mounted #{handler.constructor.name} at #{route.verb} #{route.path}"
 
   onRequest: (request, next) ->

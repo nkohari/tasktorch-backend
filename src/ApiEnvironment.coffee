@@ -1,18 +1,19 @@
-path           = require 'path'
-glob           = require 'glob'
-_              = require 'lodash'
-Config         = require 'common/Config'
-KeyGenerator   = require 'common/KeyGenerator'
-Log            = require 'common/Log'
-PasswordHasher = require 'common/PasswordHasher'
-Database       = require 'data/Database'
-ConnectionPool = require 'data/ConnectionPool'
-CardService    = require 'data/services/CardService'
-SessionService = require 'data/services/SessionService'
-UserService    = require 'data/services/UserService'
-EventBus       = require 'events/EventBus'
-ApiServer      = require 'http/ApiServer'
-Authenticator  = require 'http/Authenticator'
+path                = require 'path'
+glob                = require 'glob'
+_                   = require 'lodash'
+Config              = require 'common/Config'
+KeyGenerator        = require 'common/KeyGenerator'
+Log                 = require 'common/Log'
+PasswordHasher      = require 'common/PasswordHasher'
+Database            = require 'data/Database'
+ConnectionPool      = require 'data/ConnectionPool'
+CardService         = require 'data/services/CardService'
+OrganizationService = require 'data/services/OrganizationService'
+SessionService      = require 'data/services/SessionService'
+UserService         = require 'data/services/UserService'
+EventBus            = require 'events/EventBus'
+ApiServer           = require 'http/ApiServer'
+Authenticator       = require 'http/Authenticator'
 
 class ApiEnvironment
 
@@ -29,6 +30,7 @@ class ApiEnvironment
     forge.bind('database').to.type(Database)
 
     forge.bind('cardService').to.type(CardService)
+    forge.bind('organizationService').to.type(OrganizationService)
     forge.bind('userService').to.type(UserService)
     forge.bind('sessionService').to.type(SessionService)
 
