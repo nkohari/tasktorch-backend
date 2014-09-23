@@ -24,7 +24,12 @@ class ApiServer
       @log.info 'Server listening'
 
   register: (handler) ->
-    {route, config} = handler.constructor.options
+    {route, demand, config} = handler.constructor.options
+
+    if demand?
+      demand = @forge.get('demand', demand)
+      (config ?= {}).pre = [demand.test.bind(demand)]
+
     @server.route
       method:  route.verb
       path:    route.path

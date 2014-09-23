@@ -3,7 +3,8 @@ Handler = require '../../framework/Handler'
 class PasswordChangeHandler extends Handler
 
   @route 'post /users/{userId}/passwordChange'
-
+  @demand 'is user'
+  
   constructor: (log, @userService) ->
     super(log)
 

@@ -38,11 +38,18 @@ class ApiEnvironment
     for name, type of @loadAllFiles('http/handlers')
       forge.bind('handler').to.type(type).when(name)
 
+    for name, type of @loadAllFiles('http/demands')
+      name = @humanize name.replace('Demand', '')
+      forge.bind('demand').to.type(type).when(name)
+
   loadAllFiles: (dir) ->
     files = glob.sync("#{dir}/**/*.coffee", {cwd: __dirname})
     return _.object _.map files, (file) ->
       name = path.basename(file, '.coffee')
       type = require "./#{file}"
       return [name, type]
+
+  humanize: (str) ->
+    str.replace(/([A-Z])/g, ' $1').substr(1).toLowerCase()
 
 module.exports = ApiEnvironment

@@ -9,6 +9,9 @@ class Handler
     [verb, path] = route.split(/\s+/, 2)
     (@options ?= {}).route = {verb, path}
 
+  @demand: (demand) ->
+    (@options ?= {}).demand = demand
+    
   @auth: (auth) ->
     @options ?= {}
     (@options.config ?= {}).auth = auth

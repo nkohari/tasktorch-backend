@@ -4,6 +4,7 @@ Handler   = require '../../framework/Handler'
 class GetUserHandler extends Handler
 
   @route 'get /users/{userId}'
+  @demand 'is user'
 
   constructor: (log, @userService) ->
     super(log)
