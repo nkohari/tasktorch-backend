@@ -39,8 +39,8 @@ class Query
   addJoin: (query, property) ->
     name  = property.name
     table = property.type.schema.table
-    return query.eqJoin(name, r.table(table)).map (tuple) ->
-      tuple('left').merge(r.object(name, tuple('right')))
+    return query.merge (parent) ->
+      r.object name, r.table(table).get(parent(name).default('__does_not_exist__')).default(null)
 
   createSubqueryFunction: (property) ->
     throw new Error("You must implement createSubqueryFunction() on #{@constructor.name}")
