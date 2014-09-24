@@ -5,6 +5,6 @@ class OrganizationModel extends Model
   constructor: (organization) ->
     super(organization.id)
     @name = organization.name
-    @users = organization.users
+    @members = organization.members
 
 module.exports = OrganizationModel

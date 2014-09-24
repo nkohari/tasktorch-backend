@@ -8,19 +8,19 @@ class OrganizationService extends Service
   @type Organization
 
   addMember: (organization, user, callback) ->
-    organization.users.add(user)
+    organization.members.add(user)
     event = new UserJoinedOrganizationEvent(organization, user)
-    @update organization, (err) =>
+    @database.update organization, (err) =>
       return callback(err) if err?
-      @publish(event)
+      @eventBus.publish(event)
       callback()
 
   removeMember: (organization, user, callback) ->
-    organization.users.remove(user)
+    organization.members.remove(user)
     event = new UserLeftOrganizationEvent(organization, user)
-    @update organization, (err) =>
+    @database.update organization, (err) =>
       return callback(err) if err?
-      @publish(event)
+      @eventBus.publish(event)
       callback()
 
 module.exports = OrganizationService

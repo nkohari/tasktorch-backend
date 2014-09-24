@@ -8,6 +8,7 @@ class SingleResultQuery extends Query
     query = query.nth(0).default(null)
     @runQuery conn, query, enrichers, (err, result) =>
       return callback(err) if err?
+      console.log {@type, result}
       callback null, new @type(result)
 
   createSubqueryFunction: (property) ->

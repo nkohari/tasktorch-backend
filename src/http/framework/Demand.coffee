@@ -2,13 +2,9 @@ Hapi = require 'hapi'
 
 class Demand
 
-  execute: (request, reply) ->
-    @satisfies request, (err, satisfied) =>
-      return reply Hapi.error.internal('Something bad happened', err) if err?
-      return reply Hapi.error.unauthorized() unless satisfied
-      reply()
+  error: Hapi.error
 
-  satisfies: (request, callback) ->
-    throw new Error("You must implement satisfies() on #{@constructor.name}")
+  execute: (request, reply) ->
+    throw new Error("You must implement execute() on #{@constructor.name}")
 
 module.exports = Demand

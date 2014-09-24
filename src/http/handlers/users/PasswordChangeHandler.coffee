@@ -5,17 +5,16 @@ class PasswordChangeHandler extends Handler
   @route 'post /users/{userId}/passwordChange'
   @demand 'is user'
   
-  constructor: (log, @userService) ->
-    super(log)
+  constructor: (@userService) ->
 
   handle: (request, reply) ->
     {userId}   = request.params
     {password} = request.payload
     @userService.get userId, (err, user) =>
-      return reply @error(err) if err?
-      return reply @notFound() unless user?
+      return reply err if err?
+      return reply @error.notFound() unless user?
       @userService.changePassword user, password, (err) =>
-        return reply @error(err) if err?
+        return reply err if err?
         reply()
 
 module.exports = PasswordChangeHandler

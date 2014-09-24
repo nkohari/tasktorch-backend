@@ -6,6 +6,7 @@ class Organization extends Entity
   @table 'organizations'
 
   @field 'name', Entity.DataType.STRING
-  @hasMany 'users', User
+  @hasMany 'leaders', User
+  @hasMany 'members', User
 
 module.exports = Organization

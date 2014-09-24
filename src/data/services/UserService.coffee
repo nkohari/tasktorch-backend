@@ -12,9 +12,9 @@ class UserService extends Service
   changePassword: (user, newPassword, callback) ->
     user.password = @passwordHasher.hash(newPassword)
     event = new PasswordChangedEvent(user)
-    @update user, (err) =>
+    @database.update user, (err) =>
       return callback(err) if err?
-      @publish(event)
+      @eventBus.publish(event)
       callback()
 
 module.exports = UserService

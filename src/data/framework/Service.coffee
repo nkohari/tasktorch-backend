@@ -30,19 +30,4 @@ class Service
     query.expand(options.expand) if options.expand?
     @database.execute(query, callback)
 
-  save: (entity, callback) ->
-    @database.save(entity, callback)
-
-  create: (entity, callback) ->
-    @database.create(entity, callback)
-
-  update: (entity, callback) ->
-    @database.update(entity, callback)
-
-  delete: (entity, callback) ->
-    @database.delete(entity, callback)
-
-  publish: (event) ->
-    @eventBus.publish(event)
-
 module.exports = Service

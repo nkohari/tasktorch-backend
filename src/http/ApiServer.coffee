@@ -8,6 +8,7 @@ class ApiServer
     @server = new Hapi.Server @config.http.port,
       tls: @getTlsConfig()
     @server.ext 'onRequest', @onRequest.bind(this)
+    @server.on 'internalError', @onError.bind(this)
     @authenticator.init(@server)
 
   getTlsConfig: ->
@@ -24,12 +25,16 @@ class ApiServer
       @log.info 'Server listening'
 
   register: (handler) ->
-    {route, demand, config} = handler.constructor.options
-    config ?= {}
 
-    if demand?
-      demand = @forge.get('demand', demand)
-      (config.pre ?= []).push demand.execute.bind(demand)
+    options = handler.constructor.options
+    route   = options.route
+    config  = options.config ? {}
+
+    if options.demand?
+      demands = _.flatten [options.demand]
+      config.pre = _.map demands, (name) =>
+        demand = @forge.get('demand', name)
+        demand.execute.bind(demand)
 
     @server.route
       method:  route.verb
@@ -41,6 +46,10 @@ class ApiServer
 
   onRequest: (request, next) ->
     request.baseUrl = "https://#{request.headers['host']}"
+    request.scope = {}
     next()
+
+  onError: (request, err) ->
+    @log.error "Request failed with error: #{err}"
 
 module.exports = ApiServer

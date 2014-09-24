@@ -10,6 +10,8 @@ ConnectionPool      = require 'data/ConnectionPool'
 CardService         = require 'data/services/CardService'
 OrganizationService = require 'data/services/OrganizationService'
 SessionService      = require 'data/services/SessionService'
+StackService        = require 'data/services/StackService'
+TeamService         = require 'data/services/TeamService'
 UserService         = require 'data/services/UserService'
 EventBus            = require 'events/EventBus'
 ApiServer           = require 'http/ApiServer'
@@ -31,8 +33,10 @@ class ApiEnvironment
 
     forge.bind('cardService').to.type(CardService)
     forge.bind('organizationService').to.type(OrganizationService)
-    forge.bind('userService').to.type(UserService)
     forge.bind('sessionService').to.type(SessionService)
+    forge.bind('stackService').to.type(StackService)
+    forge.bind('teamService').to.type(TeamService)
+    forge.bind('userService').to.type(UserService)
 
     forge.bind('server').to.type(ApiServer)
     forge.bind('authenticator').to.type(Authenticator)

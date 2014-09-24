@@ -4,7 +4,7 @@ class CardModel extends Model
 
   constructor: (card) ->
     super(card.id)
-    @title = card.title
+    @name = card.name
     @owner = card.owner
     @participants = card.participants
 

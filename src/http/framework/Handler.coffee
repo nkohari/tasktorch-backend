@@ -2,6 +2,8 @@ Hapi = require 'hapi'
 
 class Handler
 
+  @error: Hapi.error
+
   @route: (route) ->
     [verb, path] = route.split(/\s+/, 2)
     (@options ?= {}).route = {verb, path}
@@ -13,16 +15,7 @@ class Handler
     @options ?= {}
     (@options.config ?= {}).auth = auth
 
-  constructor: (@log) ->
-
-  error: (err) ->
-    @log.debug(err)
-    Hapi.error.internal('Something bad happened', err)
-
-  notFound: ->
-    Hapi.error.notFound()
-
-  unauthorized: ->
-    Hapi.error.unauthorized()
+  handle: (request, reply) ->
+    throw new Error("You must implement handle() on #{@constructor.name}")
 
 module.exports = Handler

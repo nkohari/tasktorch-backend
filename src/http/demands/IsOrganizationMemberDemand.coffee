@@ -4,12 +4,16 @@ class IsOrganizationMemberDemand extends Demand
 
   constructor: (@organizationService) ->
 
-  satisfies: (request, callback) ->
+  execute: (request, reply) ->
     {organizationId} = request.params
     @organizationService.get organizationId, (err, organization) =>
-      return callback(err) if err?
+      return reply(err) if err?
+      return reply(@error.notFound()) unless organization?
+      request.scope.organization = organization
       user = request.auth.credentials.user
-      satisfied = user? and organization.users.any (u) -> u.equals(user)
-      callback(null, satisfied)
+      if organization.members.any((m) -> m.equals(user))
+        return reply()
+      else
+        return reply @error.unauthorized()
 
 module.exports = IsOrganizationMemberDemand

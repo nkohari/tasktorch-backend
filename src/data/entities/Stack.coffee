@@ -1,16 +1,18 @@
 Entity       = require '../framework/Entity'
+Card         = require './Card'
 Organization = require './Organization'
+Team         = require './Team'
 User         = require './User'
 
-class Card extends Entity
+class Stack extends Entity
 
-  @table 'cards'
+  @table 'stacks'
 
   @field 'name', Entity.DataType.STRING
   
   @hasOne 'organization', Organization
-  @hasOne 'creator', User
   @hasOne 'owner', User
-  @hasMany 'participants', User
+  @hasOne 'team', Team
+  @hasMany 'cards', Card
 
-module.exports = Card
+module.exports = Stack
