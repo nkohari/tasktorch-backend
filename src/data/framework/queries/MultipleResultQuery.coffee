@@ -4,14 +4,11 @@ Query = require './Query'
 
 class MultipleResultQuery extends Query
 
-  execute: (conn, callback) ->
-    {query, enrichers} = @buildQuery()
-    @runQuery conn, query, enrichers, (err, cursor) =>
+  processResult: (cursor, callback) ->
+    cursor.toArray (err, records) =>
       return callback(err) if err?
-      cursor.toArray (err, records) =>
-        return callback(err) if err?
-        cursor.close()
-        callback null, _.map records, (record) => new @type(record)
+      cursor.close()
+      callback null, _.map records, (record) => new @type(record)
 
   createSubqueryFunction: (property) ->
     name  = property.name

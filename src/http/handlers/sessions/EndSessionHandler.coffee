@@ -7,7 +7,7 @@ class EndSessionHandler extends Handler
   constructor: (@sessionService) ->
 
   handle: (request, reply) ->
-    {session} = request.credentials
+    {session} = request.auth.credentials
     @sessionService.end session, (err) =>
       return reply err if err?
       request.auth.session.clear()

@@ -1,3 +1,5 @@
+Organization      = require 'data/entities/Organization'
+GetQuery          = require 'data/queries/GetQuery'
 OrganizationModel = require '../../models/OrganizationModel'
 Handler           = require '../../framework/Handler'
 
@@ -5,15 +7,15 @@ class GetOrganizationHandler extends Handler
 
   @route 'get /organizations/{organizationId}'
   @demand 'is organization member'
-  
-  constructor: (@organizationService) ->
+
+  constructor: (@database) ->
 
   handle: (request, reply) ->
     {organizationId} = request.params
-    expand = request.query.expand.split(',') if request.query.expand?.length > 0
-    @organizationService.get organizationId, {expand}, (err, organization) =>
+    expand = request.query.expand?.split(',')
+    query  = new GetQuery(Organization, organizationId, {expand})
+    @database.execute query, (err, organization) =>
       return reply err if err?
-      return reply @error.notFound() unless organization?
       reply new OrganizationModel(organization)
 
 module.exports = GetOrganizationHandler

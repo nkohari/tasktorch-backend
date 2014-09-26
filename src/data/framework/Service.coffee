@@ -1,6 +1,7 @@
-_                   = require 'lodash'
-IdQuery             = require './queries/IdQuery'
-SecondaryIndexQuery = require './queries/SecondaryIndexQuery'
+_             = require 'lodash'
+GetQuery      = require '../queries/GetQuery'
+MultiGetQuery = require '../queries/MultiGetQuery'
+GetByQuery    = require '../queries/GetByQuery'
 
 interpret = (varargs) ->
   if varargs.length == 2
@@ -19,14 +20,20 @@ class Service
 
   get: (id, varargs...) ->
     {options, callback} = interpret(varargs)
-    query = new IdQuery(@type, id)
+    query = new GetQuery(@type, id)
     query.expand(options.expand) if options.expand?
     @database.execute(query, callback)
 
   getBy: (hash, varargs...) ->
     {options, callback} = interpret(varargs)
     index = _.first _.keys(hash)
-    query = new SecondaryIndexQuery(@type, index, hash[index])
+    query = new GetByQuery(@type, index, hash[index])
+    query.expand(options.expand) if options.expand?
+    @database.execute(query, callback)
+
+  getAll: (ids, varargs...) ->
+    {options, callback} = interpret(varargs)
+    query = new MultiGetQuery(@type, ids)
     query.expand(options.expand) if options.expand?
     @database.execute(query, callback)
 

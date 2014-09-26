@@ -8,13 +8,10 @@ class PasswordChangeHandler extends Handler
   constructor: (@userService) ->
 
   handle: (request, reply) ->
-    {userId}   = request.params
+    {user}     = request.scope
     {password} = request.payload
-    @userService.get userId, (err, user) =>
+    @userService.changePassword user, password, (err) =>
       return reply err if err?
-      return reply @error.notFound() unless user?
-      @userService.changePassword user, password, (err) =>
-        return reply err if err?
-        reply()
+      reply()
 
 module.exports = PasswordChangeHandler
