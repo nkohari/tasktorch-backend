@@ -12,39 +12,35 @@ class Database
           callback.apply(null, results)
         func.apply this, _.flatten [conn, args, cleanup]
 
-  constructor: (@log, @connectionPool, @keyGenerator) ->
+  constructor: (@connectionPool, @keyGenerator, @eventBus) ->
 
   execute: @withConnection (conn, query, callback) ->
     query.execute(conn, callback)
 
-  save: (entity, callback) ->
-    if entity.id?
-      return @update(entity, callback)
-    else
-      return @create(entity, callback)
-
   create: @withConnection (conn, entity, callback) ->
     entity.id = @keyGenerator.generate()
-    type      = entity.constructor
-    table     = type.schema.table
+    {schema}  = entity.constructor
     record    = entity.toJSON {flatten: true}
-    rethinkdb.table(table).insert(record).run conn, (err, results) =>
+    rethinkdb.table(schema.table).insert(record).run conn, (err, results) =>
       return callback(err) if err?
+      entity.onCreated()
+      entity.flushPendingEvents(@eventBus)
       callback()
 
   update: @withConnection (conn, entity, callback) ->
-    type  = entity.constructor
-    table = type.schema.table
-    diff  = entity.toJSON {flatten: true, diff: true}
-    rethinkdb.table(table).get(entity.id).update(diff).run conn, (err, results) =>
+    {schema} = entity.constructor
+    diff     = entity.toJSON {flatten: true, diff: true}
+    rethinkdb.table(schema.table).get(entity.id).update(diff).run conn, (err, results) =>
       return callback(err) if err?
+      entity.flushPendingEvents(@eventBus)
       callback()
 
   delete: @withConnection (conn, entity, callback) ->
-    type  = entity.constructor
-    table = type.schema.table
-    rethinkdb.table(table).get(entity.id).delete().run conn, (err, results) =>
+    {schema} = entity.constructor
+    rethinkdb.table(schema.table).get(entity.id).delete().run conn, (err, results) =>
       return callback(err) if err?
+      entity.onDeleted()
+      entity.flushPendingEvents(@eventBus)
       callback()
 
 module.exports = Database

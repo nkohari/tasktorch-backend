@@ -5,12 +5,13 @@ class PasswordChangeHandler extends Handler
   @route 'post /users/{userId}/passwordChange'
   @demand 'is user'
   
-  constructor: (@userService) ->
+  constructor: (@database, @passwordHasher) ->
 
   handle: (request, reply) ->
     {user}     = request.scope
     {password} = request.payload
-    @userService.changePassword user, password, (err) =>
+    user.setPassword(@passwordHasher.hash(password))
+    @database.update user, (err, user) =>
       return reply err if err?
       reply()
 

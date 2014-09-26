@@ -4,11 +4,12 @@ class EndSessionHandler extends Handler
 
   @route 'delete /sessions/{sessionId}'
 
-  constructor: (@sessionService) ->
+  constructor: (@database) ->
 
   handle: (request, reply) ->
     {session} = request.auth.credentials
-    @sessionService.end session, (err) =>
+    session.end()
+    @database.save session, (err) =>
       return reply err if err?
       request.auth.session.clear()
       reply()

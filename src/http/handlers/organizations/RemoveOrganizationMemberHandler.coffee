@@ -7,7 +7,7 @@ class RemoveOrganizationMemberHandler extends Handler
   @route 'delete /organizations/{organizationId}/users/{userId}'
   @demand 'is organization member'
   
-  constructor: (@database, @organizationService) ->
+  constructor: (@database) ->
 
   handle: (request, reply) ->
 
@@ -18,7 +18,8 @@ class RemoveOrganizationMemberHandler extends Handler
     @database.execute query, (err, user) =>
       return reply err if err?
       return reply @error.notFound() unless user?
-      @organizationService.removeMember organization, user, (err) =>
+      organization.removeMember(user)
+      @database.update organization, (err) =>
         return reply err if err?
         return reply()
 

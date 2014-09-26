@@ -1,6 +1,9 @@
+Session  = require 'data/entities/Session'
+GetQuery = require 'data/queries/GetQuery'
+
 class Authenticator
 
-  constructor: (@log, @config, @sessionService) ->
+  constructor: (@log, @config, @database) ->
 
   init: (server) ->
     server.pack.register require('hapi-auth-cookie'), (err) =>
@@ -15,7 +18,8 @@ class Authenticator
   validate: (state, callback) ->
     return callback(null, false) unless state?
     {userId, sessionId} = state
-    @sessionService.get sessionId, {expand: 'user'}, (err, session) =>
+    query = new GetQuery(Session, sessionId, {expand: 'user'})
+    @database.execute query, (err, session) =>
       return callback(err) if err?
       return callback(null, false) unless session?
       return callback(null, false) unless session.isActive and session.user?.id == userId

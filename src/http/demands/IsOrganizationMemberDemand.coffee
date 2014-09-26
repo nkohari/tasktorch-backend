@@ -1,12 +1,15 @@
-Demand = require '../framework/Demand'
+Organization = require 'data/entities/Organization'
+GetQuery     = require 'data/queries/GetQuery'
+Demand       = require '../framework/Demand'
 
 class IsOrganizationMemberDemand extends Demand
 
-  constructor: (@organizationService) ->
+  constructor: (@database) ->
 
   execute: (request, reply) ->
     {organizationId} = request.params
-    @organizationService.get organizationId, (err, organization) =>
+    query = new GetQuery(Organization, organizationId)
+    @database.execute query, (err, organization) =>
       return reply(err) if err?
       return reply(@error.notFound()) unless organization?
       request.scope.organization = organization

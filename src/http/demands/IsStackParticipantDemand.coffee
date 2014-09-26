@@ -1,12 +1,15 @@
-Demand = require '../framework/Demand'
+Stack    = require 'data/entities/Stack'
+GetQuery = require 'data/queries/GetQuery'
+Demand   = require '../framework/Demand'
 
 class IsStackParticipantDemand extends Demand
 
-  constructor: (@log, @stackService) ->
+  constructor: (@database) ->
 
   execute: (request, reply) ->
     {stackId} = request.params
-    @stackService.get stackId, {expand: 'team'}, (err, stack) =>
+    query = new GetQuery(Stack, stackId, {expand: 'team'})
+    @database.execute query, (err, stack) =>
       return reply err if err?
       return reply @error.notFound() unless stack?
       request.scope.stack = stack

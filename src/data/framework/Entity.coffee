@@ -28,6 +28,12 @@ class Entity
     entity._isRef = true
     return entity
 
+  Object.defineProperty @prototype, 'id',
+    get: -> @_id
+    set: (value) ->
+      throw new Error("#{@constructor.name} already has an id (#{id})") if @_id?
+      @_id = value
+
   Object.defineProperty @prototype, 'isDirty',
     get: -> _.any @properties, (p) -> p.isDirty
 
@@ -36,6 +42,7 @@ class Entity
 
   constructor: (data = {}) ->
     @properties = {}
+    @pendingEvents = []
     @id = data.id if data.id?
     for name, spec of @constructor.schema.properties
       @properties[name] = property = new spec.kind(name, spec.type, spec.options)
@@ -52,6 +59,18 @@ class Entity
 
   equals: (other) ->
     other instanceof @constructor and other.id == @id
+
+  onCreated: ->
+    
+  onDeleted: ->
+
+  announce: (event) ->
+    @pendingEvents.push(event)
+
+  flushPendingEvents: (eventBus) ->
+    return unless @pendingEvents.length > 0
+    eventBus.publish(@pendingEvents)
+    @pendingEvents = []
 
   toJSON: (options = {}) ->
 
