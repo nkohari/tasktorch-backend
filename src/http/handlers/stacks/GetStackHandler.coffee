@@ -1,4 +1,4 @@
-Stack      = require 'data/entities/Stack'
+{Stack}    = require 'data/entities'
 GetQuery   = require 'data/queries/GetQuery'
 StackModel = require '../../models/StackModel'
 Handler    = require '../../framework/Handler'
@@ -6,7 +6,7 @@ Handler    = require '../../framework/Handler'
 class GetStackHandler extends Handler
 
   @route 'get /organizations/{organizationId}/stacks/{stackId}'
-  @demand ['is organization member', 'is stack participant']
+  @demand ['requester is organization member', 'requester is stack participant']
 
   constructor: (@log, @database) ->
 

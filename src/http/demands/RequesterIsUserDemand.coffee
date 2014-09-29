@@ -1,6 +1,6 @@
 Demand = require '../framework/Demand'
 
-class IsUserDemand extends Demand
+class RequesterIsUserDemand extends Demand
 
   execute: (request, reply) ->
     user = request.auth.credentials.user
@@ -10,4 +10,4 @@ class IsUserDemand extends Demand
     else
       return reply @error.unauthorized()
 
-module.exports = IsUserDemand
+module.exports = RequesterIsUserDemand

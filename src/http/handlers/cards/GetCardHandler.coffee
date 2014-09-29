@@ -1,4 +1,4 @@
-Card      = require 'data/entities/Card'
+{Card}    = require 'data/entities'
 GetQuery  = require 'data/queries/GetQuery'
 CardModel = require '../../models/CardModel'
 Handler   = require '../../framework/Handler'

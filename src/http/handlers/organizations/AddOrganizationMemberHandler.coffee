@@ -1,11 +1,11 @@
-User     = require 'data/entities/User'
+{User}   = require 'data/entities'
 GetQuery = require 'data/queries/GetQuery'
 Handler  = require '../../framework/Handler'
 
 class AddOrganizationMemberHandler extends Handler
 
   @route 'post /organizations/{organizationId}/users'
-  @demand 'is organization member'
+  @demand 'requester is organization member'
 
   constructor: (@database) ->
 

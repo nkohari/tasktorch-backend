@@ -1,11 +1,11 @@
-User     = require 'data/entities/User'
+{User}   = require 'data/entities'
 GetQuery = require 'data/queries/GetQuery'
 Handler  = require '../../framework/Handler'
 
 class RemoveOrganizationMemberHandler extends Handler
 
   @route 'delete /organizations/{organizationId}/users/{userId}'
-  @demand 'is organization member'
+  @demand 'requester is organization member'
   
   constructor: (@database) ->
 

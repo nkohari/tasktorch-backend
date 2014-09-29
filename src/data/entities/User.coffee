@@ -1,5 +1,5 @@
 Entity = require '../framework/Entity'
-PasswordChangedEvent = require 'events/users/PasswordChangedEvent'
+Events = require 'events'
 
 class User extends Entity
 
@@ -11,6 +11,6 @@ class User extends Entity
 
   setPassword: (password) ->
     @password = password
-    @announce new PasswordChangedEvent(this)
+    @announce new Events.PasswordChangedEvent(this)
 
 module.exports = User

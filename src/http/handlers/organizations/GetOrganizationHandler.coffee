@@ -1,4 +1,4 @@
-Organization      = require 'data/entities/Organization'
+{Organization}    = require 'data/entities'
 GetQuery          = require 'data/queries/GetQuery'
 OrganizationModel = require '../../models/OrganizationModel'
 Handler           = require '../../framework/Handler'
@@ -6,7 +6,7 @@ Handler           = require '../../framework/Handler'
 class GetOrganizationHandler extends Handler
 
   @route 'get /organizations/{organizationId}'
-  @demand 'is organization member'
+  @demand 'requester is organization member'
 
   constructor: (@database) ->
 

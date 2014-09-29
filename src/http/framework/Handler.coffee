@@ -2,7 +2,7 @@ Hapi = require 'hapi'
 
 class Handler
 
-  @error: Hapi.error
+  error: Hapi.error
 
   @route: (route) ->
     [verb, path] = route.split(/\s+/, 2)

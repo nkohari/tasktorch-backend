@@ -1,6 +1,7 @@
-r     = require 'rethinkdb'
-_     = require 'lodash'
-Query = require './Query'
+r        = require 'rethinkdb'
+_        = require 'lodash'
+Entities = require '../../entities'
+Query    = require './Query'
 
 class MultipleResultQuery extends Query
 
@@ -11,12 +12,12 @@ class MultipleResultQuery extends Query
       callback null, _.map records, (record) => new @type(record)
 
   createSubqueryFunction: (property) ->
-    name  = property.name
-    table = property.type.schema.table
-    field = property.options.foreignField ? 'id'
+    name   = property.name
+    schema = Entities.getSchema(property.type)
+    field  = property.options.foreignField ? 'id'
     return (conn, parentDocuments, callback) =>
       ids   = _.flatten _.pluck(parentDocuments, name)
-      query = r.table(table).getAll(r.args(ids), {index: field})
+      query = r.table(schema.table).getAll(r.args(ids), {index: field})
       query.run conn, (err, childDocuments) ->
         return callback(err) if err?
         childDocuments = _.object _.map childDocuments, (item) -> [item[field], item]

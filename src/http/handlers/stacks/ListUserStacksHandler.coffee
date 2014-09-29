@@ -1,5 +1,5 @@
 _             = require 'lodash'
-Stack         = require 'data/entities/Stack'
+{Stack}       = require 'data/entities'
 GetAllByQuery = require 'data/queries/GetAllByQuery'
 StackModel    = require '../../models/StackModel'
 Handler       = require '../../framework/Handler'
@@ -7,7 +7,7 @@ Handler       = require '../../framework/Handler'
 class ListUserStacksHandler extends Handler
 
   @route 'get /organizations/{organizationId}/users/{userId}/stacks'
-  @demand ['is organization member', 'is user']
+  @demand ['requester is organization member', 'requester is user']
 
   constructor: (@database) ->
 

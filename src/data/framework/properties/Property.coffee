@@ -18,10 +18,12 @@ class Property
     throw new Error("You must implement toDocument() on #{@constructor.name}")
 
   coerce: (value) ->
+    Entities = require('../../entities')
+    klass    = Entities[@type]
     unless value?             then return value
-    if value instanceof @type then return value
-    if _.isObject(value)      then return new @type(value)
-    if _.isString(value)      then return @type.ref(value)
+    if value instanceof klass then return value
+    if _.isObject(value)      then return new klass(value)
+    if _.isString(value)      then return klass.ref(value)
     throw new Error("Unknown value #{value} specified for property #{@name}")
 
 module.exports = Property

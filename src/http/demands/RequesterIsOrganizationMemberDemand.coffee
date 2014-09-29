@@ -1,8 +1,8 @@
-Organization = require 'data/entities/Organization'
-GetQuery     = require 'data/queries/GetQuery'
-Demand       = require '../framework/Demand'
+{Organization} = require 'data/entities'
+GetQuery       = require 'data/queries/GetQuery'
+Demand         = require '../framework/Demand'
 
-class IsOrganizationMemberDemand extends Demand
+class RequesterIsOrganizationMemberDemand extends Demand
 
   constructor: (@database) ->
 
@@ -19,4 +19,4 @@ class IsOrganizationMemberDemand extends Demand
       else
         return reply @error.unauthorized()
 
-module.exports = IsOrganizationMemberDemand
+module.exports = RequesterIsOrganizationMemberDemand

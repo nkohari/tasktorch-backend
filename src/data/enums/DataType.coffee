@@ -5,6 +5,7 @@ DataType = Enum [
   'STRING',
   'INT',
   'DATETIME'
+  'BOOLEAN'
 ]
 
 module.exports = DataType

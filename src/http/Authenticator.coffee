@@ -1,5 +1,5 @@
-Session  = require 'data/entities/Session'
-GetQuery = require 'data/queries/GetQuery'
+{Session} = require 'data/entities'
+GetQuery  = require 'data/queries/GetQuery'
 
 class Authenticator
 

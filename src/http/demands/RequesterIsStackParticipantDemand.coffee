@@ -1,8 +1,8 @@
-Stack    = require 'data/entities/Stack'
+{Stack}  = require 'data/entities'
 GetQuery = require 'data/queries/GetQuery'
 Demand   = require '../framework/Demand'
 
-class IsStackParticipantDemand extends Demand
+class RequesterIsStackParticipantDemand extends Demand
 
   constructor: (@database) ->
 
@@ -19,4 +19,4 @@ class IsStackParticipantDemand extends Demand
       else
         return reply @error.unauthorized()
 
-module.exports = IsStackParticipantDemand
+module.exports = RequesterIsStackParticipantDemand

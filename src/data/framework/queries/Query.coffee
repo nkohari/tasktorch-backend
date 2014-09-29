@@ -1,8 +1,9 @@
-_       = require 'lodash'
-async   = require 'async'
-r       = require 'rethinkdb'
-HasOne  = require '../properties/HasOne'
-HasMany = require '../properties/HasMany'
+_        = require 'lodash'
+async    = require 'async'
+r        = require 'rethinkdb'
+Entities = require '../../entities'
+HasOne   = require '../properties/HasOne'
+HasMany  = require '../properties/HasMany'
 
 class Query
 
@@ -17,7 +18,7 @@ class Query
     throw new Error("You must implement processResult() on #{@constructor.name}")
 
   expand: (properties...) ->
-    @expandProperties = _.union(@expandProperties, _.flatten(properties))
+    @expandProperties = _.union @expandProperties, _.flatten(properties)
 
   execute: (conn, callback) ->
     query = @getStatement()
@@ -35,10 +36,10 @@ class Query
         @processResult(result, callback)
 
   addJoin: (query, property) ->
-    name  = property.name
-    table = property.type.schema.table
+    name   = property.name
+    schema = Entities.getSchema(property.type)
     return query.merge (parent) ->
-      r.object name, r.table(table).get(parent(name).default('__does_not_exist__')).default(null)
+      r.object name, r.table(schema.table).get(parent(name).default('__does_not_exist__')).default(null)
 
   createSubqueryFunction: (property) ->
     throw new Error("You must implement createSubqueryFunction() on #{@constructor.name}")

@@ -1,8 +1,7 @@
-Session      = require 'data/entities/Session'
-User         = require 'data/entities/User'
-GetByQuery   = require 'data/queries/GetByQuery'
-SessionModel = require '../../models/SessionModel'
-Handler      = require '../../framework/Handler'
+{Session, User} = require 'data/entities'
+GetByQuery      = require 'data/queries/GetByQuery'
+SessionModel    = require '../../models/SessionModel'
+Handler         = require '../../framework/Handler'
 
 class CreateSessionHandler extends Handler
 

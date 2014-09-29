@@ -1,4 +1,5 @@
 r = require 'rethinkdb'
+_ = require 'lodash'
 MultipleResultQuery = require '../framework/queries/MultipleResultQuery'
 
 class GetByQuery extends MultipleResultQuery

@@ -1,7 +1,7 @@
 r                 = require 'rethinkdb'
 SingleResultQuery = require '../framework/queries/SingleResultQuery'
 
-class IdQuery extends SingleResultQuery
+class GetQuery extends SingleResultQuery
 
   constructor: (type, @id, options) ->
     super(type, options)
@@ -9,4 +9,4 @@ class IdQuery extends SingleResultQuery
   getStatement: ->
     r.table(@type.schema.table).get(@id).default(null)
 
-module.exports = IdQuery
+module.exports = GetQuery

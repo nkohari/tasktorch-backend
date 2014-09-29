@@ -1,20 +1,18 @@
-SessionCreatedEvent = require 'events/sessions/SessionCreatedEvent'
-SessionEndedEvent   = require 'events/sessions/SessionEndedEvent'
-Entity              = require '../framework/Entity'
-User                = require './User'
+Events = require 'events'
+Entity = require '../framework/Entity'
 
 class Session extends Entity
 
   @table  'sessions'
 
   @field  'isActive', Entity.DataType.BOOLEAN
-  @hasOne 'user',     User
+  @hasOne 'user',     'User'
 
   onCreated: ->
-    @announce new SessionCreatedEvent(this)
+    @announce new Events.SessionCreatedEvent(this)
 
   end: ->
     @isActive = false
-    @announce new SessionEndedEvent(this)
+    @announce new Events.SessionEndedEvent(this)
 
 module.exports = Session
