@@ -1,0 +1,4 @@
+#!/bin/sh
+rethinkdb export -d testdata
+tar czvf testdata.tar.gz testdata
+rm -rf testdata

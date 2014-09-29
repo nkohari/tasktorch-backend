@@ -1,0 +1,4 @@
+#!/bin/sh
+tar xzvf testdata.tar.gz
+rethinkdb import --force -d ./testdata
+rm -rf testdata

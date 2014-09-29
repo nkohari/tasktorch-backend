@@ -1,5 +1,5 @@
 Entity = require '../framework/Entity'
-Events = require 'events'
+Events = require '../events'
 
 class User extends Entity
 

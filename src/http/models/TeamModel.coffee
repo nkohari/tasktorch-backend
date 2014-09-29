@@ -6,7 +6,7 @@ class TeamModel extends Model
     super(team.id)
     @name = team.name
     @members = team.members
-    @organization = team.organization
+    @organization = team.organization.id
     @uri = "#{baseUrl}/organizations/#{@organization.id}/teams/#{@id}"
 
 module.exports = TeamModel

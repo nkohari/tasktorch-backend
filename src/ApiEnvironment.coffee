@@ -7,7 +7,7 @@ Log                 = require 'common/Log'
 PasswordHasher      = require 'common/PasswordHasher'
 Database            = require 'data/Database'
 ConnectionPool      = require 'data/ConnectionPool'
-EventBus            = require 'events/EventBus'
+EventBus            = require 'data/EventBus'
 ApiServer           = require 'http/ApiServer'
 Authenticator       = require 'http/Authenticator'
 

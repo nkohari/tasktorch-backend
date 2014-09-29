@@ -22,7 +22,7 @@ class CreateTeamHandler extends Handler
       return reply err if err?
       @database.update organization, (err) =>
         return reply err if err?
-          model = new TeamModel(request.baseUrl, team)
-          reply(model).location(model.uri)
+        model = new TeamModel(request.baseUrl, team)
+        reply(model)#.location(model.uri)
 
 module.exports = CreateTeamHandler

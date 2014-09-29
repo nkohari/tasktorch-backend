@@ -1,3 +1,4 @@
+_              = require 'lodash'
 {Organization} = require 'data/entities'
 GetQuery       = require 'data/queries/GetQuery'
 Demand         = require '../framework/Demand'
@@ -13,8 +14,7 @@ class RequesterIsOrganizationMemberDemand extends Demand
       return reply(err) if err?
       return reply(@error.notFound()) unless organization?
       request.scope.organization = organization
-      user = request.auth.credentials.user
-      if organization.members.any((m) -> m.equals(user))
+      if organization.hasMember(request.auth.credentials.user)
         return reply()
       else
         return reply @error.unauthorized()

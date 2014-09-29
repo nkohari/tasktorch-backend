@@ -13,5 +13,9 @@ exports.SessionEndedEvent = require './sessions/SessionEndedEvent'
 # stacks
 exports.StackCreatedEvent = require './stacks/StackCreatedEvent'
 
+# teams
+exports.TeamAddedEvent = require './teams/TeamAddedEvent'
+exports.TeamRemovedEvent = require './teams/TeamRemovedEvent'
+
 # users
 exports.PasswordChangedEvent = require './users/PasswordChangedEvent'

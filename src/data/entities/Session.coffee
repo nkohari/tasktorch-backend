@@ -1,4 +1,4 @@
-Events = require 'events'
+Events = require '../events'
 Entity = require '../framework/Entity'
 
 class Session extends Entity

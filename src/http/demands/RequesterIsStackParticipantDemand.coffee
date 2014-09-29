@@ -14,7 +14,7 @@ class RequesterIsStackParticipantDemand extends Demand
       return reply @error.notFound() unless stack?
       request.scope.stack = stack
       user = request.auth.credentials.user
-      if stack.owner?.equals(user) or stack.team?.members.any((m) -> m.equals(user))
+      if stack.owner?.equals(user) or stack.team?.hasMember(user)
         return reply()
       else
         return reply @error.unauthorized()

@@ -1,6 +1,5 @@
 _        = require 'lodash'
 Property = require './Property'
-Set      = require 'collections/set'
 
 class HasMany extends Property
 
@@ -8,21 +7,14 @@ class HasMany extends Property
     @entities
 
   set: (items) ->
-    @entities.removeRangeChangeListener(this) if @entities?
     @isDirty = true
+    @entities = _.map items, (item) => @coerce(item)
 
-    items = _.map items, (item) => @coerce(item)
-    equal = (a, b) -> a.equals(b)
-    hash  = (obj)  -> obj.id
-
-    @entities = new Set(items, equal, hash)
-    @entities.addRangeChangeListener(this)
-
-  toJSON: (options) ->
+  toJSON: (options) ->    
     if options.flatten
-      @entities.map (item) => item.id
+      _.pluck(@entities, 'id')
     else
-      @entities.map (item) => item.toJSON(options)
+      _.map @entities, (item) -> item.toJSON(options)
 
   handleRangeChange: (plus, minus, index) ->
     @isDirty = true

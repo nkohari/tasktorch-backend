@@ -1,3 +1,4 @@
+_      = require 'lodash'
 Entity = require '../framework/Entity'
 
 class Team extends Entity
@@ -9,5 +10,8 @@ class Team extends Entity
   @hasMany 'leaders',      'User'
   @hasMany 'members',      'User'
   @hasMany 'stacks',       'Stack'
+
+  hasMember: (user) ->
+    _.any @members, (u) -> u.equals(user)
 
 module.exports = Team

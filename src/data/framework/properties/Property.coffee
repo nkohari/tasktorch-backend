@@ -18,6 +18,7 @@ class Property
     throw new Error("You must implement toDocument() on #{@constructor.name}")
 
   coerce: (value) ->
+    # TODO: Fix weird referencing
     Entities = require('../../entities')
     klass    = Entities[@type]
     unless value?             then return value
