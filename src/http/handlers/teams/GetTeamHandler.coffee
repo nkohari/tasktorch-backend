@@ -13,7 +13,7 @@ class GetTeamHandler extends Handler
   handle: (request, reply) ->
     {teamId} = request.params
     expand   = request.query.expand?.split(',')
-    query    = new GetQuery(Team, team, {expand})
+    query    = new GetQuery(Team, teamId, {expand})
     @database.execute query, (err, team) =>
       return reply err if err?
       reply new TeamModel(request.baseUrl, team)

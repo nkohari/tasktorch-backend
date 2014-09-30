@@ -1,12 +1,10 @@
-r                 = require 'rethinkdb'
-SingleResultQuery = require '../framework/queries/SingleResultQuery'
+r            = require 'rethinkdb'
+ExpandoQuery = require '../framework/ExpandoQuery'
 
-class GetQuery extends SingleResultQuery
+class GetQuery extends ExpandoQuery
 
-  constructor: (type, @id, options) ->
+  constructor: (type, id, options) ->
     super(type, options)
-
-  getStatement: ->
-    r.table(@type.schema.table).get(@id).default(null)
+    @rql = r.table(type.schema.table).get(id).default(null)
 
 module.exports = GetQuery

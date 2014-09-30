@@ -1,16 +1,14 @@
-r = require 'rethinkdb'
-_ = require 'lodash'
-MultipleResultQuery = require '../framework/queries/MultipleResultQuery'
+r            = require 'rethinkdb'
+_            = require 'lodash'
+ExpandoQuery = require '../framework/ExpandoQuery'
 
-class GetByQuery extends MultipleResultQuery
+class GetByQuery extends ExpandoQuery
 
   constructor: (type, tuple, options) ->
     super(type, options)
-    @index = _.first _.keys(tuple)
-    @value = tuple[@index]
-
-  getStatement: ->
-    r.table(@type.schema.table).getAll(@value, {@index}).limit(1)
+    index = _.first _.keys(tuple)
+    value = tuple[index]
+    @rql  = r.table(type.schema.table).getAll(value, {index}).limit(1)
 
   processResult: (cursor, callback) ->
     cursor.toArray (err, records) =>
