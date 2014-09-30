@@ -8,7 +8,7 @@ class GetStackHandler extends Handler
   @route 'get /organizations/{organizationId}/stacks/{stackId}'
   @demand ['requester is organization member', 'requester is stack participant']
 
-  constructor: (@log, @database) ->
+  constructor: (@database) ->
 
   handle: (request, reply) ->
     {stackId} = request.params

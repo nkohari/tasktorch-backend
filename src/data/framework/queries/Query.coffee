@@ -24,10 +24,11 @@ class Query
     query = @getStatement()
     enrichers = []
 
-    properties = _.map @expandProperties, (name) => @type.schema.properties[name]
-    for property in properties
-      if property.kind is HasOne  then query = @addJoin(query, property)
-      if property.kind is HasMany then enrichers.push @createSubqueryFunction(property)
+    for name in @expandProperties
+      property = @type.schema.properties[name]
+      schema   = Entities.getSchema(property.type)
+      if property.kind is HasOne  then query = @addJoin(query, name, schema.table)
+      if property.kind is HasMany then query = @addJoinMany(query, name, schema.table, 'id')
 
     query.run conn, (err, result) =>
       return callback(err) if err?
@@ -35,13 +36,12 @@ class Query
         return callback(err) if err?
         @processResult(result, callback)
 
-  addJoin: (query, property) ->
-    name   = property.name
-    schema = Entities.getSchema(property.type)
-    return query.merge (parent) ->
-      r.object name, r.table(schema.table).get(parent(name).default('__does_not_exist__')).default(null)
+  addJoin: (query, field, table) ->
+    query.merge (parent) ->
+      r.object(field, r.table(table).get(parent(field).default('__nonexistent__')).default(null))
 
-  createSubqueryFunction: (property) ->
-    throw new Error("You must implement createSubqueryFunction() on #{@constructor.name}")
+  addJoinMany: (query, field, table, index) ->
+    query.merge (parent) ->
+      r.object(field, r.table(table).getAll(r.args(parent(field)), {index}).coerceTo('array'))
 
 module.exports = Query
