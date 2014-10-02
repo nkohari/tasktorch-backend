@@ -1,11 +1,11 @@
-{Card}    = require 'data/entities'
-GetQuery  = require 'data/queries/GetQuery'
-CardModel = require '../../models/CardModel'
-Handler   = require '../../framework/Handler'
+{Card}     = require 'data/entities'
+{GetQuery} = require 'data/queries'
+CardModel  = require '../../models/CardModel'
+Handler    = require '../../framework/Handler'
 
 class GetCardHandler extends Handler
 
-  @route 'get /organizations/{organizationId}/cards/{cardId}'
+  @route 'get /{organizationId}/cards/{cardId}'
 
   constructor: (@database) ->
 

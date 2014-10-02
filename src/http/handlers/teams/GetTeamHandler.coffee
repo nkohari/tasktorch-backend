@@ -1,11 +1,11 @@
-{Team}    = require 'data/entities'
-GetQuery  = require 'data/queries/GetQuery'
-TeamModel = require '../../models/TeamModel'
-Handler   = require '../../framework/Handler'
+{Team}     = require 'data/entities'
+{GetQuery} = require 'data/queries'
+TeamModel  = require '../../models/TeamModel'
+Handler    = require '../../framework/Handler'
 
 class GetTeamHandler extends Handler
 
-  @route 'get /organizations/{organizationId}/teams/{teamId}'
+  @route 'get /{organizationId}/teams/{teamId}'
   @demand ['requester is organization member', 'team belongs to organization']
 
   constructor: (@database) ->

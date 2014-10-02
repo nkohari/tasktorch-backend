@@ -9,7 +9,7 @@ class Team extends Entity
   @hasOne  'organization', 'Organization'
   @hasMany 'leaders',      'User'
   @hasMany 'members',      'User'
-  @hasMany 'stacks',       'Stack'
+  @hasMany 'stacks',       'Stack', {foreign: 'team'}
 
   hasMember: (user) ->
     _.any @members, (u) -> u.equals(user)

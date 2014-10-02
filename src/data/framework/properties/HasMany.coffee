@@ -10,7 +10,7 @@ class HasMany extends Property
     @isDirty = true
     @entities = _.map items, (item) => @coerce(item)
 
-  toJSON: (options) ->    
+  toJSON: (options) ->
     if options.flatten
       _.pluck(@entities, 'id')
     else

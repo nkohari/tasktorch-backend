@@ -9,6 +9,6 @@ class StackModel extends Model
     @owner = stack.owner
     @team = stack.team
     @cards = stack.cards
-    @uri = "#{baseUrl}/organizations/#{@organization.id}/stacks/#{@id}"
+    @uri = "#{baseUrl}/#{@organization.id}/stacks/#{@id}"
 
 module.exports = StackModel

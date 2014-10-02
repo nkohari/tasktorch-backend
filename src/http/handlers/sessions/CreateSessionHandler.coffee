@@ -1,5 +1,5 @@
 {Session, User} = require 'data/entities'
-GetByQuery      = require 'data/queries/GetByQuery'
+{GetByQuery}    = require 'data/queries'
 SessionModel    = require '../../models/SessionModel'
 Handler         = require '../../framework/Handler'
 

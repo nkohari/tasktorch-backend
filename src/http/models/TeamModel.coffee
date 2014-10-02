@@ -7,6 +7,7 @@ class TeamModel extends Model
     @name = team.name
     @members = team.members
     @organization = team.organization.id
-    @uri = "#{baseUrl}/organizations/#{@organization.id}/teams/#{@id}"
+    @uri = "#{baseUrl}/#{@organization.id}/teams/#{@id}"
+    @stacks = team.stacks if team.stacks?
 
 module.exports = TeamModel

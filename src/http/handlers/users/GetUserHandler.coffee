@@ -1,7 +1,7 @@
-{User}    = require 'data/entities'
-GetQuery  = require 'data/queries/GetQuery'
-UserModel = require '../../models/UserModel'
-Handler   = require '../../framework/Handler'
+{User}     = require 'data/entities'
+{GetQuery} = require 'data/queries'
+UserModel  = require '../../models/UserModel'
+Handler    = require '../../framework/Handler'
 
 class GetUserHandler extends Handler
 

@@ -77,10 +77,10 @@ class Entity
     if @isRef
       return if options.flatten then @id else {@id}
 
+    properties = _.select @properties, (p) -> not p.options.foreign?
+
     if options.diff
-      properties = _.select @properties, (p) -> p.isDirty
-    else
-      properties = _.values @properties
+      properties = _.select properties, (p) -> p.isDirty
 
     data = {@id}
     for property in properties

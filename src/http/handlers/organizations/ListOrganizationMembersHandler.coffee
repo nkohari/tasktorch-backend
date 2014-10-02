@@ -1,12 +1,12 @@
-_             = require 'lodash'
-{User}        = require 'data/entities'
-MultiGetQuery = require 'data/queries/MultiGetQuery'
-UserModel     = require '../../models/UserModel'
-Handler       = require '../../framework/Handler'
+_               = require 'lodash'
+{User}          = require 'data/entities'
+{MultiGetQuery} = require 'data/queries'
+UserModel       = require '../../models/UserModel'
+Handler         = require '../../framework/Handler'
 
 class ListOrganizationMembersHandler extends Handler
 
-  @route 'get /organizations/{organizationId}/members'
+  @route 'get /{organizationId}/members'
   @demand 'requester is organization member'
   
   constructor: (@database) ->
