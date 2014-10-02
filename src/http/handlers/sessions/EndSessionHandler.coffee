@@ -2,7 +2,7 @@ Handler = require '../../framework/Handler'
 
 class EndSessionHandler extends Handler
 
-  @route 'delete /sessions/{sessionId}'
+  @route 'delete /api/sessions/{sessionId}'
 
   constructor: (@database) ->
 

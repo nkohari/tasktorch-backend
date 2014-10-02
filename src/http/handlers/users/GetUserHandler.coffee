@@ -5,7 +5,7 @@ Handler    = require '../../framework/Handler'
 
 class GetUserHandler extends Handler
 
-  @route 'get /users/{userId}'
+  @route 'get /api/users/{userId}'
   @demand 'requester is user'
 
   constructor: (@database) ->

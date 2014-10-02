@@ -5,7 +5,7 @@ Handler    = require '../../framework/Handler'
 
 class GetCardHandler extends Handler
 
-  @route 'get /{organizationId}/cards/{cardId}'
+  @route 'get /api/{organizationId}/cards/{cardId}'
 
   constructor: (@database) ->
 

@@ -5,7 +5,7 @@ Handler         = require '../../framework/Handler'
 
 class CreateSessionHandler extends Handler
 
-  @route 'post /sessions'
+  @route 'post /api/sessions'
   @auth  {mode: 'try'}
 
   constructor: (@database, @passwordHasher) ->

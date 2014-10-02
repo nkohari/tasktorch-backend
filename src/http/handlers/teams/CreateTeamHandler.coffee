@@ -5,7 +5,7 @@ Handler    = require '../../framework/Handler'
 
 class CreateTeamHandler extends Handler
 
-  @route 'post /{organizationId}/teams'
+  @route 'post /api/{organizationId}/teams'
   @demand ['requester is organization member']
 
   constructor: (@database) ->

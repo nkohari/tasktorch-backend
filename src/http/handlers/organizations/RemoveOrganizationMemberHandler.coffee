@@ -4,7 +4,7 @@ Handler    = require '../../framework/Handler'
 
 class RemoveOrganizationMemberHandler extends Handler
 
-  @route 'delete /{organizationId}/users/{userId}'
+  @route 'delete /api/{organizationId}/users/{userId}'
   @demand 'requester is organization member'
   
   constructor: (@database) ->

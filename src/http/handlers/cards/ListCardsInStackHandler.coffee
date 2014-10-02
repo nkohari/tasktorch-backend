@@ -6,7 +6,7 @@ Handler         = require '../../framework/Handler'
 
 class ListCardsInStackHandler extends Handler
 
-  @route 'get /{organizationId}/stacks/{stackId}/cards'
+  @route 'get /api/{organizationId}/stacks/{stackId}/cards'
   @demand ['requester is organization member', 'requester is stack participant']
 
   constructor: (@database) ->

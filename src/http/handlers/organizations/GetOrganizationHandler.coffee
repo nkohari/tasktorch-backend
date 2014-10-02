@@ -5,7 +5,7 @@ Handler           = require '../../framework/Handler'
 
 class GetOrganizationHandler extends Handler
 
-  @route 'get /{organizationId}'
+  @route 'get /api/{organizationId}'
   @demand 'requester is organization member'
 
   constructor: (@database) ->

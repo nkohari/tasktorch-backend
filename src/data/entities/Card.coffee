@@ -6,6 +6,7 @@ class Card extends Entity
 
   @field   'title',        Entity.DataType.STRING
   @field   'body',         Entity.DataType.STRING
+  @field   'type',         Entity.DataType.STRING
   @hasOne  'organization', 'Organization'
   @hasOne  'creator',      'User'
   @hasOne  'owner',        'User'

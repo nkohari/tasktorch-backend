@@ -6,7 +6,7 @@ Handler         = require '../../framework/Handler'
 
 class ListUserStacksHandler extends Handler
 
-  @route 'get /{organizationId}/users/{userId}/stacks'
+  @route 'get /api/{organizationId}/users/{userId}/stacks'
   @demand ['requester is organization member', 'requester is user']
 
   constructor: (@database) ->
