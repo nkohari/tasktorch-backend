@@ -7,7 +7,7 @@ class Organization extends Entity
   @table 'organizations'
 
   @field   'name',    Entity.DataType.STRING
-  @hasMany 'teams',   'Team'
+  @hasMany 'teams',   'Team', {foreign: 'organization'}
   @hasMany 'leaders', 'User'
   @hasMany 'members', 'User'
 
@@ -19,16 +19,11 @@ class Organization extends Entity
     @leaders = _.filter @leaders, (u) -> u.equals(user)
     @announce new Events.OrganizationLeaderRemovedEvent(this, user)
 
-  hasTeam: (team) ->
-    _.any @teams, (t) -> t.equals(team)
-
   addTeam: (team) ->
-    @teams = @teams.concat [team]
     team.organiation = this
     @announce new Events.TeamAddedEvent(this, team)
 
   removeTeam: (team) ->
-    @teams = _.filter @teams, (t) -> t.equals(team)
     team.organization = undefined
     @announce new Events.TeamRemovedEvent(this, team)
 

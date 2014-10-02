@@ -12,9 +12,10 @@ class Database
           callback.apply(null, results)
         func.apply this, _.flatten [conn, args, cleanup]
 
-  constructor: (@connectionPool, @keyGenerator, @eventBus) ->
+  constructor: (@log, @connectionPool, @keyGenerator, @eventBus) ->
 
   execute: @withConnection (conn, query, callback) ->
+    @log.debug query.rql.toString()
     query.execute(conn, callback)
 
   create: @withConnection (conn, entity, callback) ->

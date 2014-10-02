@@ -1,0 +1,50 @@
+#!/usr/bin/env ./node_modules/.bin/coffee
+
+async = require 'async'
+r     = require 'rethinkdb'
+_     = require 'lodash'
+
+DB_NAME = 'tasktorch'
+
+database = (name) ->
+  return (conn, callback) ->
+    r.dbCreate(DB_NAME).run(conn, callback)
+
+table = (name) ->
+  return (conn, callback) ->
+    r.db(DB_NAME).tableCreate(name).run(conn, callback)
+
+index = (table, name, options = undefined) ->
+  return (conn, callback) ->
+    r.db(DB_NAME).table(table).indexCreate(name, options).run(conn, callback)
+
+tasks = [
+  database()
+  table('cards')
+  table('organizations')
+  index('organizations', 'members', {multi: true})
+  table('sessions')
+  index('sessions', 'user')
+  table('stacks')
+  index('stacks', 'owner')
+  index('stacks', 'team')
+  table('teams')
+  index('teams', 'organization')
+  index('teams', 'members', {multi: true})
+  table('users')
+  index('users', 'username')
+]
+
+console.log 'Connecting to RethinkDB'
+r.connect (err, conn) ->
+  if err?
+    console.log(err)
+    process.exit(1)
+  console.log 'Building database'
+  funcs = _.map tasks, (task) -> _.partial(task, conn)
+  async.series funcs, (err) ->
+    if err?
+      console.log(err)
+      process.exit(1)
+    console.log 'Complete'
+    process.exit(0)

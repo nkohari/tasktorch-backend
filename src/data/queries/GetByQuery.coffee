@@ -13,7 +13,6 @@ class GetByQuery extends ExpandoQuery
   processResult: (cursor, callback) ->
     cursor.toArray (err, records) =>
       return callback(err) if err?
-      cursor.close()
       return callback(null, null) if records.length == 0
       callback null, new @type(records[0])
 

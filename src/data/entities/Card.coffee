@@ -4,7 +4,8 @@ class Card extends Entity
 
   @table 'cards'
 
-  @field   'name',         Entity.DataType.STRING
+  @field   'title',        Entity.DataType.STRING
+  @field   'body',         Entity.DataType.STRING
   @hasOne  'organization', 'Organization'
   @hasOne  'creator',      'User'
   @hasOne  'owner',        'User'

@@ -19,9 +19,9 @@ class ExpandoQuery extends Query
     @rql = @rql.merge (parent) ->
       r.object(expandoField, r.table(table).get(parent(expandoField).default('__nonexistent__')).default(null))
 
-  withMany: (expandoField, table, index) ->
+  withMany: (expandoField, table, foreignIndex) ->
     @rql = @rql.merge (parent) ->
-      r.object(expandoField, r.table(table).getAll(r.args(parent(expandoField)), {index}).coerceTo('array'))
+      r.object(expandoField, r.table(table).getAll(r.args(parent(expandoField)), {index: foreignIndex}).coerceTo('array'))
 
   withManyForeign: (expandoField, table, joinField, foreignIndex) ->
     @rql = @rql.merge (parent) ->
@@ -37,9 +37,9 @@ class ExpandoQuery extends Query
         if property.options.foreign?
           @withManyForeign(name, schema.table, 'id', property.options.foreign)
         else
-          @withMany(name, schema.table, name)
+          @withMany(name, schema.table, 'id')
 
-  processResult: (result) ->
-    return new @type(result)
+  processResultItem: (item) ->
+    return new @type(item)
 
 module.exports = ExpandoQuery

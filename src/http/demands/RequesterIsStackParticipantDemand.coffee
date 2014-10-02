@@ -4,7 +4,7 @@ Demand   = require '../framework/Demand'
 
 class RequesterIsStackParticipantDemand extends Demand
 
-  constructor: (@database) ->
+  constructor: (@log, @database) ->
 
   execute: (request, reply) ->
     {stackId} = request.params
