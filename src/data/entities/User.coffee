@@ -5,9 +5,12 @@ class User extends Entity
 
   @table 'users'
 
-  @field 'username', Entity.DataType.STRING
-  @field 'name',     Entity.DataType.STRING
-  @field 'password', Entity.DataType.STRING
+  @field  'username',  Entity.DataType.STRING
+  @field  'name',      Entity.DataType.STRING
+  @field  'password',  Entity.DataType.STRING
+  @field  'emails',    Entity.DataType.ARRAY
+  @hasOne 'inbox',     'Stack'
+  @hasOne 'queue',     'Stack'
 
   setPassword: (password) ->
     @password = password

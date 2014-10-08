@@ -6,11 +6,15 @@ class Authenticator
   constructor: (@log, @config, @database) ->
 
   init: (server) ->
+    {cookie} = @config.security
     server.pack.register require('hapi-auth-cookie'), (err) =>
       throw err if err?
       server.auth.strategy 'session', 'cookie', 'required',
-        cookie:       'tt-sid'
-        password:     @config.security.secret
+        cookie:       cookie.name
+        domain:       cookie.domain
+        ttl:          cookie.ttl
+        password:     cookie.secret
+        isSecure:     cookie.secure
         redirectTo:   false
         clearInvalid: true
         validateFunc: @validate.bind(this)

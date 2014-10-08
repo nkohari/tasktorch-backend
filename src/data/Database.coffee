@@ -1,3 +1,4 @@
+async     = require 'async'
 rethinkdb = require 'rethinkdb'
 _         = require 'lodash'
 
@@ -17,6 +18,10 @@ class Database
   execute: @withConnection (conn, query, callback) ->
     @log.debug query.rql.toString()
     query.execute(conn, callback)
+
+  executeAll: (queries, callback) ->
+    @log.inspect queries
+    async.map queries, @execute.bind(this), callback
 
   create: @withConnection (conn, entity, callback) ->
     entity.id = @keyGenerator.generate()

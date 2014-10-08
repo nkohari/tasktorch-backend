@@ -11,15 +11,24 @@ class CreateSessionHandler extends Handler
   constructor: (@database, @passwordHasher) ->
 
   handle: (request, reply) ->
-    {username, password} = request.payload
-    query = new GetByQuery(User, {username})
-    @database.execute query, (err, user) =>
+    {login, password} = request.payload
+    @resolveUser login, (err, user) =>
       return reply err if err?
-      return reply @error.unauthorized() unless user? and @passwordHasher.verify(user.password, password)
+      return reply @error.forbidden() unless user? and @passwordHasher.verify(user.password, password)
       session = new Session {user, isActive: true}
       @database.create session, (err) =>
         return reply err if err?
         request.auth.session.set {userId: user.id, sessionId: session.id}
         reply new SessionModel(session)
+
+  resolveUser: (login, callback) ->
+    query = new GetByQuery(User, {username: login})
+    @database.execute query, (err, user) =>
+      return callback(err) if err?
+      return callback(null, user) if user?
+      query = new GetByQuery(User, {emails: login})
+      @database.execute query, (err, user) =>
+        return callback(err) if err?
+        callback(null, user)
 
 module.exports = CreateSessionHandler

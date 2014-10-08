@@ -31,7 +31,10 @@ tasks = [
   table('teams')
   index('teams', 'organization')
   index('teams', 'members', {multi: true})
+  table('types')
+  index('types', 'organization')
   table('users')
+  index('users', 'emails', {multi: true})
   index('users', 'username')
 ]
 
