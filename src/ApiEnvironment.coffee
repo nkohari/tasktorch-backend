@@ -5,6 +5,7 @@ Config              = require 'common/Config'
 KeyGenerator        = require 'common/KeyGenerator'
 Log                 = require 'common/Log'
 PasswordHasher      = require 'common/PasswordHasher'
+PusherClient        = require 'common/PusherClient'
 Database            = require 'data/Database'
 ConnectionPool      = require 'data/ConnectionPool'
 EventBus            = require 'data/EventBus'
@@ -20,6 +21,7 @@ class ApiEnvironment
     forge.bind('keyGenerator').to.type(KeyGenerator)
     forge.bind('log').to.type(Log)
     forge.bind('passwordHasher').to.type(PasswordHasher)
+    forge.bind('pusher').to.type(PusherClient)
     forge.bind('eventBus').to.type(EventBus)
 
     forge.bind('connectionPool').to.type(ConnectionPool)
