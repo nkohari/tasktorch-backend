@@ -16,6 +16,6 @@ class ListMyOrganizationsHandler extends Handler
     query = new GetAllByQuery(Organization, {members: user.id}, {expand})
     @database.execute query, (err, organizations) =>
       return reply err if err?
-      reply _.map organizations, (organization) -> new OrganizationModel(organization)
+      reply _.map organizations, (organization) -> new OrganizationModel(organization, request)
 
 module.exports = ListMyOrganizationsHandler

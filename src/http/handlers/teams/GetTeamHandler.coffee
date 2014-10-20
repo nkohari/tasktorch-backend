@@ -16,6 +16,6 @@ class GetTeamHandler extends Handler
     query    = new GetQuery(Team, teamId, {expand})
     @database.execute query, (err, team) =>
       return reply err if err?
-      reply new TeamModel(request.baseUrl, team)
+      reply new TeamModel(team, request)
 
 module.exports = GetTeamHandler

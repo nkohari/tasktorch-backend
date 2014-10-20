@@ -24,7 +24,7 @@ class PusherAuthHandler extends Handler
       return reply @error.forbidden() unless organization.hasMember(user)
       presenceInfo =
         user_id: user.id
-        user_info: new UserModel(user)
+        user_info: new UserModel(user, request)
       reply @pusher.getAuthToken(socketId, channel, presenceInfo)
 
 module.exports = PusherAuthHandler

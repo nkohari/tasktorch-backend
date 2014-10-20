@@ -2,14 +2,15 @@ Model = require '../framework/Model'
 
 class StackModel extends Model
 
-  constructor: (baseUrl, stack) ->
-    super(stack.id)
+  getUri: (stack, request) ->
+    "#{request.scope.organization.id}/stacks/#{stack.id}"
+
+  assignProperties: (stack) ->
     @name = stack.name
     @kind = stack.kind
-    @organization = stack.organization
-    @owner = stack.owner
-    @team = stack.team
-    @cards = stack.cards
-    @uri = "#{baseUrl}/#{@organization.id}/stacks/#{@id}"
+    @organization = @one('OrganizationModel', stack.organization)
+    @owner = @one('UserModel', stack.owner)
+    @team = @one('TeamModel', stack.team)
+    @cards = @many('CardModel', stack.cards)
 
 module.exports = StackModel

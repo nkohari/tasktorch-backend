@@ -2,12 +2,13 @@ Model = require '../framework/Model'
 
 class TeamModel extends Model
 
-  constructor: (baseUrl, team) ->
-    super(team.id)
+  getUri: (team, request) ->
+    "#{request.scope.organization.id}/teams/#{team.id}"
+
+  assignProperties: (team) ->
     @name = team.name
-    @members = team.members
-    @organization = team.organization.id
-    @uri = "#{baseUrl}/#{@organization.id}/teams/#{@id}"
-    @stacks = team.stacks if team.stacks?
+    @members = @many('UserModel', team.members)
+    @organization = @one('OrganizationModel', team.organization)
+    @stacks = @many('StackModel', team.stacks) if team.stacks?
 
 module.exports = TeamModel

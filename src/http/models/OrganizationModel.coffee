@@ -2,9 +2,11 @@ Model = require '../framework/Model'
 
 class OrganizationModel extends Model
 
-  constructor: (organization) ->
-    super(organization.id)
+  getUri: (organization, request) ->
+    "#{organization.id}"
+
+  assignProperties: (organization) ->
     @name = organization.name
-    @members = organization.members
+    @members = @many('UserModel', organization.members)
 
 module.exports = OrganizationModel

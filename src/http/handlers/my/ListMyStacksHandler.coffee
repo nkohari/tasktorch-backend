@@ -18,6 +18,6 @@ class ListMyStacksHandler extends Handler
     query = new GetAllStacksByOrganizationAndOwnerQuery(organization, user, {expand})
     @database.execute query, (err, teams) =>
       return reply err if err?
-      reply _.map teams, (team) -> new StackModel(request.baseUrl, team)
+      reply _.map teams, (team) -> new StackModel(team, request)
 
 module.exports = ListMyStacksHandler

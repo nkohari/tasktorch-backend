@@ -45,7 +45,7 @@ class ApiServer
     @log.debug "Mounted #{handler.constructor.name} at #{route.verb} #{route.path}"
 
   onRequest: (request, next) ->
-    request.baseUrl = "https://#{request.headers['host']}"
+    request.baseUrl = "http://#{request.headers['host']}/api"
     request.scope = {}
     next()
 

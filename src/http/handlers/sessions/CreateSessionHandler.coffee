@@ -19,7 +19,7 @@ class CreateSessionHandler extends Handler
       @database.create session, (err) =>
         return reply err if err?
         request.auth.session.set {userId: user.id, sessionId: session.id}
-        reply new SessionModel(session)
+        reply new SessionModel(session, request)
 
   resolveUser: (login, callback) ->
     query = new GetByQuery(User, {username: login})

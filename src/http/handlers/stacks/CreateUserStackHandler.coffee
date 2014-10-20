@@ -18,7 +18,7 @@ class CreateUserStackHandler extends Handler
 
     @database.create stack, (err) =>
       return reply err if err?
-      model = new StackModel(request.baseUrl, stack)
+      model = new StackModel(stack, request)
       reply(model).location(model.uri)
 
 module.exports = CreateUserStackHandler

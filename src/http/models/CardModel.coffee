@@ -2,12 +2,14 @@ Model = require '../framework/Model'
 
 class CardModel extends Model
 
-  constructor: (card) ->
-    super(card.id)
+  getUri: (card, request) ->
+    "#{request.scope.organization.id}/cards/#{card.id}"
+
+  assignProperties: (card) ->
     @type = card.type
     @title = card.title
     @body = card.body
-    @owner = card.owner
-    @participants = card.participants
+    @owner = @one('UserModel', card.owner)
+    @participants = @many('UserModel', card.participants)
 
 module.exports = CardModel

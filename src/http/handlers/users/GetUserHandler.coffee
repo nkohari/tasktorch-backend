@@ -17,6 +17,6 @@ class GetUserHandler extends Handler
     @database.execute query, (err, user) =>
       return reply err if err?
       return reply @error.notFound() unless user?
-      reply new UserModel(user)
+      reply new UserModel(user, request)
 
 module.exports = GetUserHandler

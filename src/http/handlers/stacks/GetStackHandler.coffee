@@ -16,6 +16,6 @@ class GetStackHandler extends Handler
     query     = new GetQuery(Stack, stackId, {expand})
     @database.execute query, (err, stack) =>
       return reply err if err?
-      reply new StackModel(request.baseUrl, stack)
+      reply new StackModel(stack, request)
 
 module.exports = GetStackHandler

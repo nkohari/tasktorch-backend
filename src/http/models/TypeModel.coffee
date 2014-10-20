@@ -2,11 +2,12 @@ Model = require '../framework/Model'
 
 class TypeModel extends Model
 
-  constructor: (baseUrl, type) ->
-    super(type.id)
+  getUri: (type, request) ->
+    "#{request.scope.organization.id}/types/#{type.id}"
+
+  assignProperties: (type) ->
     @name = type.name
-    @organization = type.organization
-    @steps = type.steps
-    @uri = "#{baseUrl}/#{@organization.id}/kinds/#{@id}"
+    @organization = @one('OrganizationModel', type.organization)
+    @steps = type.steps #TODO
 
 module.exports = TypeModel

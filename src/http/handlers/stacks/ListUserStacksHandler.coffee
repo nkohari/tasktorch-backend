@@ -16,6 +16,6 @@ class ListUserStacksHandler extends Handler
     query  = new GetAllByQuery(Stack, {owner: request.scope.user.id}, {expand})
     @database.execute query, (err, stacks) =>
       return reply err if err?
-      reply _.map stacks, (stack) -> new StackModel(request.baseUrl, stack)
+      reply _.map stacks, (stack) -> new StackModel(stack, request)
 
 module.exports = ListUserStacksHandler

@@ -6,6 +6,6 @@ class EventBus
 
   publish: (events...) ->
     events = _.flatten(events)
-    @log.inspect {events}
+    @log.inspect(events, 999)
 
 module.exports = EventBus

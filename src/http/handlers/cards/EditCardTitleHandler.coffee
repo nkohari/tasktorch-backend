@@ -3,22 +3,23 @@
 CardModel  = require '../../models/CardModel'
 Handler    = require '../../framework/Handler'
 
-class GetCardHandler extends Handler
+class EditCardTitleHandler extends Handler
 
-  @route 'get /api/{organizationId}/cards/{cardId}'
+  @route 'post /api/{organizationId}/cards/{cardId}/title'
   @demand 'requester is organization member'
 
   constructor: (@database) ->
 
   handle: (request, reply) ->
-
     {cardId} = request.params
-    expand   = request.query.expand?.split(',')
-
-    query = new GetQuery(Card, cardId, {expand})
+    {title}  = request.payload
+    query = new GetQuery(Card, cardId)
     @database.execute query, (err, card) =>
       return reply err if err?
       return reply @error.notFound() unless card?
-      reply new CardModel(card, request)
+      card.setTitle(title)
+      @database.update card, (err) =>
+        return reply err if err?
+        reply()
 
-module.exports = GetCardHandler
+module.exports = EditCardTitleHandler

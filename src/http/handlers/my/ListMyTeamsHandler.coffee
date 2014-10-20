@@ -18,6 +18,6 @@ class ListMyTeamsHandler extends Handler
     query = new GetAllTeamsByOrganizationAndMemberQuery(organization, user, {expand})
     @database.execute query, (err, teams) =>
       return reply err if err?
-      reply _.map teams, (team) -> new TeamModel(request.baseUrl, team)
+      reply _.map teams, (team) -> new TeamModel(team, request)
 
 module.exports = ListMyTeamsHandler

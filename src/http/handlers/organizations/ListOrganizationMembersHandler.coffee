@@ -21,6 +21,6 @@ class ListOrganizationMembersHandler extends Handler
 
     @database.execute query, (err, users) =>
       return reply err if err?
-      reply _.map users, (user) -> new UserModel(user)
+      reply _.map users, (user) -> new UserModel(user, request)
 
 module.exports = ListOrganizationMembersHandler

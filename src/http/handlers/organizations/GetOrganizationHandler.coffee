@@ -16,6 +16,6 @@ class GetOrganizationHandler extends Handler
     query  = new GetQuery(Organization, organizationId, {expand})
     @database.execute query, (err, organization) =>
       return reply err if err?
-      reply new OrganizationModel(organization)
+      reply new OrganizationModel(organization, request)
 
 module.exports = GetOrganizationHandler

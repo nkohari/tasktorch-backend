@@ -28,11 +28,11 @@ class GetMyWorkspaceHandler extends Handler
       return reply err if err?
       
       reply {
-        user:         new UserModel(user)
-        organization: new OrganizationModel(organization)
-        types:        _.map(types, (type) -> new TypeModel(request.baseUrl, type))
-        teams:        _.map(teams, (team) -> new TeamModel(request.baseUrl, team))
-        stacks:       _.map(stacks, (stack) -> new StackModel(request.baseUrl, stack))
+        user:         new UserModel(user, request)
+        organization: new OrganizationModel(organization, request)
+        types:        _.map(types, (type) -> new TypeModel(type, request))
+        teams:        _.map(teams, (team) -> new TeamModel(team, request))
+        stacks:       _.map(stacks, (stack) -> new StackModel(stack, request))
       }
 
 module.exports = GetMyWorkspaceHandler

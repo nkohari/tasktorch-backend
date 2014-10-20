@@ -17,6 +17,6 @@ class ListCardsInStackHandler extends Handler
     query = new MultiGetQuery(Card, _.pluck(stack.cards, 'id'), {expand})
     @database.execute query, (err, cards) =>
       return reply err if err?
-      reply _.map cards, (card) -> new CardModel(card)
+      reply _.map cards, (card) -> new CardModel(card, request)
 
 module.exports = ListCardsInStackHandler

@@ -3,8 +3,10 @@ Model  = require '../framework/Model'
 
 class UserModel extends Model
 
-  constructor: (user) ->
-    super(user.id)
+  getUri: (user, request) ->
+    "users/#{user.id}"
+
+  assignProperties: (user) ->
     @username = user.username
     @name = user.name
     # TODO: Make this configurable instead of always being the first email address
