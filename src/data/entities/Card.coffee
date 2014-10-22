@@ -13,14 +13,14 @@ class Card extends Entity
   @hasOne  'owner',        'User'
   @hasMany 'participants', 'User'
 
-  setBody: (value) ->
+  setBody: (user, value) ->
     previous = @body
     @body = value
-    @announce new Events.CardBodyEditedEvent(this, previous, value)
+    @announce new Events.CardBodyChangedEvent(user.id, @organization.id, this, previous, value)
 
-  setTitle: (value) ->
+  setTitle: (user, value) ->
     previous = @title
     @title = value
-    @announce new Events.CardTitleEditedEvent(this, previous, value)
+    @announce new Events.CardTitleChangedEvent(user.id, @organization.id, this, previous, value)
 
 module.exports = Card

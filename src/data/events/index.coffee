@@ -1,6 +1,6 @@
 # cards
-exports.CardBodyEditedEvent = require './cards/CardBodyEditedEvent'
-exports.CardTitleEditedEvent = require './cards/CardTitleEditedEvent'
+exports.CardBodyChangedEvent = require './cards/CardBodyChangedEvent'
+exports.CardTitleChangedEvent = require './cards/CardTitleChangedEvent'
 
 # organizations
 exports.OrganizationLeaderAddedEvent = require './organizations/OrganizationLeaderAddedEvent'
