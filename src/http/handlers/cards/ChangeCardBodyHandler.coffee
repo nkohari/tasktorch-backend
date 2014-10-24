@@ -11,14 +11,17 @@ class ChangeCardBodyHandler extends Handler
   constructor: (@database) ->
 
   handle: (request, reply) ->
-    {user}   = request.auth.credentials
     {cardId} = request.params
     {body}   = request.payload
     query = new GetQuery(Card, cardId)
     @database.execute query, (err, card) =>
       return reply err if err?
       return reply @error.notFound() unless card?
-      card.setBody(user, body)
+      metadata =
+        user:         request.auth.credentials.user
+        organization: request.scope.organization
+        socketId:     request.socketId
+      card.setBody(body, metadata)
       @database.update card, (err) =>
         return reply err if err?
         reply()

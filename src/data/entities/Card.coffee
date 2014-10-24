@@ -1,5 +1,6 @@
-Entity = require '../framework/Entity'
-Events = require '../events'
+Entity                = require '../framework/Entity'
+CardBodyChangedEvent  = require '../events/cards/CardBodyChangedEvent'
+CardTitleChangedEvent = require '../events/cards/CardTitleChangedEvent'
 
 class Card extends Entity
 
@@ -12,15 +13,18 @@ class Card extends Entity
   @hasOne  'creator',      'User'
   @hasOne  'owner',        'User'
   @hasMany 'participants', 'User'
+  @hasOne  'stack',        'Stack'
 
-  setBody: (user, value) ->
-    previous = @body
+  setBody: (value, metadata) ->
+    event = new CardBodyChangedEvent(this, value, metadata)
     @body = value
-    @announce new Events.CardBodyChangedEvent(user.id, @organization.id, this, previous, value)
+    @incrementVersion()
+    @announce(event)
 
-  setTitle: (user, value) ->
-    previous = @title
+  setTitle: (value, metadata) ->
+    event = new CardTitleChangedEvent(this, value, metadata)
     @title = value
-    @announce new Events.CardTitleChangedEvent(user.id, @organization.id, this, previous, value)
+    @incrementVersion()
+    @announce(event)
 
 module.exports = Card

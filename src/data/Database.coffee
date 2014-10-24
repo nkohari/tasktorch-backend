@@ -1,6 +1,6 @@
-async     = require 'async'
-rethinkdb = require 'rethinkdb'
-_         = require 'lodash'
+async = require 'async'
+r     = require 'rethinkdb'
+_     = require 'lodash'
 
 class Database
 
@@ -27,7 +27,7 @@ class Database
     entity.id = @keyGenerator.generate()
     {schema}  = entity.constructor
     record    = entity.toJSON {flatten: true}
-    rethinkdb.table(schema.table).insert(record).run conn, (err, results) =>
+    r.table(schema.table).insert(record).run conn, (err, results) =>
       return callback(err) if err?
       entity.onCreated()
       entity.flushPendingEvents(@eventBus)
@@ -36,14 +36,19 @@ class Database
   update: @withConnection (conn, entity, callback) ->
     {schema} = entity.constructor
     diff     = entity.toJSON {flatten: true, diff: true}
-    rethinkdb.table(schema.table).get(entity.id).update(diff).run conn, (err, results) =>
+    events   = _.map entity.pendingEvents, (event) -> event.toJSON()
+    rql = r.table(schema.table)
+    .get(entity.id)
+    .update (row) -> r.expr(diff).merge({events: row('events').add(events)})
+    @log.debug(rql.toString())
+    rql.run conn, (err, results) =>
       return callback(err) if err?
       entity.flushPendingEvents(@eventBus)
       callback()
 
   delete: @withConnection (conn, entity, callback) ->
     {schema} = entity.constructor
-    rethinkdb.table(schema.table).get(entity.id).delete().run conn, (err, results) =>
+    r.table(schema.table).get(entity.id).delete().run conn, (err, results) =>
       return callback(err) if err?
       entity.onDeleted()
       entity.flushPendingEvents(@eventBus)

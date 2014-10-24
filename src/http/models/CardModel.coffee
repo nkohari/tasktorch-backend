@@ -11,5 +11,6 @@ class CardModel extends Model
     @body = card.body
     @owner = @one('UserModel', card.owner)
     @participants = @many('UserModel', card.participants)
+    @stack = @one('StackModel', card.stack)
 
 module.exports = CardModel

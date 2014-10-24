@@ -11,14 +11,17 @@ class ChangeCardTitleHandler extends Handler
   constructor: (@database) ->
 
   handle: (request, reply) ->
-    {user}   = request.auth.credentials
     {cardId} = request.params
     {title}  = request.payload
     query = new GetQuery(Card, cardId)
     @database.execute query, (err, card) =>
       return reply err if err?
       return reply @error.notFound() unless card?
-      card.setTitle(user, title)
+      metadata =
+        user:         request.auth.credentials.user
+        organization: request.scope.organization
+        socketId:     request.socketId
+      card.setTitle(title, metadata)
       @database.update card, (err) =>
         return reply err if err?
         reply()
