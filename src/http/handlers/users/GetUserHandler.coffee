@@ -1,7 +1,6 @@
-{User}     = require 'data/entities'
-{GetQuery} = require 'data/queries'
-UserModel  = require '../../models/UserModel'
-Handler    = require '../../framework/Handler'
+UserModel = require 'http/models/UserModel'
+Handler = require 'http/framework/Handler'
+GetUserQuery = require 'data/queries/GetUserQuery'
 
 class GetUserHandler extends Handler
 
@@ -12,8 +11,7 @@ class GetUserHandler extends Handler
 
   handle: (request, reply) ->
     {userId} = request.params
-    expand   = request.query.expand?.split(',')
-    query    = new GetQuery(User, userId, {expand})
+    query = new GetUserQuery(userId, @getQueryOptions(request))
     @database.execute query, (err, user) =>
       return reply err if err?
       return reply @error.notFound() unless user?

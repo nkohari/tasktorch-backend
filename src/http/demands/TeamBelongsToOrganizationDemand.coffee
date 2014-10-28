@@ -1,7 +1,6 @@
-_              = require 'lodash'
-{Organization} = require 'data/entities'
-GetQuery       = require 'data/queries/GetQuery'
-Demand         = require '../framework/Demand'
+_            = require 'lodash'
+GetTeamQuery = require 'data/queries/GetTeamQuery'
+Demand       = require '../framework/Demand'
 
 class TeamBelongsToOrganizationDemand extends Demand
 
@@ -9,10 +8,10 @@ class TeamBelongsToOrganizationDemand extends Demand
 
   execute: (request, reply) ->
     {organizationId, teamId} = request.params
-    query = new GetQuery(Organization, organizationId)
-    @database.execute query, (err, organization) =>
+    query = new GetTeamQuery(teamId)
+    @database.execute query, (err, team) =>
       return reply err if err?
-      if _.any(organization.teams, (t) -> t.id == teamId)
+      if team.organization == organizationId
         return reply()
       else
         return reply @error.unauthorized()

@@ -1,12 +1,12 @@
-r            = require 'rethinkdb'
-{Stack}      = require '../entities'
-ExpandoQuery = require '../framework/ExpandoQuery'
+r     = require 'rethinkdb'
+Stack = require 'data/schemas/Stack'
+Query = require 'data/framework/queries/Query'
 
-class GetAllStacksByOrganizationAndOwnerQuery extends ExpandoQuery
+class GetAllStacksByOrganizationAndOwnerQuery extends Query
 
-  constructor: (organization, user, options) ->
+  constructor: (organizationId, userId, options) ->
     super(Stack, options)
-    @rql = r.table(Stack.schema.table).getAll(user.id, {index: 'owner'})
-      .filter({organization: organization.id})
+    @rql = r.table(@schema.table).getAll(userId, {index: 'owner'})
+      .filter({organization: organizationId})
 
 module.exports = GetAllStacksByOrganizationAndOwnerQuery

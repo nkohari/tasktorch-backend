@@ -2,14 +2,19 @@ _ = require 'lodash'
 
 class Model
 
-  @create: (type, entity, request) ->
+  @create: (type, data, request) ->
     klass = require "../models/#{type}"
-    new klass(entity, request)
+    new klass(data, request)
 
-  constructor: (entity, @request) ->
-    @id  = entity.id
-    @uri = "#{@request.baseUrl}/#{@getUri(entity, request)}"
-    @assignProperties(entity) unless entity.isRef
+  constructor: (data, @request) ->
+    if _.isString(data)
+      @id = data
+      @uri = "#{@request.baseUrl}/#{@getUri({id: data}, @request)}"
+    else
+      @id = data.id
+      @uri = "#{@request.baseUrl}/#{@getUri(data, @request)}"
+      @version = data.version
+      @assignProperties(data)
 
   getUri: (entity, request) ->
     throw new Error("You must implement getUri() on #{@constructor.name}")

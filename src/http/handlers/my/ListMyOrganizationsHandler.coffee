@@ -1,8 +1,7 @@
-_                 = require 'lodash'
-{Organization}    = require 'data/entities'
-OrganizationModel = require '../../models/OrganizationModel'
-Handler           = require '../../framework/Handler'
-{GetAllByQuery}   = require 'data/queries'
+_ = require 'lodash'
+OrganizationModel = require 'http/models/OrganizationModel'
+Handler = require 'http/framework/Handler'
+GetAllOrganizationsByMemberQuery = require 'data/queries/GetAllOrganizationsByMemberQuery'
 
 class ListMyOrganizationsHandler extends Handler
 
@@ -12,8 +11,7 @@ class ListMyOrganizationsHandler extends Handler
 
   handle: (request, reply) ->
     {user} = request.auth.credentials
-    expand = request.query.expand?.split(',')
-    query = new GetAllByQuery(Organization, {members: user.id}, {expand})
+    query = new GetAllOrganizationsByMemberQuery(user.id, @getQueryOptions(request))
     @database.execute query, (err, organizations) =>
       return reply err if err?
       reply _.map organizations, (organization) -> new OrganizationModel(organization, request)

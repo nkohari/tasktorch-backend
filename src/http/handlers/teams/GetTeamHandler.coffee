@@ -1,7 +1,6 @@
-{Team}     = require 'data/entities'
-{GetQuery} = require 'data/queries'
-TeamModel  = require '../../models/TeamModel'
-Handler    = require '../../framework/Handler'
+TeamModel = require 'http/models/TeamModel'
+Handler = require 'http/framework/Handler'
+GetTeamQuery = require 'data/queries/GetTeamQuery'
 
 class GetTeamHandler extends Handler
 
@@ -12,8 +11,7 @@ class GetTeamHandler extends Handler
 
   handle: (request, reply) ->
     {teamId} = request.params
-    expand   = request.query.expand?.split(',')
-    query    = new GetQuery(Team, teamId, {expand})
+    query = new GetTeamQuery(teamId, @getQueryOptions(request))
     @database.execute query, (err, team) =>
       return reply err if err?
       reply new TeamModel(team, request)

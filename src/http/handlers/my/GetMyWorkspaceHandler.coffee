@@ -1,12 +1,13 @@
-_          = require 'lodash'
-{Type}     = require 'data/entities'
-OrganizationModel = require '../../models/OrganizationModel'
-StackModel = require '../../models/StackModel'
-TeamModel  = require '../../models/TeamModel'
-TypeModel  = require '../../models/TypeModel'
-UserModel  = require '../../models/UserModel'
-Handler    = require '../../framework/Handler'
-{GetAllByQuery, GetAllTeamsByOrganizationAndMemberQuery, GetAllStacksByOrganizationAndOwnerQuery} = require 'data/queries'
+_ = require 'lodash'
+Handler = require 'http/framework/Handler'
+OrganizationModel = require 'http/models/OrganizationModel'
+StackModel = require 'http/models/StackModel'
+TeamModel = require 'http/models/TeamModel'
+TypeModel = require 'http/models/TypeModel'
+UserModel = require 'http/models/UserModel'
+GetAllTypesByOrganizationQuery = require 'data/queries/GetAllTypesByOrganizationQuery'
+GetAllTeamsByOrganizationAndMemberQuery = require 'data/queries/GetAllTeamsByOrganizationAndMemberQuery'
+GetAllStacksByOrganizationAndOwnerQuery = require 'data/queries/GetAllStacksByOrganizationAndOwnerQuery'
 
 class GetMyWorkspaceHandler extends Handler
 
@@ -17,14 +18,15 @@ class GetMyWorkspaceHandler extends Handler
 
   handle: (request, reply) ->
 
-    {user}         = request.auth.credentials
+    {user} = request.auth.credentials
     {organization} = request.scope
 
     @database.executeAll [
-      new GetAllByQuery(Type, {organization: organization.id})
-      new GetAllTeamsByOrganizationAndMemberQuery(organization, user, {expand: 'stacks'})
-      new GetAllStacksByOrganizationAndOwnerQuery(organization, user)
+      new GetAllTypesByOrganizationQuery(organization.id)
+      new GetAllTeamsByOrganizationAndMemberQuery(organization.id, user.id, {expand: 'stacks'})
+      new GetAllStacksByOrganizationAndOwnerQuery(organization.id, user.id)
     ], (err, [types, teams, stacks]) =>
+      console.log(arguments)
       return reply err if err?
       
       reply {

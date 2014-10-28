@@ -1,15 +1,14 @@
-_ = require 'lodash'
-
 class EventBus
 
-  constructor: (@log, @pusher) ->
+  constructor: (@log, @database, @pusher) ->
 
-  publish: (events...) ->
-    # TODO
-    _.each _.flatten(events), (event) =>
-      {organization} = event.metadata
+  publish: (event, metadata, callback) ->
+    @database.recordEvent event, (err) =>
+      return callback(err) if err?
+      {organization} = metadata
       return unless organization?
       @log.debug "Sending #{event.type} to channel #{organization.id}"
-      @pusher.trigger("presence-#{organization.id}", event.type, event.toJSON(), event.metadata.socketId)
+      @pusher.trigger("presence-#{organization.id}", event.type, event, metadata.socket)
+      callback()
 
 module.exports = EventBus

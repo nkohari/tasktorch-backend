@@ -1,7 +1,6 @@
-{Stack}    = require 'data/entities'
-{GetQuery} = require 'data/queries'
-StackModel = require '../../models/StackModel'
-Handler    = require '../../framework/Handler'
+StackModel = require 'http/models/StackModel'
+Handler = require 'http/framework/Handler'
+GetStackQuery = require 'data/queries/GetStackQuery'
 
 class GetStackHandler extends Handler
 
@@ -12,8 +11,7 @@ class GetStackHandler extends Handler
 
   handle: (request, reply) ->
     {stackId} = request.params
-    expand    = request.query.expand?.split(',')
-    query     = new GetQuery(Stack, stackId, {expand})
+    query = new GetStackQuery(stackId, @getQueryOptions(request))
     @database.execute query, (err, stack) =>
       return reply err if err?
       reply new StackModel(stack, request)

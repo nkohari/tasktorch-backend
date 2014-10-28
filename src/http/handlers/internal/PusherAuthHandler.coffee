@@ -1,8 +1,7 @@
-_              = require 'lodash'
-{GetQuery}     = require 'data/queries'
-{Organization} = require 'data/entities'
-Handler        = require '../../framework/Handler'
-UserModel      = require '../../models/UserModel'
+_         = require 'lodash'
+Handler   = require '../../framework/Handler'
+UserModel = require '../../models/UserModel'
+GetOrganizationQuery = require 'data/queries/GetOrganizationQuery'
 
 class PusherAuthHandler extends Handler
 
@@ -13,18 +12,18 @@ class PusherAuthHandler extends Handler
   handle: (request, reply) ->
 
     {user}         = request.auth.credentials
-    socketId       = request.payload.socket_id
+    socket         = request.payload.socket_id
     channel        = request.payload.channel_name
     organizationId = channel.replace('presence-', '')
 
-    query = new GetQuery(Organization, organizationId)
+    query = new GetOrganizationQuery(organizationId)
     @database.execute query, (err, organization) =>
       return reply err if err?
       return reply @error.notFound()  unless organization?
-      return reply @error.forbidden() unless organization.hasMember(user)
+      return reply @error.forbidden() unless _.contains(organization.members, user.id)
       presenceInfo =
         user_id: user.id
         user_info: new UserModel(user, request)
-      reply @pusher.getAuthToken(socketId, channel, presenceInfo)
+      reply @pusher.getAuthToken(socket, channel, presenceInfo)
 
 module.exports = PusherAuthHandler

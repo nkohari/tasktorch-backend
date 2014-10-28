@@ -1,7 +1,6 @@
-{Organization}    = require 'data/entities'
-{GetQuery}        = require 'data/queries'
-OrganizationModel = require '../../models/OrganizationModel'
-Handler           = require '../../framework/Handler'
+Handler = require 'http/framework/Handler'
+OrganizationModel = require 'http/models/OrganizationModel'
+GetOrganizationQuery = require 'data/queries/GetOrganizationQuery'
 
 class GetOrganizationHandler extends Handler
 
@@ -12,8 +11,7 @@ class GetOrganizationHandler extends Handler
 
   handle: (request, reply) ->
     {organizationId} = request.params
-    expand = request.query.expand?.split(',')
-    query  = new GetQuery(Organization, organizationId, {expand})
+    query = new GetOrganizationQuery(organizationId, @getQueryOptions(request))
     @database.execute query, (err, organization) =>
       return reply err if err?
       reply new OrganizationModel(organization, request)

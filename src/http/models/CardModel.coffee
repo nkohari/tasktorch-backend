@@ -9,6 +9,7 @@ class CardModel extends Model
     @type = card.type
     @title = card.title
     @body = card.body
+    @creator = @one('UserModel', card.creator)
     @owner = @one('UserModel', card.owner)
     @participants = @many('UserModel', card.participants)
     @stack = @one('StackModel', card.stack)

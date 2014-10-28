@@ -1,8 +1,7 @@
-_          = require 'lodash'
-{Stack}    = require 'data/entities'
-StackModel = require '../../models/StackModel'
-Handler    = require '../../framework/Handler'
-{GetAllStacksByOrganizationAndOwnerQuery} = require 'data/queries'
+_ = require 'lodash'
+StackModel = require 'http/models/StackModel'
+Handler = require 'http/framework/Handler'
+GetAllStacksByOrganizationAndOwnerQuery = require 'data/queries/GetAllStacksByOrganizationAndOwnerQuery'
 
 class ListMyStacksHandler extends Handler
 
@@ -14,8 +13,7 @@ class ListMyStacksHandler extends Handler
   handle: (request, reply) ->
     {organization} = request.scope
     {user} = request.auth.credentials
-    expand = request.query.expand?.split(',')
-    query = new GetAllStacksByOrganizationAndOwnerQuery(organization, user, {expand})
+    query = new GetAllStacksByOrganizationAndOwnerQuery(organization.id, user.id, @getQueryOptions(request))
     @database.execute query, (err, teams) =>
       return reply err if err?
       reply _.map teams, (team) -> new StackModel(team, request)

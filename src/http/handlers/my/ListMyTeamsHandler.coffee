@@ -1,8 +1,7 @@
-_         = require 'lodash'
-{Team}    = require 'data/entities'
-TeamModel = require '../../models/TeamModel'
-Handler   = require '../../framework/Handler'
-{GetAllTeamsByOrganizationAndMemberQuery} = require 'data/queries'
+_ = require 'lodash'
+TeamModel = require 'http/models/TeamModel'
+Handler = require 'http/framework/Handler'
+GetAllTeamsByOrganizationAndMemberQuery = require 'data/queries/GetAllTeamsByOrganizationAndMemberQuery'
 
 class ListMyTeamsHandler extends Handler
 
@@ -14,8 +13,7 @@ class ListMyTeamsHandler extends Handler
   handle: (request, reply) ->
     {organization} = request.scope
     {user} = request.auth.credentials
-    expand = request.query.expand?.split(',')
-    query = new GetAllTeamsByOrganizationAndMemberQuery(organization, user, {expand})
+    query = new GetAllTeamsByOrganizationAndMemberQuery(organization.id, user.id, @getQueryOptions(request))
     @database.execute query, (err, teams) =>
       return reply err if err?
       reply _.map teams, (team) -> new TeamModel(team, request)

@@ -1,5 +1,4 @@
-{Session} = require 'data/entities'
-GetQuery  = require 'data/queries/GetQuery'
+GetSessionQuery = require 'data/queries/GetSessionQuery'
 
 class Authenticator
 
@@ -22,7 +21,7 @@ class Authenticator
   validate: (state, callback) ->
     return callback(null, false) unless state?
     {userId, sessionId} = state
-    query = new GetQuery(Session, sessionId, {expand: 'user'})
+    query = new GetSessionQuery(sessionId, {expand: 'user'})
     @database.execute query, (err, session) =>
       return callback(err) if err?
       return callback(null, false) unless session?

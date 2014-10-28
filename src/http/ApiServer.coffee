@@ -1,6 +1,7 @@
-fs   = require 'fs'
-_    = require 'lodash'
-Hapi = require 'hapi'
+fs     = require 'fs'
+_      = require 'lodash'
+Hapi   = require 'hapi'
+Header = require './Header'
 
 class ApiServer
 
@@ -45,9 +46,10 @@ class ApiServer
     @log.debug "Mounted #{handler.constructor.name} at #{route.verb} #{route.path}"
 
   onRequest: (request, next) ->
-    request.baseUrl  = "http://#{request.headers['host']}/api"
-    request.socketId = request.headers['x-tasktorch-socketid']
-    request.scope    = {}
+    request.baseUrl = "http://#{request.headers['host']}/api"
+    request.scope = {}
+    request.expectedVersion = Number(request.headers['if-match']) if request.headers['if-match']?
+    request.socket = request.headers[Header.Socket]
     next()
 
   onError: (request, err) ->

@@ -1,12 +1,12 @@
-r            = require 'rethinkdb'
-{Team}       = require '../entities'
-ExpandoQuery = require '../framework/ExpandoQuery'
+r     = require 'rethinkdb'
+Team  = require 'data/schemas/Team'
+Query = require 'data/framework/queries/Query'
 
-class GetAllTeamsByOrganizationAndUserQuery extends ExpandoQuery
+class GetAllTeamsByOrganizationAndOwnerQuery extends Query
 
-  constructor: (organization, user, options) ->
+  constructor: (organizationId, userId, options) ->
     super(Team, options)
-    @rql = r.table(Team.schema.table).getAll(user.id, {index: 'members'})
-      .filter({organization: organization.id})
+    @rql = r.table(@schema.table).getAll(userId, {index: 'members'})
+      .filter({organization: organizationId})
 
-module.exports = GetAllTeamsByOrganizationAndUserQuery
+module.exports = GetAllTeamsByOrganizationAndOwnerQuery

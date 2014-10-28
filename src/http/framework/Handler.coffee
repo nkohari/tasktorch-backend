@@ -1,4 +1,6 @@
-Hapi = require 'hapi'
+Hapi            = require 'hapi'
+QueryOptions    = require './QueryOptions'
+RequestMetadata = require './RequestMetadata'
 
 class Handler
 
@@ -17,5 +19,11 @@ class Handler
 
   handle: (request, reply) ->
     throw new Error("You must implement handle() on #{@constructor.name}")
+
+  getQueryOptions: (request) ->
+    new QueryOptions(request)
+
+  getRequestMetadata: (request) ->
+    new RequestMetadata(request)
 
 module.exports = Handler

@@ -1,16 +1,15 @@
-path                = require 'path'
-glob                = require 'glob'
-_                   = require 'lodash'
-Config              = require 'common/Config'
-KeyGenerator        = require 'common/KeyGenerator'
-Log                 = require 'common/Log'
-PasswordHasher      = require 'common/PasswordHasher'
-PusherClient        = require 'common/PusherClient'
-Database            = require 'data/Database'
-ConnectionPool      = require 'data/ConnectionPool'
-EventBus            = require 'data/EventBus'
-ApiServer           = require 'http/ApiServer'
-Authenticator       = require 'http/Authenticator'
+path           = require 'path'
+glob           = require 'glob'
+_              = require 'lodash'
+Config         = require 'common/Config'
+Log            = require 'common/Log'
+PasswordHasher = require 'common/PasswordHasher'
+PusherClient   = require 'common/PusherClient'
+Database       = require 'data/Database'
+ConnectionPool = require 'data/ConnectionPool'
+EventBus       = require 'data/EventBus'
+ApiServer      = require 'http/ApiServer'
+Authenticator  = require 'http/Authenticator'
 
 class ApiEnvironment
 
@@ -18,7 +17,6 @@ class ApiEnvironment
 
     forge.bind('app').to.instance(app)
     forge.bind('config').to.type(Config)
-    forge.bind('keyGenerator').to.type(KeyGenerator)
     forge.bind('log').to.type(Log)
     forge.bind('passwordHasher').to.type(PasswordHasher)
     forge.bind('pusher').to.type(PusherClient)
@@ -29,6 +27,9 @@ class ApiEnvironment
 
     forge.bind('server').to.type(ApiServer)
     forge.bind('authenticator').to.type(Authenticator)
+
+    for name, type of @loadAllFiles('data/schemas')
+      forge.bind('schema').to.type(type).when(name)
 
     for name, type of @loadAllFiles('http/handlers')
       forge.bind('handler').to.type(type).when(name)
