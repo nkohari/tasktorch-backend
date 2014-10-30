@@ -27,5 +27,7 @@ class ChangeCardTitleHandler extends Handler
       @eventBus.publish event, metadata, (err) =>
         return reply err if err?
         reply()
-
+        .header(Header.Event, event.id)
+        .header(Header.Version, event.document.version)
+        
 module.exports = ChangeCardTitleHandler

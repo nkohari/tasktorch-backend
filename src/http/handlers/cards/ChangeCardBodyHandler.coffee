@@ -28,7 +28,8 @@ class ChangeCardBodyHandler extends Handler
       event = new CardBodyChangedEvent(card, user)
       @eventBus.publish event, metadata, (err) =>
         return reply err if err?
-        model = new CardModel(card, request)
-        reply(model).header(Header.Event, event.id)
+        reply()
+        .header(Header.Event, event.id)
+        .header(Header.Version, event.document.version)
 
 module.exports = ChangeCardBodyHandler

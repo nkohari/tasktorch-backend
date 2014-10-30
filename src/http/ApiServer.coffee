@@ -46,10 +46,17 @@ class ApiServer
     @log.debug "Mounted #{handler.constructor.name} at #{route.verb} #{route.path}"
 
   onRequest: (request, next) ->
-    request.baseUrl = "http://#{request.headers['host']}/api"
-    request.scope = {}
-    request.expectedVersion = Number(request.headers['if-match']) if request.headers['if-match']?
-    request.socket = request.headers[Header.Socket]
+    request.baseUrl = "http://#{request.headers[Header.Host]}/api"
+    request.scope   = {}
+    request.socket  = request.headers[Header.Socket]
+
+    ifMatch = request.headers[Header.IfMatch]
+    if ifMatch?.length > 0
+      try
+        request.expectedVersion = Number(ifMatch)
+      catch err
+        # Ignore if malformed
+
     next()
 
   onError: (request, err) ->
