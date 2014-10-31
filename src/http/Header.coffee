@@ -1,6 +1,5 @@
 module.exports =
-  ETag:    'ETag'
-  Event:   'X-TaskTorch-Event'
-  Host:    'Host'
-  IfMatch: 'If-Match'
-  Socket:  'X-TaskTorch-Socket'
+  Event:   'x-tasktorch-event'
+  Host:    'host'
+  IfMatch: 'if-match'
+  Socket:  'x-tasktorch-socket'

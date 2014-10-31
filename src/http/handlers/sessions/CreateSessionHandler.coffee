@@ -1,5 +1,4 @@
 Handler                = require 'http/framework/Handler'
-SessionModel           = require 'http/models/SessionModel'
 CreateSessionCommand   = require 'data/commands/CreateSessionCommand'
 SessionCreatedEvent    = require 'data/events/SessionCreatedEvent'
 GetUserByUsernameQuery = require 'data/queries/GetUserByUsernameQuery'
@@ -10,7 +9,7 @@ class CreateSessionHandler extends Handler
   @route 'post /api/sessions'
   @auth  {mode: 'try'}
 
-  constructor: (@database, @eventBus, @passwordHasher) ->
+  constructor: (@database, @eventBus, @modelFactory, @passwordHasher) ->
 
   handle: (request, reply) ->
     {login, password} = request.payload
@@ -19,14 +18,14 @@ class CreateSessionHandler extends Handler
       return reply @error.forbidden() unless user? and @passwordHasher.verify(user.password, password)
       session = {user: user.id, isActive: true}
       command = new CreateSessionCommand(session)
-      @database.create session, (err) =>
+      @database.execute command, (err) =>
         return reply err if err?
-        event = new SessionCreatedEvent(session)
-        @eventBus.publish event, metadata, (err) =>
+        event = new SessionCreatedEvent(session, user)
+        @eventBus.publish event, {user}, (err) =>
           return reply err if err?
           request.auth.session.set {userId: user.id, sessionId: session.id}
-          model = new SessionModel(session, request)
-          reply(model).created(model.uri)
+          model = @modelFactory.create(session, request)
+          reply(model).etag(model.version).created(model.uri)
 
   resolveUser: (login, callback) ->
     query = new GetUserByUsernameQuery(login)

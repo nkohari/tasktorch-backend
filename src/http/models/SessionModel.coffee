@@ -1,11 +1,11 @@
-Model = require '../framework/Model'
+Model = require 'http/framework/Model'
 
 class SessionModel extends Model
 
-  getUri: (session, request) ->
-    "sessions/#{session.id}"
+  @describes: 'Session'
+  @getUri: (id, request) -> "sessions/#{id}"
 
-  assignProperties: (session) ->
-    @user = @one('UserModel', session.user)
+  load: (session) ->
+    @user = @ref('user', session.user)
 
 module.exports = SessionModel

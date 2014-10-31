@@ -1,7 +1,6 @@
 async = require 'async'
 r     = require 'rethinkdb'
 _     = require 'lodash'
-uuid  = require 'common/uuid'
 Event = require 'data/schemas/Event'
 
 class Database

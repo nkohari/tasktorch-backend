@@ -2,7 +2,6 @@ GetCardQuery          = require 'data/queries/GetCardQuery'
 ChangeCardBodyCommand = require 'data/commands/ChangeCardBodyCommand'
 CardBodyChangedEvent  = require 'data/events/CardBodyChangedEvent'
 Error                 = require 'data/Error'
-CardModel             = require 'http/models/CardModel'
 Handler               = require 'http/framework/Handler'
 Header                = require 'http/Header'
 
@@ -29,7 +28,7 @@ class ChangeCardBodyHandler extends Handler
       @eventBus.publish event, metadata, (err) =>
         return reply err if err?
         reply()
+        .etag(event.document.version)
         .header(Header.Event, event.id)
-        .header(Header.Version, event.document.version)
 
 module.exports = ChangeCardBodyHandler

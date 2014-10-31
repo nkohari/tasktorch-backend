@@ -1,15 +1,14 @@
 _                 = require 'lodash'
 CreateCardCommand = require 'data/commands/CreateCardCommand'
 CardCreatedEvent  = require 'data/events/CardCreatedEvent'
-Handler           = require '../../framework/Handler'
-CardModel         = require '../../models/CardModel'
+Handler           = require 'http/framework/Handler'
 
 class CreateCardHandler extends Handler
 
   @route 'post /api/{organizationId}/stacks/{stackId}/cards'
   @demand ['requester is organization member', 'requester is stack participant']
 
-  constructor: (@database, @eventBus) ->
+  constructor: (@database, @eventBus, @modelFactory) ->
 
   handle: (request, reply) ->
 
@@ -33,7 +32,9 @@ class CreateCardHandler extends Handler
       event = new CardCreatedEvent(card, user)
       @eventBus.publish event, metadata, (err) =>
         return reply err if err?
-        model = new CardModel(card, request)
-        reply(model).created(model.uri)
+        model = @modelFactory.create(card, request)
+        reply(model)
+        .created(model.uri)
+        .etag(model.version)
 
 module.exports = CreateCardHandler

@@ -1,6 +1,5 @@
-path           = require 'path'
-glob           = require 'glob'
 _              = require 'lodash'
+loadFiles      = require 'common/util/loadFiles'
 Config         = require 'common/Config'
 Log            = require 'common/Log'
 PasswordHasher = require 'common/PasswordHasher'
@@ -10,6 +9,7 @@ ConnectionPool = require 'data/ConnectionPool'
 EventBus       = require 'data/EventBus'
 ApiServer      = require 'http/ApiServer'
 Authenticator  = require 'http/Authenticator'
+ModelFactory   = require 'http/ModelFactory'
 
 class ApiEnvironment
 
@@ -27,23 +27,17 @@ class ApiEnvironment
 
     forge.bind('server').to.type(ApiServer)
     forge.bind('authenticator').to.type(Authenticator)
+    forge.bind('modelFactory').to.type(ModelFactory)
 
-    for name, type of @loadAllFiles('data/schemas')
+    for name, type of loadFiles('data/schemas', __dirname)
       forge.bind('schema').to.type(type).when(name)
 
-    for name, type of @loadAllFiles('http/handlers')
+    for name, type of loadFiles('http/handlers', __dirname)
       forge.bind('handler').to.type(type).when(name)
 
-    for name, type of @loadAllFiles('http/demands')
+    for name, type of loadFiles('http/demands', __dirname)
       name = @humanize name.replace('Demand', '')
       forge.bind('demand').to.type(type).when(name)
-
-  loadAllFiles: (dir) ->
-    files = glob.sync("#{dir}/**/*.coffee", {cwd: __dirname})
-    return _.object _.map files, (file) ->
-      name = path.basename(file, '.coffee')
-      type = require "./#{file}"
-      return [name, type]
 
   humanize: (str) ->
     str.replace(/([A-Z])/g, ' $1').substr(1).toLowerCase()

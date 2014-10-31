@@ -1,13 +1,13 @@
-Model = require '../framework/Model'
+Model = require 'http/framework/Model'
 
 class TypeModel extends Model
 
-  getUri: (type, request) ->
-    "#{request.scope.organization.id}/types/#{type.id}"
+  @describes: 'Type'
+  @getUri: (id, request) -> "#{request.scope.organization.id}/types/#{id}"
 
-  assignProperties: (type) ->
+  load: (type) ->
     @name = type.name
-    @organization = @one('OrganizationModel', type.organization)
+    @organization = @ref('organization', type.organization)
     @steps = type.steps #TODO
 
 module.exports = TypeModel

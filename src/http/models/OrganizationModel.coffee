@@ -1,12 +1,12 @@
-Model = require '../framework/Model'
+Model = require 'http/framework/Model'
 
 class OrganizationModel extends Model
 
-  getUri: (organization, request) ->
-    "#{organization.id}"
+  @describes: 'Organization'
+  @getUri: (id, request) -> "#{id}"
 
-  assignProperties: (organization) ->
+  load: (organization) ->
     @name = organization.name
-    @members = @many('UserModel', organization.members)
+    @members = @ref('members', organization.members)
 
 module.exports = OrganizationModel

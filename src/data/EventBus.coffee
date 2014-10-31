@@ -6,7 +6,7 @@ class EventBus
     @database.recordEvent event, (err) =>
       return callback(err) if err?
       {organization} = metadata
-      return unless organization?
+      return callback() unless organization?
       @log.debug "Sending #{event.type} to channel #{organization.id}"
       @pusher.trigger("presence-#{organization.id}", event.type, event, metadata.socket)
       callback()

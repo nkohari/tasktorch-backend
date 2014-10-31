@@ -1,10 +1,10 @@
 _    = require 'lodash'
-uuid = require 'common/uuid'
+uuid = require 'common/util/uuid'
 
 class Event
 
   constructor: ->
-    @id        = uuid.generate()
+    @id        = uuid()
     @type      = @constructor.name.replace(/Event$/, '')
     @timestamp = new Date()
 

@@ -1,12 +1,12 @@
 r       = require 'rethinkdb'
 _       = require 'lodash'
-uuid    = require 'common/uuid'
+uuid    = require 'common/util/uuid'
 Command = require './Command'
 
 class CreateCommand extends Command
 
   constructor: (schema, data) ->
-    @document = _.extend data, {id: uuid.generate(), version: 0}
+    @document = _.extend data, {id: uuid(), version: 0}
     @rql = r.table(schema.table).insert(@document)
 
   execute: (dbConnection, callback) ->

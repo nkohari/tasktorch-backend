@@ -1,17 +1,17 @@
-Model = require '../framework/Model'
+Model = require 'http/framework/Model'
 
 class CardModel extends Model
 
-  getUri: (card, request) ->
-    "#{request.scope.organization.id}/cards/#{card.id}"
+  @describes: 'Card'
+  @getUri: (id, request) -> "#{request.scope.organization.id}/cards/#{id}"
 
-  assignProperties: (card) ->
+  load: (card) ->
     @type = card.type
     @title = card.title
     @body = card.body
-    @creator = @one('UserModel', card.creator)
-    @owner = @one('UserModel', card.owner)
-    @participants = @many('UserModel', card.participants)
-    @stack = @one('StackModel', card.stack)
+    @creator = @ref('creator', card.creator)
+    @owner = @ref('owner', card.owner)
+    @participants = @ref('participants', card.participants)
+    @stack = @ref('stack', card.stack)
 
 module.exports = CardModel

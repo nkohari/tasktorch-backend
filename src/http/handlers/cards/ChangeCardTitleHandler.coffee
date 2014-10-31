@@ -2,7 +2,8 @@ GetCardQuery           = require 'data/queries/GetCardQuery'
 ChangeCardTitleCommand = require 'data/commands/ChangeCardTitleCommand'
 CardTitleChangedEvent  = require 'data/events/CardTitleChangedEvent'
 Error                  = require 'data/Error'
-Handler                = require '../../framework/Handler'
+Handler                = require 'http/framework/Handler'
+Header                 = require 'http/Header'
 
 class ChangeCardTitleHandler extends Handler
 
@@ -27,7 +28,7 @@ class ChangeCardTitleHandler extends Handler
       @eventBus.publish event, metadata, (err) =>
         return reply err if err?
         reply()
+        .etag(event.document.version)
         .header(Header.Event, event.id)
-        .header(Header.Version, event.document.version)
         
 module.exports = ChangeCardTitleHandler

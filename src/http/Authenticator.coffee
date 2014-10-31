@@ -25,9 +25,10 @@ class Authenticator
     @database.execute query, (err, session) =>
       return callback(err) if err?
       return callback(null, false) unless session?
-      return callback(null, false) unless session.isActive and session.user?.id == userId
-      credentials = {session, user: session.user}
-      @log.debug "Authenticated session #{session.id} for user #{session.user.username}"
+      return callback(null, false) unless session.isActive and session.user == userId
+      user = session.getRelated('user')
+      credentials = {session, user}
+      @log.debug "Authenticated session #{session.id} for user #{user.username}"
       callback(null, true, credentials)
 
 module.exports = Authenticator

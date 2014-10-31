@@ -6,10 +6,9 @@ Header = require './Header'
 class ApiServer
 
   constructor: (@forge, @config, @log, @authenticator) ->
-    @server = new Hapi.Server @config.http.port,
-      tls: @getTlsConfig()
-    @server.ext 'onRequest', @onRequest.bind(this)
-    @server.on 'internalError', @onError.bind(this)
+    @server = new Hapi.Server @config.http.port, {tls: @getTlsConfig()}
+    @server.ext 'onRequest',     @onRequest.bind(this)
+    @server.on  'internalError', @onError.bind(this)
     @authenticator.init(@server)
 
   getTlsConfig: ->
@@ -51,10 +50,13 @@ class ApiServer
     request.socket  = request.headers[Header.Socket]
 
     ifMatch = request.headers[Header.IfMatch]
+    console.log(ifMatch)
     if ifMatch?.length > 0
       try
         request.expectedVersion = Number(ifMatch)
+        console.log(request.expectedVersion)
       catch err
+        console.log('no version')
         # Ignore if malformed
 
     next()

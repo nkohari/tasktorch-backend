@@ -2,34 +2,34 @@ _ = require 'lodash'
 
 class Model
 
-  @create: (type, data, request) ->
-    klass = require "../models/#{type}"
-    new klass(data, request)
+  constructor: (factory, document, request) ->
+    @_factory  = factory
+    @_request  = request
+    @_document = document
+    @id        = document.id
+    @version   = document.version
+    @uri       = "#{request.baseUrl}/#{@constructor.getUri(@id, request)}"
+    @_related  = @createRelatedModels(document._related) if document._related?
+    @load(document)
 
-  constructor: (data, @request) ->
-    if _.isString(data)
-      @id = data
-      @uri = "#{@request.baseUrl}/#{@getUri({id: data}, @request)}"
-    else
-      @id = data.id
-      @uri = "#{@request.baseUrl}/#{@getUri(data, @request)}"
-      @version = data.version
-      @assignProperties(data)
+  load: (document) ->
+    throw new Error("You must implement load() on #{@constructor.name}")
 
-  getUri: (entity, request) ->
-    throw new Error("You must implement getUri() on #{@constructor.name}")
+  createRelatedModels: (relatedDocuments) ->
+    return _.object _.map relatedDocuments, (doc, key) =>
+      [key, @_factory.create(doc, @_request)]
 
-  assignProperties: (entity) ->
-    throw new Error("You must implement assignProperties() on #{@constructor.name}")
+  ref: (field, id) ->
+    schema   = @_document.getSchema()
+    relation = schema.getRelation(field)
+    @[field] = @_factory.ref(relation.getSchema(), id, @_request)
+
+  refs: (field, ids) ->
+    schema   = @_document.getSchema()
+    relation = schema.getRelation(field)
+    @[field] = _.map ids, (id) => @_factory.ref(relation.getSchema(), id, @_request)
 
   toJSON: ->
-    _.omit(this, 'request')
-
-  one: (type, entity) ->
-    return undefined unless entity?
-    Model.create(type, entity, @request)
-
-  many: (type, entities) ->
-    _.map entities, (entity) => Model.create(type, entity, @request)
+    _.omit(this, '_factory', '_request', '_document')
 
 module.exports = Model

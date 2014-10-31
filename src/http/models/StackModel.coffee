@@ -1,16 +1,16 @@
-Model = require '../framework/Model'
+Model = require 'http/framework/Model'
 
 class StackModel extends Model
 
-  getUri: (stack, request) ->
-    "#{request.scope.organization.id}/stacks/#{stack.id}"
+  @describes: 'Stack'
+  @getUri: (id, request) -> "#{request.scope.organization.id}/stacks/#{id}"
 
-  assignProperties: (stack) ->
+  load: (stack) ->
     @name = stack.name
     @kind = stack.kind
-    @organization = @one('OrganizationModel', stack.organization)
-    @owner = @one('UserModel', stack.owner)
-    @team = @one('TeamModel', stack.team)
-    @cards = @many('CardModel', stack.cards)
+    @organization = @ref('organization', stack.organization)
+    @owner = @ref('owner', stack.owner)
+    @team = @ref('team', stack.team)
+    @cards = @refs('cards', stack.cards)
 
 module.exports = StackModel

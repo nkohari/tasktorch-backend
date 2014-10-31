@@ -1,5 +1,6 @@
-r = require 'rethinkdb'
-_ = require 'lodash'
+r            = require 'rethinkdb'
+_            = require 'lodash'
+Document     = require '../Document'
 RelationType = require '../RelationType'
 
 class Query
@@ -22,10 +23,13 @@ class Query
     @_processPluck() if @fields?
     @rql.run dbConnection, (err, result) =>
       return callback(err) if err?
-      return callback(null, result) unless result.toArray?
-      result.toArray (err, documents) =>
-        return callback(err) if err?
-        return callback(null, documents)
+      @processResult(result, callback)
+
+  processResult: (result, callback) ->
+    return callback(null, new Document(@schema, result)) unless result.toArray?
+    result.toArray (err, items) =>
+      return callback(err) if err?
+      return callback null, _.map items, (item) => new Document(@schema, item)
 
   _processPluck: ->
     @rql = @rql.pluck Query.requiredFields.concat(@fields)
@@ -38,16 +42,16 @@ class Query
         @rql = @rql.merge (parent) ->
           foreignKey = parent(field).default('__nonexistent__')
           value = r.table(schema.table).get(foreignKey).default(null)
-          return r.object(field, value)
+          return {_related: parent('_related').default({}).merge(r.object(field, value))}
       if relation.type == RelationType.HasMany
         @rql = @rql.merge (parent) ->
           index = relation.index ? 'id'
           value = r.table(schema.table).getAll(r.args(parent(field)), {index}).coerceTo('array')
-          return r.object(field, value)
+          return {_related: parent('_related').default({}).merge(r.object(field, value))}
       if relation.type == RelationType.HasManyForeign
         @rql = @rql.merge (parent) ->
           index = relation.index ? 'id'
           value = r.table(schema.table).getAll(parent('id'), {index}).coerceTo('array')
-          return r.object(field, value)
+          return {_related: parent('_related').default({}).merge(r.object(field, value))}
 
 module.exports = Query

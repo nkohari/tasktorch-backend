@@ -1,4 +1,3 @@
-UserModel = require 'http/models/UserModel'
 Handler = require 'http/framework/Handler'
 GetUserQuery = require 'data/queries/GetUserQuery'
 
@@ -7,7 +6,7 @@ class GetUserHandler extends Handler
   @route 'get /api/users/{userId}'
   @demand 'requester is user'
 
-  constructor: (@database) ->
+  constructor: (@database, @modelFactory) ->
 
   handle: (request, reply) ->
     {userId} = request.params
@@ -15,6 +14,7 @@ class GetUserHandler extends Handler
     @database.execute query, (err, user) =>
       return reply err if err?
       return reply @error.notFound() unless user?
-      reply new UserModel(user, request)
+      model = @modelFactory.create(user, request)
+      reply(model).etag(model.version)
 
 module.exports = GetUserHandler

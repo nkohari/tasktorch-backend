@@ -1,13 +1,12 @@
-_         = require 'lodash'
-Handler   = require '../../framework/Handler'
-UserModel = require '../../models/UserModel'
+_ = require 'lodash'
+Handler = require 'http/framework/Handler'
 GetOrganizationQuery = require 'data/queries/GetOrganizationQuery'
 
 class PusherAuthHandler extends Handler
 
   @route 'post /api/_auth/presence'
 
-  constructor: (@database, @pusher) ->
+  constructor: (@database, @pusher, @modelFactory) ->
 
   handle: (request, reply) ->
 
@@ -23,7 +22,7 @@ class PusherAuthHandler extends Handler
       return reply @error.forbidden() unless _.contains(organization.members, user.id)
       presenceInfo =
         user_id: user.id
-        user_info: new UserModel(user, request)
+        user_info: @modelFactory.create(user, request)
       reply @pusher.getAuthToken(socket, channel, presenceInfo)
 
 module.exports = PusherAuthHandler
