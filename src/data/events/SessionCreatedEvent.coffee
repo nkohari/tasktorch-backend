@@ -7,6 +7,6 @@ class SessionCreatedEvent extends Event
     super()
     @document = {type: Session.name, id: session.id, version: session.version}
     @meta     = {user: user.id}
-    @payload  = session
+    @payload  = session.toJSON()
 
 module.exports = SessionCreatedEvent

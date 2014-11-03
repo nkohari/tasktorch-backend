@@ -16,9 +16,9 @@ class CreateSessionHandler extends Handler
     @resolveUser login, (err, user) =>
       return reply err if err?
       return reply @error.forbidden() unless user? and @passwordHasher.verify(user.password, password)
-      session = {user: user.id, isActive: true}
-      command = new CreateSessionCommand(session)
-      @database.execute command, (err) =>
+      data = {user: user.id, isActive: true}
+      command = new CreateSessionCommand(data)
+      @database.execute command, (err, session) =>
         return reply err if err?
         event = new SessionCreatedEvent(session, user)
         @eventBus.publish event, {user}, (err) =>

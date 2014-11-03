@@ -24,9 +24,10 @@ class Database
     async.map queries, @execute.bind(this), callback
 
   recordEvent: @withConnection (dbConnection, event, callback) ->
-    r.table(Event.table)
-    .insert(event)
-    .run dbConnection, (err) =>
+    @log.inspect(event)
+    rql = r.table(Event.table).insert(event)
+    @log.debug(rql.toString())
+    rql.run dbConnection, (err) =>
       return callback(err) if err?
       callback(null, event)
 

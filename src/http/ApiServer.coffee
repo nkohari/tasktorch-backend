@@ -1,12 +1,15 @@
 fs     = require 'fs'
 _      = require 'lodash'
 Hapi   = require 'hapi'
+etag   = require 'common/util/etag'
 Header = require './Header'
 
 class ApiServer
 
   constructor: (@forge, @config, @log, @authenticator) ->
-    @server = new Hapi.Server @config.http.port, {tls: @getTlsConfig()}
+    @server = new Hapi.Server @config.http.port,
+      tls: @getTlsConfig()
+      json: {space: 2}
     @server.ext 'onRequest',     @onRequest.bind(this)
     @server.on  'internalError', @onError.bind(this)
     @authenticator.init(@server)
@@ -45,18 +48,16 @@ class ApiServer
     @log.debug "Mounted #{handler.constructor.name} at #{route.verb} #{route.path}"
 
   onRequest: (request, next) ->
+    
     request.baseUrl = "http://#{request.headers[Header.Host]}/api"
     request.scope   = {}
     request.socket  = request.headers[Header.Socket]
 
     ifMatch = request.headers[Header.IfMatch]
-    console.log(ifMatch)
     if ifMatch?.length > 0
       try
-        request.expectedVersion = Number(ifMatch)
-        console.log(request.expectedVersion)
+        request.expectedVersion = Number(etag.decode(ifMatch))
       catch err
-        console.log('no version')
         # Ignore if malformed
 
     next()

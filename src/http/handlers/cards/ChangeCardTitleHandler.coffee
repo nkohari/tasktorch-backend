@@ -10,7 +10,7 @@ class ChangeCardTitleHandler extends Handler
   @route 'put /api/{organizationId}/cards/{cardId}/title'
   @demand 'requester is organization member'
 
-  constructor: (@database, @eventBus) ->
+  constructor: (@log, @database, @eventBus) ->
 
   handle: (request, reply) ->
 
@@ -18,6 +18,7 @@ class ChangeCardTitleHandler extends Handler
     {cardId} = request.params
     {title}  = request.payload
     metadata = @getRequestMetadata(request)
+    @log.inspect(request.expectedVersion)
 
     command = new ChangeCardTitleCommand(cardId, title, request.expectedVersion)
     @database.execute command, (err, card, previous) =>

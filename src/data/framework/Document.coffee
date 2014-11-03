@@ -7,6 +7,9 @@ class Document
     @_related = @_createRelatedDocuments(data._related) if data._related?
     _.extend this, _.omit(data, '_related')
 
+  toJSON: ->
+    _.omit(this, _.functions(this), '_schema', '_related')
+
   getSchema: ->
     @_schema
 
