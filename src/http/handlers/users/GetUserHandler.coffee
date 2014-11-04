@@ -4,7 +4,6 @@ GetUserQuery = require 'data/queries/GetUserQuery'
 class GetUserHandler extends Handler
 
   @route 'get /api/users/{userId}'
-  @demand 'requester is user'
 
   constructor: (@database, @modelFactory) ->
 

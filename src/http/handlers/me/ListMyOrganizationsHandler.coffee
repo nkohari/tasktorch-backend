@@ -4,7 +4,7 @@ GetAllOrganizationsByMemberQuery = require 'data/queries/GetAllOrganizationsByMe
 
 class ListMyOrganizationsHandler extends Handler
 
-  @route 'get /api/my/organizations'
+  @route 'get /api/me/organizations'
 
   constructor: (@database, @modelFactory) ->
 

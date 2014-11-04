@@ -6,7 +6,7 @@ GetAllStacksByOrganizationAndOwnerQuery = require 'data/queries/GetAllStacksByOr
 
 class GetMyWorkspaceHandler extends Handler
 
-  @route 'get /api/{organizationId}/my/workspace'
+  @route 'get /api/{organizationId}/me/workspace'
   @demand 'requester is organization member'
 
   constructor: (@database, @modelFactory) ->

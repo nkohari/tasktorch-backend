@@ -4,7 +4,7 @@ GetAllTeamsByOrganizationAndMemberQuery = require 'data/queries/GetAllTeamsByOrg
 
 class ListMyTeamsHandler extends Handler
 
-  @route 'get /api/{organizationId}/my/teams'
+  @route 'get /api/{organizationId}/me/teams'
   @demand 'requester is organization member'
 
   constructor: (@database, @modelFactory) ->

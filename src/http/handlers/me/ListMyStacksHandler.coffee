@@ -4,7 +4,7 @@ GetAllStacksByOrganizationAndOwnerQuery = require 'data/queries/GetAllStacksByOr
 
 class ListMyStacksHandler extends Handler
 
-  @route 'get /api/{organizationId}/my/stacks'
+  @route 'get /api/{organizationId}/me/stacks'
   @demand 'requester is organization member'
 
   constructor: (@database, @modelFactory) ->
