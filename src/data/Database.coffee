@@ -17,7 +17,6 @@ class Database
   constructor: (@log, @connectionPool) ->
 
   execute: @withConnection (dbConnection, statement, callback) ->
-    @log.debug(statement.rql.toString())
     statement.execute(dbConnection, callback)
 
   executeAll: (queries, callback) ->

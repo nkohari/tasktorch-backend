@@ -11,7 +11,6 @@ class Query
     @expansions = []
     @pluck(@options.pluck)   if @options.pluck?
     @expand(@options.expand) if @options.expand?
-    @limit = @options.limit  if @options.limit?
 
   pluck: (fields...) ->
     @fields = _.flatten(fields)
@@ -20,9 +19,9 @@ class Query
     @expansions = @expansions.concat _.flatten(fields)
 
   execute: (dbConnection, callback) ->
-    @_processLimit() if @limit?
     @_processExpansions() if @expansions?
     @_processPluck() if @fields?
+    console.log(@rql.toString())
     @rql.run dbConnection, (err, result) =>
       return callback(err) if err?
       @processResult(result, callback)
@@ -31,10 +30,10 @@ class Query
     return callback(null, new Document(@schema, result)) unless result.toArray?
     result.toArray (err, items) =>
       return callback(err) if err?
-      return callback null, _.map items, (item) => new Document(@schema, item)
-
-  _processLimit: ->
-    @rql = @rql.limit(@limit)
+      if @options.firstResult
+        callback null, new Document(@schema, items[0])
+      else
+        callback null, _.map items, (item) => new Document(@schema, item)
 
   _processPluck: ->
     @rql = @rql.pluck Query.requiredFields.concat(@fields)

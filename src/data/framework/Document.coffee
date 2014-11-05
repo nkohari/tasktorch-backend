@@ -19,9 +19,14 @@ class Document
     return related
 
   _createRelatedDocuments: (related) ->
-    return _.object _.map related, (data, name) =>
-      return null unless data?
-      relation = @_schema.getRelation(name)
-      [name, new Document(relation.getSchema(), data)]
+    return _.object _.map related, (data, field) =>
+      relation = @_schema.getRelation(field)
+      if not data?
+        value = null
+      else if _.isArray(data)
+        value = _.map data, (datum) => new Document(relation.getSchema(), datum)
+      else
+        value = new Document(relation.getSchema(), data)
+      [field, value]
  
 module.exports = Document
