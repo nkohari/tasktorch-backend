@@ -1,6 +1,6 @@
-_                  = require 'lodash'
-MultiGetCardsQuery = require 'data/queries/MultiGetCardsQuery'
-Handler            = require 'http/framework/Handler'
+_                       = require 'lodash'
+GetAllCardsInStackQuery = require 'data/queries/GetAllCardsInStackQuery'
+Handler                 = require 'http/framework/Handler'
 
 class ListCardsInStackHandler extends Handler
 
@@ -11,7 +11,7 @@ class ListCardsInStackHandler extends Handler
 
   handle: (request, reply) ->
     {stack} = request.scope
-    query = new MultiGetCardsQuery(stack.cards, @getQueryOptions(request))
+    query = new GetAllCardsInStackQuery(stack.id, @getQueryOptions(request))
     @database.execute query, (err, cards) =>
       return reply err if err?
       models = _.map cards, (card) => @modelFactory.create(card, request)

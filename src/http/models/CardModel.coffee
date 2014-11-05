@@ -9,6 +9,7 @@ class CardModel extends Model
     @type = card.type
     @title = card.title
     @body = card.body
+    @rank = card.rank
     @creator = @ref('creator', card.creator)
     @owner = @ref('owner', card.owner)
     @participants = @ref('participants', card.participants)
