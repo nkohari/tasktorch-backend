@@ -14,5 +14,7 @@ class CardModel extends Model
     @owner = @ref('owner', card.owner)
     @participants = @ref('participants', card.participants)
     @stack = @ref('stack', card.stack)
+    @goal = @ref('goal', card.goal)
+    @milestone = @ref('milestone', card.milestone)
 
 module.exports = CardModel

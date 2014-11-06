@@ -12,5 +12,7 @@ Card = Schema.create 'Card',
     participants: {type: HasMany, schema: 'User'}
     stack:        {type: HasMany, schema: 'Stack'}
     type:         {type: HasOne,  schema: 'Type'}
+    goal:         {type: HasOne,  schema: 'Goal'}
+    milestone:    {type: HasOne,  schema: 'Milestone'}
 
 module.exports = Card
