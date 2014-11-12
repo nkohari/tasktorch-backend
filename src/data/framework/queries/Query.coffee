@@ -27,6 +27,7 @@ class Query
       @processResult(result, callback)
 
   processResult: (result, callback) ->
+    return callback(null, null) unless result?
     return callback(null, new Document(@schema, result)) unless result.toArray?
     result.toArray (err, items) =>
       return callback(err) if err?

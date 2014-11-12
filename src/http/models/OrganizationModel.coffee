@@ -7,6 +7,6 @@ class OrganizationModel extends Model
 
   load: (organization) ->
     @name = organization.name
-    @members = @ref('members', organization.members)
+    @members = @many('members', organization.members)
 
 module.exports = OrganizationModel

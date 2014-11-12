@@ -10,8 +10,8 @@ Card = Schema.create 'Card',
     organization: {type: HasOne,  schema: 'Organization'}
     owner:        {type: HasOne,  schema: 'User'}
     participants: {type: HasMany, schema: 'User'}
-    stack:        {type: HasMany, schema: 'Stack'}
-    type:         {type: HasOne,  schema: 'Type'}
+    stack:        {type: HasOne,  schema: 'Stack'}
+    kind:         {type: HasOne,  schema: 'Kind'}
     goal:         {type: HasOne,  schema: 'Goal'}
     milestone:    {type: HasOne,  schema: 'Milestone'}
 

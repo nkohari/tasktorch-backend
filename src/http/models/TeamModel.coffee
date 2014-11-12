@@ -7,7 +7,7 @@ class TeamModel extends Model
 
   load: (team) ->
     @name = team.name
-    @organization = @ref('organization', team.organization)
-    @members = @refs('members', team.members)
+    @organization = @one('organization', team.organization)
+    @members = @many('members', team.members)
 
 module.exports = TeamModel

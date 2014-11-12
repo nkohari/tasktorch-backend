@@ -8,7 +8,7 @@ class MilestoneModel extends Model
   load: (milestone) ->
     @name = milestone.name
     @deadline = milestone.deadline
-    @goal = @ref('goal', milestone.goal)
-    @organization = @ref('organization', milestone.organization)
+    @goal = @one('goal', milestone.goal)
+    @organization = @one('organization', milestone.organization)
 
 module.exports = MilestoneModel

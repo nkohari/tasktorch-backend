@@ -1,12 +1,11 @@
 Schema = require '../framework/Schema'
 {HasOne} = require '../framework/RelationType'
 
-# TODO: Rename to something that isn't dumb
-Type = Schema.create 'Type',
+Kind = Schema.create 'Kind',
 
-  table: 'types'
+  table: 'kinds'
 
   relations:
     organization: {type: HasOne, schema: 'Organization'}
 
-module.exports = Type
+module.exports = Kind

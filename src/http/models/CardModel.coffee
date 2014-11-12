@@ -6,15 +6,15 @@ class CardModel extends Model
   @getUri: (id, request) -> "#{request.scope.organization.id}/cards/#{id}"
 
   load: (card) ->
-    @type = card.type
     @title = card.title
     @body = card.body
     @rank = card.rank
-    @creator = @ref('creator', card.creator)
-    @owner = @ref('owner', card.owner)
-    @participants = @ref('participants', card.participants)
-    @stack = @ref('stack', card.stack)
-    @goal = @ref('goal', card.goal)
-    @milestone = @ref('milestone', card.milestone)
+    @kind = @one('kind', card.kind)
+    @creator = @one('creator', card.creator)
+    @owner = @one('owner', card.owner) if card.owner?
+    @participants = @many('participants', card.participants)
+    @stack = @one('stack', card.stack)
+    @goal = @one('goal', card.goal) if card.goal?
+    @milestone = @one('milestone', card.milestone) if card.milestone?
 
 module.exports = CardModel

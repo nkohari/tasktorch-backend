@@ -7,9 +7,9 @@ class StackModel extends Model
 
   load: (stack) ->
     @name = stack.name
-    @kind = stack.kind
-    @organization = @ref('organization', stack.organization)
-    @owner = @ref('owner', stack.owner)
-    @team = @ref('team', stack.team)
+    @type = stack.type
+    @organization = @one('organization', stack.organization)
+    @owner = @one('owner', stack.owner)
+    @team = @one('team', stack.team)
 
 module.exports = StackModel

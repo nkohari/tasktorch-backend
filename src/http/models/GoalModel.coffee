@@ -8,6 +8,6 @@ class GoalModel extends Model
   load: (goal) ->
     @name = goal.name
     @deadline = goal.deadline
-    @organization = @ref('organization', goal.organization)
+    @organization = @one('organization', goal.organization)
 
 module.exports = GoalModel

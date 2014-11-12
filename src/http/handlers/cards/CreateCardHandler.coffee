@@ -24,7 +24,7 @@ class CreateCardHandler extends Handler
       participants: [user.id]
 
     # TODO: Validation. Will probably need to be async because of validating
-    # the existence of the card's type/category/whatever we call it.
+    # the existence of the card's kind, etc.
 
     command = new CreateCardCommand(card, metadata)
     @database.execute command, (err, card) =>

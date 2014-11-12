@@ -17,18 +17,21 @@ class Model
 
   createRelatedModels: (related) ->
     return _.object _.map related, (data, key) =>
-      if _.isArray(data)
+      if not data?
+        value = null
+      else if _.isArray(data)
         value = _.map data, (datum) => @_factory.create(datum, @_request)
       else
         value = @_factory.create(data, @_request)
       [key, value]
 
-  ref: (field, id) ->
+  one: (field, id) ->
     schema   = @_document.getSchema()
     relation = schema.getRelation(field)
     @[field] = @_factory.ref(relation.getSchema(), id, @_request)
 
-  refs: (field, ids) ->
+  many: (field, ids) ->
+    console.log(field)
     schema   = @_document.getSchema()
     relation = schema.getRelation(field)
     @[field] = _.map ids, (id) => @_factory.ref(relation.getSchema(), id, @_request)

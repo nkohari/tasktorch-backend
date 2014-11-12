@@ -6,11 +6,11 @@ Query    = require 'data/framework/queries/Query'
 
 class GetSpecialStackByOrganizationAndOwnerQuery extends Query
 
-  constructor: (organizationId, userId, kind, options) ->
+  constructor: (organizationId, userId, type, options) ->
     super(Stack, _.extend({firstResult: true}, options))
     console.log(options.expand)
     @rql = r.table(Stack.table).getAll(userId, {index: 'owner'})
-      .filter({organization: organizationId, kind: kind})
+      .filter({organization: organizationId, type: type})
       .limit(1)
 
 module.exports = GetSpecialStackByOrganizationAndOwnerQuery

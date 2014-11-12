@@ -6,6 +6,6 @@ class SessionModel extends Model
   @getUri: (id, request) -> "sessions/#{id}"
 
   load: (session) ->
-    @user = @ref('user', session.user)
+    @user = @one('user', session.user)
 
 module.exports = SessionModel
