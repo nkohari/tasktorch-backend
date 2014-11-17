@@ -9,7 +9,7 @@ class StackModel extends Model
     @name = stack.name
     @type = stack.type
     @organization = @one('organization', stack.organization)
-    @owner = @one('owner', stack.owner)
-    @team = @one('team', stack.team)
+    @owner = @one('owner', stack.owner) if stack.owner?
+    @team = @one('team', stack.team) if stack.team?
 
 module.exports = StackModel

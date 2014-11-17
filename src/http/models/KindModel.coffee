@@ -9,6 +9,5 @@ class KindModel extends Model
     @name = kind.name
     @color = kind.color
     @organization = @one('organization', kind.organization)
-    @stages = kind.stages
 
 module.exports = KindModel

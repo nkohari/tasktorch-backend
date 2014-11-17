@@ -31,7 +31,6 @@ class Model
     @[field] = @_factory.ref(relation.getSchema(), id, @_request)
 
   many: (field, ids) ->
-    console.log(field)
     schema   = @_document.getSchema()
     relation = schema.getRelation(field)
     @[field] = _.map ids, (id) => @_factory.ref(relation.getSchema(), id, @_request)

@@ -1,5 +1,5 @@
 Schema = require '../framework/Schema'
-{HasOne, HasMany} = require '../framework/RelationType'
+{HasOne, HasMany, HasManyForeign} = require '../framework/RelationType'
 
 Card = Schema.create 'Card',
 
@@ -14,5 +14,6 @@ Card = Schema.create 'Card',
     kind:         {type: HasOne,  schema: 'Kind'}
     goal:         {type: HasOne,  schema: 'Goal'}
     milestone:    {type: HasOne,  schema: 'Milestone'}
+    actions:      {type: HasManyForeign, schema: 'Action', index: 'card'}
 
 module.exports = Card
