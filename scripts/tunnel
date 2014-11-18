@@ -1,0 +1,10 @@
+#!/bin/bash
+
+sudo ifconfig lo0 alias 127.0.0.2 up
+sudo ifconfig lo0 alias 127.0.0.3 up
+
+ssh -N compose@portal.1.dblayer.com -p 10077 \
+  -L 127.0.0.2:8080:10.4.64.2:8080 \
+  -L 127.0.0.3:8080:10.4.64.3:8080 \
+  -L 127.0.0.2:28015:10.4.64.2:28015 \
+  -L 127.0.0.3:28015:10.4.64.3:28015
