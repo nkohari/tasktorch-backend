@@ -1,5 +1,6 @@
 _                              = require 'lodash'
 Handler                        = require 'http/framework/Handler'
+FindTeamsByOrganizationQuery   = require 'data/queries/FindTeamsByOrganizationQuery'
 GetAllTeamsByOrganizationQuery = require 'data/queries/GetAllTeamsByOrganizationQuery'
 
 class ListTeamsInOrganizationHandler extends Handler
@@ -11,7 +12,13 @@ class ListTeamsInOrganizationHandler extends Handler
 
   handle: (request, reply) ->
     {organization} = request.scope
-    query = new GetAllTeamsByOrganizationQuery(organization.id, @getQueryOptions(request))
+    options = @getQueryOptions(request)
+
+    if request.query.suggest?
+      query = new FindTeamsByOrganizationQuery(organization.id, request.query.suggest, options)
+    else
+      query = new GetAllTeamsByOrganizationQuery(organization.id, options)
+
     @database.execute query, (err, teams) =>
       return reply err if err?
       models = _.map teams, (team) => @modelFactory.create(team, request)

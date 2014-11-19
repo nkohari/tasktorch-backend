@@ -1,10 +1,10 @@
 {
-  "name": "tasktorch-db",
+  "name": "tasktorch-api",
   "version": "0.1.0",
-  "description": "tasktorch data access",
+  "description": "tasktorch http api server",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tasktorch/db.git"
+    "url": "https://github.com/tasktorch/api.git"
   },
   "author": {
     "name": "Nate Kohari",
@@ -14,7 +14,7 @@
     "async": "0.9.0",
     "coffee-script": "1.8.0",
     "deep-equal": "0.2.1",
-    "elasticsearch": "3.0.0",
+    "elasticsearch": "^3.0.0",
     "forge-di": "0.9.4",
     "generic-pool": "2.1.1",
     "glob": "4.0.5",
@@ -33,6 +33,6 @@
   "devDependencies": {},
   "scripts": {
     "test": "mocha",
-    "prepublish": "for LINK in 'common' 'data' 'http'; do ln -snf `pwd`/src/$LINK ./node_modules/$LINK; done"
+    "prepublish": "for LINK in 'common' 'data' 'http' 'search'; do ln -snf `pwd`/src/$LINK ./node_modules/$LINK; done"
   }
 }

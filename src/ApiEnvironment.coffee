@@ -10,6 +10,8 @@ EventBus       = require 'data/EventBus'
 ApiServer      = require 'http/ApiServer'
 Authenticator  = require 'http/Authenticator'
 ModelFactory   = require 'http/ModelFactory'
+SearchEngine   = require 'search/SearchEngine'
+SearchIndexer  = require 'search/SearchIndexer'
 
 class ApiEnvironment
 
@@ -29,6 +31,9 @@ class ApiEnvironment
     forge.bind('authenticator').to.type(Authenticator)
     forge.bind('modelFactory').to.type(ModelFactory)
 
+    forge.bind('searchEngine').to.type(SearchEngine)
+    forge.bind('searchIndexer').to.type(SearchIndexer)
+
     for name, type of loadFiles('data/schemas', __dirname)
       forge.bind('schema').to.type(type).when(name)
 
@@ -38,6 +43,9 @@ class ApiEnvironment
     for name, type of loadFiles('http/demands', __dirname)
       name = @humanize name.replace('Demand', '')
       forge.bind('demand').to.type(type).when(name)
+
+    for name, type of loadFiles('search/factories', __dirname)
+      forge.bind('searchModelFactory').to.type(type).when(name)
 
   humanize: (str) ->
     str.replace(/([A-Z])/g, ' $1').substr(1).toLowerCase()

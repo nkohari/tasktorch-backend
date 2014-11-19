@@ -3,7 +3,7 @@ User          = require 'data/schemas/User'
 
 class ChangeUserPasswordCommand extends UpdateCommand
 
-  constructor: (cardId, password, expectedVersion) ->
-    super(User, cardId, {password}, expectedVersion)
+  constructor: (userId, password, expectedVersion) ->
+    super(User, userId, {password}, expectedVersion)
 
 module.exports = ChangeUserPasswordCommand
