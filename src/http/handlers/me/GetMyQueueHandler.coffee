@@ -1,7 +1,7 @@
 _ = require 'lodash'
 Handler = require 'http/framework/Handler'
-StackKind = require 'data/enums/StackKind'
-GetSpecialStackByOrganizationAndOwnerQuery = require 'data/queries/GetSpecialStackByOrganizationAndOwnerQuery'
+StackType = require 'data/enums/StackType'
+GetSpecialStackByOrganizationAndUserQuery = require 'data/queries/GetSpecialStackByOrganizationAndUserQuery'
 
 class GetMyQueueHandler extends Handler
 
@@ -13,7 +13,7 @@ class GetMyQueueHandler extends Handler
   handle: (request, reply) ->
     {user}         = request.auth.credentials
     {organization} = request.scope
-    query = new GetSpecialStackByOrganizationAndOwnerQuery(organization.id, user.id, StackKind.Queue, @getQueryOptions(request))
+    query = new GetSpecialStackByOrganizationAndUserQuery(organization.id, user.id, StackType.Queue, @getQueryOptions(request))
     @database.execute query, (err, stack) =>
       return reply err if err?
       model = @modelFactory.create(stack, request)

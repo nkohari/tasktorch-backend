@@ -3,7 +3,7 @@ Model = require 'http/framework/Model'
 class ActionModel extends Model
 
   @describes: 'Action'
-  @getUri: (id, request) -> "#{request.scope.organization.id}/cards/#{request.params.cardId}/actions/#{id}"
+  @getUri: (id, request) -> "#{request.scope.organization.id}/actions/#{id}"
 
   load: (action) ->
     @text = action.text

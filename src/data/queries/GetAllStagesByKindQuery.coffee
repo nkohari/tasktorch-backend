@@ -1,11 +1,11 @@
-r     = require 'rethinkdb'
-Query = require 'data/framework/queries/Query'
-Stage = require 'data/schemas/Stage'
+r                 = require 'rethinkdb'
+GetAllByListQuery = require 'data/framework/queries/GetAllByListQuery'
+Kind              = require 'data/schemas/Kind'
+Stage             = require 'data/schemas/Stage'
 
-class GetAllStagesByKindQuery extends Query
+class GetAllStagesByKindQuery extends GetAllByListQuery
 
   constructor: (kindId, options) ->
-    super(Stage, options)
-    @rql = r.table(Stage.table).getAll(kindId, {index: 'kind'}).orderBy('rank')
+    super(Stage, Kind, kindId, 'stages', options)
 
 module.exports = GetAllStagesByKindQuery

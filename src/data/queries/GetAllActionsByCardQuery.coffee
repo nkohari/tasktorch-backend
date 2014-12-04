@@ -1,11 +1,11 @@
-r      = require 'rethinkdb'
-Query  = require 'data/framework/queries/Query'
-Action = require 'data/schemas/Action'
+r                 = require 'rethinkdb'
+GetAllByListQuery = require 'data/framework/queries/GetAllByListQuery'
+Action            = require 'data/schemas/Action'
+Card              = require 'data/schemas/Card'
 
-class GetAllActionsByCardQuery extends Query
+class GetAllActionsByCardQuery extends GetAllByListQuery
 
   constructor: (cardId, options) ->
-    super(Action, options)
-    @rql = r.table(Action.table).getAll(cardId, {index: 'card'}).orderBy('rank')
+    super(Action, Card, cardId, 'actions', options)
 
 module.exports = GetAllActionsByCardQuery

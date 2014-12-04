@@ -3,6 +3,8 @@ _            = require 'lodash'
 Document     = require '../Document'
 RelationType = require '../RelationType'
 
+DUMMY_ID = '__nonexistent__'
+
 class Query
 
   @requiredFields: ['id', 'version']
@@ -45,13 +47,13 @@ class Query
       schema   = relation.getSchema()
       if relation.type == RelationType.HasOne
         @rql = @rql.merge (parent) ->
-          foreignKey = parent(field).default('__nonexistent__')
+          foreignKey = parent(field).default(DUMMY_ID)
           value = r.table(schema.table).get(foreignKey).default(null)
           return {_related: parent('_related').default({}).merge(r.object(field, value))}
       if relation.type == RelationType.HasMany
         @rql = @rql.merge (parent) ->
           index = relation.index ? 'id'
-          value = r.table(schema.table).getAll(r.args(parent(field)), {index}).coerceTo('array')
+          value = r.table(schema.table).getAll(r.args(parent(field).append(DUMMY_ID)), {index}).coerceTo('array')
           return {_related: parent('_related').default({}).merge(r.object(field, value))}
       if relation.type == RelationType.HasManyForeign
         @rql = @rql.merge (parent) ->

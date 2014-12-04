@@ -5,8 +5,4 @@ User = Schema.create 'User',
 
   table: 'users'
 
-  relations:
-    inbox: {type: HasOne,  schema: 'Stack'}
-    stack: {type: HasOne,  schema: 'Stack'}
-
 module.exports = User
