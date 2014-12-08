@@ -3,7 +3,9 @@ Schema = require '../framework/Schema'
 
 Organization = Schema.create 'Organization',
 
-  table: 'organizations'
+  table:    'organizations'
+  singular: 'organization'
+  plural:   'organizations'
 
   relations:
     teams:   {type: HasMany, schema: 'Team'}

@@ -3,7 +3,9 @@ Schema = require '../framework/Schema'
 
 Action = Schema.create 'Action',
 
-  table: 'actions'
+  table:    'actions'
+  singular: 'action'
+  plural:   'actions'
 
   relations:
     card:  {type: HasOne, schema: 'Card'}

@@ -1,5 +1,6 @@
-_ = require 'lodash'
-Handler = require 'http/framework/Handler'
+_        = require 'lodash'
+Handler  = require 'http/framework/Handler'
+Response = require 'http/framework/Response'
 GetAllStacksByOrganizationAndOwnerQuery = require 'data/queries/GetAllStacksByOrganizationAndOwnerQuery'
 
 class ListMyStacksHandler extends Handler
@@ -7,15 +8,14 @@ class ListMyStacksHandler extends Handler
   @route 'get /api/{organizationId}/me/stacks'
   @demand 'requester is organization member'
 
-  constructor: (@database, @modelFactory) ->
+  constructor: (@database) ->
 
   handle: (request, reply) ->
     {organization} = request.scope
     {user} = request.auth.credentials
     query = new GetAllStacksByOrganizationAndOwnerQuery(organization.id, user.id, @getQueryOptions(request))
-    @database.execute query, (err, stacks) =>
+    @database.execute query, (err, result) =>
       return reply err if err?
-      models = _.map stacks, (stack) => @modelFactory.create(stack, request)
-      reply(models)
+      reply new Response(result)
 
 module.exports = ListMyStacksHandler

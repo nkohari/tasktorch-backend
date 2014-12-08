@@ -10,12 +10,12 @@ class GetByIndexQuery extends Query
     value = tuple[index]
     @rql  = r.table(@schema.table).getAll(value, {index}).default([]).limit(1)
 
-  processResult: (result, callback) ->
-    result.toArray (err, documents) =>
+  preprocessResult: (result, callback) ->
+    result.toArray (err, items) =>
       return callback(err) if err?
-      if documents.length == 0
+      if items.length == 0
         callback(null, null)
       else
-        callback(null, documents[0])
+        callback(null, items[0])
 
 module.exports = GetByIndexQuery

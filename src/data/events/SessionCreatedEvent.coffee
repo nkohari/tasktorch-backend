@@ -1,5 +1,6 @@
-Event   = require 'data/framework/Event'
-Session = require 'data/schemas/Session'
+Event        = require 'data/framework/Event'
+Session      = require 'data/schemas/Session'
+SessionModel = require 'http/models/SessionModel'
 
 class SessionCreatedEvent extends Event
 
@@ -7,6 +8,6 @@ class SessionCreatedEvent extends Event
     super()
     @document = {type: Session.name, id: session.id, version: session.version}
     @meta     = {user: user.id}
-    @payload  = session.toJSON()
+    @payload  = new SessionModel(session)
 
 module.exports = SessionCreatedEvent

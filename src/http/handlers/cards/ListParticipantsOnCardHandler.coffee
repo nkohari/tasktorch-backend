@@ -1,20 +1,20 @@
 _                             = require 'lodash'
-Handler                       = require 'http/framework/Handler'
 GetAllParticipantsOnCardQuery = require 'data/queries/GetAllParticipantsOnCardQuery'
+Handler                       = require 'http/framework/Handler'
+Response                      = require 'http/framework/Response'
 
 class ListParticipantsOnCardHandler extends Handler
 
   @route 'get /api/{organizationId}/cards/{cardId}/participants'
   @demand ['requester is organization member']
 
-  constructor: (@database, @modelFactory) ->
+  constructor: (@database) ->
 
   handle: (request, reply) ->
     {cardId} = request.params
     query = new GetAllParticipantsOnCardQuery(cardId, @getQueryOptions(request))
-    @database.execute query, (err, users) =>
+    @database.execute query, (err, result) =>
       return reply err if err?
-      models = _.map users, (user) => @modelFactory.create(user, request)
-      reply(models)
+      reply new Response(result)
 
 module.exports = ListParticipantsOnCardHandler

@@ -9,9 +9,10 @@ class TeamBelongsToOrganizationDemand extends Demand
   execute: (request, reply) ->
     {organizationId, teamId} = request.params
     query = new GetTeamQuery(teamId)
-    @database.execute query, (err, team) =>
+    @database.execute query, (err, result) =>
       return reply err if err?
-      if team.organization == organizationId
+      return reply @error.notFound() unless result.team?
+      if result.team.organization == organizationId
         return reply()
       else
         return reply @error.unauthorized()

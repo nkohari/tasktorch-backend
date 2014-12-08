@@ -3,7 +3,9 @@ Schema = require '../framework/Schema'
 
 Goal = Schema.create 'Goal',
 
-  table: 'goals'
+  table:    'goals'
+  singular: 'goal'
+  plural:   'goals'
 
   relations:
     organization: {type: HasOne, schema: 'Organization'}

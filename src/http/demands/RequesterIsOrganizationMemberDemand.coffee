@@ -10,11 +10,11 @@ class RequesterIsOrganizationMemberDemand extends Demand
     {user} = request.auth.credentials
     {organizationId} = request.params
     query = new GetOrganizationQuery(organizationId)
-    @database.execute query, (err, organization) =>
+    @database.execute query, (err, result) =>
       return reply err if err?
-      return reply @error.notFound() unless organization?
-      request.scope.organization = organization
-      if _.contains(organization.members, user.id)
+      return reply @error.notFound() unless result.organization?
+      request.scope.organization = result.organization
+      if _.contains(result.organization.members, user.id)
         return reply()
       else
         return reply @error.unauthorized()

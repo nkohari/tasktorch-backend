@@ -3,6 +3,8 @@ Schema   = require '../framework/Schema'
 
 User = Schema.create 'User',
 
-  table: 'users'
+  table:    'users'
+  singular: 'user'
+  plural:   'users'
 
 module.exports = User

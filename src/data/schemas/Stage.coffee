@@ -3,7 +3,9 @@ Schema = require '../framework/Schema'
 
 Stage = Schema.create 'Stage',
 
-  table: 'stages'
+  table:    'stages'
+  singular: 'stage'
+  plural:   'stages'
 
   relations:
     kind: {type: HasOne, schema: 'Kind'}

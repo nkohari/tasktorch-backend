@@ -1,20 +1,20 @@
-_ = require 'lodash'
-Handler = require 'http/framework/Handler'
+_                              = require 'lodash'
 GetAllGoalsInOrganizationQuery = require 'data/queries/GetAllGoalsInOrganizationQuery'
+Handler                        = require 'http/framework/Handler'
+Response                       = require 'http/framework/Response'
 
 class ListGoalsInOrganizationHandler extends Handler
 
   @route 'get /api/{organizationId}/goals'
   @demand ['requester is organization member']
 
-  constructor: (@database, @modelFactory) ->
+  constructor: (@database) ->
 
   handle: (request, reply) ->
     {organization} = request.scope
     query = new GetAllGoalsInOrganizationQuery(organization.id, @getQueryOptions(request))
-    @database.execute query, (err, goals) =>
+    @database.execute query, (err, result) =>
       return reply err if err?
-      models = _.map goals, (goal) => @modelFactory.create(goal, request)
-      reply(models)
+      reply new Response(result)
 
 module.exports = ListGoalsInOrganizationHandler

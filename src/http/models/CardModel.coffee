@@ -2,20 +2,18 @@ Model = require 'http/framework/Model'
 
 class CardModel extends Model
 
-  @describes: 'Card'
-  @getUri: (id, request) -> "#{request.scope.organization.id}/cards/#{id}"
-
-  load: (card) ->
-    @title = card.title
-    @body = card.body
-    @kind = @one('kind', card.kind)
-    @creator = @one('creator', card.creator)
-    @owner = @one('owner', card.owner) if card.owner?
-    @participants = @many('participants', card.participants)
-    @stack = @one('stack', card.stack)
-    @actions = @many('actions', card.actions)
-    @goal = @one('goal', card.goal) if card.goal?
-    @milestone = @one('milestone', card.milestone) if card.milestone?
-    @lastHandoff = @one('lastHandoff', card.lastHandoff) if card.lastHandoff?
+  constructor: (card) ->
+    super(card)
+    @title        = card.title
+    @body         = card.body
+    @kind         = card.kind
+    @creator      = card.creator
+    @owner        = card.owner ? null
+    @participants = card.participants
+    @stack        = card.stack
+    @actions      = card.actions
+    @goal         = card.goal ? null
+    @milestone    = card.milestone ? null
+    @lastHandoff  = card.lastHandoff ? null
 
 module.exports = CardModel

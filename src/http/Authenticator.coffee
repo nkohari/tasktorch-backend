@@ -22,12 +22,13 @@ class Authenticator
     return callback(null, false) unless state?
     {userId, sessionId} = state
     query = new GetSessionQuery(sessionId, {expand: 'user'})
-    @database.execute query, (err, session) =>
+    @database.execute query, (err, result) =>
       return callback(err) if err?
+      session = result.session
       return callback(null, false) unless session?
       return callback(null, false) unless session.isActive and session.user == userId
-      user = session.getRelated('user')
-      credentials = {session, user}
+      user = result.related.users[session.user]
+      credentials = {session: session, user}
       @log.debug "Authenticated session #{session.id} for user #{user.username}"
       callback(null, true, credentials)
 

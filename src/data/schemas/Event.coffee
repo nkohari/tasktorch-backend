@@ -3,7 +3,9 @@ Schema   = require '../framework/Schema'
 
 Event = Schema.create 'Event',
 
-  table: 'events'
+  table:    'events'
+  singular: 'event'
+  plural:   'events'
 
   relations:
     user:         {type: HasOne,  schema: 'User'}

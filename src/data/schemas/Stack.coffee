@@ -3,7 +3,9 @@ Schema = require '../framework/Schema'
 
 Stack = Schema.create 'Stack',
 
-  table: 'stacks'
+  table:    'stacks'
+  singular: 'stack'
+  plural:   'stacks'
 
   relations:
     organization: {type: HasOne,  schema: 'Organization'}

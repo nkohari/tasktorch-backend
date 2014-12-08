@@ -1,8 +1,8 @@
-r        = require 'rethinkdb'
-_        = require 'lodash'
-uuid     = require 'common/util/uuid'
-Command  = require './Command'
-Document = require '../Document'
+r           = require 'rethinkdb'
+_           = require 'lodash'
+uuid        = require 'common/util/uuid'
+Command     = require './Command'
+QueryResult = require '../QueryResult'
 
 class CreateCommand extends Command
 
@@ -13,6 +13,6 @@ class CreateCommand extends Command
   execute: (dbConnection, callback) ->
     @rql.run dbConnection, (err, results) =>
       return callback(err) if err?
-      callback null, new Document(@schema, @data)
+      callback null, new QueryResult(@schema, @data)
 
 module.exports = CreateCommand

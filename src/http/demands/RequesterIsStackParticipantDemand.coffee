@@ -10,11 +10,11 @@ class RequesterIsStackParticipantDemand extends Demand
     {user}    = request.auth.credentials
     {stackId} = request.params
     query = new GetStackQuery(stackId, {expand: 'team'})
-    @database.execute query, (err, stack) =>
+    @database.execute query, (err, result) =>
       return reply err if err?
-      return reply @error.notFound() unless stack?
-      team = stack['_related'].team
-      stack = request.scope.stack = _.omit(stack, '_related')
+      return reply @error.notFound() unless result.stack?
+      stack = request.scope.stack = result.stack
+      team = if stack.team? then result.related.teams[stack.team] else null
       if stack.owner? and stack.owner == user.id
         return reply()
       else if team? and _.contains(team.members, user.id)

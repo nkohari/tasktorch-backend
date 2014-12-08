@@ -3,7 +3,9 @@ Schema = require '../framework/Schema'
 
 Session = Schema.create 'Session',
 
-  table: 'sessions'
+  table:    'sessions'
+  singular: 'session'
+  plural:   'sessions'
 
   relations:
     user: {type: HasOne,  schema: 'User'}

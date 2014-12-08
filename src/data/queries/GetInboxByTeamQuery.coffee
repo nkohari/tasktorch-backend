@@ -7,9 +7,11 @@ Query     = require 'data/framework/queries/Query'
 class GetInboxByTeamQuery extends Query
 
   constructor: (organizationId, teamId, options) ->
-    super(Stack, _.extend({firstResult: true}, options))
+    super(Stack, options)
     @rql = r.table(Stack.table).getAll(teamId, {index: 'team'})
       .filter({organization: organizationId, type: StackType.Inbox})
       .limit(1)
+      .coerceTo('array').do (result) ->
+        r.branch(result.isEmpty(), null, result.nth(0))
 
 module.exports = GetInboxByTeamQuery

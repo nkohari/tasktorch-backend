@@ -15,7 +15,9 @@ class Schema
     return schema
 
   constructor: (@name, spec) ->
-    @table = spec.table
+    @table     = spec.table
+    @singular  = spec.singular
+    @plural    = spec.plural
     @relations = _.object _.map spec.relations, (rspec, name) =>
       [name, new Relation(this, name, rspec)]
 

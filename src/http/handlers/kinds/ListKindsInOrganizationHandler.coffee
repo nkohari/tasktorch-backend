@@ -1,5 +1,6 @@
-_ = require 'lodash'
-Handler = require 'http/framework/Handler'
+_                              = require 'lodash'
+Handler                        = require 'http/framework/Handler'
+Response                       = require 'http/framework/Response'
 GetAllKindsByOrganizationQuery = require 'data/queries/GetAllKindsByOrganizationQuery'
 
 class ListKindsInOrganizationHandler extends Handler
@@ -7,14 +8,13 @@ class ListKindsInOrganizationHandler extends Handler
   @route 'get /api/{organizationId}/kinds'
   @demand ['requester is organization member']
 
-  constructor: (@database, @modelFactory) ->
+  constructor: (@database) ->
 
   handle: (request, reply) ->
     {organization} = request.scope
     query = new GetAllKindsByOrganizationQuery(organization.id, @getQueryOptions(request))
-    @database.execute query, (err, kinds) =>
+    @database.execute query, (err, result) =>
       return reply err if err?
-      models = _.map kinds, (kind) => @modelFactory.create(kind, request)
-      reply(models)
+      reply new Response(result)
 
 module.exports = ListKindsInOrganizationHandler

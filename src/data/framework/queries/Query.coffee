@@ -1,9 +1,9 @@
-r            = require 'rethinkdb'
+util         = require 'util'
 _            = require 'lodash'
-Document     = require '../Document'
+r            = require 'rethinkdb'
 RelationType = require '../RelationType'
-
-DUMMY_ID = '__nonexistent__'
+QueryResult  = require '../QueryResult'
+ExpansionTreeBuilder = require '../expansions/ExpansionTreeBuilder'
 
 class Query
 
@@ -24,41 +24,28 @@ class Query
     @_processExpansions() if @expansions?
     @_processPluck() if @fields?
     console.log(@rql.toString())
-    @rql.run dbConnection, (err, result) =>
+    @rql.run dbConnection, (err, response) =>
       return callback(err) if err?
-      @processResult(result, callback)
+      @preprocessResult response, (err, result) =>
+        return callback(err) if err?
+        callback null, new QueryResult(@schema, result)
 
-  processResult: (result, callback) ->
-    return callback(null, null) unless result?
-    return callback(null, new Document(@schema, result)) unless result.toArray?
-    result.toArray (err, items) =>
-      return callback(err) if err?
-      if @options.firstResult
-        callback null, new Document(@schema, items[0])
-      else
-        callback null, _.map items, (item) => new Document(@schema, item)
+  preprocessResult: (result, callback) ->
+    if result?.toArray?
+      result.toArray(callback)
+    else
+      callback(null, result)
 
   _processPluck: ->
     @rql = @rql.pluck Query.requiredFields.concat(@fields)
 
   _processExpansions: ->
-    for field in @expansions
-      relation = @schema.getRelation(field)
-      schema   = relation.getSchema()
-      if relation.type == RelationType.HasOne
-        @rql = @rql.merge (parent) ->
-          foreignKey = parent(field).default(DUMMY_ID)
-          value = r.table(schema.table).get(foreignKey).default(null)
-          return {_related: parent('_related').default({}).merge(r.object(field, value))}
-      if relation.type == RelationType.HasMany
-        @rql = @rql.merge (parent) ->
-          index = relation.index ? 'id'
-          value = r.table(schema.table).getAll(r.args(parent(field).append(DUMMY_ID)), {index}).coerceTo('array')
-          return {_related: parent('_related').default({}).merge(r.object(field, value))}
-      if relation.type == RelationType.HasManyForeign
-        @rql = @rql.merge (parent) ->
-          index = relation.index ? 'id'
-          value = r.table(schema.table).getAll(parent('id'), {index}).coerceTo('array')
-          return {_related: parent('_related').default({}).merge(r.object(field, value))}
+    return unless @expansions.length > 0
+    tree = ExpansionTreeBuilder.build(@schema, @expansions)
+    @rql = @rql.do (result) ->
+      expanded = result
+      for field, expansion of tree
+        expanded = expanded.merge(expansion.getMergeFunction())
+      r.branch(result.eq(null), null, expanded)
 
 module.exports = Query

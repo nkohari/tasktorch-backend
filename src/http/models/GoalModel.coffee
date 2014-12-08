@@ -2,12 +2,10 @@ Model = require 'http/framework/Model'
 
 class GoalModel extends Model
 
-  @describes: 'Goal'
-  @getUri: (id, request) -> "#{request.scope.organization.id}/goals/#{id}"
-
-  load: (goal) ->
-    @name = goal.name
-    @deadline = goal.deadline
-    @organization = @one('organization', goal.organization)
+  constructor: (goal) ->
+    super(goal)
+    @name         = goal.name
+    @deadline     = goal.deadline
+    @organization = goal.organization
 
 module.exports = GoalModel

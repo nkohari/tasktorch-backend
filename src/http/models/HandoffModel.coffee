@@ -2,14 +2,12 @@ Model = require 'http/framework/Model'
 
 class HandoffModel extends Model
 
-  @describes: 'Handoff'
-  @getUri: (id, request) -> "#{request.scope.organization.id}/handoffs/#{id}"
-
-  load: (handoff) ->
+  constructor: (handoff) ->
+    super(handoff)
     @timestamp = handoff.timestamp
-    @message = handoff.message
-    @sender = @one('sender', handoff.sender)
-    @user = @one('user', handoff.user) if handoff.user?
-    @team = @one('team', handoff.team) if handoff.team?
+    @message   = handoff.message
+    @sender    = handoff.sender
+    @user      = handoff.user if handoff.user?
+    @team      = handoff.team if handoff.team?
 
 module.exports = HandoffModel

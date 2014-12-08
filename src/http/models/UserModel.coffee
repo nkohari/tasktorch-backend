@@ -3,12 +3,10 @@ Model  = require 'http/framework/Model'
 
 class UserModel extends Model
 
-  @describes: 'User'
-  @getUri: (id, request) -> "users/#{id}"
-
-  load: (user) ->
-    @username = user.username
-    @name = user.name
+  constructor: (user) ->
+    super(user)
+    @username  = user.username
+    @name      = user.name
     # TODO: Make this configurable instead of always being the first email address
     @avatarUrl = @getAvatarUrl(user.emails[0])
 

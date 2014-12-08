@@ -8,5 +8,6 @@ class GetAllStacksByOrganizationAndOwnerQuery extends Query
     super(Stack, options)
     @rql = r.table(@schema.table).getAll(userId, {index: 'owner'})
       .filter({organization: organizationId})
+      .coerceTo('array')
 
 module.exports = GetAllStacksByOrganizationAndOwnerQuery
