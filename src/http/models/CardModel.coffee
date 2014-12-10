@@ -8,12 +8,12 @@ class CardModel extends Model
     @body         = card.body
     @kind         = card.kind
     @creator      = card.creator
+    @organization = card.organization
     @owner        = card.owner ? null
     @participants = card.participants
     @stack        = card.stack
     @actions      = card.actions
     @goal         = card.goal ? null
     @milestone    = card.milestone ? null
-    @lastHandoff  = card.lastHandoff ? null
 
 module.exports = CardModel

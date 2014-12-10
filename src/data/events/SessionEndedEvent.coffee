@@ -4,9 +4,7 @@ Session = require 'data/schemas/Session'
 class SessionEndedEvent extends Event
 
   constructor: (session, user) ->
-    super()
-    @document = {type: Session.name, id: session.id, version: session.version}
-    @meta     = {user: user.id}
-    @payload  = {}
+    super(session, user)
+    @payload = {}
 
 module.exports = SessionEndedEvent

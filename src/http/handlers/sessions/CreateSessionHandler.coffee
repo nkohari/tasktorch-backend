@@ -19,14 +19,13 @@ class CreateSessionHandler extends Handler
       return reply @error.forbidden() unless user? and @passwordHasher.verify(user.password, password)
       data = {user: user.id, isActive: true}
       command = new CreateSessionCommand(data)
-      @database.execute command, (err, result) =>
+      @database.execute command, (err, session) =>
         return reply err if err?
-        {session} = result
-        event     = new SessionCreatedEvent(session, user)
+        event = new SessionCreatedEvent(session, user)
         @eventBus.publish event, {user}, (err) =>
           return reply err if err?
           request.auth.session.set {userId: user.id, sessionId: session.id}
-          reply new Response(result)
+          reply new Response(session)
 
   resolveUser: (login, callback) ->
     query = new GetUserByUsernameQuery(login)

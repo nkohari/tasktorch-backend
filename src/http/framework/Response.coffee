@@ -1,10 +1,20 @@
-_     = require 'lodash'
-Model = require './Model'
+_        = require 'lodash'
+Model    = require './Model'
+Document = require 'data/framework/Document'
 
 class Response
 
-  constructor: (result) ->
+  constructor: (data) ->
+    if data instanceof Document
+      @loadDocument(data)
+    else
+      @loadQueryResult(data)
 
+  loadDocument: (document) ->
+    schema = document.getSchema()
+    @[schema.singular] = Model.create(document)
+
+  loadQueryResult: (result) ->
     schema = result.schema
     if result[schema.plural] isnt undefined
       @[schema.plural] = _.map result[schema.plural], (item) -> Model.create(item)

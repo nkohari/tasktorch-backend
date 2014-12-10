@@ -3,7 +3,7 @@ ChangeCardTitleCommand = require 'data/commands/ChangeCardTitleCommand'
 CardTitleChangedEvent  = require 'data/events/CardTitleChangedEvent'
 Error                  = require 'data/Error'
 Handler                = require 'http/framework/Handler'
-Header                 = require 'http/Header'
+Header                 = require 'http/framework/Header'
 
 class ChangeCardTitleHandler extends Handler
 

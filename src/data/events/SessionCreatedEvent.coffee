@@ -5,9 +5,7 @@ SessionModel = require 'http/models/SessionModel'
 class SessionCreatedEvent extends Event
 
   constructor: (session, user) ->
-    super()
-    @document = {type: Session.name, id: session.id, version: session.version}
-    @meta     = {user: user.id}
-    @payload  = new SessionModel(session)
+    super(session, user)
+    @payload = new SessionModel(session)
 
 module.exports = SessionCreatedEvent

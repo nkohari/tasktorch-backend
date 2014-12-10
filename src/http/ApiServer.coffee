@@ -2,7 +2,7 @@ fs     = require 'fs'
 _      = require 'lodash'
 Hapi   = require 'hapi'
 etag   = require 'common/util/etag'
-Header = require './Header'
+Header = require './framework/Header'
 
 class ApiServer
 
