@@ -1,7 +1,8 @@
 arrayEnum = require 'common/util/arrayEnum'
 
 module.exports = arrayEnum [
-  'Inbox'
   'Queue'
+  'Inbox'
+  'Drafts'
   'Backlog'
 ]

@@ -33,6 +33,6 @@
   "devDependencies": {},
   "scripts": {
     "test": "mocha",
-    "prepublish": "for LINK in 'common' 'data' 'http' 'search'; do ln -snf `pwd`/src/$LINK ./node_modules/$LINK; done"
+    "prepublish": "for LINK in 'common' 'data' 'domain' 'http' 'messaging' 'search'; do ln -snf `pwd`/src/$LINK ./node_modules/$LINK; done"
   }
 }

@@ -1,7 +1,6 @@
 Handler                = require 'http/framework/Handler'
 Response               = require 'http/framework/Response'
-CreateSessionCommand   = require 'data/commands/CreateSessionCommand'
-SessionCreatedEvent    = require 'data/events/SessionCreatedEvent'
+CreateSessionCommand   = require 'domain/commands/CreateSessionCommand'
 GetUserByUsernameQuery = require 'data/queries/GetUserByUsernameQuery'
 GetUserByEmailQuery    = require 'data/queries/GetUserByEmailQuery'
 
@@ -10,7 +9,7 @@ class CreateSessionHandler extends Handler
   @route 'post /api/sessions'
   @auth  {mode: 'try'}
 
-  constructor: (@database, @eventBus, @passwordHasher) ->
+  constructor: (@database, @processor, @passwordHasher) ->
 
   handle: (request, reply) ->
     {login, password} = request.payload
@@ -19,13 +18,12 @@ class CreateSessionHandler extends Handler
       return reply @error.forbidden() unless user? and @passwordHasher.verify(user.password, password)
       data = {user: user.id, isActive: true}
       command = new CreateSessionCommand(data)
-      @database.execute command, (err, session) =>
+      @processor.execute command, (err, result) =>
+        return reply @error.notFound() if err is Error.DocumentNotFound
+        return reply @error.conflict() if err is Error.VersionMismatch
         return reply err if err?
-        event = new SessionCreatedEvent(session, user)
-        @eventBus.publish event, {user}, (err) =>
-          return reply err if err?
-          request.auth.session.set {userId: user.id, sessionId: session.id}
-          reply new Response(session)
+        request.auth.session.set {userId: user.id, sessionId: session.id}
+        reply new Response(result.session)
 
   resolveUser: (login, callback) ->
     query = new GetUserByUsernameQuery(login)

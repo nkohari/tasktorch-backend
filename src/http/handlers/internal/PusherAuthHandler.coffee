@@ -1,7 +1,7 @@
 _                    = require 'lodash'
 Handler              = require 'http/framework/Handler'
 GetOrganizationQuery = require 'data/queries/GetOrganizationQuery'
-UserModel            = require 'http/models/UserModel'
+UserModel            = require 'domain/models/UserModel'
 
 class PusherAuthHandler extends Handler
 

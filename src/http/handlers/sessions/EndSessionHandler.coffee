@@ -1,23 +1,21 @@
-Handler = require 'http/framework/Handler'
-EndSessionCommand = require 'data/commands/EndSessionCommand'
-SessionEndedEvent = require 'data/events/SessionEndedEvent'
+Handler           = require 'http/framework/Handler'
+EndSessionCommand = require 'domain/commands/EndSessionCommand'
 
 class EndSessionHandler extends Handler
 
   @route 'delete /api/sessions/{sessionId}'
 
-  constructor: (@database) ->
+  constructor: (@processor) ->
 
   handle: (request, reply) ->
     {session, user} = request.auth.credentials
     metadata = @getRequestMetadata()
     command = new EndSessionCommand(session, session.version)
-    @database.execute command, (err) =>
+    @processor.execute command, (err, result) =>
+      return reply @error.notFound() if err is Error.DocumentNotFound
+      return reply @error.conflict() if err is Error.VersionMismatch
       return reply err if err?
       request.auth.session.clear()
-      event = new SessionEndedEvent(session)
-      @eventBus.publish event, metadata, (err) =>
-        return reply err if err?
-        reply()
+      reply()
 
 module.exports = EndSessionHandler

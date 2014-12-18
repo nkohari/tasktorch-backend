@@ -1,5 +1,5 @@
-Schema = require '../framework/Schema'
-{HasOne, HasMany} = require '../framework/RelationType'
+Schema            = require 'data/Schema'
+{HasOne, HasMany} = require 'data/RelationType'
 
 Kind = Schema.create 'Kind',
 

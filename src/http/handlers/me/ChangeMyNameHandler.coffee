@@ -1,23 +1,21 @@
 Handler               = require 'http/framework/Handler'
-ChangeUserNameCommand = require 'data/commands/ChangeUserNameCommand'
-UserNameChangedEvent  = require 'data/events/UserNameChangedEvent'
+Response              = require 'http/framework/Response'
+ChangeUserNameCommand = require 'domain/commands/ChangeUserNameCommand'
 
 class ChangeMyNameHandler extends Handler
 
   @route 'put /api/me/name'
 
-  constructor: (@log, @database, @eventBus) ->
+  constructor: (@processor) ->
 
   handle: (request, reply) ->
     {user} = request.auth.credentials
     {name} = request.payload
-    @log.inspect {user}
-    command = new ChangeUserNameCommand(user.id, name, request.expectedVersion)
-    @database.execute command, (err) =>
+    command = new ChangeUserNameCommand(user.id, name)
+    @processor.execute command, (err, result) =>
+      return reply @error.notFound() if err is Error.DocumentNotFound
+      return reply @error.conflict() if err is Error.VersionMismatch
       return reply err if err?
-      event = new UserNameChangedEvent(user)
-      @eventBus.publish event, @getRequestMetadata(request), (err) =>
-        return reply err if err?
-        reply()
+      reply new Response(result.user)
 
 module.exports = ChangeMyNameHandler

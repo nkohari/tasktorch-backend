@@ -1,5 +1,5 @@
-Schema = require '../framework/Schema'
-{HasOne, HasMany, HasManyForeign} = require '../framework/RelationType'
+Schema                            = require 'data/Schema'
+{HasOne, HasMany, HasManyForeign} = require 'data/RelationType'
 
 Team = Schema.create 'Team',
 

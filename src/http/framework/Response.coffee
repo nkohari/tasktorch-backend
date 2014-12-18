@@ -1,6 +1,6 @@
 _        = require 'lodash'
-Model    = require './Model'
-Document = require 'data/framework/Document'
+Document = require 'data/Document'
+Model    = require 'domain/Model'
 
 class Response
 

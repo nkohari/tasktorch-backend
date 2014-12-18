@@ -1,33 +1,13 @@
-async = require 'async'
-r     = require 'rethinkdb'
-_     = require 'lodash'
-Event = require 'data/schemas/Event'
-
 class Database
 
-  @withConnection: (func) ->
-    (args..., callback) ->
-      @connectionPool.acquire (err, dbConnection) =>
-        return callback(err) if err?
-        cleanup = (results...) =>
-          @connectionPool.release(dbConnection)
-          callback.apply(null, results)
-        func.apply this, _.flatten [dbConnection, args, cleanup]
+  constructor: (@connectionPool) ->
 
-  constructor: (@log, @connectionPool) ->
-
-  execute: @withConnection (dbConnection, statement, callback) ->
-    statement.execute(dbConnection, callback)
-
-  executeAll: (queries, callback) ->
-    async.map queries, @execute.bind(this), callback
-
-  recordEvent: @withConnection (dbConnection, event, callback) ->
-    @log.inspect(event)
-    rql = r.table(Event.table).insert(event)
-    @log.debug(rql.toString())
-    rql.run dbConnection, (err) =>
+  execute: (query, callback) ->
+    @connectionPool.acquire (err, conn) =>
       return callback(err) if err?
-      callback(null, event)
+      query.execute conn, (err, result) =>
+        return callback(err) if err?
+        @connectionPool.release(conn)
+        callback(null, result)
 
 module.exports = Database

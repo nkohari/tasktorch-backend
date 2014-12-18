@@ -1,5 +1,5 @@
-Schema = require '../framework/Schema'
-{HasOne} = require '../framework/RelationType'
+Schema   = require 'data/Schema'
+{HasOne} = require 'data/RelationType'
 
 Stage = Schema.create 'Stage',
 

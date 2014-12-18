@@ -1,50 +1,50 @@
-Handler             = require 'http/framework/Handler'
-HandOffCardCommand  = require 'data/commands/HandOffCardCommand'
-StackType           = require 'data/enums/StackType'
-CardHandedOffEvent  = require 'data/events/CardHandedOffEvent'
-GetInboxByTeamQuery = require 'data/queries/GetInboxByTeamQuery'
-GetSpecialStackByOrganizationAndUserQuery = require 'data/queries/GetSpecialStackByOrganizationAndUserQuery'
+HandOffCardCommand         = require 'domain/commands/HandOffCardCommand'
+StackType                  = require 'data/enums/StackType'
+GetInboxByTeamQuery        = require 'data/queries/GetInboxByTeamQuery'
+GetSpecialStackByUserQuery = require 'data/queries/GetSpecialStackByUserQuery'
+Handler                    = require 'http/framework/Handler'
+Response                   = require 'http/framework/Response'
 
 class HandOffCardHandler extends Handler
 
   @route 'put /api/{organizationId}/cards/{cardId}/handoff'
   @demand 'requester is organization member'
 
-  constructor: (@database, @eventBus) ->
+  constructor: (@database, @processor) ->
 
   handle: (request, reply) ->
 
-    {user} = request.auth.credentials
+    {user}         = request.auth.credentials
     {organization} = request.scope
-    model = new HandOffCardModel(request)
-    metadata = @getRequestMetadata(request)
+    model          = @createRequestModel(request)
 
+    @resolveStack organization, model, (err, stack) =>
+      return reply err if err?
+      command = new HandOffCardCommand(model.card, stack.id, model.user ? null)
+      @processor.execute command, (err, result) =>
+        return reply @error.notFound() if err is Error.DocumentNotFound
+        return reply @error.conflict() if err is Error.VersionMismatch
+        return reply err if err?
+        reply new Response(result.card)
+
+  resolveStack: (organization, model, callback) ->
     if model.user?
-      query = new GetSpecialStackByOrganizationAndUserQuery(organization.id, model.user, StackType.Inbox)
+      query = new GetSpecialStackByUserQuery(organization.id, model.user, StackType.Inbox)
     else if model.team?
       query = new GetInboxByTeamQuery(model.team)
     else
-      return reply @error.badRequest()
-
-    # TODO: Validate request model
-
+      return callback @error.badRequest()
     @database.execute query, (err, result) =>
-      return reply err if err?
-      return reply @error.badRequest() unless result.stack?
-      command = new HandOffCardCommand(model.card, result.stack.id, model.user ? null)
-      @database.execute command, (err, {card, oldStack, newStack}) =>
-        return reply err if err?
-        event = new CardHandedOffEvent(organization, user, card, oldStack, newStack)
-        @eventBus.publish event, @getRequestMetadata(request), (err) =>
-          return reply err if err?
-          reply(event)
+      return callback(err) if err?
+      return callback @error.badRequest() unless result.stack?
+      callback(null, result.stack)
 
-class HandOffCardModel
-
-  constructor: (request) ->
-    @card = request.params.cardId
-    @user = request.payload.user
-    @team = request.payload.team
-    @message = request.payload.message
+  createRequestModel: (request) ->
+    return {
+      card:    request.params.cardId
+      user:    request.payload.user
+      team:    request.payload.team
+      message: request.payload.message
+    }
 
 module.exports = HandOffCardHandler

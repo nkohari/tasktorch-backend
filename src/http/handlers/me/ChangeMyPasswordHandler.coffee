@@ -1,23 +1,22 @@
-Handler = require 'http/framework/Handler'
-ChangeUserPasswordCommand = require 'data/commands/ChangeUserPasswordCommand'
-UserPasswordChangedEvent = require 'data/events/UserPasswordChangedEvent'
+Handler                   = require 'http/framework/Handler'
+Response                  = require 'http/framework/Response'
+ChangeUserPasswordCommand = require 'domain/commands/ChangeUserPasswordCommand'
 
 class ChangeMyPasswordHandler extends Handler
 
   @route 'put /api/me/password'
   
-  constructor: (@database, @eventBus, @passwordHasher) ->
+  constructor: (@processor, @passwordHasher) ->
 
   handle: (request, reply) ->
-    {user} = request.auth.credentials
+    {user}     = request.auth.credentials
     {password} = request.payload
     hashedPassword = @passwordHasher.hash(password)
-    command = new ChangeUserPasswordCommand(user.id, hashedPassword, request.expectedVersion)
-    @database.execute command, (err) =>
+    command = new ChangeUserPasswordCommand(user.id, hashedPassword)
+    @processor.execute command, (err, result) =>
+      return reply @error.notFound() if err is Error.DocumentNotFound
+      return reply @error.conflict() if err is Error.VersionMismatch
       return reply err if err?
-      event = new UserPasswordChangedEvent(user)
-      @eventBus.publish event, @getRequestMetadata(request), (err) =>
-        return reply err if err?
-        reply()
+      reply()
 
 module.exports = ChangeMyPasswordHandler

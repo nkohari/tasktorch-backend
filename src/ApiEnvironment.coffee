@@ -3,13 +3,13 @@ loadFiles      = require 'common/util/loadFiles'
 Config         = require 'common/Config'
 Log            = require 'common/Log'
 PasswordHasher = require 'common/PasswordHasher'
-PusherClient   = require 'common/PusherClient'
 Database       = require 'data/Database'
 ConnectionPool = require 'data/ConnectionPool'
-EventBus       = require 'data/EventBus'
+Processor      = require 'domain/Processor'
 ApiServer      = require 'http/ApiServer'
 Authenticator  = require 'http/Authenticator'
-ModelFactory   = require 'http/ModelFactory'
+PusherClient   = require 'messaging/PusherClient'
+MessageBus     = require 'messaging/MessageBus'
 SearchEngine   = require 'search/SearchEngine'
 SearchIndexer  = require 'search/SearchIndexer'
 
@@ -21,15 +21,17 @@ class ApiEnvironment
     forge.bind('config').to.type(Config)
     forge.bind('log').to.type(Log)
     forge.bind('passwordHasher').to.type(PasswordHasher)
-    forge.bind('pusher').to.type(PusherClient)
-    forge.bind('eventBus').to.type(EventBus)
 
     forge.bind('connectionPool').to.type(ConnectionPool)
     forge.bind('database').to.type(Database)
 
+    forge.bind('processor').to.type(Processor)
+
     forge.bind('server').to.type(ApiServer)
     forge.bind('authenticator').to.type(Authenticator)
-    forge.bind('modelFactory').to.type(ModelFactory)
+
+    forge.bind('pusher').to.type(PusherClient)
+    forge.bind('messageBus').to.type(MessageBus)
 
     forge.bind('searchEngine').to.type(SearchEngine)
     forge.bind('searchIndexer').to.type(SearchIndexer)

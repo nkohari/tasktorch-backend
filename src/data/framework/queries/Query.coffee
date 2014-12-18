@@ -1,9 +1,9 @@
-util         = require 'util'
-_            = require 'lodash'
-r            = require 'rethinkdb'
-RelationType = require '../RelationType'
-QueryResult  = require '../QueryResult'
-ExpansionTreeBuilder = require '../expansions/ExpansionTreeBuilder'
+util                 = require 'util'
+_                    = require 'lodash'
+r                    = require 'rethinkdb'
+RelationType         = require 'data/RelationType'
+QueryResult          = require 'data/QueryResult'
+ExpansionTreeBuilder = require 'data/framework/ExpansionTreeBuilder'
 
 class Query
 
@@ -20,11 +20,11 @@ class Query
   expand: (fields...) ->
     @expansions = @expansions.concat _.flatten(fields)
 
-  execute: (dbConnection, callback) ->
+  execute: (conn, callback) ->
     @_processExpansions() if @expansions?
     @_processPluck() if @fields?
     console.log(@rql.toString())
-    @rql.run dbConnection, (err, response) =>
+    @rql.run conn, (err, response) =>
       return callback(err) if err?
       @preprocessResult response, (err, result) =>
         return callback(err) if err?
