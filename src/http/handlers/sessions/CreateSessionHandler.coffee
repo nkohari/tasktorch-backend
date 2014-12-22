@@ -22,7 +22,7 @@ class CreateSessionHandler extends Handler
         return reply @error.notFound() if err is Error.DocumentNotFound
         return reply @error.conflict() if err is Error.VersionMismatch
         return reply err if err?
-        request.auth.session.set {userId: user.id, sessionId: session.id}
+        request.auth.session.set {userId: user.id, sessionId: result.session.id}
         reply new Response(result.session)
 
   resolveUser: (login, callback) ->

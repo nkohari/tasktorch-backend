@@ -4,21 +4,11 @@ Document  = require 'data/Document'
 Error     = require 'data/Error'
 Statement = require './Statement'
 
-class UpdateStatement extends Statement
+class BulkUpdateStatement extends Statement
 
-  constructor: (@schema, match, patch, expectedVersion = undefined) ->
-
+  constructor: (@schema, match, patch) ->
     patch = _.extend patch, {version: r.row('version').add(1)}
-
-    if @expectedVersion?
-      patch = (row) =>
-        r.branch(
-          row('version').eq(@expectedVersion),
-          patch,
-          r.error(Error.VersionMismatch)
-        )
-
-    @rql = r.table(@schema.table).get(match).update(patch, {returnChanges: true})
+    @rql = match.update(patch, {returnChanges: true})
 
   execute: (conn, callback) ->
     console.log(@rql.toString())
@@ -26,7 +16,7 @@ class UpdateStatement extends Statement
       return callback(err) if err?
       return callback(response.first_error)   if response.first_error?
       return callback(Error.DocumentNotFound) if response.replaced == 0 and response.unchanged == 0
-      document = new Document(@schema, response.changes[0].new_val)
-      callback(null, document)
+      documents = _.map response.changes, (change) => new Document(@schema, change.new_val)
+      callback(null, documents)
 
-module.exports = UpdateStatement
+module.exports = BulkUpdateStatement

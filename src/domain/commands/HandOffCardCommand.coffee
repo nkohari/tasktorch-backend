@@ -1,8 +1,8 @@
-Command                             = require 'domain/Command'
-CommandResult                       = require 'domain/CommandResult'
-RemoveCardFromCurrentStackStatement = require 'data/statements/RemoveCardFromCurrentStackStatement'
-AddCardToStackStatement             = require 'data/statements/AddCardToStackStatement'
-UpdateCardStatement                 = require 'data/statements/UpdateCardStatement'
+Command                       = require 'domain/Command'
+CommandResult                 = require 'domain/CommandResult'
+RemoveCardFromStacksStatement = require 'data/statements/RemoveCardFromStacksStatement'
+AddCardToStackStatement       = require 'data/statements/AddCardToStackStatement'
+UpdateCardStatement           = require 'data/statements/UpdateCardStatement'
 
 class HandOffCardCommand extends Command
 
@@ -11,19 +11,19 @@ class HandOffCardCommand extends Command
 
   execute: (conn, callback) ->
     result = new CommandResult()
-    statement = new UpdateCardStatement(@cardId, {stack: @stackId, owner: @ownerId})
-    statement.execute conn, (err, card) =>
+    statement = new RemoveCardFromStacksStatement(@cardId)
+    statement.execute conn, (err, previousStacks) =>
       return callback(err) if err?
-      result.card = card
-      result.changed(card)
-      statement = new RemoveCardFromCurrentStackStatement(card.id)
-      statement.execute conn, (err, previousStack) =>
+      result.changed(previousStacks)
+      statement = new AddCardToStackStatement(@stackId, @cardId, 'append')
+      statement.execute conn, (err, currentStack) =>
         return callback(err) if err?
-        result.changed(previousStack)
-        statement = new AddCardToStackStatement(@stackId, card.id, 'append')
-        statement.execute conn, (err, currentStack) =>
+        result.changed(currentStack)
+        statement = new UpdateCardStatement(@cardId, {stack: @stackId, owner: @ownerId})
+        statement.execute conn, (err, card) =>
           return callback(err) if err?
-          result.changed(currentStack)
+          result.card = card
+          result.changed(card)
           callback(null, result)
 
 module.exports = HandOffCardCommand

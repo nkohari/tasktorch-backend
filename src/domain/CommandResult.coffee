@@ -8,14 +8,17 @@ class CommandResult
     @_messages = []
     @_events = []
 
-  created: (document) ->
-    @_messages.push Message.create(Activity.Created, document)
+  created: (documents...) ->
+    for document in _.flatten(documents)
+      @_messages.push Message.create(Activity.Created, document)
 
-  changed: (document) ->
-    @_messages.push Message.create(Activity.Changed, document)
+  changed: (documents...) ->
+    for document in _.flatten(documents)
+      @_messages.push Message.create(Activity.Changed, document)
 
-  deleted: (document) ->
-    @_messages.push Message.create(Activity.Deleted, document)
+  deleted: (documents...) ->
+    for document in _.flatten(documents)
+      @_messages.push Message.create(Activity.Deleted, document)
 
   getMessages: ->
     @_messages
