@@ -5,7 +5,7 @@ class Database
   execute: (query, callback) ->
     @connectionPool.acquire (err, conn) =>
       return callback(err) if err?
-      query.execute conn, (err, result) =>
+      conn.execute query, (err, result) =>
         return callback(err) if err?
         @connectionPool.release(conn)
         callback(null, result)

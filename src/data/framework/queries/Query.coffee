@@ -2,12 +2,13 @@ util                 = require 'util'
 _                    = require 'lodash'
 r                    = require 'rethinkdb'
 RelationType         = require 'data/RelationType'
+DocumentStatus       = require 'data/DocumentStatus'
 QueryResult          = require 'data/QueryResult'
 ExpansionTreeBuilder = require 'data/framework/ExpansionTreeBuilder'
 
 class Query
 
-  @requiredFields: ['id', 'version']
+  @requiredFields: ['id', 'status', 'version']
 
   constructor: (@schema, @options = {}) ->
     @expansions = []
@@ -20,10 +21,13 @@ class Query
   expand: (fields...) ->
     @expansions = @expansions.concat _.flatten(fields)
 
-  execute: (conn, callback) ->
-    @_processExpansions() if @expansions?
-    @_processPluck() if @fields?
-    console.log(@rql.toString())
+  prepare: (conn, callback) ->
+    @_addExpansionClause() if @expansions?
+    @_addPluckClause()     if @fields?
+    @_addStatusFilterClause()
+    callback()
+
+  run: (conn, callback) ->
     @rql.run conn, (err, response) =>
       return callback(err) if err?
       @preprocessResult response, (err, result) =>
@@ -36,10 +40,7 @@ class Query
     else
       callback(null, result)
 
-  _processPluck: ->
-    @rql = @rql.pluck Query.requiredFields.concat(@fields)
-
-  _processExpansions: ->
+  _addExpansionClause: ->
     return unless @expansions.length > 0
     tree = ExpansionTreeBuilder.build(@schema, @expansions)
     @rql = @rql.do (result) ->
@@ -47,5 +48,21 @@ class Query
       for field, expansion of tree
         expanded = expanded.merge(expansion.getMergeFunction())
       r.branch(result.eq(null), null, expanded)
+
+  _addPluckClause: ->
+    @rql = @rql.pluck Query.requiredFields.concat(@fields)
+
+  _addStatusFilterClause: ->
+    @rql = @rql.do (result) ->
+      r.branch(
+        r.typeOf(result).eq('ARRAY'),
+        result.filter (row) ->
+          r.or(r.not(row.hasFields('status')), r.not(row('status').eq(DocumentStatus.Deleted)))
+        r.branch(
+          r.and(result.hasFields('status'), result('status').eq(DocumentStatus.Deleted)),
+          null,
+          result
+        )
+      )
 
 module.exports = Query

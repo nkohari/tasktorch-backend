@@ -9,7 +9,7 @@ class ChangeUserPasswordCommand extends Command
   execute: (conn, callback) ->
     result = new CommandResult()
     statement = new UpdateUserStatement(@userId, {password: @password})
-    statement.execute conn, (err, user) =>
+    conn.execute statement, (err, user) =>
       return callback(err) if err?
       result.user = user
       callback(null, result)

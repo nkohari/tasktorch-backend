@@ -8,6 +8,6 @@ class GetAllByIndexQuery extends Query
     super(schema, options)
     index = _.first _.keys(tuple)
     value = tuple[index]
-    @rql  = r.table(@schema.table).getAll(value, {index}).default([])
+    @rql  = r.table(@schema.table).getAll(value, {index}).default([]).coerceTo('array')
 
 module.exports = GetAllByIndexQuery

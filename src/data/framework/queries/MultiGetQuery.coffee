@@ -5,6 +5,6 @@ class MultiGetQuery extends Query
 
   constructor: (schema, ids, options) ->
     super(schema, options)
-    @rql = r.table(@schema.table).getAll(r.args(ids), {index: 'id'}).default([])
+    @rql = r.table(@schema.table).getAll(r.args(ids), {index: 'id'}).default([]).coerceTo('array')
 
 module.exports = MultiGetQuery

@@ -20,8 +20,7 @@ class UpdateStatement extends Statement
 
     @rql = r.table(@schema.table).get(match).update(patch, {returnChanges: true})
 
-  execute: (conn, callback) ->
-    console.log(@rql.toString())
+  run: (conn, callback) ->
     @rql.run conn, (err, response) =>
       return callback(err) if err?
       return callback(response.first_error)   if response.first_error?

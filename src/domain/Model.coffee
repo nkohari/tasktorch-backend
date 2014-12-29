@@ -19,6 +19,7 @@ class Model
 
   constructor: (document) ->
     @id      = document.id
+    @status  = document.status
     @version = document.version
 
 module.exports = Model

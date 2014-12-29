@@ -10,12 +10,12 @@ class CreateCardCommand extends Command
   execute: (conn, callback) ->
     result = new CommandResult()
     statement = new CreateCardStatement(@data)
-    statement.execute conn, (err, card) =>
+    conn.execute statement, (err, card) =>
       return callback(err) if err?
       result.card = card
       result.created(card)
       statement = new AddCardToStackStatement(@stackId, card.id, 'append')
-      statement.execute conn, (err, stack) =>
+      conn.execute statement, (err, stack) =>
         return callback(err) if err?
         result.changed(stack)
         callback(null, result)

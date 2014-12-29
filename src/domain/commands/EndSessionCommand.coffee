@@ -9,7 +9,7 @@ class EndSessionCommand extends Command
   execute: (conn, callback) ->
     result = new CommandResult()
     statement = new UpdateSessionStatement(@sessionId, {isActive: false})
-    statement.execute conn, (err, session) =>
+    conn.execute statement, (err, session) =>
       return callback(err) if err?
       result.session = session
       callback(null, result)

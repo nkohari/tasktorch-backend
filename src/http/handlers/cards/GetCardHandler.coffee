@@ -4,7 +4,7 @@ Response     = require 'http/framework/Response'
 
 class GetCardHandler extends Handler
 
-  @route 'get /api/{organizationId}/cards/{cardId}'
+  @route  'get /api/{organizationId}/cards/{cardId}'
   @demand 'requester is organization member'
 
   constructor: (@database) ->

@@ -1,5 +1,6 @@
-genpool   = require 'generic-pool'
-rethinkdb = require 'rethinkdb'
+genpool    = require 'generic-pool'
+rethinkdb  = require 'rethinkdb'
+Connection = require './Connection'
 
 class ConnectionPool
 
@@ -13,11 +14,14 @@ class ConnectionPool
 
   create: (callback) ->
     {host, port, db} = @config.rethinkdb
-    @log.debug "Opening connection ##{@pool.getPoolSize()} to RethinkDB at #{host}:#{port}/#{db}"
-    rethinkdb.connect({host, port, db}, callback)
+    id = @pool.getPoolSize()
+    @log.debug "[db:#{id}] Opening connection to #{host}:#{port}/#{db}"
+    rethinkdb.connect {host, port, db}, (err, conn) =>
+      return callback(err) if err?
+      callback null, new Connection(id, @log, conn)
 
   destroy: (conn) ->
-    @log.debug "Closing connection to RethinkDB"
+    @log.debug "[db:#{conn.id}] Closing connection"
     conn.close()
 
   acquire: (callback) ->

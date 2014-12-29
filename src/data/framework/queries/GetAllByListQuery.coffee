@@ -9,6 +9,6 @@ class GetAllByListQuery extends Query
     # TODO: Worried about the performance of this -- can we change it to use getAll() instead?
     @rql = r.table(parentSchema.table).get(parentId)(property).default([]).map((id) ->
       r.table(schema.table).get(id)
-    ).default([])
+    ).default([]).coerceTo('array')
 
 module.exports = GetAllByListQuery

@@ -12,15 +12,15 @@ class HandOffCardCommand extends Command
   execute: (conn, callback) ->
     result = new CommandResult()
     statement = new RemoveCardFromStacksStatement(@cardId)
-    statement.execute conn, (err, previousStacks) =>
+    conn.execute statement, (err, previousStacks) =>
       return callback(err) if err?
       result.changed(previousStacks)
       statement = new AddCardToStackStatement(@stackId, @cardId, 'append')
-      statement.execute conn, (err, currentStack) =>
+      conn.execute statement, (err, currentStack) =>
         return callback(err) if err?
         result.changed(currentStack)
         statement = new UpdateCardStatement(@cardId, {stack: @stackId, owner: @ownerId})
-        statement.execute conn, (err, card) =>
+        conn.execute statement, (err, card) =>
           return callback(err) if err?
           result.card = card
           result.changed(card)

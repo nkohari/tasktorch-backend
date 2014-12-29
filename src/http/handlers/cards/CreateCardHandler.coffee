@@ -2,6 +2,7 @@ _                 = require 'lodash'
 CreateCardCommand = require 'domain/commands/CreateCardCommand'
 Handler           = require 'http/framework/Handler'
 Response          = require 'http/framework/Response'
+CardStatus        = require 'data/enums/CardStatus'
 StackType         = require 'data/enums/StackType'
 GetSpecialStackByUserQuery = require 'data/queries/GetSpecialStackByUserQuery'
 GetKindQuery = require 'data/queries/GetKindQuery'
@@ -25,6 +26,7 @@ class CreateCardHandler extends Handler
         return reply err if err?
 
         data =
+          status:       CardStatus.Active
           creator:      user.id
           owner:        user.id
           kind:         kind.id

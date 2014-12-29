@@ -1,5 +1,5 @@
 _                              = require 'lodash'
-GetAllGoalsInOrganizationQuery = require 'data/queries/GetAllGoalsInOrganizationQuery'
+GetAllGoalsByOrganizationQuery = require 'data/queries/GetAllGoalsByOrganizationQuery'
 Handler                        = require 'http/framework/Handler'
 Response                       = require 'http/framework/Response'
 
@@ -12,7 +12,7 @@ class ListGoalsInOrganizationHandler extends Handler
 
   handle: (request, reply) ->
     {organization} = request.scope
-    query = new GetAllGoalsInOrganizationQuery(organization.id, @getQueryOptions(request))
+    query = new GetAllGoalsByOrganizationQuery(organization.id, @getQueryOptions(request))
     @database.execute query, (err, result) =>
       return reply err if err?
       reply new Response(result)

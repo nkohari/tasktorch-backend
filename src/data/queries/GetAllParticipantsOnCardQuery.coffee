@@ -1,14 +1,10 @@
-r     = require 'rethinkdb'
-Query = require 'data/framework/queries/Query'
-Card  = require 'data/schemas/Card'
-User  = require 'data/schemas/User'
+GetAllByListQuery = require 'data/framework/queries/GetAllByListQuery'
+Card              = require 'data/schemas/Card'
+User              = require 'data/schemas/User'
 
-class GetAllParticipantsOnCardQuery extends Query
+class GetAllParticipantsOnCardQuery extends GetAllByListQuery
 
   constructor: (cardId, options) ->
-    super(User, options)
-    @rql = r.table(User.table).getAll(
-      r.args(r.table(Card.table).get(cardId)('participants'))
-    )
+    super(User, Card, cardId, 'participants', options)
 
 module.exports = GetAllParticipantsOnCardQuery

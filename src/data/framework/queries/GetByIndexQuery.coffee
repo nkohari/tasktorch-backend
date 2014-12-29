@@ -8,7 +8,7 @@ class GetByIndexQuery extends Query
     super(schema, options)
     index = _.first _.keys(tuple)
     value = tuple[index]
-    @rql  = r.table(@schema.table).getAll(value, {index}).default([]).limit(1)
+    @rql  = r.table(@schema.table).getAll(value, {index}).default([]).limit(1).coerceTo('array')
 
   preprocessResult: (result, callback) ->
     result.toArray (err, items) =>

@@ -6,7 +6,7 @@ Response               = require 'http/framework/Response'
 
 class ChangeCardTitleHandler extends Handler
 
-  @route 'put /api/{organizationId}/cards/{cardId}/title'
+  @route  'post /api/{organizationId}/cards/{cardId}/title'
   @demand 'requester is organization member'
 
   constructor: (@processor) ->

@@ -10,7 +10,7 @@ class ChangeCardTitleCommand extends Command
   execute: (conn, callback) ->
     result = new CommandResult()
     statement = new UpdateCardStatement(@cardId, {title: @title})
-    statement.execute conn, (err, card) =>
+    conn.execute statement, (err, card) =>
       return callback(err) if err?
       result.changed(card)
       result.card = card

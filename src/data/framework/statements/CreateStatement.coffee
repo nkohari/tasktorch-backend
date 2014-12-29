@@ -10,8 +10,7 @@ class CreateStatement extends Statement
     data = _.extend data, {id: uuid(), version: 0}
     @rql = r.table(schema.table).insert(data, {returnChanges: true})
 
-  execute: (conn, callback) ->
-    console.log(@rql.toString())
+  run: (conn, callback) ->
     @rql.run conn, (err, response) =>
       return callback(err) if err?
       document = new Document(@schema, response.changes[0].new_val)
