@@ -26,7 +26,7 @@ class CreateCardHandler extends Handler
         return reply err if err?
 
         data =
-          status:       CardStatus.Active
+          status:       CardStatus.Normal
           creator:      user.id
           owner:        user.id
           kind:         kind.id
