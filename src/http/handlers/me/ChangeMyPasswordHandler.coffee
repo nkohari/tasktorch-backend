@@ -12,7 +12,7 @@ class ChangeMyPasswordHandler extends Handler
     {user}     = request.auth.credentials
     {password} = request.payload
     hashedPassword = @passwordHasher.hash(password)
-    command = new ChangeUserPasswordCommand(user.id, hashedPassword)
+    command = new ChangeUserPasswordCommand(user, hashedPassword)
     @processor.execute command, (err, result) =>
       return reply @error.notFound() if err is Error.DocumentNotFound
       return reply @error.conflict() if err is Error.VersionMismatch

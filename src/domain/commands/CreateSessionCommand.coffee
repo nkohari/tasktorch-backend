@@ -4,10 +4,10 @@ CreateSessionStatement  = require 'data/statements/CreateSessionStatement'
 
 class CreateSessionCommand extends Command
 
-  constructor: (@data) ->
+  constructor: (@user, @data) ->
 
   execute: (conn, callback) ->
-    result = new CommandResult()
+    result    = new CommandResult(@user)
     statement = new CreateSessionStatement(@data)
     conn.execute statement, (err, session) =>
       return callback(err) if err?

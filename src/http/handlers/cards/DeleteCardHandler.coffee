@@ -16,7 +16,7 @@ class DeleteCardHandler extends Handler
     {user}         = request.auth.credentials
     {cardId}       = request.params
 
-    command = new DeleteCardCommand(cardId)
+    command = new DeleteCardCommand(user, cardId)
     @processor.execute command, (err, result) =>
       return reply @error.notFound() if err is Error.DocumentNotFound
       return reply @error.conflict() if err is Error.VersionMismatch

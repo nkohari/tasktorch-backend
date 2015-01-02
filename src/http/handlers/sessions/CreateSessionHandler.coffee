@@ -17,7 +17,7 @@ class CreateSessionHandler extends Handler
       return reply err if err?
       return reply @error.forbidden() unless user? and @passwordHasher.verify(user.password, password)
       data = {user: user.id, isActive: true}
-      command = new CreateSessionCommand(data)
+      command = new CreateSessionCommand(user, data)
       @processor.execute command, (err, result) =>
         return reply @error.notFound() if err is Error.DocumentNotFound
         return reply @error.conflict() if err is Error.VersionMismatch

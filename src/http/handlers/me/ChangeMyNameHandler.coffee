@@ -11,7 +11,7 @@ class ChangeMyNameHandler extends Handler
   handle: (request, reply) ->
     {user} = request.auth.credentials
     {name} = request.payload
-    command = new ChangeUserNameCommand(user.id, name)
+    command = new ChangeUserNameCommand(user, name)
     @processor.execute command, (err, result) =>
       return reply @error.notFound() if err is Error.DocumentNotFound
       return reply @error.conflict() if err is Error.VersionMismatch

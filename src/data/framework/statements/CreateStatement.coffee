@@ -1,13 +1,14 @@
-_         = require 'lodash'
-r         = require 'rethinkdb'
-uuid      = require 'common/util/uuid'
-Document  = require 'data/Document'
-Statement = require './Statement'
+_              = require 'lodash'
+r              = require 'rethinkdb'
+uuid           = require 'common/util/uuid'
+Document       = require 'data/Document'
+DocumentStatus = require 'data/DocumentStatus'
+Statement      = require './Statement'
 
 class CreateStatement extends Statement
 
   constructor: (@schema, data) ->
-    data = _.extend data, {id: uuid(), version: 0}
+    data = _.extend data, {id: uuid(), version: 0, status: DocumentStatus.Normal}
     @rql = r.table(schema.table).insert(data, {returnChanges: true})
 
   run: (conn, callback) ->

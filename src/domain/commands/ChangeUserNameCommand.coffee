@@ -4,15 +4,15 @@ UpdateUserStatement = require 'data/statements/UpdateUserStatement'
 
 class ChangeUserNameCommand extends Command
 
-  constructor: (@userId, @name) ->
+  constructor: (@user, @name) ->
 
   execute: (conn, callback) ->
-    result = new CommandResult()
-    statement = new UpdateUserStatement(@userId, {name: @name})
+    result    = new CommandResult(@user)
+    statement = new UpdateUserStatement(@user.id, {name: @name})
     conn.execute statement, (err, user) =>
       return callback(err) if err?
+      result.messages.changed(user)
       result.user = user
-      result.changed(user)
       callback(null, result)
 
 module.exports = ChangeUserNameCommand

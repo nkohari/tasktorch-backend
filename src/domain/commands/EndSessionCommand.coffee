@@ -4,10 +4,10 @@ UpdateSessionStatement  = require 'data/statements/UpdateSessionStatement'
 
 class EndSessionCommand extends Command
 
-  constructor: (@sessionId) ->
+  constructor: (@user, @sessionId) ->
 
   execute: (conn, callback) ->
-    result = new CommandResult()
+    result    = new CommandResult(@user)
     statement = new UpdateSessionStatement(@sessionId, {isActive: false})
     conn.execute statement, (err, session) =>
       return callback(err) if err?

@@ -17,7 +17,7 @@ class ChangeCardBodyHandler extends Handler
     {cardId}       = request.params
     {body}         = request.payload
 
-    command = new ChangeCardBodyCommand(cardId, body)
+    command = new ChangeCardBodyCommand(user, cardId, body)
     @processor.execute command, (err, result) =>
       return reply @error.notFound() if err is Error.DocumentNotFound
       return reply @error.conflict() if err is Error.VersionMismatch

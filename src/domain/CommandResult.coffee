@@ -1,26 +1,17 @@
-_        = require 'lodash'
-Activity = require 'messaging/Activity'
-Message  = require 'messaging/Message'
+_                 = require 'lodash'
+MessageCollection = require './MessageCollection'
+NoteCollection    = require './NoteCollection'
 
 class CommandResult
 
-  constructor: ->
-    @_messages = []
-    @_events = []
-
-  created: (documents...) ->
-    for document in _.flatten(documents)
-      @_messages.push Message.create(Activity.Created, document)
-
-  changed: (documents...) ->
-    for document in _.flatten(documents)
-      @_messages.push Message.create(Activity.Changed, document)
-
-  deleted: (documents...) ->
-    for document in _.flatten(documents)
-      @_messages.push Message.create(Activity.Deleted, document)
+  constructor: (user) ->
+    @messages = new MessageCollection(user)
+    @notes    = new NoteCollection(user)
 
   getMessages: ->
-    @_messages
+    @messages.toArray()
+
+  getNotes: ->
+    @_notes.toArray()
 
 module.exports = CommandResult

@@ -4,21 +4,22 @@ CardStatus                    = require 'data/enums/CardStatus'
 UpdateCardStatement           = require 'data/statements/UpdateCardStatement'
 RemoveCardFromStacksStatement = require 'data/statements/RemoveCardFromStacksStatement'
 
-class ArchiveCardCommand extends Command
+class CompleteCardCommand extends Command
 
-  constructor: (@cardId) ->
+  constructor: (@user, @cardId) ->
 
   execute: (conn, callback) ->
-    result = new CommandResult()
-    statement = new UpdateCardStatement(@cardId, {status: CardStatus.Archived, stack: null})
+    result    = new CommandResult(@user)
+    statement = new UpdateCardStatement(@cardId, {status: CardStatus.Complete, stack: null})
     conn.execute statement, (err, card) =>
       return callback(err) if err?
-      result.card = card
-      result.changed(card)
+      result.messages.changed(card)
       statement = new RemoveCardFromStacksStatement(@cardId)
       conn.execute statement, (err, stacks) =>
         return callback(err) if err?
-        result.changed(stacks)
+        result.messages.changed(stacks)
+        result.notes.completed(card)
+        result.card = card
         callback(null, result)
 
-module.exports = ArchiveCardCommand
+module.exports = CompleteCardCommand

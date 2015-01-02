@@ -1,13 +1,13 @@
-HandOffCardCommand         = require 'domain/commands/HandOffCardCommand'
+PassCardCommand            = require 'domain/commands/PassCardCommand'
 StackType                  = require 'data/enums/StackType'
 GetInboxByTeamQuery        = require 'data/queries/GetInboxByTeamQuery'
 GetSpecialStackByUserQuery = require 'data/queries/GetSpecialStackByUserQuery'
 Handler                    = require 'http/framework/Handler'
 Response                   = require 'http/framework/Response'
 
-class HandOffCardHandler extends Handler
+class PassCardHandler extends Handler
 
-  @route 'put /api/{organizationId}/cards/{cardId}/handoff'
+  @route  'put /api/{organizationId}/cards/{cardId}/pass'
   @demand 'requester is organization member'
 
   constructor: (@database, @processor) ->
@@ -20,7 +20,7 @@ class HandOffCardHandler extends Handler
 
     @resolveStack organization, model, (err, stack) =>
       return reply err if err?
-      command = new HandOffCardCommand(model.card, stack.id, model.user ? null)
+      command = new PassCardCommand(user, model.card, stack.id, model.user ? null)
       @processor.execute command, (err, result) =>
         return reply @error.notFound() if err is Error.DocumentNotFound
         return reply @error.conflict() if err is Error.VersionMismatch
@@ -47,4 +47,4 @@ class HandOffCardHandler extends Handler
       message: request.payload.message
     }
 
-module.exports = HandOffCardHandler
+module.exports = PassCardHandler

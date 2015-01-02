@@ -5,19 +5,20 @@ RemoveCardFromStacksStatement = require 'data/statements/RemoveCardFromStacksSta
 
 class DeleteCardCommand extends Command
 
-  constructor: (@cardId) ->
+  constructor: (@user, @cardId) ->
 
   execute: (conn, callback) ->
-    result = new CommandResult()
+    result    = new CommandResult(@user)
     statement = new DeleteCardStatement(@cardId)
     conn.execute statement, (err, card) =>
       return callback(err) if err?
-      result.card = card
-      result.changed(card)
+      result.messages.changed(card)
       statement = new RemoveCardFromStacksStatement(@cardId)
       conn.execute statement, (err, stacks) =>
         return callback(err) if err?
-        result.changed(stacks)
+        result.messages.changed(stacks)
+        result.notes.deleted(card)
+        result.card = card
         callback(null, result)
 
 module.exports = DeleteCardCommand

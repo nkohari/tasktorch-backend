@@ -26,7 +26,6 @@ class CreateCardHandler extends Handler
         return reply err if err?
 
         data =
-          status:       CardStatus.Normal
           creator:      user.id
           owner:        user.id
           kind:         kind.id
@@ -34,7 +33,7 @@ class CreateCardHandler extends Handler
           organization: organization.id
           participants: [user.id]
 
-        command = new CreateCardCommand(data, stack.id)
+        command = new CreateCardCommand(user, data, stack.id)
         @processor.execute command, (err, result) =>
           return reply @error.notFound() if err is Error.DocumentNotFound
           return reply @error.conflict() if err is Error.VersionMismatch

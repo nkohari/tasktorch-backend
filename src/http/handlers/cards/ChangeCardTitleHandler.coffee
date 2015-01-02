@@ -18,7 +18,7 @@ class ChangeCardTitleHandler extends Handler
     {cardId}       = request.params
     {title}        = request.payload
 
-    command = new ChangeCardTitleCommand(cardId, title)
+    command = new ChangeCardTitleCommand(user, cardId, title)
     @processor.execute command, (err, result) =>
       return reply @error.notFound() if err is Error.DocumentNotFound
       return reply @error.conflict() if err is Error.VersionMismatch

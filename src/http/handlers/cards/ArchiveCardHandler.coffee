@@ -1,11 +1,11 @@
-ArchiveCardCommand = require 'domain/commands/ArchiveCardCommand'
-Error              = require 'data/Error'
-Handler            = require 'http/framework/Handler'
-Response           = require 'http/framework/Response'
+CompleteCardCommand = require 'domain/commands/CompleteCardCommand'
+Error               = require 'data/Error'
+Handler             = require 'http/framework/Handler'
+Response            = require 'http/framework/Response'
 
 class ArchiveCardHandler extends Handler
 
-  @route  'post /api/{organizationId}/cards/{cardId}/archive'
+  @route  'post /api/{organizationId}/cards/{cardId}/complete'
   @demand 'requester is organization member'
 
   constructor: (@processor) ->
@@ -16,7 +16,7 @@ class ArchiveCardHandler extends Handler
     {user}         = request.auth.credentials
     {cardId}       = request.params
 
-    command = new ArchiveCardCommand(cardId)
+    command = new CompleteCardCommand(user, cardId)
     @processor.execute command, (err, result) =>
       return reply @error.notFound() if err is Error.DocumentNotFound
       return reply @error.conflict() if err is Error.VersionMismatch
