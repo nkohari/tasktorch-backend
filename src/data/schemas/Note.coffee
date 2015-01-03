@@ -8,7 +8,8 @@ Note = Schema.create 'Note',
   plural:   'notes'
 
   relations:
-    card: {type: HasOne, schema: 'Card'}
-    user: {type: HasOne, schema: 'User'}
+    organization: {type: 'HasOne', schema: 'Organization'}
+    card:         {type: HasOne, schema: 'Card'}
+    user:         {type: HasOne, schema: 'User'}
 
 module.exports = Note

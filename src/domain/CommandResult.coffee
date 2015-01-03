@@ -12,6 +12,6 @@ class CommandResult
     @messages.toArray()
 
   getNotes: ->
-    @_notes.toArray()
+    @notes.toArray()
 
 module.exports = CommandResult

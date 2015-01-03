@@ -11,6 +11,7 @@ class NoteCollection
     @_add(NoteType.Created, card)
 
   changed: (field, card, previous) ->
+    console.log {field, card, previous}
     @_add(NoteType.Changed, card, {field: field, from: previous[field], to: card[field]})
 
   passed: (card, stackId, ownerId) ->
@@ -23,7 +24,7 @@ class NoteCollection
     @_add(NoteType.Completed, card)
 
   _add: (type, card, content) ->
-    @_notes.push new Note(type, card.id, @user.id, content)
+    @_notes.push new Note(type, card.organization, card.id, @user.id, content)
 
   toArray: ->
     _.clone(@_notes)
