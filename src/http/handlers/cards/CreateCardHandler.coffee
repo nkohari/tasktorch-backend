@@ -25,6 +25,7 @@ class CreateCardHandler extends Handler
       @resolveKind kindId, (err, kind) =>
         return reply err if err?
 
+        # TODO: Create a document model for this
         data =
           creator:      user.id
           owner:        user.id
@@ -32,6 +33,7 @@ class CreateCardHandler extends Handler
           stack:        stack.id
           organization: organization.id
           participants: [user.id]
+          moves:        []
 
         command = new CreateCardCommand(user, data, stack.id)
         @processor.execute command, (err, result) =>

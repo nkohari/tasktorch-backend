@@ -1,7 +1,7 @@
 _        = require 'lodash'
 Handler  = require 'http/framework/Handler'
 Response = require 'http/framework/Response'
-GetAllStacksByOrganizationAndOwnerQuery = require 'data/queries/GetAllStacksByOrganizationAndOwnerQuery'
+GetAllStacksByOrganizationAndUserQuery = require 'data/queries/GetAllStacksByOrganizationAndUserQuery'
 
 class ListMyStacksHandler extends Handler
 
@@ -13,7 +13,7 @@ class ListMyStacksHandler extends Handler
   handle: (request, reply) ->
     {organization} = request.scope
     {user} = request.auth.credentials
-    query = new GetAllStacksByOrganizationAndOwnerQuery(organization.id, user.id, @getQueryOptions(request))
+    query = new GetAllStacksByOrganizationAndUserQuery(organization.id, user.id, @getQueryOptions(request))
     @database.execute query, (err, result) =>
       return reply err if err?
       reply new Response(result)

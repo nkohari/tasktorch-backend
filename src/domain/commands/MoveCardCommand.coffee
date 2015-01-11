@@ -2,14 +2,13 @@ r                             = require 'rethinkdb'
 Command                       = require 'domain/Command'
 CommandResult                 = require 'domain/CommandResult'
 Move                          = require 'domain/documents/Move'
-MoveType                      = require 'domain/enums/MoveType'
 RemoveCardFromStacksStatement = require 'data/statements/RemoveCardFromStacksStatement'
 AddCardToStackStatement       = require 'data/statements/AddCardToStackStatement'
 UpdateCardStatement           = require 'data/statements/UpdateCardStatement'
 
-class PassCardCommand extends Command
+class MoveCardCommand extends Command
 
-  constructor: (@user, @cardId, @stackId, @ownerId) ->
+  constructor: (@user, @cardId, @stackId, @position = 'append') ->
     super()
 
   execute: (conn, callback) ->
@@ -18,21 +17,23 @@ class PassCardCommand extends Command
     conn.execute statement, (err, previousStacks) =>
       return callback(err) if err?
       result.messages.changed(previousStacks)
-      statement = new AddCardToStackStatement(@stackId, @cardId, 'append')
+      # TODO: Cards should only be in one stack at a time. The RemoveCardFromStackStatement
+      # ensures that we'll be putting the card into only one stack, so previousStacks
+      # should almost always only contain a single stack. This is here just to be sure.
+      previousStack = previousStacks[0]
+      statement = new AddCardToStackStatement(@stackId, @cardId, @position)
       conn.execute statement, (err, currentStack) =>
         return callback(err) if err?
         result.messages.changed(currentStack)
-        move = new Move(@user, previousStacks[0], currentStack)
-        statement = new UpdateCardStatement(@cardId, {
-          stack: @stackId
-          owner: @ownerId
-          moves: r.row('moves').append(move)
-        })
-        conn.execute statement, (err, card, previousCard) =>
+        patch = {stack: @stackId, owner: currentStack.user ? null}
+        if previousStack.id != currentStack.id
+          move = new Move(@user, previousStack, currentStack)
+          patch.moves = r.row('moves').append(move)
+        statement = new UpdateCardStatement(@cardId, patch)
+        conn.execute statement, (err, card) =>
           return callback(err) if err?
           result.messages.changed(card)
-          result.notes.passed(card, @stackId, @ownerId)
           result.card = card
           callback(null, result)
 
-module.exports = PassCardCommand
+module.exports = MoveCardCommand

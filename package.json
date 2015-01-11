@@ -15,7 +15,7 @@
     "coffee-script": "1.8.0",
     "deep-equal": "0.2.1",
     "elasticsearch": "^3.0.0",
-    "forge-di": "0.9.4",
+    "forge-di": "0.9.5",
     "generic-pool": "2.1.1",
     "glob": "4.0.5",
     "hapi": "6.8.1",

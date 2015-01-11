@@ -7,7 +7,7 @@ class StackModel extends Model
     @name         = stack.name
     @type         = stack.type
     @organization = stack.organization
-    @owner        = stack.owner if stack.owner?
+    @user         = stack.user if stack.user?
     @team         = stack.team if stack.team?
     @cards        = stack.cards
 

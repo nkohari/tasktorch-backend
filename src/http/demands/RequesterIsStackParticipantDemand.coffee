@@ -15,7 +15,7 @@ class RequesterIsStackParticipantDemand extends Demand
       return reply @error.notFound() unless result.stack?
       stack = request.scope.stack = result.stack
       team = if stack.team? then result.related.teams[stack.team] else null
-      if stack.owner? and stack.owner == user.id
+      if stack.user? and stack.user == user.id
         return reply()
       else if team? and _.contains(team.members, user.id)
         return reply()

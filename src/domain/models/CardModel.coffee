@@ -16,5 +16,6 @@ class CardModel extends Model
     @goal         = card.goal ? null
     @milestone    = card.milestone ? null
     @notes        = card.notes if card.notes?
+    @moves        = card.moves
 
 module.exports = CardModel

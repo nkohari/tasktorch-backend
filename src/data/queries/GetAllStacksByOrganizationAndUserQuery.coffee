@@ -2,12 +2,12 @@ r     = require 'rethinkdb'
 Stack = require 'data/schemas/Stack'
 Query = require 'data/framework/queries/Query'
 
-class GetAllStacksByOrganizationAndOwnerQuery extends Query
+class GetAllStacksByOrganizationAndUserQuery extends Query
 
   constructor: (organizationId, userId, options) ->
     super(Stack, options)
-    @rql = r.table(@schema.table).getAll(userId, {index: 'owner'})
+    @rql = r.table(@schema.table).getAll(userId, {index: 'user'})
       .filter({organization: organizationId})
       .coerceTo('array')
 
-module.exports = GetAllStacksByOrganizationAndOwnerQuery
+module.exports = GetAllStacksByOrganizationAndUserQuery

@@ -9,7 +9,7 @@ Stack = Schema.create 'Stack',
 
   relations:
     organization: {type: HasOne,  schema: 'Organization'}
-    owner:        {type: HasOne,  schema: 'User'}
+    user:         {type: HasOne,  schema: 'User'}
     team:         {type: HasOne,  schema: 'Team'}
     cards:        {type: HasMany, schema: 'Card'}
 
