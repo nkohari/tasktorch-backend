@@ -8,8 +8,9 @@ Action = Schema.create 'Action',
   plural:   'actions'
 
   relations:
-    card:  {type: HasOne, schema: 'Card'}
-    owner: {type: HasOne, schema: 'User'}
-    stage: {type: HasOne, schema: 'Stage'}
+    organization: {type: HasOne, schema: 'Organization'}
+    card:         {type: HasOne, schema: 'Card'}
+    owner:        {type: HasOne, schema: 'User'}
+    stage:        {type: HasOne, schema: 'Stage'}
 
 module.exports = Action

@@ -8,7 +8,7 @@ Statement      = require './Statement'
 class CreateStatement extends Statement
 
   constructor: (@schema, data) ->
-    data = _.extend data, {id: uuid(), version: 0, status: DocumentStatus.Normal}
+    data = _.extend {id: uuid(), version: 0, status: DocumentStatus.Normal}, data
     @rql = r.table(schema.table).insert(data, {returnChanges: true})
 
   run: (conn, callback) ->

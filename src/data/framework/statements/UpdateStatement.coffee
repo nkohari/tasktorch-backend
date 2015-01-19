@@ -8,7 +8,9 @@ class UpdateStatement extends Statement
 
   constructor: (@schema, match, patch, expectedVersion = undefined) ->
 
-    patch = _.extend patch, {version: r.row('version').add(1)}
+    # TODO: We need a better way of handling the version increment for functions.
+    unless _.isFunction(patch)
+      patch = _.extend patch, {version: r.row('version').add(1)}
 
     if @expectedVersion?
       patch = (row) =>

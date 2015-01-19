@@ -34,6 +34,7 @@ class CreateCardHandler extends Handler
           organization: organization.id
           participants: [user.id]
           moves:        []
+          actions:      _.object(_.map(kind.stages, (id) -> [id, []]))
 
         command = new CreateCardCommand(user, data, stack.id)
         @processor.execute command, (err, result) =>

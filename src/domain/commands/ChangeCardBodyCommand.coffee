@@ -12,7 +12,6 @@ class ChangeCardBodyCommand extends Command
     conn.execute statement, (err, card, previous) =>
       return callback(err) if err?
       result.messages.changed(card)
-      result.notes.changed('body', card, previous)
       result.card = card
       callback(null, result)
 
