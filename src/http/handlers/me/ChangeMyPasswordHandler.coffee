@@ -1,6 +1,6 @@
 Handler                   = require 'http/framework/Handler'
 Response                  = require 'http/framework/Response'
-ChangeUserPasswordCommand = require 'domain/commands/ChangeUserPasswordCommand'
+ChangeUserPasswordCommand = require 'domain/commands/user/ChangeUserPasswordCommand'
 
 class ChangeMyPasswordHandler extends Handler
 

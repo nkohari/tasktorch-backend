@@ -2,7 +2,7 @@ _                       = require 'lodash'
 Handler                 = require 'http/framework/Handler'
 Response                = require 'http/framework/Response'
 GetActionQuery          = require 'data/queries/GetActionQuery'
-ChangeActionTextCommand = require 'domain/commands/ChangeActionTextCommand'
+ChangeActionTextCommand = require 'domain/commands/action/ChangeActionTextCommand'
 
 class ChangeActionTextHandler extends Handler
 

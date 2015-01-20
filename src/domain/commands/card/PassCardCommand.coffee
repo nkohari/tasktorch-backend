@@ -31,7 +31,6 @@ class PassCardCommand extends Command
         conn.execute statement, (err, card, previousCard) =>
           return callback(err) if err?
           result.messages.changed(card)
-          result.notes.passed(card, @stackId, @ownerId)
           result.card = card
           callback(null, result)
 

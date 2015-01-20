@@ -3,7 +3,7 @@ Handler                  = require 'http/framework/Handler'
 Response                 = require 'http/framework/Response'
 GetActionQuery           = require 'data/queries/GetActionQuery'
 GetUserQuery             = require 'data/queries/GetUserQuery'
-ChangeActionOwnerCommand = require 'domain/commands/ChangeActionOwnerCommand'
+ChangeActionOwnerCommand = require 'domain/commands/action/ChangeActionOwnerCommand'
 
 class ChangeActionOwnerHandler extends Handler
 

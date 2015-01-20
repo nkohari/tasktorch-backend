@@ -1,4 +1,4 @@
-CompleteCardCommand = require 'domain/commands/CompleteCardCommand'
+CompleteCardCommand = require 'domain/commands/card/CompleteCardCommand'
 Error               = require 'data/Error'
 Handler             = require 'http/framework/Handler'
 Response            = require 'http/framework/Response'

@@ -1,11 +1,11 @@
-_                 = require 'lodash'
-CreateCardCommand = require 'domain/commands/CreateCardCommand'
-Handler           = require 'http/framework/Handler'
-Response          = require 'http/framework/Response'
-CardStatus        = require 'data/enums/CardStatus'
-StackType         = require 'data/enums/StackType'
+_                          = require 'lodash'
+Handler                    = require 'http/framework/Handler'
+Response                   = require 'http/framework/Response'
+CardStatus                 = require 'data/enums/CardStatus'
+StackType                  = require 'data/enums/StackType'
 GetSpecialStackByUserQuery = require 'data/queries/GetSpecialStackByUserQuery'
-GetKindQuery = require 'data/queries/GetKindQuery'
+GetKindQuery               = require 'data/queries/GetKindQuery'
+CreateCardCommand          = require 'domain/commands/card/CreateCardCommand'
 
 class CreateCardHandler extends Handler
 

@@ -1,8 +1,8 @@
-_                   = require 'lodash'
+_                 = require 'lodash'
 Handler           = require 'http/framework/Handler'
 Response          = require 'http/framework/Response'
 GetActionQuery    = require 'data/queries/GetActionQuery'
-MoveActionCommand = require 'domain/commands/MoveActionCommand'
+MoveActionCommand = require 'domain/commands/action/MoveActionCommand'
 
 class MoveActionHandler extends Handler
 

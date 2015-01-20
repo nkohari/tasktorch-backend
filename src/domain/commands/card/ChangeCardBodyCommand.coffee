@@ -1,5 +1,6 @@
 Command             = require 'domain/Command'
 CommandResult       = require 'domain/CommandResult'
+CardBodyChangedNote = require 'domain/documents/CardBodyChangedNote'
 UpdateCardStatement = require 'data/statements/UpdateCardStatement'
 
 class ChangeCardBodyCommand extends Command
@@ -12,6 +13,7 @@ class ChangeCardBodyCommand extends Command
     conn.execute statement, (err, card, previous) =>
       return callback(err) if err?
       result.messages.changed(card)
+      result.addNote(new CardBodyChangedNote(@user, card, previous))
       result.card = card
       callback(null, result)
 

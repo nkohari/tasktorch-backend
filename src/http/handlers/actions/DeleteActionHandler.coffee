@@ -2,7 +2,7 @@ _                   = require 'lodash'
 Handler             = require 'http/framework/Handler'
 Response            = require 'http/framework/Response'
 GetActionQuery      = require 'data/queries/GetActionQuery'
-DeleteActionCommand = require 'domain/commands/DeleteActionCommand'
+DeleteActionCommand = require 'domain/commands/action/DeleteActionCommand'
 
 class DeleteActionHandler extends Handler
 

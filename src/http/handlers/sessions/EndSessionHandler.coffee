@@ -1,5 +1,5 @@
 Handler           = require 'http/framework/Handler'
-EndSessionCommand = require 'domain/commands/EndSessionCommand'
+EndSessionCommand = require 'domain/commands/session/EndSessionCommand'
 
 class EndSessionHandler extends Handler
 

@@ -1,6 +1,6 @@
 Handler               = require 'http/framework/Handler'
 Response              = require 'http/framework/Response'
-ChangeUserNameCommand = require 'domain/commands/ChangeUserNameCommand'
+ChangeUserNameCommand = require 'domain/commands/user/ChangeUserNameCommand'
 
 class ChangeMyNameHandler extends Handler
 

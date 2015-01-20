@@ -1,4 +1,4 @@
-DeleteCardCommand = require 'domain/commands/DeleteCardCommand'
+DeleteCardCommand = require 'domain/commands/card/DeleteCardCommand'
 Error             = require 'data/Error'
 Handler           = require 'http/framework/Handler'
 Response          = require 'http/framework/Response'

@@ -22,11 +22,16 @@ class Handler
   handle: (request, reply) ->
     throw new Error("You must implement handle() on #{@constructor.name}")
 
+  # TODO: eliminate
   loadRequestData: (request, steps, callback) ->
     funcs = _.map steps, (func) => func.bind(this, request)
     async.parallel funcs, (err, data) =>
       return callback(err) if err?
-      callback null, _.extend.apply(null, data)
+      callback(null, _.extend.apply(null, data))
+
+  prepare: (request, steps, callback) ->
+    funcs = _.map steps, (func) => func.bind(this, request)
+    async.series(funcs, callback)
 
   getQueryOptions: (request) ->
     new QueryOptions(request)

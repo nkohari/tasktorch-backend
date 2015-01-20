@@ -1,4 +1,4 @@
-PassCardCommand            = require 'domain/commands/PassCardCommand'
+PassCardCommand            = require 'domain/commands/card/PassCardCommand'
 StackType                  = require 'data/enums/StackType'
 GetInboxByTeamQuery        = require 'data/queries/GetInboxByTeamQuery'
 GetSpecialStackByUserQuery = require 'data/queries/GetSpecialStackByUserQuery'

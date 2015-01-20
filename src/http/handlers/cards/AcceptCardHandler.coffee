@@ -1,9 +1,9 @@
 _                 = require 'lodash'
-AcceptCardCommand = require 'domain/commands/AcceptCardCommand'
 AcceptCardRequest = require 'http/requests/AcceptCardRequest'
 Error             = require 'data/Error'
 Handler           = require 'http/framework/Handler'
 Response          = require 'http/framework/Response'
+AcceptCardCommand = require 'domain/commands/card/AcceptCardCommand'
 
 class AcceptCardHandler extends Handler
 

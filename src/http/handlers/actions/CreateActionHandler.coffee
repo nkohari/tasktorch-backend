@@ -2,7 +2,7 @@ _                   = require 'lodash'
 Handler             = require 'http/framework/Handler'
 Response            = require 'http/framework/Response'
 GetCardQuery        = require 'data/queries/GetCardQuery'
-CreateActionCommand = require 'domain/commands/CreateActionCommand'
+CreateActionCommand = require 'domain/commands/action/CreateActionCommand'
 Action              = require 'domain/documents/Action'
 
 class CreateActionHandler extends Handler

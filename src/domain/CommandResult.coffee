@@ -1,17 +1,19 @@
 _                 = require 'lodash'
 MessageCollection = require './MessageCollection'
-NoteCollection    = require './NoteCollection'
 
 class CommandResult
 
   constructor: (user) ->
     @messages = new MessageCollection(user)
-    @notes    = new NoteCollection(user)
+    @notes = []
 
   getMessages: ->
     @messages.toArray()
 
+  addNote: (note) ->
+    @notes.push(note)
+
   getNotes: ->
-    @notes.toArray()
+    @notes
 
 module.exports = CommandResult

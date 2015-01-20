@@ -1,5 +1,5 @@
 _               = require 'lodash'
-MoveCardCommand = require 'domain/commands/MoveCardCommand'
+MoveCardCommand = require 'domain/commands/card/MoveCardCommand'
 Handler         = require 'http/framework/Handler'
 Response        = require 'http/framework/Response'
 MoveCardRequest = require 'http/requests/MoveCardRequest'

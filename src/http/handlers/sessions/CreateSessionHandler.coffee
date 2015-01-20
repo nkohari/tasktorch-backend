@@ -1,6 +1,6 @@
 Handler                = require 'http/framework/Handler'
 Response               = require 'http/framework/Response'
-CreateSessionCommand   = require 'domain/commands/CreateSessionCommand'
+CreateSessionCommand   = require 'domain/commands/session/CreateSessionCommand'
 GetUserByUsernameQuery = require 'data/queries/GetUserByUsernameQuery'
 GetUserByEmailQuery    = require 'data/queries/GetUserByEmailQuery'
 

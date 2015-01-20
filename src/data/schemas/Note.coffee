@@ -8,7 +8,7 @@ Note = Schema.create 'Note',
   plural:   'notes'
 
   relations:
-    organization: {type: 'HasOne', schema: 'Organization'}
+    organization: {type: HasOne, schema: 'Organization'}
     card:         {type: HasOne, schema: 'Card'}
     user:         {type: HasOne, schema: 'User'}
 

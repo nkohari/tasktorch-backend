@@ -1,5 +1,5 @@
 GetCardQuery           = require 'data/queries/GetCardQuery'
-ChangeCardTitleCommand = require 'domain/commands/ChangeCardTitleCommand'
+ChangeCardTitleCommand = require 'domain/commands/card/ChangeCardTitleCommand'
 Error                  = require 'data/Error'
 Handler                = require 'http/framework/Handler'
 Response               = require 'http/framework/Response'

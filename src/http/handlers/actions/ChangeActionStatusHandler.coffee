@@ -2,7 +2,7 @@ _                         = require 'lodash'
 Handler                   = require 'http/framework/Handler'
 Response                  = require 'http/framework/Response'
 GetActionQuery            = require 'data/queries/GetActionQuery'
-ChangeActionStatusCommand = require 'domain/commands/ChangeActionStatusCommand'
+ChangeActionStatusCommand = require 'domain/commands/action/ChangeActionStatusCommand'
 ActionStatus              = require 'domain/enums/ActionStatus'
 
 class ChangeActionStatusHandler extends Handler
