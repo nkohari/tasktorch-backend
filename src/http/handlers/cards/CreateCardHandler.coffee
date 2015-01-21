@@ -32,7 +32,7 @@ class CreateCardHandler extends Handler
           kind:         kind.id
           stack:        stack.id
           organization: organization.id
-          participants: [user.id]
+          followers:    [user.id]
           moves:        []
           actions:      _.object(_.map(kind.stages, (id) -> [id, []]))
 

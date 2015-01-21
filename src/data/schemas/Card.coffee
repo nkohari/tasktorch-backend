@@ -11,7 +11,7 @@ Card = Schema.create 'Card',
     creator:      {type: HasOne,         schema: 'User'}
     organization: {type: HasOne,         schema: 'Organization'}
     owner:        {type: HasOne,         schema: 'User'}
-    participants: {type: HasMany,        schema: 'User'}
+    followers:    {type: HasMany,        schema: 'User'}
     stack:        {type: HasOne,         schema: 'Stack'}
     kind:         {type: HasOne,         schema: 'Kind'}
     goal:         {type: HasOne,         schema: 'Goal'}

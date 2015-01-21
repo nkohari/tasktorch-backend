@@ -5,12 +5,12 @@ class CardModel extends Model
   constructor: (card) ->
     super(card)
     @title        = card.title
-    @body         = card.body
+    @summary      = card.summary
     @kind         = card.kind
     @creator      = card.creator
     @organization = card.organization
     @owner        = card.owner ? null
-    @participants = card.participants
+    @followers    = card.followers
     @stack        = card.stack
     @actions      = card.actions
     @goal         = card.goal ? null
