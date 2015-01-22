@@ -3,7 +3,7 @@ Error                    = require 'data/Error'
 Handler                  = require 'http/framework/Handler'
 Response                 = require 'http/framework/Response'
 
-class ChangeCardSummaryCommand extends Handler
+class ChangeCardSummaryHandler extends Handler
 
   @route  'post /api/{organizationId}/cards/{cardId}/summary'
   @demand 'requester is organization member'
@@ -24,4 +24,4 @@ class ChangeCardSummaryCommand extends Handler
       return reply err if err?
       reply new Response(result.card)
 
-module.exports = ChangeCardSummaryCommand
+module.exports = ChangeCardSummaryHandler

@@ -6,6 +6,7 @@ UpdateCardStatement    = require 'data/statements/UpdateCardStatement'
 class ChangeCardSummaryCommand extends Command
 
   constructor: (@user, @cardId, @summary) ->
+    super()
 
   execute: (conn, callback) ->
     result    = new CommandResult(@user)

@@ -2,12 +2,12 @@ uuid = require 'common/util/uuid'
 
 class Note
 
-  constructor: (user, card) ->
+  constructor: (userId, organizationId, cardId) ->
     @id           = uuid()
     @time         = new Date()
     @type         = @constructor.name.replace(/Note$/, '')
-    @organization = card.organization
-    @card         = card.id
-    @user         = user.id
+    @organization = organizationId
+    @card         = cardId
+    @user         = userId
 
 module.exports = Note

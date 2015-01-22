@@ -13,9 +13,10 @@ class ChangeActionOwnerCommand extends Command
     else
       patch = {owner: null}
     statement = new UpdateActionStatement(@actionId, patch)
-    conn.execute statement, (err, action) =>
+    conn.execute statement, (err, action, previous) =>
       return callback(err) if err?
       result.messages.changed(action)
+      result.addNote(new ActionOwnerChangedNote(@user, action, previous))
       result.action = action
       callback(null, result)
 
