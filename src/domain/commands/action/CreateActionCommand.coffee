@@ -1,6 +1,6 @@
 Command                  = require 'domain/Command'
 CommandResult            = require 'domain/CommandResult'
-ActionCreatedNote        = require 'domain/documents/ActionCreatedNote'
+ActionCreatedNote        = require 'domain/documents/notes/ActionCreatedNote'
 CreateActionStatement    = require 'data/statements/CreateActionStatement'
 AddActionToCardStatement = require 'data/statements/AddActionToCardStatement'
 

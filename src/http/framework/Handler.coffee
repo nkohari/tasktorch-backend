@@ -14,6 +14,9 @@ class Handler
 
   @demand: (demand) ->
     (@options ?= {}).demand = demand
+
+  @prereqs: (prereqs) ->
+    (@options ?= {}).prereqs = prereqs
     
   @auth: (auth) ->
     @options ?= {}

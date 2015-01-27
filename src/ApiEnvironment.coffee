@@ -46,6 +46,10 @@ class ApiEnvironment
       name = @humanize name.replace('Demand', '')
       forge.bind('demand').to.type(type).when(name)
 
+    for name, type of loadFiles('http/prereqs', __dirname)
+      name = name.replace(/Prereq$/, '')
+      forge.bind('prereq').to.type(type).when(name)
+
     for name, type of loadFiles('search/factories', __dirname)
       forge.bind('searchModelFactory').to.type(type).when(name)
 

@@ -2,9 +2,9 @@ _                          = require 'lodash'
 Handler                    = require 'http/framework/Handler'
 Response                   = require 'http/framework/Response'
 CardStatus                 = require 'data/enums/CardStatus'
-StackType                  = require 'data/enums/StackType'
 GetSpecialStackByUserQuery = require 'data/queries/GetSpecialStackByUserQuery'
 GetKindQuery               = require 'data/queries/GetKindQuery'
+StackType                  = require 'domain/enums/StackType'
 CreateCardCommand          = require 'domain/commands/card/CreateCardCommand'
 
 class CreateCardHandler extends Handler

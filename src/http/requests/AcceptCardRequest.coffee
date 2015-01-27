@@ -1,5 +1,5 @@
 Request                    = require 'http/framework/Request'
-StackType                  = require 'data/enums/StackType'
+StackType                  = require 'domain/enums/StackType'
 GetCardQuery               = require 'data/queries/GetCardQuery'
 GetSpecialStackByUserQuery = require 'data/queries/GetSpecialStackByUserQuery'
 

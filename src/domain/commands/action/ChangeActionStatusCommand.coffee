@@ -1,7 +1,7 @@
 Command                 = require 'domain/Command'
 CommandResult           = require 'domain/CommandResult'
 UpdateActionStatement   = require 'data/statements/UpdateActionStatement'
-ActionStatusChangedNote = require 'domain/documents/ActionStatusChangedNote'
+ActionStatusChangedNote = require 'domain/documents/notes/ActionStatusChangedNote'
 
 class ChangeActionStatusCommand extends Command
 

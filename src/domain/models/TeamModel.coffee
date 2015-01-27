@@ -7,5 +7,6 @@ class TeamModel extends Model
     @name         = team.name
     @organization = team.organization
     @members      = team.members
+    @leaders      = team.leaders
 
 module.exports = TeamModel

@@ -33,9 +33,16 @@ class ApiServer
     route   = options.route
     config  = options.config ? {}
 
+    if options.prereqs?
+      config.pre = _.map options.prereqs, (component, assign) =>
+        prereq = @forge.get('prereq', component)
+        {method: prereq.execute.bind(prereq), assign: assign}
+
+    # TODO: Move demands into prereqs?
     if options.demand?
       demands = _.flatten [options.demand]
-      config.pre = _.map demands, (name) =>
+      config.pre ?= []
+      config.pre = config.pre.concat _.map demands, (name) =>
         demand = @forge.get('demand', name)
         demand.execute.bind(demand)
 

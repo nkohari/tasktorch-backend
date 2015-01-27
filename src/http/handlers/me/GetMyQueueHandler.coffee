@@ -1,7 +1,7 @@
 _                          = require 'lodash'
 Handler                    = require 'http/framework/Handler'
 Response                   = require 'http/framework/Response'
-StackType                  = require 'data/enums/StackType'
+StackType                  = require 'domain/enums/StackType'
 GetSpecialStackByUserQuery = require 'data/queries/GetSpecialStackByUserQuery'
 
 class GetMyQueueHandler extends Handler

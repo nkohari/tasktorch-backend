@@ -1,5 +1,5 @@
-Schema            = require 'data/Schema'
-{HasOne, HasMany} = require 'data/RelationType'
+Schema = require 'data/Schema'
+{HasOne, HasMany, HasManyForeign} = require 'data/RelationType'
 
 Team = Schema.create 'Team',
 
@@ -8,9 +8,9 @@ Team = Schema.create 'Team',
   plural:   'teams'
 
   relations:
-    organization: {type: HasOne,  schema: 'Organization'}
-    leaders:      {type: HasMany, schema: 'User'}
-    members:      {type: HasMany, schema: 'User'}
-    stacks:       {type: HasMany, schema: 'Stack'}
+    organization: {type: HasOne,         schema: 'Organization'}
+    leaders:      {type: HasMany,        schema: 'User'}
+    members:      {type: HasMany,        schema: 'User'}
+    stacks:       {type: HasManyForeign, schema: 'Stack', index: 'team'}
 
 module.exports = Team

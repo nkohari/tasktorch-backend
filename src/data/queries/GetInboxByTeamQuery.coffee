@@ -1,8 +1,8 @@
 _         = require 'lodash'
 r         = require 'rethinkdb'
 Stack     = require 'data/schemas/Stack'
-StackType = require 'data/enums/StackType'
 Query     = require 'data/framework/queries/Query'
+StackType = require 'domain/enums/StackType'
 
 class GetInboxByTeamQuery extends Query
 

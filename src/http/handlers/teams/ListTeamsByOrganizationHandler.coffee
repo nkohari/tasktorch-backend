@@ -4,7 +4,7 @@ Response                        = require 'http/framework/Response'
 SuggestTeamsByOrganizationQuery = require 'data/queries/SuggestTeamsByOrganizationQuery'
 GetAllTeamsByOrganizationQuery  = require 'data/queries/GetAllTeamsByOrganizationQuery'
 
-class ListTeamsInOrganizationHandler extends Handler
+class ListTeamsByOrganizationHandler extends Handler
 
   @route 'get /api/{organizationId}/teams'
   @demand ['requester is organization member']
@@ -24,4 +24,4 @@ class ListTeamsInOrganizationHandler extends Handler
       return reply err if err?
       reply new Response(result)
 
-module.exports = ListTeamsInOrganizationHandler
+module.exports = ListTeamsByOrganizationHandler

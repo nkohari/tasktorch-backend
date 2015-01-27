@@ -25,7 +25,7 @@ class UpdateStatement extends Statement
   run: (conn, callback) ->
     @rql.run conn, (err, response) =>
       return callback(err) if err?
-      return callback(response.first_error)   if response.first_error?
+      return callback(response.first_error) if response.first_error?
       return callback(Error.DocumentNotFound) if response.replaced == 0 and response.unchanged == 0
       document = new Document(@schema, response.changes[0].new_val)
       if response.changes[0].old_val?

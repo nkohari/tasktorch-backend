@@ -2,7 +2,7 @@ _                 = require 'lodash'
 Handler           = require 'http/framework/Handler'
 Response          = require 'http/framework/Response'
 GetCardQuery      = require 'data/queries/GetCardQuery'
-CommentNote       = require 'domain/documents/CommentNote'
+CommentNote       = require 'domain/documents/notes/CommentNote'
 CreateNoteCommand = require 'domain/commands/note/CreateNoteCommand'
 
 class CreateNoteHandler extends Handler

@@ -1,6 +1,6 @@
 Command                = require 'domain/Command'
 CommandResult          = require 'domain/CommandResult'
-CardSummaryChangedNote = require 'domain/documents/CardSummaryChangedNote'
+CardSummaryChangedNote = require 'domain/documents/notes/CardSummaryChangedNote'
 UpdateCardStatement    = require 'data/statements/UpdateCardStatement'
 
 class ChangeCardSummaryCommand extends Command

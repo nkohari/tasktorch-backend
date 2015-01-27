@@ -5,6 +5,7 @@ Move                          = require 'domain/documents/Move'
 RemoveCardFromStacksStatement = require 'data/statements/RemoveCardFromStacksStatement'
 AddCardToStackStatement       = require 'data/statements/AddCardToStackStatement'
 UpdateCardStatement           = require 'data/statements/UpdateCardStatement'
+CardAcceptedNote              = require 'domain/documents/notes/CardAcceptedNote'
 
 class AcceptCardCommand extends Command
 
@@ -27,9 +28,10 @@ class AcceptCardCommand extends Command
           owner: @user.id
           moves: r.row('moves').append(move)
         })
-        conn.execute statement, (err, card) =>
+        conn.execute statement, (err, card, previous) =>
           return callback(err) if err?
           result.messages.changed(card)
+          result.addNote(new CardAcceptedNote(@user, card, previous))
           result.card = card
           callback(null, result)
 
