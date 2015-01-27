@@ -6,15 +6,15 @@ GetSpecialStackByUserQuery = require 'data/queries/GetSpecialStackByUserQuery'
 
 class GetMyQueueHandler extends Handler
 
-  @route 'get /api/{organizationId}/me/queue'
-  @demand 'requester is organization member'
+  @route 'get /api/{orgId}/me/queue'
+  @demand 'requester is org member'
 
   constructor: (@database) ->
 
   handle: (request, reply) ->
-    {user}         = request.auth.credentials
-    {organization} = request.scope
-    query = new GetSpecialStackByUserQuery(organization.id, user.id, StackType.Queue, @getQueryOptions(request))
+    {user} = request.auth.credentials
+    {org}  = request.scope
+    query = new GetSpecialStackByUserQuery(org.id, user.id, StackType.Queue, @getQueryOptions(request))
     @database.execute query, (err, result) =>
       return reply err if err?
       reply new Response(result)

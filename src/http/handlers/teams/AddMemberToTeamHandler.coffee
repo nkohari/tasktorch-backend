@@ -5,30 +5,30 @@ AddMemberToTeamCommand = require 'domain/commands/team/AddMemberToTeamCommand'
 
 class AddMemberToTeamHandler extends Handler
 
-  @route 'post /api/{organizationId}/teams/{teamId}/members'
+  @route 'post /api/{orgId}/teams/{teamId}/members'
 
   @prereqs {
-    organization: 'ResolveOrganization'
-    team:         'ResolveTeam'
-    user:         'ResolveUserArgument'
+    org:  'ResolveOrg'
+    team: 'ResolveTeam'
+    user: 'ResolveUserArgument'
   }
 
   constructor: (@processor) ->
 
   handle: (request, reply) ->
 
-    {organization, team, user} = request.pre
+    {org, team, user} = request.pre
 
-    # Ensure that the team is part of the organization.
-    unless team.organization == organization.id
+    # Ensure that the team is part of the org.
+    unless team.org == org.id
       return reply @error.notFound()
 
-    # Ensure that the requesting user is a member of the organization.
-    unless _.contains(organization.members, request.auth.credentials.user.id)
+    # Ensure that the requesting user is a member of the org.
+    unless _.contains(org.members, request.auth.credentials.user.id)
       return reply @error.forbidden()
 
-    # Ensure that the user we're adding is a member of the organization.
-    unless _.contains(organization.members, user.id)
+    # Ensure that the user we're adding is a member of the org.
+    unless _.contains(org.members, user.id)
       return reply @error.badRequest()
 
     command = new AddMemberToTeamCommand(request.auth.credentials.user, request.pre.team, request.pre.user)

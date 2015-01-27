@@ -3,6 +3,6 @@ Message = require 'messaging/Message'
 class ActionMessage extends Message
 
   getChannels: ->
-    ["presence-#{@document.organization}"]
+    ["presence-#{@document.org}"]
 
 module.exports = ActionMessage

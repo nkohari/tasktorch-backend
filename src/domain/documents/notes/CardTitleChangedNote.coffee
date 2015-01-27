@@ -3,7 +3,7 @@ Note = require './Note'
 class CardTitleChangedNote extends Note
 
   constructor: (user, card, previous) ->
-    super(user.id, card.organization, card.id)
+    super(user.id, card.org, card.id)
     @content =
       from: previous.title ? null
       to:   card.title     ? null

@@ -8,10 +8,10 @@ StackType          = require 'domain/enums/StackType'
 
 class CreateUserStackHandler extends Handler
 
-  @route 'post /api/{organizationId}/me/stacks'
+  @route 'post /api/{orgId}/me/stacks'
 
   @prereqs {
-    organization: 'ResolveOrganization'
+    org: 'ResolveOrg'
   }
 
   constructor: (@processor) ->
@@ -19,10 +19,10 @@ class CreateUserStackHandler extends Handler
   handle: (request, reply) ->
 
     requester = request.auth.credentials.user
-    {organization} = request.pre
+    {org} = request.pre
 
-    # Ensure that the requester is a member of the organization.
-    unless _.contains(organization.members, requester.id)
+    # Ensure that the requester is a member of the org.
+    unless _.contains(org.members, requester.id)
       return reply @error.forbidden()
 
     # Ensure that a name was specified for the stack.
@@ -30,7 +30,7 @@ class CreateUserStackHandler extends Handler
       return reply @error.badRequest()
 
     stack = new Stack {
-      organization: organization.id
+      org: org.id
       type:         StackType.Backlog
       name:         request.payload.name
       user:         requester.id

@@ -4,8 +4,8 @@ GetStackQuery = require 'data/queries/GetStackQuery'
 
 class GetStackHandler extends Handler
 
-  @route 'get /api/{organizationId}/stacks/{stackId}'
-  @demand ['requester is organization member']
+  @route 'get /api/{orgId}/stacks/{stackId}'
+  @demand ['requester is org member']
 
   constructor: (@database) ->
 

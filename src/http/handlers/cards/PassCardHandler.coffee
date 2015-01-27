@@ -7,18 +7,18 @@ Response                   = require 'http/framework/Response'
 
 class PassCardHandler extends Handler
 
-  @route  'put /api/{organizationId}/cards/{cardId}/pass'
-  @demand 'requester is organization member'
+  @route  'put /api/{orgId}/cards/{cardId}/pass'
+  @demand 'requester is org member'
 
   constructor: (@database, @processor) ->
 
   handle: (request, reply) ->
 
-    {user}         = request.auth.credentials
-    {organization} = request.scope
-    model          = @createRequestModel(request)
+    {user} = request.auth.credentials
+    {org}  = request.scope
+    model  = @createRequestModel(request)
 
-    @resolveStack organization, model, (err, stack) =>
+    @resolveStack org, model, (err, stack) =>
       return reply err if err?
       command = new PassCardCommand(user, model.card, stack.id, model.user ? null)
       @processor.execute command, (err, result) =>
@@ -27,9 +27,9 @@ class PassCardHandler extends Handler
         return reply err if err?
         reply new Response(result.card)
 
-  resolveStack: (organization, model, callback) ->
+  resolveStack: (org, model, callback) ->
     if model.user?
-      query = new GetSpecialStackByUserQuery(organization.id, model.user, StackType.Inbox)
+      query = new GetSpecialStackByUserQuery(org.id, model.user, StackType.Inbox)
     else if model.team?
       query = new GetInboxByTeamQuery(model.team)
     else

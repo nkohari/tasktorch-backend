@@ -1,7 +1,7 @@
-_                    = require 'lodash'
-Handler              = require 'http/framework/Handler'
-GetOrganizationQuery = require 'data/queries/GetOrganizationQuery'
-UserModel            = require 'domain/models/UserModel'
+_           = require 'lodash'
+Handler     = require 'http/framework/Handler'
+GetOrgQuery = require 'data/queries/GetOrgQuery'
+UserModel   = require 'domain/models/UserModel'
 
 class PusherAuthHandler extends Handler
 
@@ -11,16 +11,16 @@ class PusherAuthHandler extends Handler
 
   handle: (request, reply) ->
 
-    {user}         = request.auth.credentials
-    socket         = request.payload.socket_id
-    channel        = request.payload.channel_name
-    organizationId = channel.replace('presence-', '')
+    {user}  = request.auth.credentials
+    socket  = request.payload.socket_id
+    channel = request.payload.channel_name
+    orgId   = channel.replace('presence-', '')
 
-    query = new GetOrganizationQuery(organizationId)
+    query = new GetOrgQuery(orgId)
     @database.execute query, (err, result) =>
       return reply err if err?
-      return reply @error.notFound()  unless result.organization?
-      return reply @error.forbidden() unless _.contains(result.organization.members, user.id)
+      return reply @error.notFound()  unless result.org?
+      return reply @error.forbidden() unless _.contains(result.org.members, user.id)
       presenceInfo =
         user_id:   user.id
         user_info: new UserModel(user)

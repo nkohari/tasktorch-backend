@@ -7,12 +7,12 @@ CreateNoteCommand = require 'domain/commands/note/CreateNoteCommand'
 
 class CreateNoteHandler extends Handler
 
-  @route 'post /api/{organizationId}/cards/{cardId}/notes'
+  @route 'post /api/{orgId}/cards/{cardId}/notes'
 
   constructor: (@database, @processor) ->
 
   handle: (request, reply) ->
-    @prepare request, [@getCardWithOrganization], (err) =>
+    @prepare request, [@getCardWithOrg], (err) =>
       return reply err if err?
       @validate request, (err) =>
         return reply err if err?
@@ -26,20 +26,20 @@ class CreateNoteHandler extends Handler
             reply new Response(result.note)
 
   validate: (request, callback) ->
-    if request.organization.id != request.params.organizationId
+    if request.org.id != request.params.orgId
       return callback @error.forbidden()
-    unless _.contains(request.organization.members, request.auth.credentials.user.id)
+    unless _.contains(request.org.members, request.auth.credentials.user.id)
       return callback @error.forbidden()
     callback()
 
-  getCardWithOrganization: (request, callback) ->
-    query = new GetCardQuery(request.params.cardId, {expand: 'organization'})
+  getCardWithOrg: (request, callback) ->
+    query = new GetCardQuery(request.params.cardId, {expand: 'org'})
     @database.execute query, (err, result) =>
       return callback(err) if err?
       {card} = result
       return callback @error.notFound() unless card?
       request.card = card
-      request.organization = result.related.organizations[card.organization]
+      request.org = result.related.orgs[card.org]
       callback()
 
   # TODO: Improve this if we end up supporting additional note types.

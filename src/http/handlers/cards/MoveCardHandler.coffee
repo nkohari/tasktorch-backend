@@ -6,7 +6,7 @@ MoveCardRequest = require 'http/requests/MoveCardRequest'
 
 class MoveCardHandler extends Handler
 
-  @route 'post /api/{organizationId}/cards/{cardId}/move'
+  @route 'post /api/{orgId}/cards/{cardId}/move'
 
   constructor: (@forge, @database, @processor) ->
 
@@ -15,8 +15,8 @@ class MoveCardHandler extends Handler
       return reply err if err?
 
       # TODO: Move to demand
-      unless _.contains(req.organization.members, req.user.id)
-        return reply @error.unauthorized("You do not have access to that organization")
+      unless _.contains(req.org.members, req.user.id)
+        return reply @error.unauthorized("You do not have access to that org")
 
       if req.stack.team? and not _.contains(req.team.members, req.user.id)
         return reply @error.unauthorized("You cannot move a card to a stack owned by a team of which you are not a member")

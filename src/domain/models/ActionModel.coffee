@@ -4,10 +4,10 @@ class ActionModel extends Model
 
   constructor: (action) ->
     super(action)
-    @text         = action.text
-    @organization = action.organization
-    @card         = action.card
-    @owner        = action.owner ? null
-    @stage        = action.stage
+    @text  = action.text
+    @org   = action.org
+    @card  = action.card
+    @owner = action.owner ? null
+    @stage = action.stage
 
 module.exports = ActionModel

@@ -8,7 +8,7 @@ Goal = Schema.create 'Goal',
   plural:   'goals'
 
   relations:
-    organization: {type: HasOne, schema: 'Organization'}
-    milestones:   {type: HasManyForeign, schema: 'Milestone', index: 'goal'}
+    org:        {type: HasOne, schema: 'Org'}
+    milestones: {type: HasManyForeign, schema: 'Milestone', index: 'goal'}
 
 module.exports = Goal

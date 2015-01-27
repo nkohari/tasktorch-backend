@@ -6,7 +6,7 @@ ChangeActionTextCommand = require 'domain/commands/action/ChangeActionTextComman
 
 class ChangeActionTextHandler extends Handler
 
-  @route 'post /api/{organizationId}/actions/{actionId}/text'
+  @route 'post /api/{orgId}/actions/{actionId}/text'
 
   constructor: (@database, @processor) ->
 
@@ -21,7 +21,7 @@ class ChangeActionTextHandler extends Handler
           reply new Response(result.action)
 
   createRequestModel: (request, callback) ->
-    query = new GetActionQuery(request.params.actionId, {expand: 'organization'})
+    query = new GetActionQuery(request.params.actionId, {expand: 'org'})
     @database.execute query, (err, result) =>
       return callback(err) if err?
       return callback @error.notFound() unless result.action?
@@ -29,14 +29,14 @@ class ChangeActionTextHandler extends Handler
       callback null, {
         user:         request.auth.credentials.user
         action:       action
-        organization: result.related.organizations[action.organization]
+        org: result.related.orgs[action.org]
         text:         request.payload.text
       }
 
   validate: (request, model, callback) ->
-    if model.action.organization != request.params.organizationId
+    if model.action.org != request.params.orgId
       return callback @error.unauthorized()
-    unless _.contains(model.organization.members, model.user.id)
+    unless _.contains(model.org.members, model.user.id)
       return callback @error.unauthorized()
     unless model.text?.length > 0
       return callback @error.badRequest()

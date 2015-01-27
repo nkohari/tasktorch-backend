@@ -8,9 +8,9 @@ Stack = Schema.create 'Stack',
   plural:   'stacks'
 
   relations:
-    organization: {type: HasOne,  schema: 'Organization'}
-    user:         {type: HasOne,  schema: 'User'}
-    team:         {type: HasOne,  schema: 'Team'}
-    cards:        {type: HasMany, schema: 'Card'}
+    org:   {type: HasOne,  schema: 'Org'}
+    user:  {type: HasOne,  schema: 'User'}
+    team:  {type: HasOne,  schema: 'Team'}
+    cards: {type: HasMany, schema: 'Card'}
 
 module.exports = Stack

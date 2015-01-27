@@ -4,8 +4,8 @@ GetAllStagesByKindQuery = require 'data/queries/GetAllStagesByKindQuery'
 
 class ListStagesByKindHandler extends Handler
 
-  @route 'get /api/{organizationId}/kinds/{kindId}/stages'
-  @demand ['requester is organization member']
+  @route 'get /api/{orgId}/kinds/{kindId}/stages'
+  @demand ['requester is org member']
 
   constructor: (@database) ->
 

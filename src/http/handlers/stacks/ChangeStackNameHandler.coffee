@@ -5,11 +5,11 @@ ChangeStackNameCommand = require 'domain/commands/stack/ChangeStackNameCommand'
 
 class ChangeStackNameHandler extends Handler
 
-  @route 'post /api/{organizationId}/stacks/{stackId}/name'
+  @route 'post /api/{orgId}/stacks/{stackId}/name'
 
   @prereqs {
-    organization: 'ResolveOrganization'
-    stack:        'ResolveStack'
+    org:   'ResolveOrg'
+    stack: 'ResolveStack'
   }
 
   constructor: (@processor) ->
@@ -17,14 +17,14 @@ class ChangeStackNameHandler extends Handler
   handle: (request, reply) ->
 
     requester = request.auth.credentials.user
-    {organization, stack} = request.pre
+    {org, stack} = request.pre
 
-    # Ensure that the stack is part of the organization.
-    unless stack.organization == organization.id
+    # Ensure that the stack is part of the org.
+    unless stack.org == org.id
       return reply @error.notFound()
 
-    # Ensure that the requester is a member of the organization.
-    unless _.contains(organization.members, requester.id)
+    # Ensure that the requester is a member of the org.
+    unless _.contains(org.members, requester.id)
       return reply @error.forbidden()
 
     # Ensure that a new name was specified for the stack.

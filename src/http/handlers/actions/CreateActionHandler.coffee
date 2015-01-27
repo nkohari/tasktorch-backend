@@ -7,7 +7,7 @@ Action              = require 'domain/documents/Action'
 
 class CreateActionHandler extends Handler
 
-  @route 'post /api/{organizationId}/cards/{cardId}/actions'
+  @route 'post /api/{orgId}/cards/{cardId}/actions'
 
   constructor: (@database, @processor) ->
 
@@ -22,23 +22,23 @@ class CreateActionHandler extends Handler
           reply new Response(result.action)
 
   createRequestModel: (request, callback) ->
-    query = new GetCardQuery(request.params.cardId, {expand: ['organization', 'kind']})
+    query = new GetCardQuery(request.params.cardId, {expand: ['org', 'kind']})
     @database.execute query, (err, result) =>
       return callback(err) if err?
       return callback @error.notFound() unless result.card?
       card = result.card
-      organization = result.related.organizations[card.organization]
+      org = result.related.orgs[card.org]
       kind = result.related.kinds[card.kind]
       callback null, {
         card:         card
-        organization: organization
+        org: org
         kind:         kind
         user:         request.auth.credentials.user
-        action:       new Action(organization.id, card.id, request.payload.stage, request.payload.text)
+        action:       new Action(org.id, card.id, request.payload.stage, request.payload.text)
       }
 
   validate: (request, model, callback) ->
-    if model.card.organization != request.params.organizationId
+    if model.card.org != request.params.orgId
       return callback @error.unauthorized()
     unless model.action.stage?.length > 0
       return callback @error.badRequest()

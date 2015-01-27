@@ -3,6 +3,6 @@ Message = require 'messaging/Message'
 class StackMessage extends Message
 
   getChannels: ->
-    ["presence-#{@document.organization}"]
+    ["presence-#{@document.org}"]
 
 module.exports = StackMessage

@@ -5,17 +5,17 @@ Response                 = require 'http/framework/Response'
 
 class ChangeCardSummaryHandler extends Handler
 
-  @route  'post /api/{organizationId}/cards/{cardId}/summary'
-  @demand 'requester is organization member'
+  @route  'post /api/{orgId}/cards/{cardId}/summary'
+  @demand 'requester is org member'
 
   constructor: (@processor) ->
 
   handle: (request, reply) ->
 
-    {organization} = request.scope
-    {user}         = request.auth.credentials
-    {cardId}       = request.params
-    {summary}      = request.payload
+    {org}     = request.scope
+    {user}    = request.auth.credentials
+    {cardId}  = request.params
+    {summary} = request.payload
 
     command = new ChangeCardSummaryCommand(user, cardId, summary)
     @processor.execute command, (err, result) =>

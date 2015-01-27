@@ -8,7 +8,7 @@ Kind = Schema.create 'Kind',
   plural:   'kinds'
 
   relations:
-    organization: {type: HasOne,  schema: 'Organization'}
-    stages:       {type: HasMany, schema: 'Stage'}
+    org:    {type: HasOne,  schema: 'Org'}
+    stages: {type: HasMany, schema: 'Stage'}
 
 module.exports = Kind

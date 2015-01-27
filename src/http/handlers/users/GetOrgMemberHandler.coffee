@@ -2,10 +2,10 @@ Handler      = require 'http/framework/Handler'
 Response     = require 'http/framework/Response'
 GetUserQuery = require 'data/queries/GetUserQuery'
 
-class GetOrganizationMemberHandler extends Handler
+class GetOrgMemberHandler extends Handler
 
-  @route 'get /api/{organizationId}/members/{userId}'
-  @demand ['requester is organization member', 'user is member of organization']
+  @route 'get /api/{orgId}/members/{userId}'
+  @demand ['requester is org member', 'user is member of org']
 
   constructor: (@database) ->
 
@@ -16,4 +16,4 @@ class GetOrganizationMemberHandler extends Handler
       return reply err if err?
       reply new Response(result)
 
-module.exports = GetOrganizationMemberHandler
+module.exports = GetOrgMemberHandler

@@ -3,7 +3,7 @@ Query = require 'data/framework/queries/Query'
 Team  = require 'data/schemas/Team'
 User  = require 'data/schemas/User'
 
-class GetAllMembersOfTeamQuery extends Query
+class GetAllMembersByTeamQuery extends Query
 
   constructor: (teamId, options) ->
     super(User, options)
@@ -11,4 +11,4 @@ class GetAllMembersOfTeamQuery extends Query
       r.args(r.table(Team.table).get(teamId)('members'))
     )
 
-module.exports = GetAllMembersOfTeamQuery
+module.exports = GetAllMembersByTeamQuery

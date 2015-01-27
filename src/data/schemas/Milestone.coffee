@@ -8,7 +8,7 @@ Milestone = Schema.create 'Milestone',
   plural:   'milestones'
 
   relations:
-    organization: {type: HasOne, schema: 'Organization'}
-    goal:         {type: HasOne, schema: 'Goal'}
+    org:  {type: HasOne, schema: 'Org'}
+    goal: {type: HasOne, schema: 'Goal'}
 
 module.exports = Milestone

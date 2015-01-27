@@ -1,19 +1,19 @@
-_        = require 'lodash'
-Handler  = require 'http/framework/Handler'
-Response = require 'http/framework/Response'
-GetAllStacksByOrganizationAndUserQuery = require 'data/queries/GetAllStacksByOrganizationAndUserQuery'
+_                             = require 'lodash'
+Handler                       = require 'http/framework/Handler'
+Response                      = require 'http/framework/Response'
+GetAllStacksByOrgAndUserQuery = require 'data/queries/GetAllStacksByOrgAndUserQuery'
 
 class ListMyStacksHandler extends Handler
 
-  @route 'get /api/{organizationId}/me/stacks'
-  @demand 'requester is organization member'
+  @route 'get /api/{orgId}/me/stacks'
+  @demand 'requester is org member'
 
   constructor: (@database) ->
 
   handle: (request, reply) ->
-    {organization} = request.scope
+    {org} = request.scope
     {user} = request.auth.credentials
-    query = new GetAllStacksByOrganizationAndUserQuery(organization.id, user.id, @getQueryOptions(request))
+    query = new GetAllStacksByOrgAndUserQuery(org.id, user.id, @getQueryOptions(request))
     @database.execute query, (err, result) =>
       return reply err if err?
       reply new Response(result)

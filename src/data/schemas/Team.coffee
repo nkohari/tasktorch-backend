@@ -8,9 +8,9 @@ Team = Schema.create 'Team',
   plural:   'teams'
 
   relations:
-    organization: {type: HasOne,         schema: 'Organization'}
-    leaders:      {type: HasMany,        schema: 'User'}
-    members:      {type: HasMany,        schema: 'User'}
-    stacks:       {type: HasManyForeign, schema: 'Stack', index: 'team'}
+    org:     {type: HasOne,         schema: 'Org'}
+    leaders: {type: HasMany,        schema: 'User'}
+    members: {type: HasMany,        schema: 'User'}
+    stacks:  {type: HasManyForeign, schema: 'Stack', index: 'team'}
 
 module.exports = Team

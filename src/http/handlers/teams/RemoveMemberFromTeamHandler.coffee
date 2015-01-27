@@ -5,26 +5,26 @@ RemoveMemberFromTeamCommand = require 'domain/commands/team/RemoveMemberFromTeam
 
 class RemoveMemberFromTeamHandler extends Handler
 
-  @route 'delete /api/{organizationId}/teams/{teamId}/members/{userId}'
+  @route 'delete /api/{orgId}/teams/{teamId}/members/{userId}'
 
   @prereqs {
-    organization: 'ResolveOrganization'
-    team:         'ResolveTeam'
-    user:         'ResolveUser'
+    org:  'ResolveOrg'
+    team: 'ResolveTeam'
+    user: 'ResolveUser'
   }
 
   constructor: (@processor) ->
 
   handle: (request, reply) ->
 
-    {organization, team, user} = request.pre
+    {org, team, user} = request.pre
 
-    # Ensure that the team is part of the organization.
-    unless team.organization == organization.id
+    # Ensure that the team is part of the org.
+    unless team.org == org.id
       return reply @error.notFound()
 
-    # Ensure that the requesting user is a member of the organization.
-    unless _.contains(organization.members, request.auth.credentials.user.id)
+    # Ensure that the requesting user is a member of the org.
+    unless _.contains(org.members, request.auth.credentials.user.id)
       return reply @error.forbidden()
 
     # Ensure that the user we're removing is a member of the team.

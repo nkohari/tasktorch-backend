@@ -5,11 +5,11 @@ DeleteTeamCommand = require 'domain/commands/team/DeleteTeamCommand'
 
 class DeleteTeamHandler extends Handler
 
-  @route 'delete /api/{organizationId}/teams/{teamId}'
+  @route 'delete /api/{orgId}/teams/{teamId}'
 
   @prereqs {
-    organization: 'ResolveOrganization'
-    team:         'ResolveTeam'
+    org:  'ResolveOrg'
+    team: 'ResolveTeam'
   }
 
   constructor: (@processor) ->
@@ -17,14 +17,14 @@ class DeleteTeamHandler extends Handler
   handle: (request, reply) ->
 
     requester = request.auth.credentials.user
-    {organization, team} = request.pre
+    {org, team} = request.pre
 
-    # Ensure that the team is part of the organization.
-    unless team.organization == organization.id
+    # Ensure that the team is part of the org.
+    unless team.org == org.id
       return reply @error.notFound()
 
-    # Ensure that the requester is a member of the organization.
-    unless _.contains(organization.members, requester.id)
+    # Ensure that the requester is a member of the org.
+    unless _.contains(org.members, requester.id)
       return reply @error.forbidden()
 
     # Ensure that the requester is a member of the team.

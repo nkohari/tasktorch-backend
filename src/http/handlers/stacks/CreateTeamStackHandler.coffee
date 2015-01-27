@@ -8,11 +8,11 @@ StackType          = require 'domain/enums/StackType'
 
 class CreateTeamStackHandler extends Handler
 
-  @route 'post /api/{organizationId}/teams/{teamId}/stacks'
+  @route 'post /api/{orgId}/teams/{teamId}/stacks'
 
   @prereqs {
-    organization: 'ResolveOrganization'
-    team:         'ResolveTeam'
+    org:  'ResolveOrg'
+    team: 'ResolveTeam'
   }
 
   constructor: (@log, @processor) ->
@@ -20,14 +20,14 @@ class CreateTeamStackHandler extends Handler
   handle: (request, reply) ->
 
     requester = request.auth.credentials.user
-    {organization, team} = request.pre
+    {org, team} = request.pre
 
-    # Ensure that the team is part of the organization.
-    unless team.organization == organization.id
+    # Ensure that the team is part of the org.
+    unless team.org == org.id
       return reply @error.notFound()
 
-    # Ensure that the requester is a member of the organization.
-    unless _.contains(organization.members, requester.id)
+    # Ensure that the requester is a member of the org.
+    unless _.contains(org.members, requester.id)
       return reply @error.forbidden()
 
     # Ensure that the requester is a member of the team.
@@ -39,7 +39,7 @@ class CreateTeamStackHandler extends Handler
       return reply @error.badRequest()
 
     stack = new Stack {
-      organization: organization.id
+      org: org.id
       type:         StackType.Backlog
       name:         request.payload.name
       team:         team.id

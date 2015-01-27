@@ -7,7 +7,7 @@ ChangeActionOwnerCommand = require 'domain/commands/action/ChangeActionOwnerComm
 
 class ChangeActionOwnerHandler extends Handler
 
-  @route 'post /api/{organizationId}/actions/{actionId}/owner'
+  @route 'post /api/{orgId}/actions/{actionId}/owner'
 
   constructor: (@database, @processor) ->
 
@@ -25,20 +25,20 @@ class ChangeActionOwnerHandler extends Handler
     @loadRequestData request, [@getAction, @getOwner], (err, data) =>
       return callback(err) if err?
       callback null, {
-        user:         request.auth.credentials.user
-        action:       data.action
-        organization: data.organization
-        owner:        data.owner
+        user:   request.auth.credentials.user
+        action: data.action
+        org:    data.org
+        owner:  data.owner
       }
 
   getAction: (request, callback) ->
-    query = new GetActionQuery(request.params.actionId, {expand: 'organization'})
+    query = new GetActionQuery(request.params.actionId, {expand: 'org'})
     @database.execute query, (err, result) =>
       return callback(err) if err?
       return callback @error.notFound() unless result.action?
       action = result.action
-      organization = result.related.organizations[action.organization]
-      callback null, {action, organization}
+      org    = result.related.orgs[action.org]
+      callback null, {action, org}
 
   getOwner: (request, callback) ->
     if request.payload.user is undefined
@@ -53,9 +53,9 @@ class ChangeActionOwnerHandler extends Handler
       callback null, {owner}
 
   validate: (request, model, callback) ->
-    if model.action.organization != request.params.organizationId
+    if model.action.org != request.params.orgId
       return callback @error.unauthorized()
-    unless _.contains(model.organization.members, model.user.id)
+    unless _.contains(model.org.members, model.user.id)
       return callback @error.unauthorized()
     callback()
 

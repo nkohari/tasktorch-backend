@@ -1,15 +1,15 @@
 Schema    = require 'data/Schema'
 {HasMany} = require 'data/RelationType'
 
-Organization = Schema.create 'Organization',
+Org = Schema.create 'Org',
 
-  table:    'organizations'
-  singular: 'organization'
-  plural:   'organizations'
+  table:    'orgs'
+  singular: 'org'
+  plural:   'orgs'
 
   relations:
     teams:   {type: HasMany, schema: 'Team'}
     leaders: {type: HasMany, schema: 'User'}
     members: {type: HasMany, schema: 'User'}
 
-module.exports = Organization
+module.exports = Org

@@ -5,16 +5,16 @@ Response            = require 'http/framework/Response'
 
 class ArchiveCardHandler extends Handler
 
-  @route  'post /api/{organizationId}/cards/{cardId}/complete'
-  @demand 'requester is organization member'
+  @route  'post /api/{orgId}/cards/{cardId}/complete'
+  @demand 'requester is org member'
 
   constructor: (@processor) ->
 
   handle: (request, reply) ->
 
-    {organization} = request.scope
-    {user}         = request.auth.credentials
-    {cardId}       = request.params
+    {org}    = request.scope
+    {user}   = request.auth.credentials
+    {cardId} = request.params
 
     command = new CompleteCardCommand(user, cardId)
     @processor.execute command, (err, result) =>

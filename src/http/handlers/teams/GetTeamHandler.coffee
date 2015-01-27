@@ -4,8 +4,8 @@ GetTeamQuery = require 'data/queries/GetTeamQuery'
 
 class GetTeamHandler extends Handler
 
-  @route 'get /api/{organizationId}/teams/{teamId}'
-  @demand ['requester is organization member', 'team belongs to organization']
+  @route 'get /api/{orgId}/teams/{teamId}'
+  @demand ['requester is org member', 'team belongs to org']
 
   constructor: (@database) ->
 

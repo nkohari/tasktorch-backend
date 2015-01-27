@@ -8,28 +8,28 @@ class AcceptCardRequest extends Request
   constructor: (@database) ->
 
   interpret: (request, callback) ->
-    @getCardWithOrganization request.params.cardId, (err, card, organization) =>
+    @getCardWithOrg request.params.cardId, (err, card, org) =>
       return callback(err) if err?
-      return callback @error.notFound() unless card.organization == organization.id
-      @getQueueStack organization, request.auth.credentials.user, (err, stack) =>
+      return callback @error.notFound() unless card.org == org.id
+      @getQueueStack org, request.auth.credentials.user, (err, stack) =>
         return callback(err) if err?
         @user         = request.auth.credentials.user
-        @organization = organization
+        @org = org
         @card         = card
         @stack        = stack
         callback()
 
-  getCardWithOrganization: (cardId, callback) ->
-    query = new GetCardQuery(cardId, {expand: 'organization'})
+  getCardWithOrg: (cardId, callback) ->
+    query = new GetCardQuery(cardId, {expand: 'org'})
     @database.execute query, (err, result) =>
       return callback(err) if err?
       return callback @error.notFound() unless result.card?
       card = result.card
-      organization = result.related.organizations[card.organization]
-      callback(null, card, organization)
+      org  = result.related.orgs[card.org]
+      callback(null, card, org)
 
-  getQueueStack: (organization, user, callback) ->
-    query = new GetSpecialStackByUserQuery(organization.id, user.id, StackType.Queue)
+  getQueueStack: (org, user, callback) ->
+    query = new GetSpecialStackByUserQuery(org.id, user.id, StackType.Queue)
     @database.execute query, (err, result) =>
       return callback(err) if err?
       return callback @error.badRequest() unless result.stack?

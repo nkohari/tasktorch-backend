@@ -5,8 +5,8 @@ Response                = require 'http/framework/Response'
 
 class ListCardsByStackHandler extends Handler
 
-  @route 'get /api/{organizationId}/stacks/{stackId}/cards'
-  @demand ['requester is organization member', 'requester is stack participant']
+  @route 'get /api/{orgId}/stacks/{stackId}/cards'
+  @demand ['requester is org member', 'requester is stack participant']
 
   constructor: (@database) ->
 

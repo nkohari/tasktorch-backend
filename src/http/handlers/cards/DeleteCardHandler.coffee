@@ -5,16 +5,16 @@ Response          = require 'http/framework/Response'
 
 class DeleteCardHandler extends Handler
 
-  @route 'delete /api/{organizationId}/cards/{cardId}'
-  @demand 'requester is organization member'
+  @route 'delete /api/{orgId}/cards/{cardId}'
+  @demand 'requester is org member'
 
   constructor: (@processor) ->
 
   handle: (request, reply) ->
 
-    {organization} = request.scope
-    {user}         = request.auth.credentials
-    {cardId}       = request.params
+    {org}    = request.scope
+    {user}   = request.auth.credentials
+    {cardId} = request.params
 
     command = new DeleteCardCommand(user, cardId)
     @processor.execute command, (err, result) =>

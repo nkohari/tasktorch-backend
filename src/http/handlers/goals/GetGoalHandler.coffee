@@ -4,8 +4,8 @@ Response     = require 'http/framework/Response'
 
 class GetGoalHandler extends Handler
 
-  @route 'get /api/{organizationId}/goals/{goalId}'
-  @demand 'requester is organization member'
+  @route 'get /api/{orgId}/goals/{goalId}'
+  @demand 'requester is org member'
 
   constructor: (@database) ->
 

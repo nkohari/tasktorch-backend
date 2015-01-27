@@ -9,18 +9,18 @@ CreateCardCommand          = require 'domain/commands/card/CreateCardCommand'
 
 class CreateCardHandler extends Handler
 
-  @route 'post /api/{organizationId}/cards'
-  @demand ['requester is organization member']
+  @route 'post /api/{orgId}/cards'
+  @demand ['requester is org member']
 
   constructor: (@database, @processor) ->
 
   handle: (request, reply) ->
 
-    {organization} = request.scope
-    {user}         = request.auth.credentials
-    kindId         = request.payload?.kind
+    {org}   = request.scope
+    {user}  = request.auth.credentials
+    kindId  = request.payload?.kind
 
-    @resolveStack organization, user, (err, stack) =>
+    @resolveStack org, user, (err, stack) =>
       return reply err if err?
       @resolveKind kindId, (err, kind) =>
         return reply err if err?
@@ -31,7 +31,7 @@ class CreateCardHandler extends Handler
           owner:        user.id
           kind:         kind.id
           stack:        stack.id
-          organization: organization.id
+          org: org.id
           followers:    [user.id]
           moves:        []
           actions:      _.object(_.map(kind.stages, (id) -> [id, []]))
@@ -43,8 +43,8 @@ class CreateCardHandler extends Handler
           return reply err if err?
           reply new Response(result.card)
 
-  resolveStack: (organization, user, callback) ->
-    query = new GetSpecialStackByUserQuery(organization.id, user.id, StackType.Drafts)
+  resolveStack: (org, user, callback) ->
+    query = new GetSpecialStackByUserQuery(org.id, user.id, StackType.Drafts)
     @database.execute query, (err, {stack}) =>
       return callback err if err?
       callback(null, stack)

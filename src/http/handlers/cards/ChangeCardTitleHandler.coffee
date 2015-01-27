@@ -6,17 +6,17 @@ Response               = require 'http/framework/Response'
 
 class ChangeCardTitleHandler extends Handler
 
-  @route  'post /api/{organizationId}/cards/{cardId}/title'
-  @demand 'requester is organization member'
+  @route  'post /api/{orgId}/cards/{cardId}/title'
+  @demand 'requester is org member'
 
   constructor: (@processor) ->
 
   handle: (request, reply) ->
 
-    {organization} = request.scope
-    {user}         = request.auth.credentials
-    {cardId}       = request.params
-    {title}        = request.payload
+    {org}    = request.scope
+    {user}   = request.auth.credentials
+    {cardId} = request.params
+    {title}  = request.payload
 
     command = new ChangeCardTitleCommand(user, cardId, title)
     @processor.execute command, (err, result) =>

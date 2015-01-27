@@ -6,11 +6,11 @@ StackType          = require 'domain/enums/StackType'
 
 class DeleteStackHandler extends Handler
 
-  @route 'delete /api/{organizationId}/stacks/{stackId}'
+  @route 'delete /api/{orgId}/stacks/{stackId}'
 
   @prereqs {
-    organization: 'ResolveOrganization'
-    stack:        'ResolveStack'
+    org:   'ResolveOrg'
+    stack: 'ResolveStack'
   }
 
   constructor: (@processor) ->
@@ -18,14 +18,14 @@ class DeleteStackHandler extends Handler
   handle: (request, reply) ->
 
     requester = request.auth.credentials.user
-    {organization, stack} = request.pre
+    {org, stack} = request.pre
 
-    # Ensure that the stack is part of the organization.
-    unless stack.organization == organization.id
+    # Ensure that the stack is part of the org.
+    unless stack.org == org.id
       return reply @error.notFound()
 
-    # Ensure that the requester is a member of the organization.
-    unless _.contains(organization.members, requester.id)
+    # Ensure that the requester is a member of the org.
+    unless _.contains(org.members, requester.id)
       return reply @error.forbidden()
 
     # Ensure that the stack is not a special stack.

@@ -7,7 +7,7 @@ AcceptCardCommand = require 'domain/commands/card/AcceptCardCommand'
 
 class AcceptCardHandler extends Handler
 
-  @route 'post /api/{organizationId}/cards/{cardId}/accept'
+  @route 'post /api/{orgId}/cards/{cardId}/accept'
 
   constructor: (@forge, @processor) ->
 
@@ -17,8 +17,8 @@ class AcceptCardHandler extends Handler
       return reply err if err?
 
       # TODO: Move to demand
-      unless _.contains(req.organization.members, req.user.id)
-        return reply @error.unauthorized("You do not have access to that organization")
+      unless _.contains(req.org.members, req.user.id)
+        return reply @error.unauthorized("You do not have access to that org")
 
       # TODO: Move to demand
       if req.card.owner? and req.card.owner != req.user.id

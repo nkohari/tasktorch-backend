@@ -14,9 +14,9 @@ class CreateTeamCommand extends Command
     result = new CommandResult(@user)
 
     inbox = new Stack {
-      organization: @team.organization
-      type:         StackType.Inbox
-      team:         @team.id
+      org:  @team.org
+      type: StackType.Inbox
+      team: @team.id
     }
 
     statement = new CreateStackStatement(inbox)
