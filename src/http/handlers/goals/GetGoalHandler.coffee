@@ -1,20 +1,28 @@
-GetGoalQuery = require 'data/queries/GetGoalQuery'
 Handler      = require 'http/framework/Handler'
-Response     = require 'http/framework/Response'
+GetGoalQuery = require 'data/queries/goals/GetGoalQuery'
 
 class GetGoalHandler extends Handler
 
-  @route 'get /api/{orgId}/goals/{goalId}'
-  @demand 'requester is org member'
+  @route 'get /api/{orgid}/goals/{goalid}'
+
+  @pre [
+    'resolve org'
+    'resolve query options'
+    'ensure requester is member of org'
+  ]
 
   constructor: (@database) ->
 
   handle: (request, reply) ->
-    {goalId} = request.params
-    query    = new GetGoalQuery(goalId, @getQueryOptions(request))
+
+    {org, options} = request.pre
+    {goalid}       = request.params
+
+    query    = new GetGoalQuery(goalid, options)
     @database.execute query, (err, result) =>
       return reply err if err?
       return reply @error.notFound() unless result.goal?
-      reply new Response(result)
+      return reply @error.notFound() unless result.goal.org == org.id
+      reply @response(result)
 
 module.exports = GetGoalHandler

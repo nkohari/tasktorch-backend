@@ -1,8 +1,7 @@
 Handler                = require 'http/framework/Handler'
-Response               = require 'http/framework/Response'
-CreateSessionCommand   = require 'domain/commands/session/CreateSessionCommand'
-GetUserByUsernameQuery = require 'data/queries/GetUserByUsernameQuery'
-GetUserByEmailQuery    = require 'data/queries/GetUserByEmailQuery'
+CreateSessionCommand   = require 'domain/commands/sessions/CreateSessionCommand'
+GetUserByUsernameQuery = require 'data/queries/users/GetUserByUsernameQuery'
+GetUserByEmailQuery    = require 'data/queries/users/GetUserByEmailQuery'
 
 class CreateSessionHandler extends Handler
 
@@ -12,18 +11,24 @@ class CreateSessionHandler extends Handler
   constructor: (@database, @processor, @passwordHasher) ->
 
   handle: (request, reply) ->
+
     {login, password} = request.payload
+
+    unless login?.length > 0
+      return reply @error.badRequest("Missing required argument 'login'")
+
+    unless password?.length > 0
+      return reply @error.badRequest("Missing required argument 'password'")
+
     @resolveUser login, (err, user) =>
       return reply err if err?
       return reply @error.forbidden() unless user? and @passwordHasher.verify(user.password, password)
-      data = {user: user.id, isActive: true}
-      command = new CreateSessionCommand(user, data)
+      session = {user: user.id, isActive: true}
+      command = new CreateSessionCommand(user, session)
       @processor.execute command, (err, result) =>
-        return reply @error.notFound() if err is Error.DocumentNotFound
-        return reply @error.conflict() if err is Error.VersionMismatch
         return reply err if err?
-        request.auth.session.set {userId: user.id, sessionId: result.session.id}
-        reply new Response(result.session)
+        request.auth.session.set {userid: user.id, sessionid: result.session.id}
+        reply @response(result.session)
 
   resolveUser: (login, callback) ->
     query = new GetUserByUsernameQuery(login)

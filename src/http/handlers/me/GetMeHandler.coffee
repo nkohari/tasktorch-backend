@@ -1,18 +1,21 @@
-GetUserQuery = require 'data/queries/GetUserQuery'
 Handler      = require 'http/framework/Handler'
-Response     = require 'http/framework/Response'
+GetUserQuery = require 'data/queries/users/GetUserQuery'
 
 class GetMeHandler extends Handler
 
   @route 'get /api/me'
 
-  constructor: (@database) ->
+  constructor: (@log, @database) ->
 
   handle: (request, reply) ->
-    {user} = request.auth.credentials
-    query = new GetUserQuery(user.id, @getQueryOptions(request))
+    @log.debug 'here'
+
+    {options} = request.pre
+    {user}    = request.auth.credentials
+    
+    query = new GetUserQuery(user.id, options)
     @database.execute query, (err, result) =>
       return reply err if err?
-      reply new Response(result)
+      reply @response(result)
 
 module.exports = GetMeHandler

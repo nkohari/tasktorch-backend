@@ -4,8 +4,8 @@ UpdateStatement = require 'data/framework/statements/UpdateStatement'
 
 class AddMemberToTeamStatement extends UpdateStatement
 
-  constructor: (teamId, userId) ->
-    patch = {members: r.row('members').setInsert(userId)}
-    super(Team, teamId, patch)
+  constructor: (teamid, userid) ->
+    patch = {members: r.row('members').setInsert(userid)}
+    super(Team, teamid, patch)
 
 module.exports = AddMemberToTeamStatement

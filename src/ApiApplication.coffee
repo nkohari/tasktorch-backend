@@ -1,21 +1,16 @@
-Application    = require 'common/Application'
-ApiEnvironment = require './ApiEnvironment'
+Application           = require 'common/Application'
+ProductionEnvironment = require './ProductionEnvironment'
 
 class ApiApplication extends Application
 
   name: 'api'
 
-  constructor: (environment = new ApiEnvironment()) ->
+  constructor: (environment = new ProductionEnvironment()) ->
     super(environment)
-    process.on('uncaughtException', @onError.bind(this))
 
   start: ->
     super()
     server = @forge.get('server')
     server.start()
-
-  onError: (error) ->
-    @forge.get('log').error("UNCAUGHT EXCEPTION: #{error.stack ? error}")
-    process.exit(1)
 
 module.exports = ApiApplication

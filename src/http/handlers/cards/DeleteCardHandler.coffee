@@ -1,25 +1,26 @@
-DeleteCardCommand = require 'domain/commands/card/DeleteCardCommand'
-Error             = require 'data/Error'
 Handler           = require 'http/framework/Handler'
-Response          = require 'http/framework/Response'
+DeleteCardCommand = require 'domain/commands/cards/DeleteCardCommand'
 
 class DeleteCardHandler extends Handler
 
-  @route 'delete /api/{orgId}/cards/{cardId}'
-  @demand 'requester is org member'
+  @route 'delete /api/{orgid}/cards/{cardid}'
+
+  @pre [
+    'resolve org'
+    'resolve card'
+    'ensure card belongs to org'
+    'ensure requester is member of org'
+  ]
 
   constructor: (@processor) ->
 
   handle: (request, reply) ->
 
-    {org}    = request.scope
-    {user}   = request.auth.credentials
-    {cardId} = request.params
+    {card} = request.pre
+    {user} = request.auth.credentials
 
-    command = new DeleteCardCommand(user, cardId)
+    command = new DeleteCardCommand(user, card)
     @processor.execute command, (err, result) =>
-      return reply @error.notFound() if err is Error.DocumentNotFound
-      return reply @error.conflict() if err is Error.VersionMismatch
       return reply err if err?
       reply()
 

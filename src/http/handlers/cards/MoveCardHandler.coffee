@@ -1,45 +1,37 @@
 _               = require 'lodash'
-MoveCardCommand = require 'domain/commands/card/MoveCardCommand'
 Handler         = require 'http/framework/Handler'
-Response        = require 'http/framework/Response'
-MoveCardRequest = require 'http/requests/MoveCardRequest'
+MoveCardCommand = require 'domain/commands/cards/MoveCardCommand'
 
 class MoveCardHandler extends Handler
 
-  @route 'post /api/{orgId}/cards/{cardId}/move'
+  @route 'post /api/{orgid}/cards/{cardid}/move'
+
+  @pre [
+    'resolve org'
+    'resolve card'
+    'resolve stack argument'
+    'resolve team by stack'
+    'ensure requester is member of org'
+    'ensure position argument is valid'
+  ]
 
   constructor: (@forge, @database, @processor) ->
 
   handle: (request, reply) ->
-    @createRequestModel request, (err, req) =>
+
+    {org, card, stack, team} = request.pre
+    {user}                   = request.auth.credentials
+    {position}               = request.payload
+
+    if team? and not _.contains(team.members, user.id)
+      return reply @error.unauthorized("You cannot move a card to a stack owned by a team of which you are not a member")
+
+    if stack.user? and stack.user != user.id
+      return reply @error.unauthorized("You cannot move a card to a stack owned by another user")
+
+    command = new MoveCardCommand(user, card.id, stack.id, position)
+    @processor.execute command, (err, result) =>
       return reply err if err?
-
-      # TODO: Move to demand
-      unless _.contains(req.org.members, req.user.id)
-        return reply @error.unauthorized("You do not have access to that org")
-
-      if req.stack.team? and not _.contains(req.team.members, req.user.id)
-        return reply @error.unauthorized("You cannot move a card to a stack owned by a team of which you are not a member")
-
-      if req.stack.user? and req.stack.user != req.user.id
-        return reply @error.unauthorized("You cannot move a card to a stack owned by another user")
-
-      command = new MoveCardCommand(req.user, req.card.id, req.stack.id, req.position)
-      @processor.execute command, (err, result) =>
-        return reply @error.notFound() if err is Error.DocumentNotFound
-        return reply @error.conflict() if err is Error.VersionMismatch
-        return reply err if err?
-        reply new Response(result.card)
-
-  # TODO: This should be part of how Handlers work, via something like:
-  #
-  # class MoveCardHandler
-  #   @request MoveCardRequest
-  # 
-  createRequestModel: (request, callback) ->
-    model = @forge.create(MoveCardRequest)
-    model.interpret request, (err) =>
-      return callback(err) if err?
-      callback(null, model)
+      reply @response(result.card)
 
 module.exports = MoveCardHandler

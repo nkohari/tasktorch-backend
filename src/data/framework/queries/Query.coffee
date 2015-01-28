@@ -59,9 +59,13 @@ class Query
         result.filter (row) ->
           r.or(r.not(row.hasFields('status')), r.not(row('status').eq(DocumentStatus.Deleted)))
         r.branch(
-          r.and(result.hasFields('status'), result('status').eq(DocumentStatus.Deleted)),
+          r.typeOf(result).eq('NULL'),
           null,
-          result
+          r.branch(
+            r.and(result.hasFields('status'), result('status').eq(DocumentStatus.Deleted)),
+            null,
+            result
+          )
         )
       )
 

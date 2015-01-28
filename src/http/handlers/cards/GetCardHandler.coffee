@@ -1,21 +1,28 @@
-GetCardQuery = require 'data/queries/GetCardQuery'
 Handler      = require 'http/framework/Handler'
-Response     = require 'http/framework/Response'
+GetCardQuery = require 'data/queries/cards/GetCardQuery'
 
 class GetCardHandler extends Handler
 
-  @route  'get /api/{orgId}/cards/{cardId}'
-  @demand 'requester is org member'
+  @route 'get /api/{orgid}/cards/{cardid}'
+
+  @pre [
+    'resolve org'
+    'resolve query options'
+    'ensure requester is member of org'
+  ]
 
   constructor: (@database) ->
 
   handle: (request, reply) ->
-    {cardId} = request.params
-    query    = new GetCardQuery(cardId, @getQueryOptions(request))
+
+    {org, options} = request.pre
+    {cardid}       = request.params
+
+    query = new GetCardQuery(cardid, options)
     @database.execute query, (err, result) =>
       return reply err if err?
       return reply @error.notFound() unless result.card?
-      response = new Response(result)
-      reply(response)
+      return reply @error.notFound() unless result.card.org == org.id
+      reply @response(result)
 
 module.exports = GetCardHandler

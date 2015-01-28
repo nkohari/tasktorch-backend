@@ -1,22 +1,19 @@
-_               = require 'lodash'
-async           = require 'async'
-Hapi            = require 'hapi'
-QueryOptions    = require './QueryOptions'
-RequestMetadata = require './RequestMetadata'
+_        = require 'lodash'
+async    = require 'async'
+Hapi     = require 'hapi'
+Boom     = require 'boom'
+Response = require './Response'
 
 class Handler
 
-  error: Hapi.error
+  error: Boom
 
   @route: (route) ->
     [verb, path] = route.split(/\s+/, 2)
     (@options ?= {}).route = {verb, path}
 
-  @demand: (demand) ->
-    (@options ?= {}).demand = demand
-
-  @prereqs: (prereqs) ->
-    (@options ?= {}).prereqs = prereqs
+  @pre: (pre) ->
+    (@options ?= {}).pre = pre
     
   @auth: (auth) ->
     @options ?= {}
@@ -25,21 +22,7 @@ class Handler
   handle: (request, reply) ->
     throw new Error("You must implement handle() on #{@constructor.name}")
 
-  # TODO: eliminate
-  loadRequestData: (request, steps, callback) ->
-    funcs = _.map steps, (func) => func.bind(this, request)
-    async.parallel funcs, (err, data) =>
-      return callback(err) if err?
-      callback(null, _.extend.apply(null, data))
-
-  prepare: (request, steps, callback) ->
-    funcs = _.map steps, (func) => func.bind(this, request)
-    async.series(funcs, callback)
-
-  getQueryOptions: (request) ->
-    new QueryOptions(request)
-
-  getRequestMetadata: (request) ->
-    new RequestMetadata(request)
+  response: (content) ->
+    new Response(content)
 
 module.exports = Handler

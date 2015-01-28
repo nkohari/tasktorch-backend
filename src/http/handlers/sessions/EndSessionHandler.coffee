@@ -1,9 +1,9 @@
 Handler           = require 'http/framework/Handler'
-EndSessionCommand = require 'domain/commands/session/EndSessionCommand'
+EndSessionCommand = require 'domain/commands/sessions/EndSessionCommand'
 
 class EndSessionHandler extends Handler
 
-  @route 'delete /api/sessions/{sessionId}'
+  @route 'delete /api/sessions/{sessionid}'
 
   constructor: (@processor) ->
 

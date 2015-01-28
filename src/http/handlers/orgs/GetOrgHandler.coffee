@@ -1,19 +1,28 @@
+_           = require 'lodash'
 Handler     = require 'http/framework/Handler'
-Response    = require 'http/framework/Response'
-GetOrgQuery = require 'data/queries/GetOrgQuery'
+GetOrgQuery = require 'data/queries/orgs/GetOrgQuery'
 
 class GetOrgHandler extends Handler
 
-  @route 'get /api/{orgId}'
-  @demand 'requester is org member'
+  @route 'get /api/{orgid}'
+
+  @pre [
+    'resolve query options'
+  ]
 
   constructor: (@database) ->
 
   handle: (request, reply) ->
-    {orgId} = request.params
-    query = new GetOrgQuery(orgId, @getQueryOptions(request))
+
+    {options} = request.pre
+    {orgid}   = request.params
+    {user}    = request.auth.credentials
+
+    query = new GetOrgQuery(orgid, options)
     @database.execute query, (err, result) =>
       return reply err if err?
-      reply new Response(result)
+      return reply @error.notFound()  unless result.org?
+      return reply @error.forbidden() unless _.contains(result.org.members, user.id)
+      reply @response(result)
 
 module.exports = GetOrgHandler

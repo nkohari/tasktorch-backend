@@ -1,20 +1,23 @@
-_                     = require 'lodash'
 Handler               = require 'http/framework/Handler'
-Response              = require 'http/framework/Response'
-GetAllKindsByOrgQuery = require 'data/queries/GetAllKindsByOrgQuery'
+GetAllKindsByOrgQuery = require 'data/queries/kinds/GetAllKindsByOrgQuery'
 
 class ListKindsByOrgHandler extends Handler
 
-  @route 'get /api/{orgId}/kinds'
-  @demand ['requester is org member']
+  @route 'get /api/{orgid}/kinds'
+
+  @pre [
+    'resolve org'
+    'resolve query options'
+    'ensure requester is member of org'
+  ]
 
   constructor: (@database) ->
 
   handle: (request, reply) ->
-    {org} = request.scope
-    query = new GetAllKindsByOrgQuery(org.id, @getQueryOptions(request))
+    {org, options} = request.pre
+    query = new GetAllKindsByOrgQuery(org.id, options)
     @database.execute query, (err, result) =>
       return reply err if err?
-      reply new Response(result)
+      reply @response(result)
 
 module.exports = ListKindsByOrgHandler

@@ -1,4 +1,4 @@
-GetUserQuery    = require 'data/queries/GetUserQuery'
+GetUserQuery    = require 'data/queries/users/GetUserQuery'
 UserSearchModel = require 'search/models/UserSearchModel'
 
 class UserSearchModelFactory

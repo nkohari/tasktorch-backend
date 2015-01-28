@@ -1,56 +1,41 @@
-_                 = require 'lodash'
 Handler           = require 'http/framework/Handler'
-Response          = require 'http/framework/Response'
-GetCardQuery      = require 'data/queries/GetCardQuery'
 CommentNote       = require 'domain/documents/notes/CommentNote'
-CreateNoteCommand = require 'domain/commands/note/CreateNoteCommand'
+CreateNoteCommand = require 'domain/commands/notes/CreateNoteCommand'
 
 class CreateNoteHandler extends Handler
 
-  @route 'post /api/{orgId}/cards/{cardId}/notes'
+  @route 'post /api/{orgid}/cards/{cardid}/notes'
+
+  @pre [
+    'resolve org'
+    'resolve card'
+    'ensure card belongs to org'
+    'ensure requester is member of org'
+  ]
 
   constructor: (@database, @processor) ->
 
   handle: (request, reply) ->
-    @prepare request, [@getCardWithOrg], (err) =>
-      return reply err if err?
-      @validate request, (err) =>
-        return reply err if err?
-        @createNoteDocument request, (err, note) =>
-          return reply err if err?
-          command = new CreateNoteCommand(request.auth.credentials.user, note)
-          @processor.execute command, (err, result) =>
-            return reply @error.notFound() if err is Error.DocumentNotFound
-            return reply @error.conflict() if err is Error.VersionMismatch
-            return reply err if err?
-            reply new Response(result.note)
 
-  validate: (request, callback) ->
-    if request.org.id != request.params.orgId
-      return callback @error.forbidden()
-    unless _.contains(request.org.members, request.auth.credentials.user.id)
-      return callback @error.forbidden()
-    callback()
+    {card}          = request.pre
+    {user}          = request.auth.credentials
+    {type, content} = request.payload
 
-  getCardWithOrg: (request, callback) ->
-    query = new GetCardQuery(request.params.cardId, {expand: 'org'})
-    @database.execute query, (err, result) =>
-      return callback(err) if err?
-      {card} = result
-      return callback @error.notFound() unless card?
-      request.card = card
-      request.org = result.related.orgs[card.org]
-      callback()
+    unless type?.length > 0
+      return reply @error.badRequest("Missing required argument 'type'")
 
-  # TODO: Improve this if we end up supporting additional note types.
-  createNoteDocument: (request, callback) ->
-    return callback @error.badRequest() unless request.payload.type?.length > 0
-    switch request.payload.type
+    # TODO: Improve this if we end up supporting additional note types.
+    switch type
       when 'Comment'
-        return callback @error.badRequest() unless request.payload.content?.length > 0
-        note = new CommentNote(request.auth.credentials.user, request.card, request.payload.content)
+        unless content?.length > 0
+          return reply @error.badRequest("Missing required argument 'content'")
+        note = new CommentNote(user, card, content)
       else
-        return callback @error.badRequest()
-    callback(null, note)
+        return reply @error.badRequest()
+
+    command = new CreateNoteCommand(user, note)
+    @processor.execute command, (err, result) =>
+      return reply err if err?
+      reply @response(result.note)
 
 module.exports = CreateNoteHandler

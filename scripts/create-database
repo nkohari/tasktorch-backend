@@ -1,53 +1,16 @@
 #!/usr/bin/env ./node_modules/coffee-script/bin/coffee
 
-async = require 'async'
-r     = require 'rethinkdb'
-_     = require 'lodash'
+DatabaseCreator = require 'test/framework/DatabaseCreator'
 
-DB_NAME = 'tasktorch'
+dbname = process.argv[2]
+unless dbname?.length > 0
+  console.error "Usage: create-database <dbname>"
+  process.exit(1)
 
-database = (name) ->
-  return (conn, callback) ->
-    r.dbCreate(DB_NAME).run(conn, callback)
-
-table = (name) ->
-  return (conn, callback) ->
-    r.db(DB_NAME).tableCreate(name).run(conn, callback)
-
-index = (table, name, options = undefined) ->
-  return (conn, callback) ->
-    r.db(DB_NAME).table(table).indexCreate(name, options).run(conn, callback)
-
-tasks = [
-  database()
-  table('cards')
-  table('organizations')
-  index('organizations', 'members', {multi: true})
-  table('sessions')
-  index('sessions', 'user')
-  table('stacks')
-  index('stacks', 'owner')
-  index('stacks', 'team')
-  table('teams')
-  index('teams', 'organization')
-  index('teams', 'members', {multi: true})
-  table('types')
-  index('types', 'organization')
-  table('users')
-  index('users', 'emails', {multi: true})
-  index('users', 'username')
-]
-
-console.log 'Connecting to RethinkDB'
-r.connect (err, conn) ->
+console.log "Creating database #{dbname}"
+DatabaseCreator.create dbname, (err) ->
   if err?
-    console.log(err)
+    console.error "Error creating database: #{err}"
     process.exit(1)
-  console.log 'Building database'
-  funcs = _.map tasks, (task) -> _.partial(task, conn)
-  async.series funcs, (err) ->
-    if err?
-      console.log(err)
-      process.exit(1)
-    console.log 'Complete'
-    process.exit(0)
+  console.log "Database created successfully"
+  process.exit(0)

@@ -1,6 +1,5 @@
 Handler               = require 'http/framework/Handler'
-Response              = require 'http/framework/Response'
-ChangeUserNameCommand = require 'domain/commands/user/ChangeUserNameCommand'
+ChangeUserNameCommand = require 'domain/commands/users/ChangeUserNameCommand'
 
 class ChangeMyNameHandler extends Handler
 
@@ -9,13 +8,16 @@ class ChangeMyNameHandler extends Handler
   constructor: (@processor) ->
 
   handle: (request, reply) ->
+
     {user} = request.auth.credentials
     {name} = request.payload
+
+    unless name?.length > 0
+      return reply @error.badRequest("Missing required parameter 'name'")
+
     command = new ChangeUserNameCommand(user, name)
     @processor.execute command, (err, result) =>
-      return reply @error.notFound() if err is Error.DocumentNotFound
-      return reply @error.conflict() if err is Error.VersionMismatch
       return reply err if err?
-      reply new Response(result.user)
+      reply @response(result.user)
 
 module.exports = ChangeMyNameHandler

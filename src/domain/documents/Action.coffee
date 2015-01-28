@@ -3,12 +3,12 @@ ActionStatus = require 'domain/enums/ActionStatus'
 
 class Action
 
-  constructor: (orgId, cardId, stageId, text) ->
-    @id     = uuid()
-    @status = ActionStatus.NotStarted
-    @org    = orgId
-    @card   = cardId
-    @stage  = stageId
-    @text   = text ? null
+  constructor: (data) ->
+    @id     = data.id     ? uuid()
+    @status = data.status ? ActionStatus.NotStarted
+    @org    = data.org
+    @card   = data.card
+    @stage  = data.stage
+    @text   = data.text   ? null
 
 module.exports = Action

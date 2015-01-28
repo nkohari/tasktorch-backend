@@ -1,19 +1,24 @@
-_                       = require 'lodash'
 Handler                 = require 'http/framework/Handler'
-Response                = require 'http/framework/Response'
-GetAllOrgsByMemberQuery = require 'data/queries/GetAllOrgsByMemberQuery'
+GetAllOrgsByMemberQuery = require 'data/queries/orgs/GetAllOrgsByMemberQuery'
 
 class ListMyOrgsHandler extends Handler
 
   @route 'get /api/me/orgs'
 
+  @pre [
+    'resolve query options'
+  ]
+
   constructor: (@database) ->
 
   handle: (request, reply) ->
-    {user} = request.auth.credentials
-    query = new GetAllOrgsByMemberQuery(user.id, @getQueryOptions(request))
+
+    {options} = request.pre
+    {user}    = request.auth.credentials
+
+    query = new GetAllOrgsByMemberQuery(user.id, options)
     @database.execute query, (err, result) =>
       return reply err if err?
-      reply new Response(result)
+      reply @response(result)
 
 module.exports = ListMyOrgsHandler

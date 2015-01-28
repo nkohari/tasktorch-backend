@@ -5,9 +5,9 @@ BulkUpdateStatement = require 'data/framework/statements/BulkUpdateStatement'
 
 class RemoveCardFromStacksStatement extends BulkUpdateStatement
 
-  constructor: (cardId) ->
-    match = r.table(Stack.table).getAll(cardId, {index: 'cards'})
-    patch = {cards: r.row('cards').difference([cardId])}
+  constructor: (cardid) ->
+    match = r.table(Stack.table).getAll(cardid, {index: 'cards'})
+    patch = {cards: r.row('cards').difference([cardid])}
     super(Stack, match, patch)
 
 module.exports = RemoveCardFromStacksStatement

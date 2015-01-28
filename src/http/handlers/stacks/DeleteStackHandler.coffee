@@ -1,45 +1,35 @@
-_                  = require 'lodash'
 Handler            = require 'http/framework/Handler'
-Response           = require 'http/framework/Response'
-DeleteStackCommand = require 'domain/commands/stack/DeleteStackCommand'
 StackType          = require 'domain/enums/StackType'
+DeleteStackCommand = require 'domain/commands/stacks/DeleteStackCommand'
 
 class DeleteStackHandler extends Handler
 
-  @route 'delete /api/{orgId}/stacks/{stackId}'
+  @route 'delete /api/{orgid}/stacks/{stackid}'
 
-  @prereqs {
-    org:   'ResolveOrg'
-    stack: 'ResolveStack'
-  }
+  @pre [
+    'resolve org'
+    'resolve stack'
+    'ensure stack belongs to org'
+    'ensure requester is member of org'
+  ]
 
   constructor: (@processor) ->
 
   handle: (request, reply) ->
 
-    requester = request.auth.credentials.user
     {org, stack} = request.pre
+    {user}       = request.auth.credentials
 
-    # Ensure that the stack is part of the org.
-    unless stack.org == org.id
-      return reply @error.notFound()
-
-    # Ensure that the requester is a member of the org.
-    unless _.contains(org.members, requester.id)
-      return reply @error.forbidden()
-
-    # Ensure that the stack is not a special stack.
     unless stack.type == StackType.Backlog
-      return reply @error.badRequest()
+      return reply @error.badRequest("Stacks with type #{stack.type} cannot be deleted")
 
-    # Ensure that the stack doesn't contain any cards.
     # TODO: Allow bulk movement of the cards to another stack.
     unless stack.cards.length == 0
-      return reply @error.badRequest()
+      return reply @error.badRequest("Stacks containing cards cannot be deleted")
 
-    command = new DeleteStackCommand(requester, stack)
+    command = new DeleteStackCommand(user, stack)
     @processor.execute command, (err, result) =>
       return reply err if err?
-      return reply new Response(result.stack)
+      return reply @response(result.stack)
 
 module.exports = DeleteStackHandler

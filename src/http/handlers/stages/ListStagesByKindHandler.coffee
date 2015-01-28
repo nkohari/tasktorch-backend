@@ -1,19 +1,25 @@
 Handler                 = require 'http/framework/Handler'
-Response                = require 'http/framework/Response'
-GetAllStagesByKindQuery = require 'data/queries/GetAllStagesByKindQuery'
+GetAllStagesByKindQuery = require 'data/queries/stages/GetAllStagesByKindQuery'
 
 class ListStagesByKindHandler extends Handler
 
-  @route 'get /api/{orgId}/kinds/{kindId}/stages'
-  @demand ['requester is org member']
+  @route 'get /api/{orgid}/kinds/{kindid}/stages'
+
+  @pre [
+    'resolve org'
+    'resolve kind'
+    'resolve query options'
+    'ensure kind belongs to org'
+    'ensure requester is member of org'
+  ]
 
   constructor: (@database) ->
 
   handle: (request, reply) ->
-    {kindId} = request.params
-    query = new GetAllStagesByKindQuery(kindId, @getQueryOptions(request))
+    {kind, options} = request.pre
+    query = new GetAllStagesByKindQuery(kind.id, options)
     @database.execute query, (err, result) =>
       return reply err if err?
-      reply new Response(result)
+      reply @response(result)
 
 module.exports = ListStagesByKindHandler

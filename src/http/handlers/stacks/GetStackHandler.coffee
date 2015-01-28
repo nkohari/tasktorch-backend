@@ -1,19 +1,28 @@
 Handler       = require 'http/framework/Handler'
-Response      = require 'http/framework/Response'
-GetStackQuery = require 'data/queries/GetStackQuery'
+GetStackQuery = require 'data/queries/stacks/GetStackQuery'
 
 class GetStackHandler extends Handler
 
-  @route 'get /api/{orgId}/stacks/{stackId}'
-  @demand ['requester is org member']
+  @route 'get /api/{orgid}/stacks/{stackid}'
+
+  @pre [
+    'resolve org'
+    'resolve query options'
+    'ensure requester is member of org'
+  ]
 
   constructor: (@database) ->
 
   handle: (request, reply) ->
-    {stackId} = request.params
-    query = new GetStackQuery(stackId, @getQueryOptions(request))
+
+    {org, options} = request.pre
+    {stackid}      = request.params
+
+    query = new GetStackQuery(stackid, options)
     @database.execute query, (err, result) =>
       return reply err if err?
-      reply new Response(result)
+      return reply @error.notFound() unless result.stack?
+      return reply @error.notFound() unless result.stack.org == org.id
+      reply @response(result)
 
 module.exports = GetStackHandler

@@ -1,28 +1,28 @@
-GetCardQuery           = require 'data/queries/GetCardQuery'
-ChangeCardTitleCommand = require 'domain/commands/card/ChangeCardTitleCommand'
-Error                  = require 'data/Error'
 Handler                = require 'http/framework/Handler'
-Response               = require 'http/framework/Response'
+ChangeCardTitleCommand = require 'domain/commands/cards/ChangeCardTitleCommand'
 
 class ChangeCardTitleHandler extends Handler
 
-  @route  'post /api/{orgId}/cards/{cardId}/title'
-  @demand 'requester is org member'
+  @route 'post /api/{orgid}/cards/{cardid}/title'
+
+  @pre [
+    'resolve org'
+    'resolve card'
+    'ensure card belongs to org'
+    'ensure requester is member of org'
+  ]
 
   constructor: (@processor) ->
 
   handle: (request, reply) ->
 
-    {org}    = request.scope
-    {user}   = request.auth.credentials
-    {cardId} = request.params
-    {title}  = request.payload
+    {card}  = request.pre
+    {user}  = request.auth.credentials
+    {title} = request.payload
 
-    command = new ChangeCardTitleCommand(user, cardId, title)
+    command = new ChangeCardTitleCommand(user, card.id, title)
     @processor.execute command, (err, result) =>
-      return reply @error.notFound() if err is Error.DocumentNotFound
-      return reply @error.conflict() if err is Error.VersionMismatch
       return reply err if err?
-      reply new Response(result.card)
+      reply @response(result.card)
         
 module.exports = ChangeCardTitleHandler

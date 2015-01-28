@@ -4,15 +4,15 @@ UpdateStatement = require 'data/framework/statements/UpdateStatement'
 
 class AddCardToStackStatement extends UpdateStatement
 
-  constructor: (stackId, cardId, position) ->
+  constructor: (stackid, cardid, position) ->
 
     if position is 'prepend'
-      arg = r.row('cards').prepend(cardId)
+      arg = r.row('cards').prepend(cardid)
     else if position is 'append'
-      arg = r.row('cards').append(cardId)
+      arg = r.row('cards').append(cardid)
     else
-      arg = r.row('cards').insertAt(position, cardId)
+      arg = r.row('cards').insertAt(position, cardid)
 
-    super(Stack, stackId, {cards: arg})
+    super(Stack, stackid, {cards: arg})
 
 module.exports = AddCardToStackStatement

@@ -1,49 +1,40 @@
 _                 = require 'lodash'
 Handler           = require 'http/framework/Handler'
-Response          = require 'http/framework/Response'
-GetActionQuery    = require 'data/queries/GetActionQuery'
-MoveActionCommand = require 'domain/commands/action/MoveActionCommand'
+GetKindQuery      = require 'data/queries/kinds/GetKindQuery'
+MoveActionCommand = require 'domain/commands/actions/MoveActionCommand'
 
 class MoveActionHandler extends Handler
 
-  @route 'post /api/{orgId}/actions/{actionId}/move'
+  @route 'post /api/{orgid}/actions/{actionid}/move'
+
+  @pre [
+    'resolve org'
+    'resolve action'
+    'resolve card argument'
+    'resolve stage argument'
+    'ensure action belongs to org'
+    'ensure requester is member of org'
+    'ensure position argument is valid'
+  ]
 
   constructor: (@database, @processor) ->
 
   handle: (request, reply) ->
-    @createRequestModel request, (err, model) =>
-      return reply err if err?
-      @validate request, model, (err) =>
-        return reply err if err?
-        command = new MoveActionCommand(model.user, model.action.id, model.cardId, model.stageId, model.position)
-        @processor.execute command, (err, result) =>
-          return reply err if err?
-          reply new Response(result.action)
 
-  createRequestModel: (request, callback) ->
-    query = new GetActionQuery(request.params.actionId, {expand: 'org'})
+    {action, card, stage} = request.pre
+    {position}            = request.payload
+
+    query = new GetKindQuery(card.kind)
     @database.execute query, (err, result) =>
-      return callback(err) if err?
-      return callback @error.notFound() unless result.action?
-      action = result.action
-      callback null, {
-        user:         request.auth.credentials.user
-        action:       action
-        org: result.related.orgs[action.org]
-        cardId:       request.payload.card
-        stageId:      request.payload.stage
-        position:     request.payload.position
-      }
+      return reply err if err?
 
-  validate: (request, model, callback) ->
-    if model.action.org != request.params.orgId
-      return callback @error.unauthorized()
-    unless _.contains(model.org.members, model.user.id)
-      return callback @error.unauthorized()
-    unless model.cardId?.length > 0
-      return callback @error.badRequest()
-    unless model.stageId?.length > 0
-      return callback @error.badRequest()
-    callback()
+      kind = result.kind
+      unless _.contains(kind.stages, stage.id)
+        return reply @error.badRequest("Stage #{stage.id} is not part of the kind #{kind.id}")
+
+      command = new MoveActionCommand(request.auth.credentials.user, action.id, card.id, stage.id, position)
+      @processor.execute command, (err, result) =>
+        return reply err if err?
+        reply @response(result.action)
 
 module.exports = MoveActionHandler

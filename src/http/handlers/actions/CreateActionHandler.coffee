@@ -1,49 +1,44 @@
 _                   = require 'lodash'
 Handler             = require 'http/framework/Handler'
-Response            = require 'http/framework/Response'
-GetCardQuery        = require 'data/queries/GetCardQuery'
-CreateActionCommand = require 'domain/commands/action/CreateActionCommand'
+GetKindQuery        = require 'data/queries/kinds/GetKindQuery'
+CreateActionCommand = require 'domain/commands/actions/CreateActionCommand'
 Action              = require 'domain/documents/Action'
 
 class CreateActionHandler extends Handler
 
-  @route 'post /api/{orgId}/cards/{cardId}/actions'
+  @route 'post /api/{orgid}/cards/{cardid}/actions'
 
-  constructor: (@database, @processor) ->
+  @pre [
+    'resolve org'
+    'resolve card'
+    'ensure card belongs to org'
+    'ensure requester is member of org'
+  ]
+
+  constructor: (@processor) ->
 
   handle: (request, reply) ->
-    @createRequestModel request, (err, model) =>
-      return reply err if err?
-      @validate request, model, (err) =>
-        return reply err if err?
-        command = new CreateActionCommand(model.user, model.action, model.card.id)
-        @processor.execute command, (err, result) =>
-          return reply err if err?
-          reply new Response(result.action)
 
-  createRequestModel: (request, callback) ->
-    query = new GetCardQuery(request.params.cardId, {expand: ['org', 'kind']})
+    {org, card}   = request.pre
+    {stage, text} = request.payload
+
+    query = new GetKindQuery(card.kind)
     @database.execute query, (err, result) =>
-      return callback(err) if err?
-      return callback @error.notFound() unless result.card?
-      card = result.card
-      org = result.related.orgs[card.org]
-      kind = result.related.kinds[card.kind]
-      callback null, {
-        card:         card
-        org: org
-        kind:         kind
-        user:         request.auth.credentials.user
-        action:       new Action(org.id, card.id, request.payload.stage, request.payload.text)
+      return reply err if err?
+
+      unless _.contains(kind.stages, stage)
+        return reply @error.badRequest("Invalid stage #{stage}")
+
+      action = new Action {
+        org:   org.id
+        card:  card.id
+        stage: stage
+        text:  text
       }
 
-  validate: (request, model, callback) ->
-    if model.card.org != request.params.orgId
-      return callback @error.unauthorized()
-    unless model.action.stage?.length > 0
-      return callback @error.badRequest()
-    unless _.contains(model.kind.stages, model.action.stage)
-      return callback @error.badRequest()
-    callback()
+      command = new CreateActionCommand(request.auth.credentials.user, action)
+      @processor.execute command, (err, result) =>
+        return reply err if err?
+        reply @response(result.action)
 
 module.exports = CreateActionHandler

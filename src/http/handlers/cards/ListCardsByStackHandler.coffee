@@ -1,20 +1,25 @@
-_                       = require 'lodash'
-GetAllCardsByStackQuery = require 'data/queries/GetAllCardsByStackQuery'
 Handler                 = require 'http/framework/Handler'
-Response                = require 'http/framework/Response'
+GetAllCardsByStackQuery = require 'data/queries/cards/GetAllCardsByStackQuery'
 
 class ListCardsByStackHandler extends Handler
 
-  @route 'get /api/{orgId}/stacks/{stackId}/cards'
-  @demand ['requester is org member', 'requester is stack participant']
+  @route 'get /api/{orgid}/stacks/{stackid}/cards'
+
+  @pre [
+    'resolve org'
+    'resolve stack'
+    'resolve query options'
+    'ensure stack belongs to org'
+    'ensure requester is member of org'
+  ]
 
   constructor: (@database) ->
 
   handle: (request, reply) ->
-    {stack} = request.scope
-    query = new GetAllCardsByStackQuery(stack.id, @getQueryOptions(request))
+    {stack, options} = request.pre
+    query = new GetAllCardsByStackQuery(stack.id, options)
     @database.execute query, (err, result) =>
       return reply err if err?
-      reply new Response(result)
+      reply @response(result)
 
 module.exports = ListCardsByStackHandler

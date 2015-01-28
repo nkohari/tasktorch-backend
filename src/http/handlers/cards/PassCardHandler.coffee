@@ -1,50 +1,41 @@
-PassCardCommand            = require 'domain/commands/card/PassCardCommand'
-StackType                  = require 'domain/enums/StackType'
-GetInboxByTeamQuery        = require 'data/queries/GetInboxByTeamQuery'
-GetSpecialStackByUserQuery = require 'data/queries/GetSpecialStackByUserQuery'
 Handler                    = require 'http/framework/Handler'
-Response                   = require 'http/framework/Response'
+StackType                  = require 'domain/enums/StackType'
+GetInboxByTeamQuery        = require 'data/queries/stacks/GetInboxByTeamQuery'
+GetSpecialStackByUserQuery = require 'data/queries/stacks/GetSpecialStackByUserQuery'
+PassCardCommand            = require 'domain/commands/cards/PassCardCommand'
 
 class PassCardHandler extends Handler
 
-  @route  'put /api/{orgId}/cards/{cardId}/pass'
-  @demand 'requester is org member'
+  @route 'put /api/{orgid}/cards/{cardid}/pass'
+
+  @pre [
+    'resolve org'
+    'resolve card'
+    'resolve optional team argument'
+    'resolve optional user argument'
+    'ensure requester is member of org'
+    'ensure team belongs to org'
+    'ensure user is member of org'
+  ]
 
   constructor: (@database, @processor) ->
 
   handle: (request, reply) ->
 
-    {user} = request.auth.credentials
-    {org}  = request.scope
-    model  = @createRequestModel(request)
+    {org, team, user} = request.pre
 
-    @resolveStack org, model, (err, stack) =>
+    if team? and user?
+      return reply @error.badRequest("You cannot specify both a team and a user")
+    else if user?
+      query = new GetSpecialStackByUserQuery(org.id, user.id, StackType.Inbox)
+    else if team?
+      query = new GetInboxByTeamQuery(team.id)
+
+    @database.execute query, (err, {stack}) =>
       return reply err if err?
-      command = new PassCardCommand(user, model.card, stack.id, model.user ? null)
+      command = new PassCardCommand(request.auth.credentials.user, card, stack)
       @processor.execute command, (err, result) =>
-        return reply @error.notFound() if err is Error.DocumentNotFound
-        return reply @error.conflict() if err is Error.VersionMismatch
         return reply err if err?
-        reply new Response(result.card)
-
-  resolveStack: (org, model, callback) ->
-    if model.user?
-      query = new GetSpecialStackByUserQuery(org.id, model.user, StackType.Inbox)
-    else if model.team?
-      query = new GetInboxByTeamQuery(model.team)
-    else
-      return callback @error.badRequest()
-    @database.execute query, (err, result) =>
-      return callback(err) if err?
-      return callback @error.badRequest() unless result.stack?
-      callback(null, result.stack)
-
-  createRequestModel: (request) ->
-    return {
-      card:    request.params.cardId
-      user:    request.payload.user
-      team:    request.payload.team
-      message: request.payload.message
-    }
+        reply @response(result.card)
 
 module.exports = PassCardHandler

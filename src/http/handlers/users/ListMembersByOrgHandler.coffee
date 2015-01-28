@@ -1,27 +1,30 @@
 Handler                  = require 'http/framework/Handler'
-Response                 = require 'http/framework/Response'
-SuggestMembersByOrgQuery = require 'data/queries/SuggestMembersByOrgQuery'
-GetAllMembersByOrgQuery  = require 'data/queries/GetAllMembersByOrgQuery'
+SuggestMembersByOrgQuery = require 'data/queries/users/SuggestMembersByOrgQuery'
+GetAllMembersByOrgQuery  = require 'data/queries/users/GetAllMembersByOrgQuery'
 
 class ListMembersByOrgHandler extends Handler
 
-  @route 'get /api/{orgId}/members'
-  @demand ['requester is org member']
+  @route 'get /api/{orgid}/members'
+
+  @pre [
+    'resolve org'
+    'ensure requester is member of org'
+  ]
 
   constructor: (@database) ->
 
   handle: (request, reply) ->
     
-    {org} = request.scope
-    options = @getQueryOptions(request)
+    {org, options} = request.pre
+    {suggest}      = request.query
 
-    if request.query.suggest?
-      query = new SuggestMembersByOrgQuery(org.id, request.query.suggest, options)
+    if suggest?.length > 0
+      query = new SuggestMembersByOrgQuery(org.id, suggest, options)
     else
       query = new GetAllMembersByOrgQuery(org.id, options)
 
     @database.execute query, (err, result) =>
       return reply err if err?
-      reply new Response(result)
+      reply @response(result)
 
 module.exports = ListMembersByOrgHandler

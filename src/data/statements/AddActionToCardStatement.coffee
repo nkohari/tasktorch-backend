@@ -4,22 +4,22 @@ UpdateStatement = require 'data/framework/statements/UpdateStatement'
 
 class AddActionToCardStatement extends UpdateStatement
 
-  constructor: (actionId, cardId, stageId, position) ->
+  constructor: (actionid, cardid, stageid, position) ->
 
     patch = (card) -> {
       version: card('version').add(1)
       actions: card('actions').merge((actions) ->
-        expr = actions(stageId).default([])
+        expr = actions(stageid).default([])
         if position is 'prepend'
-          expr = expr.prepend(actionId)
+          expr = expr.prepend(actionid)
         else if position is 'append'
-          expr = expr.append(actionId)
+          expr = expr.append(actionid)
         else
-          expr = expr.insertAt(position, actionId) 
-        r.object(stageId, expr)
+          expr = expr.insertAt(position, actionid) 
+        r.object(stageid, expr)
       )
     }
 
-    super(Card, cardId, patch)
+    super(Card, cardid, patch)
 
 module.exports = AddActionToCardStatement

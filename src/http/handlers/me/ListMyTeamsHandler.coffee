@@ -1,21 +1,26 @@
-_                              = require 'lodash'
-Response                       = require 'http/framework/Response'
 Handler                        = require 'http/framework/Handler'
-GetAllTeamsByOrgAndMemberQuery = require 'data/queries/GetAllTeamsByOrgAndMemberQuery'
+GetAllTeamsByOrgAndMemberQuery = require 'data/queries/teams/GetAllTeamsByOrgAndMemberQuery'
 
 class ListMyTeamsHandler extends Handler
 
-  @route 'get /api/{orgId}/me/teams'
-  @demand 'requester is org member'
+  @route 'get /api/{orgid}/me/teams'
+
+  @pre [
+    'resolve org'
+    'resolve query options'
+    'ensure requester is member of org'
+  ]
 
   constructor: (@database) ->
 
   handle: (request, reply) ->
-    {org} = request.scope
-    {user} = request.auth.credentials
-    query = new GetAllTeamsByOrgAndMemberQuery(org.id, user.id, @getQueryOptions(request))
+
+    {org, options} = request.pre
+    {user}         = request.auth.credentials
+
+    query = new GetAllTeamsByOrgAndMemberQuery(org.id, user.id, options)
     @database.execute query, (err, result) =>
       return reply err if err?
-      reply new Response(result)
+      reply @response(result)
 
 module.exports = ListMyTeamsHandler

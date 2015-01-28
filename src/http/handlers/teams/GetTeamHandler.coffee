@@ -1,19 +1,28 @@
 Handler      = require 'http/framework/Handler'
-Response     = require 'http/framework/Response'
-GetTeamQuery = require 'data/queries/GetTeamQuery'
+GetTeamQuery = require 'data/queries/teams/GetTeamQuery'
 
 class GetTeamHandler extends Handler
 
-  @route 'get /api/{orgId}/teams/{teamId}'
-  @demand ['requester is org member', 'team belongs to org']
+  @route 'get /api/{orgid}/teams/{teamid}'
+
+  @pre [
+    'resolve org'
+    'resolve query options'
+    'ensure requester is member of org'
+  ]
 
   constructor: (@database) ->
 
   handle: (request, reply) ->
-    {teamId} = request.params
-    query = new GetTeamQuery(teamId, @getQueryOptions(request))
+
+    {org, options} = request.pre
+    {teamid}       = request.params
+
+    query = new GetTeamQuery(teamid, options)
     @database.execute query, (err, result) =>
       return reply err if err?
-      reply new Response(result)
+      return reply @error.notFound() unless result.team?
+      return reply @error.notFound() unless result.team.org == org.id
+      reply @response(result)
 
 module.exports = GetTeamHandler

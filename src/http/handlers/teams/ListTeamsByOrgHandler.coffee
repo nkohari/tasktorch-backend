@@ -1,27 +1,31 @@
-_                      = require 'lodash'
 Handler                = require 'http/framework/Handler'
-Response               = require 'http/framework/Response'
-SuggestTeamsByOrgQuery = require 'data/queries/SuggestTeamsByOrgQuery'
-GetAllTeamsByOrgQuery  = require 'data/queries/GetAllTeamsByOrgQuery'
+SuggestTeamsByOrgQuery = require 'data/queries/teams/SuggestTeamsByOrgQuery'
+GetAllTeamsByOrgQuery  = require 'data/queries/teams/GetAllTeamsByOrgQuery'
 
 class ListTeamsByOrgHandler extends Handler
 
-  @route 'get /api/{orgId}/teams'
-  @demand ['requester is org member']
+  @route 'get /api/{orgid}/teams'
+
+  @pre [
+    'resolve org'
+    'resolve query options'
+    'ensure requester is member of org'
+  ]
 
   constructor: (@database) ->
 
   handle: (request, reply) ->
-    {org} = request.scope
-    options = @getQueryOptions(request)
 
-    if request.query.suggest?
-      query = new SuggestTeamsByOrgQuery(org.id, request.query.suggest, options)
+    {org, options} = request.pre
+    {suggest}      = request.query
+
+    if suggest?.length > 0
+      query = new SuggestTeamsByOrgQuery(org.id, suggest, options)
     else
       query = new GetAllTeamsByOrgQuery(org.id, options)
 
     @database.execute query, (err, result) =>
       return reply err if err?
-      reply new Response(result)
+      reply @response(result)
 
 module.exports = ListTeamsByOrgHandler

@@ -7,19 +7,11 @@ Header = require './framework/Header'
 class ApiServer
 
   constructor: (@forge, @config, @log, @authenticator) ->
-    @server = new Hapi.Server @config.http.port,
-      tls: @getTlsConfig()
-      json: {space: 2}
+    @server = new Hapi.Server()
+    @server.connection(@config.http)
     @server.ext 'onRequest',     @onRequest.bind(this)
-    @server.on  'internalError', @onError.bind(this)
+    @server.on  'request-error', @onError.bind(this)
     @authenticator.init(@server)
-
-  getTlsConfig: ->
-    {key, cert} = @config.security.ssl
-    return {
-      key:  fs.readFileSync(key)
-      cert: fs.readFileSync(cert)
-    }
 
   start: ->
     handlers = @forge.getAll('handler')
@@ -29,36 +21,33 @@ class ApiServer
 
   register: (handler) ->
 
-    options = handler.constructor.options
-    route   = options.route
-    config  = options.config ? {}
+    {name, options} = handler.constructor
+    {verb, path}    = options.route
 
-    if options.prereqs?
-      config.pre = _.map options.prereqs, (component, assign) =>
-        prereq = @forge.get('prereq', component)
-        {method: prereq.execute.bind(prereq), assign: assign}
+    config = _.extend {
+      json: {space: 2}
+    }, options.config
 
-    # TODO: Move demands into prereqs?
-    if options.demand?
-      demands = _.flatten [options.demand]
-      config.pre ?= []
-      config.pre = config.pre.concat _.map demands, (name) =>
-        demand = @forge.get('demand', name)
-        demand.execute.bind(demand)
+    if options.pre?
+      config.pre = _.map options.pre, (name) =>
+        pre = @forge.get('precondition', name)
+        return {
+          method: pre.execute.bind(pre)
+          assign: pre.assign ? undefined
+        }
 
-    @server.route
-      method:  route.verb
-      path:    route.path
+    @server.route {
+      method:  verb
+      path:    path
       handler: handler.handle.bind(handler)
       config:  config
+    }
 
-    @log.debug "Mounted #{handler.constructor.name} at #{route.verb} #{route.path}"
+    @log.debug "Mounted #{name} at #{verb} #{path}"
 
-  onRequest: (request, next) ->
+  onRequest: (request, reply) ->
     
     request.baseUrl = "http://#{request.headers[Header.Host]}/api"
-    request.scope   = {}
-    request.socket  = request.headers[Header.Socket]
 
     ifMatch = request.headers[Header.IfMatch]
     if ifMatch?.length > 0
@@ -67,7 +56,7 @@ class ApiServer
       catch err
         # Ignore if malformed
 
-    next()
+    reply.continue()
 
   onError: (request, err) ->
     @log.error "Request failed with error: #{err}"

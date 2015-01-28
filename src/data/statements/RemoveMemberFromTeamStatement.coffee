@@ -4,8 +4,8 @@ UpdateStatement = require 'data/framework/statements/UpdateStatement'
 
 class RemoveMemberFromTeamStatement extends UpdateStatement
 
-  constructor: (teamId, userId) ->
-    patch = {members: r.row('members').setDifference([userId])}
-    super(Team, teamId, patch)
+  constructor: (teamid, userid) ->
+    patch = {members: r.row('members').setDifference([userid])}
+    super(Team, teamid, patch)
 
 module.exports = RemoveMemberFromTeamStatement

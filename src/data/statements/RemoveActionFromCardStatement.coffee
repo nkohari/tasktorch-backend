@@ -5,13 +5,13 @@ BulkUpdateStatement = require 'data/framework/statements/BulkUpdateStatement'
 
 class RemoveActionFromCardStatement extends BulkUpdateStatement
 
-  constructor: (actionId) ->
-    match = r.table(Card.table).getAll(actionId, {index: 'actions'})
+  constructor: (actionid) ->
+    match = r.table(Card.table).getAll(actionid, {index: 'actions'})
     patch = (card) -> {
       version: card('version').add(1)
       actions: card('actions').merge((actions) ->
         actions.keys().map((key) ->
-          r.expr [key, actions(key).setDifference([actionId])]
+          r.expr [key, actions(key).setDifference([actionid])]
         ).coerceTo('object')
       )
     }

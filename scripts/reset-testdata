@@ -1,0 +1,16 @@
+#!/usr/bin/env ./node_modules/coffee-script/bin/coffee
+
+TestData = require 'test/framework/TestData'
+
+dbname = process.argv[2]
+unless dbname?.length > 0
+  console.error "Usage: reset-testdata <dbname>"
+  process.exit(1)
+
+console.log "Resetting test data in database #{dbname}"
+TestData.reset dbname, (err) ->
+  if err?
+    console.error "Error deleting data: #{err}"
+    process.exit(1)
+  console.log "Test data reset successfully"
+  process.exit(0)

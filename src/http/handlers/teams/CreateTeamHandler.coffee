@@ -1,42 +1,46 @@
-async             = require 'async'
 _                 = require 'lodash'
 Handler           = require 'http/framework/Handler'
-Response          = require 'http/framework/Response'
-CreateTeamCommand = require 'domain/commands/team/CreateTeamCommand'
 Team              = require 'domain/documents/Team'
+CreateTeamCommand = require 'domain/commands/teams/CreateTeamCommand'
 
 class CreateTeamHandler extends Handler
 
-  @route 'post /api/{orgId}/teams'
+  @route 'post /api/{orgid}/teams'
 
-  @prereqs {
-    org:     'ResolveOrg'
-    members: 'ResolveMembersArgument'
-    leaders: 'ResolveLeadersArgument'
-  }
+  @pre [
+    'resolve org'
+    'resolve members argument'
+    'resolve leaders argument'
+    'ensure requester is member of org'
+  ]
 
   constructor: (@log, @processor) ->
 
   handle: (request, reply) ->
 
-    unless _.contains(request.pre.org.members, request.auth.credentials.user.id)
-      return @error.forbidden()
+    {org, members, leaders} = request.pre
+    {user}                  = request.auth.credentials
+    {name}                  = request.payload
 
-    # TODO: Check members and leaders to ensure they are org members
+    unless name?.length > 0
+      return @error.badRequest("Missing required argument 'name'")
 
-    unless request.payload.name?.length > 0
-      return @error.badRequest()
+    if members?.length > 0 and not _.every(members, (u) -> _.contains(org.members, u.id))
+      return @error.badRequest("All users in the 'members' list must be members of the organization")
+
+    if leaders?.length > 0 and not _.every(leaders, (u) -> _.contains(org.members, u.id))
+      return @error.badRequest("All users in the 'leaders' list must be members of the organization")
 
     team = new Team {
-      org:     request.pre.org.id
-      name:    request.payload.name
-      members: _.pluck(request.pre.members, 'id')
-      leaders: _.pluck(request.pre.leaders, 'id')
+      org:     org.id
+      name:    name
+      members: _.pluck(members, 'id')
+      leaders: _.pluck(leaders, 'id')
     }
 
-    command = new CreateTeamCommand(request.auth.credentials.user, team)
+    command = new CreateTeamCommand(user, team)
     @processor.execute command, (err, result) =>
       return reply err if err?
-      return reply new Response(result.team)
+      return reply @response(result.team)
 
 module.exports = CreateTeamHandler

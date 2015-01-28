@@ -1,20 +1,25 @@
-_                        = require 'lodash'
-GetAllActionsByCardQuery = require 'data/queries/GetAllActionsByCardQuery'
 Handler                  = require 'http/framework/Handler'
-Response                 = require 'http/framework/Response'
+GetAllActionsByCardQuery = require 'data/queries/actions/GetAllActionsByCardQuery'
 
 class ListActionsByCardHandler extends Handler
 
-  @route 'get /api/{orgId}/cards/{cardId}/actions'
-  @demand ['requester is org member']
+  @route 'get /api/{orgid}/cards/{cardid}/actions'
+
+  @pre [
+    'resolve org'
+    'resolve card'
+    'resolve query options'
+    'ensure card belongs to org'
+    'ensure requester is member of org'
+  ]
 
   constructor: (@database) ->
 
   handle: (request, reply) ->
-    {cardId} = request.params
-    query = new GetAllActionsByCardQuery(cardId, @getQueryOptions(request))
+    {card, options} = request.pre
+    query = new GetAllActionsByCardQuery(card.id, options)
     @database.execute query, (err, result) =>
       return reply err if err?
-      reply new Response(result)
+      reply @response(result)
 
 module.exports = ListActionsByCardHandler
