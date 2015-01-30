@@ -8,9 +8,10 @@ class Goal extends Document
 
   @field  'id'
   @field  'version'
-  @field  'status', {default: DocumentStatus.Normal}
+  @field  'status',  {default: DocumentStatus.Normal}
   @field  'name'
+  @field  'deadline'
 
-  @hasOne 'org',    {type: 'Org'}
+  @hasOne 'org',     {type: 'Org'}
 
 module.exports = Goal

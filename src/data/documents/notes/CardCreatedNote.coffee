@@ -8,6 +8,7 @@ class CardCreatedNote
       user: user.id
       org:  card.org
       card: card.id
+      content: {}
     }
 
 module.exports = CardCreatedNote

@@ -9,11 +9,11 @@ class Action extends Document
   @field   'id'
   @field   'version'
   @field   'status', {default: ActionStatus.NotStarted}
-  @field   'text'
+  @field   'text',   {default: null}
 
   @hasOne  'card',   {type: 'Card'}
   @hasOne  'org',    {type: 'Org'}
-  @hasOne  'owner',  {type: 'User'}
+  @hasOne  'owner',  {type: 'User', default: null}
   @hasMany 'stage',  {type: 'Stage'}
 
 module.exports = Action

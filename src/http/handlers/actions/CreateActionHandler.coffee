@@ -15,7 +15,7 @@ class CreateActionHandler extends Handler
     'ensure requester is member of org'
   ]
 
-  constructor: (@processor) ->
+  constructor: (@database, @processor) ->
 
   handle: (request, reply) ->
 
@@ -26,6 +26,7 @@ class CreateActionHandler extends Handler
     @database.execute query, (err, result) =>
       return reply err if err?
 
+      {kind} = result
       unless _.contains(kind.stages, stage)
         return reply @error.badRequest("Invalid stage #{stage}")
 

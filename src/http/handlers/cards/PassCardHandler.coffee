@@ -22,7 +22,7 @@ class PassCardHandler extends Handler
 
   handle: (request, reply) ->
 
-    {org, team, user} = request.pre
+    {card, org, team, user} = request.pre
 
     if team? and user?
       return reply @error.badRequest("You cannot specify both a team and a user")
@@ -31,8 +31,9 @@ class PassCardHandler extends Handler
     else if team?
       query = new GetInboxByTeamQuery(team.id)
 
-    @database.execute query, (err, {stack}) =>
+    @database.execute query, (err, result) =>
       return reply err if err?
+      {stack} = result
       command = new PassCardCommand(request.auth.credentials.user, card, stack)
       @processor.execute command, (err, result) =>
         return reply err if err?

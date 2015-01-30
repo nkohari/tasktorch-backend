@@ -14,6 +14,7 @@ class Team extends Document
   @hasOne  'org',     {type: 'Org'}
   @hasMany 'leaders', {type: 'User', default: []}
   @hasMany 'members', {type: 'User', default: []}
-  @hasMany 'stacks',  {type: 'Stack', default: []}
+
+  @hasManyForeign 'stacks', {type: 'Stack', index: 'team'}
 
 module.exports = Team

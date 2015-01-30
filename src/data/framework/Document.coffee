@@ -34,7 +34,8 @@ class Document
       throw new Error("Unknown properties assigned to #{@constructor.name} document: #{unknowns.join(', ')}")
 
     for name, property of properties
-      @[name] = data[name] ? property.default
+      unless property.isForeign
+        @[name] = data[name] ? property.default
 
   getSchema: ->
     Schema.get(@constructor.name)

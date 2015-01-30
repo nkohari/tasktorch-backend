@@ -24,9 +24,11 @@ class CreateCardHandler extends Handler
     {user}      = request.auth.credentials
 
     query = new GetSpecialStackByUserQuery(org.id, user.id, StackType.Drafts)
-    @database.execute query, (err, {stack}) =>
+    @database.execute query, (err, result) =>
       return reply err if err?
 
+      {stack} = result
+      
       card = new Card {
         org:       org.id
         creator:   user.id

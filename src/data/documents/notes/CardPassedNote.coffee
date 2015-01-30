@@ -13,7 +13,7 @@ class CardPassedNote
           owner: previous.owner ? null
           stack: previous.stack
         to:
-          owner: card.owner? null
+          owner: card.owner ? null
           stack: card.stack
     }
 
