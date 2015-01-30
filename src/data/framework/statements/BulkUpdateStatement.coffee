@@ -1,12 +1,12 @@
 _         = require 'lodash'
 r         = require 'rethinkdb'
-Document  = require 'data/Document'
-Error     = require 'data/Error'
-Statement = require './Statement'
+Error     = require 'data/framework/Error'
+Statement = require 'data/framework/statements/Statement'
 
 class BulkUpdateStatement extends Statement
 
-  constructor: (@schema, match, patch) ->
+  constructor: (@doctype, match, patch) ->
+    super(doctype)
     patch = _.extend patch, {version: r.row('version').add(1)}
     @rql = match.update(patch, {returnChanges: true})
 
@@ -14,7 +14,7 @@ class BulkUpdateStatement extends Statement
     @rql.run conn, (err, response) =>
       return callback(err) if err?
       return callback(response.first_error) if response.first_error?
-      documents = _.map response.changes, (change) => new Document(@schema, change.new_val)
+      documents = _.map response.changes, (change) => new @doctype(change.new_val)
       callback(null, documents)
 
 module.exports = BulkUpdateStatement

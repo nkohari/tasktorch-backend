@@ -1,6 +1,6 @@
 _     = require 'lodash'
 r     = require 'rethinkdb'
-Stack = require 'data/schemas/Stack'
+Stack = require 'data/documents/Stack'
 Query = require 'data/framework/queries/Query'
 
 class GetSpecialStackByUserQuery extends Query

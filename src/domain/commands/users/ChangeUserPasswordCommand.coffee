@@ -1,5 +1,5 @@
-Command             = require 'domain/Command'
-CommandResult       = require 'domain/CommandResult'
+Command             = require 'domain/framework/Command'
+CommandResult       = require 'domain/framework/CommandResult'
 UpdateUserStatement = require 'data/statements/UpdateUserStatement'
 
 class ChangeUserPasswordCommand extends Command

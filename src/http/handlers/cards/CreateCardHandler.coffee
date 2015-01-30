@@ -1,7 +1,7 @@
 _                          = require 'lodash'
 Handler                    = require 'http/framework/Handler'
-Card                       = require 'domain/documents/Card'
-StackType                  = require 'domain/enums/StackType'
+Card                       = require 'data/documents/Card'
+StackType                  = require 'data/enums/StackType'
 GetSpecialStackByUserQuery = require 'data/queries/stacks/GetSpecialStackByUserQuery'
 CreateCardCommand          = require 'domain/commands/cards/CreateCardCommand'
 

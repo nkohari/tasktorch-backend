@@ -1,5 +1,5 @@
 crypto = require 'crypto'
-Model  = require 'domain/Model'
+Model  = require 'domain/framework/Model'
 
 class UserModel extends Model
 

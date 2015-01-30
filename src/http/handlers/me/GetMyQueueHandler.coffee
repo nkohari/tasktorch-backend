@@ -1,5 +1,5 @@
 Handler                    = require 'http/framework/Handler'
-StackType                  = require 'domain/enums/StackType'
+StackType                  = require 'data/enums/StackType'
 GetSpecialStackByUserQuery = require 'data/queries/stacks/GetSpecialStackByUserQuery'
 
 class GetMyQueueHandler extends Handler

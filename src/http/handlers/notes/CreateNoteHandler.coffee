@@ -1,5 +1,5 @@
 Handler           = require 'http/framework/Handler'
-CommentNote       = require 'domain/documents/notes/CommentNote'
+CommentNote       = require 'data/documents/notes/CommentNote'
 CreateNoteCommand = require 'domain/commands/notes/CreateNoteCommand'
 
 class CreateNoteHandler extends Handler
@@ -29,7 +29,7 @@ class CreateNoteHandler extends Handler
       when 'Comment'
         unless content?.length > 0
           return reply @error.badRequest("Missing required argument 'content'")
-        note = new CommentNote(user, card, content)
+        note = CommentNote.create(user, card, content)
       else
         return reply @error.badRequest()
 

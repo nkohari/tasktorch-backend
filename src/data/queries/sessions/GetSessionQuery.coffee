@@ -1,5 +1,5 @@
 GetQuery = require 'data/framework/queries/GetQuery'
-Session  = require 'data/schemas/Session'
+Session  = require 'data/documents/Session'
 
 class GetSessionQuery extends GetQuery
 

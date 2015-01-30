@@ -1,5 +1,5 @@
-Command             = require 'domain/Command'
-CommandResult       = require 'domain/CommandResult'
+Command             = require 'domain/framework/Command'
+CommandResult       = require 'domain/framework/CommandResult'
 CreateNoteStatement = require 'data/statements/CreateNoteStatement'
 
 class CreateNoteCommand extends Command
@@ -14,7 +14,6 @@ class CreateNoteCommand extends Command
       return callback(err) if err?
       result.messages.created(note)
       result.note = note
-      console.log "CREATED"
       callback(null, result)
 
 module.exports = CreateNoteCommand

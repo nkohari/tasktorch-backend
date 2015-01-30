@@ -1,5 +1,5 @@
 r     = require 'rethinkdb'
-Team  = require 'data/schemas/Team'
+Team  = require 'data/documents/Team'
 Query = require 'data/framework/queries/Query'
 
 class SuggestTeamsByOrgQuery extends Query
@@ -7,7 +7,7 @@ class SuggestTeamsByOrgQuery extends Query
   constructor: (orgid, phrase, options) ->
     super(Team, options)
     expression = "(?i)^#{phrase}"
-    @rql = r.table(Team.table).getAll(orgid, {index: 'org'})
+    @rql = r.table(@schema.table).getAll(orgid, {index: 'org'})
       .filter (team) -> team('name').match(expression)
       .coerceTo('array')
 

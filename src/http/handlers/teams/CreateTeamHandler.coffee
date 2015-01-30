@@ -1,6 +1,6 @@
 _                 = require 'lodash'
 Handler           = require 'http/framework/Handler'
-Team              = require 'domain/documents/Team'
+Team              = require 'data/documents/Team'
 CreateTeamCommand = require 'domain/commands/teams/CreateTeamCommand'
 
 class CreateTeamHandler extends Handler

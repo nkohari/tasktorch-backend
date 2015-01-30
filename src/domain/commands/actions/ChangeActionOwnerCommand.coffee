@@ -1,7 +1,7 @@
-Command                = require 'domain/Command'
-CommandResult          = require 'domain/CommandResult'
+Command                = require 'domain/framework/Command'
+CommandResult          = require 'domain/framework/CommandResult'
+ActionOwnerChangedNote = require 'data/documents/notes/ActionOwnerChangedNote'
 UpdateActionStatement  = require 'data/statements/UpdateActionStatement'
-ActionOwnerChangedNote = require 'domain/documents/notes/ActionOwnerChangedNote'
 
 class ChangeActionOwnerCommand extends Command
 
@@ -17,7 +17,7 @@ class ChangeActionOwnerCommand extends Command
     conn.execute statement, (err, action, previous) =>
       return callback(err) if err?
       result.messages.changed(action)
-      result.addNote(new ActionOwnerChangedNote(@user, action, previous))
+      result.addNote(ActionOwnerChangedNote.create(@user, action, previous))
       result.action = action
       callback(null, result)
 

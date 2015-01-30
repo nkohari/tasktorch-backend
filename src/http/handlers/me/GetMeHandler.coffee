@@ -8,7 +8,6 @@ class GetMeHandler extends Handler
   constructor: (@log, @database) ->
 
   handle: (request, reply) ->
-    @log.debug 'here'
 
     {options} = request.pre
     {user}    = request.auth.credentials

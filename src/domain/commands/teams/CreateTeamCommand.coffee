@@ -1,7 +1,7 @@
-Command              = require 'domain/Command'
-CommandResult        = require 'domain/CommandResult'
-Stack                = require 'domain/documents/Stack'
-StackType            = require 'domain/enums/StackType'
+Command              = require 'domain/framework/Command'
+CommandResult        = require 'domain/framework/CommandResult'
+Stack                = require 'data/documents/Stack'
+StackType            = require 'data/enums/StackType'
 CreateTeamStatement  = require 'data/statements/CreateTeamStatement'
 CreateStackStatement = require 'data/statements/CreateStackStatement'
 

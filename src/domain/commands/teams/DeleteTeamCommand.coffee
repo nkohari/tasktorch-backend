@@ -1,8 +1,7 @@
-Command                       = require 'domain/Command'
-CommandResult                 = require 'domain/CommandResult'
+Command                       = require 'domain/framework/Command'
+CommandResult                 = require 'domain/framework/CommandResult'
 DeleteTeamStatement           = require 'data/statements/DeleteTeamStatement'
 RemoveCardFromStacksStatement = require 'data/statements/RemoveCardFromStacksStatement'
-CardDeletedNote               = require 'domain/documents/notes/CardDeletedNote'
 
 class DeleteTeamCommand extends Command
 

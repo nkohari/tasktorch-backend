@@ -1,4 +1,4 @@
-Org                = require 'data/schemas/Org'
+Org                = require 'data/documents/Org'
 GetAllByIndexQuery = require 'data/framework/queries/GetAllByIndexQuery'
 
 class GetAllOrgsByMemberQuery extends GetAllByIndexQuery

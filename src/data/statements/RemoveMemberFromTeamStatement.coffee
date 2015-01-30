@@ -1,5 +1,5 @@
 r               = require 'rethinkdb'
-Team            = require 'data/schemas/Team'
+Team            = require 'data/documents/Team'
 UpdateStatement = require 'data/framework/statements/UpdateStatement'
 
 class RemoveMemberFromTeamStatement extends UpdateStatement

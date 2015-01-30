@@ -1,7 +1,7 @@
 _         = require 'lodash'
 path      = require 'path'
 loadFiles = require 'common/util/loadFiles'
-Model     = require 'domain/Model'
+Model     = require 'domain/framework/Model'
 
 CLASSES = undefined
 getClassHash = ->

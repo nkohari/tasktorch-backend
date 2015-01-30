@@ -1,5 +1,5 @@
 MultiGetQuery = require 'data/framework/queries/MultiGetQuery'
-User          = require 'data/schemas/User'
+User          = require 'data/documents/User'
 
 class MultiGetUsersQuery extends MultiGetQuery
 

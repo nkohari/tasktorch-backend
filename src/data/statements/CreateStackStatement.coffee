@@ -1,4 +1,4 @@
-Stack           = require 'data/schemas/Stack'
+Stack           = require 'data/documents/Stack'
 CreateStatement = require 'data/framework/statements/CreateStatement'
 
 class CreateStackStatement extends CreateStatement

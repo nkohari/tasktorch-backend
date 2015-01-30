@@ -1,5 +1,8 @@
 class Statement
 
+  constructor: (@doctype) ->
+    @schema = @doctype.getSchema()
+
   prepare: (conn, callback) ->
     callback()
 

@@ -1,4 +1,4 @@
-Team            = require 'data/schemas/Team'
+Team            = require 'data/documents/Team'
 CreateStatement = require 'data/framework/statements/CreateStatement'
 
 class CreateTeamStatement extends CreateStatement

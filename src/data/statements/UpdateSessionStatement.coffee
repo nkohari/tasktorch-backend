@@ -1,4 +1,4 @@
-Session         = require 'data/schemas/Session'
+Session         = require 'data/documents/Session'
 UpdateStatement = require 'data/framework/statements/UpdateStatement'
 
 class UpdateSessionStatement extends UpdateStatement

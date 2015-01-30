@@ -3,8 +3,8 @@ Query = require './Query'
 
 class MultiGetQuery extends Query
 
-  constructor: (schema, ids, options) ->
-    super(schema, options)
+  constructor: (doctype, ids, options) ->
+    super(doctype, options)
     @rql = r.table(@schema.table).getAll(r.args(ids), {index: 'id'}).default([]).coerceTo('array')
 
 module.exports = MultiGetQuery

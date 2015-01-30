@@ -1,16 +1,15 @@
-RelationType = require 'data/RelationType'
-
 # TODO: This is pretty janky, but it works. Revisit to reorganize.
 
 CLASSES = {}
-CLASSES[RelationType.HasOne]         = require './expansions/HasOneExpansion'
-CLASSES[RelationType.HasMany]        = require './expansions/HasManyExpansion'
-CLASSES[RelationType.HasManyForeign] = require './expansions/HasManyForeignExpansion'
+CLASSES['HasOneRelation']         = require './expansions/HasOneExpansion'
+CLASSES['HasManyRelation']        = require './expansions/HasManyExpansion'
+CLASSES['HasManyForeignRelation'] = require './expansions/HasManyForeignExpansion'
 
-createExpansion = (field, relation, children) ->
-  klass = CLASSES[relation.type]
-  throw new Error("Cannot create expansion for unknown relation type #{relation.type}") unless klass?
-  return new klass(field, relation, children)
+createExpansion = (field, property, children) ->
+  klass = CLASSES[property.constructor.name]
+  unless klass?
+    throw new Error("Cannot create expansion for property of type #{property.constructor.name}")
+  return new klass(field, property, children)
 
 createPathTree = (paths) ->
   tree = {}
@@ -23,10 +22,11 @@ createPathTree = (paths) ->
 buildExpansionTree = (schema, paths) ->
   tree = {}
   for field, subpaths of paths
-    relation = schema.relations[field]
-    throw new Error("Schema #{schema.name} does not define a relation named #{field}") unless relation?
-    children = buildExpansionTree(relation.getSchema(), subpaths)
-    expansion = createExpansion(field, relation, children)
+    property = schema.getProperty(field)
+    unless property?
+      throw new Error("Schema #{schema.name} does not define a property named #{field}")
+    children  = buildExpansionTree(property.getSchema(), subpaths)
+    expansion = createExpansion(field, property, children)
     tree[field] = expansion
   return tree
 

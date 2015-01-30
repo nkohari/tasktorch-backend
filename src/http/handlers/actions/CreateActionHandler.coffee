@@ -1,8 +1,8 @@
 _                   = require 'lodash'
 Handler             = require 'http/framework/Handler'
+Action              = require 'data/documents/Action'
 GetKindQuery        = require 'data/queries/kinds/GetKindQuery'
 CreateActionCommand = require 'domain/commands/actions/CreateActionCommand'
-Action              = require 'domain/documents/Action'
 
 class CreateActionHandler extends Handler
 

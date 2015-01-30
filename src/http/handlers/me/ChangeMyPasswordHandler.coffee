@@ -3,7 +3,7 @@ ChangeUserPasswordCommand = require 'domain/commands/users/ChangeUserPasswordCom
 
 class ChangeMyPasswordHandler extends Handler
 
-  @route 'put /api/me/password'
+  @route 'post /api/me/password'
   
   constructor: (@processor, @passwordHasher) ->
 

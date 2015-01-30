@@ -1,5 +1,5 @@
 GetQuery = require 'data/framework/queries/GetQuery'
-Action   = require 'data/schemas/Action'
+Action   = require 'data/documents/Action'
 
 class GetActionQuery extends GetQuery
 

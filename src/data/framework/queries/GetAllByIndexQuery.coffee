@@ -4,8 +4,8 @@ Query = require './Query'
 
 class GetAllByIndexQuery extends Query
 
-  constructor: (schema, tuple, options) ->
-    super(schema, options)
+  constructor: (doctype, tuple, options) ->
+    super(doctype, options)
     index = _.first _.keys(tuple)
     value = tuple[index]
     @rql  = r.table(@schema.table).getAll(value, {index}).default([]).coerceTo('array')

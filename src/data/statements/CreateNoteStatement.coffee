@@ -1,4 +1,4 @@
-Note            = require 'data/schemas/Note'
+Note            = require 'data/documents/Note'
 CreateStatement = require 'data/framework/statements/CreateStatement'
 
 class CreateNoteStatement extends CreateStatement

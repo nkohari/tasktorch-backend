@@ -1,14 +1,14 @@
 _         = require 'lodash'
 r         = require 'rethinkdb'
-Stack     = require 'data/schemas/Stack'
+Stack     = require 'data/documents/Stack'
 Query     = require 'data/framework/queries/Query'
-StackType = require 'domain/enums/StackType'
+StackType = require 'data/enums/StackType'
 
 class GetInboxByTeamQuery extends Query
 
   constructor: (teamid, options) ->
     super(Stack, options)
-    @rql = r.table(Stack.table).getAll(teamid, {index: 'team'})
+    @rql = r.table(@schema.table).getAll(teamid, {index: 'team'})
       .filter({type: StackType.Inbox})
       .limit(1)
       .coerceTo('array').do (result) ->

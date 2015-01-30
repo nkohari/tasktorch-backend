@@ -1,4 +1,4 @@
-Card            = require 'data/schemas/Card'
+Card            = require 'data/documents/Card'
 UpdateStatement = require 'data/framework/statements/UpdateStatement'
 
 class UpdateCardStatement extends UpdateStatement

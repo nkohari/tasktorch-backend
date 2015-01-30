@@ -1,7 +1,7 @@
 r                 = require 'rethinkdb'
 GetAllByListQuery = require 'data/framework/queries/GetAllByListQuery'
-Card              = require 'data/schemas/Card'
-Stack             = require 'data/schemas/Stack'
+Card              = require 'data/documents/Card'
+Stack             = require 'data/documents/Stack'
 
 class GetAllCardsByStackQuery extends GetAllByListQuery
 

@@ -1,6 +1,6 @@
 Handler                   = require 'http/framework/Handler'
 ChangeActionStatusCommand = require 'domain/commands/actions/ChangeActionStatusCommand'
-ActionStatus              = require 'domain/enums/ActionStatus'
+ActionStatus              = require 'data/enums/ActionStatus'
 
 class ChangeActionStatusHandler extends Handler
 

@@ -1,4 +1,4 @@
-Action          = require 'data/schemas/Action'
+Action          = require 'data/documents/Action'
 DeleteStatement = require 'data/framework/statements/DeleteStatement'
 
 class DeleteActionStatement extends DeleteStatement

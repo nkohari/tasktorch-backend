@@ -1,5 +1,5 @@
 Handler            = require 'http/framework/Handler'
-StackType          = require 'domain/enums/StackType'
+StackType          = require 'data/enums/StackType'
 DeleteStackCommand = require 'domain/commands/stacks/DeleteStackCommand'
 
 class DeleteStackHandler extends Handler

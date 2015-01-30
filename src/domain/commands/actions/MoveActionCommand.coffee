@@ -1,10 +1,10 @@
 r                             = require 'rethinkdb'
-Command                       = require 'domain/Command'
-CommandResult                 = require 'domain/CommandResult'
+Command                       = require 'domain/framework/Command'
+CommandResult                 = require 'domain/framework/CommandResult'
+ActionMovedNote               = require 'data/documents/notes/ActionMovedNote'
 RemoveActionFromCardStatement = require 'data/statements/RemoveActionFromCardStatement'
 AddActionToCardStatement      = require 'data/statements/AddActionToCardStatement'
 UpdateActionStatement         = require 'data/statements/UpdateActionStatement'
-ActionMovedNote               = require 'domain/documents/notes/ActionMovedNote'
 
 # TODO: This allows for movement from multiple previous cards. This is only
 # to allow the data to self-heal in the case of multiple simultaneous
@@ -33,7 +33,7 @@ class MoveActionCommand extends Command
         conn.execute statement, (err, action, previous) =>
           return callback(err) if err?
           result.messages.changed(action)
-          result.addNote(new ActionMovedNote(@user, action, previous))
+          result.addNote(ActionMovedNote.create(@user, action, previous))
           result.action = action
           callback(null, result)
 

@@ -1,5 +1,5 @@
 GetQuery = require 'data/framework/queries/GetQuery'
-Org      = require 'data/schemas/Org'
+Org      = require 'data/documents/Org'
 
 class GetOrgQuery extends GetQuery
 

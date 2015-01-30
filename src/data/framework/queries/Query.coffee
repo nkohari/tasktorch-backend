@@ -1,17 +1,17 @@
 util                 = require 'util'
 _                    = require 'lodash'
 r                    = require 'rethinkdb'
-RelationType         = require 'data/RelationType'
-DocumentStatus       = require 'data/DocumentStatus'
-QueryResult          = require 'data/QueryResult'
+DocumentStatus       = require 'data/enums/DocumentStatus'
+QueryResult          = require 'data/framework/QueryResult'
 ExpansionTreeBuilder = require 'data/framework/ExpansionTreeBuilder'
 
 class Query
 
   @requiredFields: ['id', 'status', 'version']
 
-  constructor: (@schema, @options = {}) ->
+  constructor: (@doctype, @options = {}) ->
     @expansions = []
+    @schema     = @doctype.getSchema()
     @pluck(@options.pluck)   if @options.pluck?
     @expand(@options.expand) if @options.expand?
 
@@ -32,7 +32,7 @@ class Query
       return callback(err) if err?
       @preprocessResult response, (err, result) =>
         return callback(err) if err?
-        callback null, new QueryResult(@schema, result)
+        callback null, new QueryResult(@doctype, result)
 
   preprocessResult: (result, callback) ->
     if result?.toArray?

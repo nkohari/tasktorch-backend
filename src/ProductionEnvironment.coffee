@@ -5,10 +5,10 @@ Config         = require 'common/Config'
 Log            = require 'common/Log'
 PasswordHasher = require 'common/PasswordHasher'
 Database       = require 'data/Database'
-ConnectionPool = require 'data/ConnectionPool'
+ConnectionPool = require 'data/framework/ConnectionPool'
 Processor      = require 'domain/Processor'
 ApiServer      = require 'http/ApiServer'
-Authenticator  = require 'http/Authenticator'
+Authenticator  = require 'http/framework/Authenticator'
 PusherClient   = require 'messaging/PusherClient'
 MessageBus     = require 'messaging/MessageBus'
 SearchEngine   = require 'search/SearchEngine'
@@ -36,9 +36,6 @@ class ProductionEnvironment
 
     forge.bind('searchEngine').to.type(SearchEngine)
     forge.bind('searchIndexer').to.type(SearchIndexer)
-
-    for name, type of loadFiles('data/schemas', __dirname)
-      forge.bind('schema').to.type(type).when(name)
 
     for name, type of loadFiles('http/handlers', __dirname)
       forge.bind('handler').to.type(type).when(name)

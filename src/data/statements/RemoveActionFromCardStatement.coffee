@@ -1,12 +1,12 @@
 r                   = require 'rethinkdb'
-Action              = require 'data/schemas/Action'
-Card                = require 'data/schemas/Card'
+Action              = require 'data/documents/Action'
+Card                = require 'data/documents/Card'
 BulkUpdateStatement = require 'data/framework/statements/BulkUpdateStatement'
 
 class RemoveActionFromCardStatement extends BulkUpdateStatement
 
   constructor: (actionid) ->
-    match = r.table(Card.table).getAll(actionid, {index: 'actions'})
+    match = r.table(Card.getSchema().table).getAll(actionid, {index: 'actions'})
     patch = (card) -> {
       version: card('version').add(1)
       actions: card('actions').merge((actions) ->

@@ -1,5 +1,5 @@
 r     = require 'rethinkdb'
-Team  = require 'data/schemas/Team'
+Team  = require 'data/documents/Team'
 Query = require 'data/framework/queries/Query'
 
 class GetAllTeamsByOrgAndOwnerQuery extends Query

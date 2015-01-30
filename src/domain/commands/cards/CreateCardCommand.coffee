@@ -1,6 +1,6 @@
-Command                 = require 'domain/Command'
-CommandResult           = require 'domain/CommandResult'
-CardCreatedNote         = require 'domain/documents/notes/CardCreatedNote'
+Command                 = require 'domain/framework/Command'
+CommandResult           = require 'domain/framework/CommandResult'
+CardCreatedNote         = require 'data/documents/notes/CardCreatedNote'
 CreateCardStatement     = require 'data/statements/CreateCardStatement'
 AddCardToStackStatement = require 'data/statements/AddCardToStackStatement'
 
@@ -18,7 +18,7 @@ class CreateCardCommand extends Command
       conn.execute statement, (err, stack) =>
         return callback(err) if err?
         result.messages.changed(stack)
-        result.addNote(new CardCreatedNote(@user, card))
+        result.addNote(CardCreatedNote.create(@user, card))
         result.card = card
         callback(null, result)
 

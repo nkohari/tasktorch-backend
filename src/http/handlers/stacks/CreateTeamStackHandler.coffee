@@ -1,6 +1,6 @@
 Handler            = require 'http/framework/Handler'
-Stack              = require 'domain/documents/Stack'
-StackType          = require 'domain/enums/StackType'
+Stack              = require 'data/documents/Stack'
+StackType          = require 'data/enums/StackType'
 CreateStackCommand = require 'domain/commands/stacks/CreateStackCommand'
 
 class CreateTeamStackHandler extends Handler

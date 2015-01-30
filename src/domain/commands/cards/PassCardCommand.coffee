@@ -1,12 +1,12 @@
 r                             = require 'rethinkdb'
-Command                       = require 'domain/Command'
-CommandResult                 = require 'domain/CommandResult'
-Move                          = require 'domain/documents/Move'
-MoveType                      = require 'domain/enums/MoveType'
+Command                       = require 'domain/framework/Command'
+CommandResult                 = require 'domain/framework/CommandResult'
+CardPassedNote                = require 'data/documents/notes/CardPassedNote'
+Move                          = require 'data/structs/Move'
+MoveType                      = require 'data/enums/MoveType'
 RemoveCardFromStacksStatement = require 'data/statements/RemoveCardFromStacksStatement'
 AddCardToStackStatement       = require 'data/statements/AddCardToStackStatement'
 UpdateCardStatement           = require 'data/statements/UpdateCardStatement'
-CardPassedNote                = require 'domain/documents/notes/CardPassedNote'
 
 class PassCardCommand extends Command
 
@@ -32,7 +32,7 @@ class PassCardCommand extends Command
         conn.execute statement, (err, card, previous) =>
           return callback(err) if err?
           result.messages.changed(card)
-          result.addNote(new CardPassedNote(@user, card, previous))
+          result.addNote(CardPassedNote.create(@user, card, previous))
           result.card = card
           callback(null, result)
 

@@ -1,5 +1,5 @@
 MultiGetQuery = require 'data/framework/queries/MultiGetQuery'
-Card          = require 'data/schemas/Card'
+Card          = require 'data/documents/Card'
 
 class MultiGetCardsQuery extends MultiGetQuery
 

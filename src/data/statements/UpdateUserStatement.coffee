@@ -1,4 +1,4 @@
-User            = require 'data/schemas/User'
+User            = require 'data/documents/User'
 UpdateStatement = require 'data/framework/statements/UpdateStatement'
 
 class UpdateUserStatement extends UpdateStatement

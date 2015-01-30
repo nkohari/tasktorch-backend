@@ -1,5 +1,5 @@
 GetAllByIndexQuery = require 'data/framework/queries/GetAllByIndexQuery'
-Goal               = require 'data/schemas/Goal'
+Goal               = require 'data/documents/Goal'
 
 class GetAllGoalsByOrgQuery extends GetAllByIndexQuery
 

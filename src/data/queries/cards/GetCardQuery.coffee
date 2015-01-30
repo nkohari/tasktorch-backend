@@ -1,5 +1,5 @@
 GetQuery = require 'data/framework/queries/GetQuery'
-Card     = require 'data/schemas/Card'
+Card     = require 'data/documents/Card'
 
 class GetCardQuery extends GetQuery
 

@@ -1,5 +1,5 @@
 GetQuery = require 'data/framework/queries/GetQuery'
-Kind     = require 'data/schemas/Kind'
+Kind     = require 'data/documents/Kind'
 
 class GetKindQuery extends GetQuery
 

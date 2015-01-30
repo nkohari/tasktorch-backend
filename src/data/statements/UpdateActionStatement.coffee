@@ -1,4 +1,4 @@
-Action          = require 'data/schemas/Action'
+Action          = require 'data/documents/Action'
 UpdateStatement = require 'data/framework/statements/UpdateStatement'
 
 class UpdateActionStatement extends UpdateStatement

@@ -1,5 +1,5 @@
 r                  = require 'rethinkdb'
-Team               = require 'data/schemas/Team'
+Team               = require 'data/documents/Team'
 GetAllByIndexQuery = require 'data/framework/queries/GetAllByIndexQuery'
 
 class GetAllTeamsByOrgQuery extends GetAllByIndexQuery

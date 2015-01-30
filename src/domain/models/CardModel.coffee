@@ -1,4 +1,4 @@
-Model = require 'domain/Model'
+Model = require 'domain/framework/Model'
 
 class CardModel extends Model
 

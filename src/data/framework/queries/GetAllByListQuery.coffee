@@ -4,11 +4,15 @@ Query = require './Query'
 
 class GetAllByListQuery extends Query
 
-  constructor: (schema, parentSchema, parentId, property, options) ->
-    super(schema, options)
+  constructor: (doctype, parentDoctype, parentId, property, options) ->
+    super(doctype, options)
+
+    table = @schema.table
+    parentTable = parentDoctype.getSchema().table
+
     # TODO: Worried about the performance of this -- can we change it to use getAll() instead?
-    @rql = r.table(parentSchema.table).get(parentId)(property).default([]).map((id) ->
-      r.table(schema.table).get(id)
+    @rql = r.table(parentTable).get(parentId)(property).default([]).map((id) ->
+      r.table(table).get(id)
     ).default([]).coerceTo('array')
 
 module.exports = GetAllByListQuery

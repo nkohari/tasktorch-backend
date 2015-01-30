@@ -1,5 +1,5 @@
 GetByIndexQuery = require 'data/framework/queries/GetByIndexQuery'
-User = require 'data/schemas/User'
+User = require 'data/documents/User'
 
 class GetUserByUsernameQuery extends GetByIndexQuery
 

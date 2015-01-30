@@ -1,5 +1,5 @@
 GetQuery = require 'data/framework/queries/GetQuery'
-Stack    = require 'data/schemas/Stack'
+Stack    = require 'data/documents/Stack'
 
 class GetStackQuery extends GetQuery
 

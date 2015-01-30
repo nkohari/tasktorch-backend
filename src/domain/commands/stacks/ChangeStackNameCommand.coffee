@@ -1,5 +1,5 @@
-Command              = require 'domain/Command'
-CommandResult        = require 'domain/CommandResult'
+Command              = require 'domain/framework/Command'
+CommandResult        = require 'domain/framework/CommandResult'
 UpdateStackStatement = require 'data/statements/UpdateStackStatement'
 
 class ChangeStackNameCommand extends Command

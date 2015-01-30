@@ -1,5 +1,5 @@
 GetQuery = require 'data/framework/queries/GetQuery'
-Stage    = require 'data/schemas/Stage'
+Stage    = require 'data/documents/Stage'
 
 class GetStageQuery extends GetQuery
 

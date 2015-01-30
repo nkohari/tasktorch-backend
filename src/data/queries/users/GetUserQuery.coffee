@@ -1,5 +1,5 @@
 GetQuery = require 'data/framework/queries/GetQuery'
-User     = require 'data/schemas/User'
+User     = require 'data/documents/User'
 
 class GetUserQuery extends GetQuery
 

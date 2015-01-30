@@ -1,5 +1,5 @@
 GetQuery = require 'data/framework/queries/GetQuery'
-Goal     = require 'data/schemas/Goal'
+Goal     = require 'data/documents/Goal'
 
 class GetGoalQuery extends GetQuery
 

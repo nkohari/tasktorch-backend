@@ -1,8 +1,8 @@
-Command                       = require 'domain/Command'
-CommandResult                 = require 'domain/CommandResult'
+Command                       = require 'domain/framework/Command'
+CommandResult                 = require 'domain/framework/CommandResult'
+ActionDeletedNote             = require 'data/documents/notes/ActionDeletedNote'
 DeleteActionStatement         = require 'data/statements/DeleteActionStatement'
 RemoveActionFromCardStatement = require 'data/statements/RemoveActionFromCardStatement'
-ActionDeletedNote             = require 'domain/documents/notes/ActionDeletedNote'
 
 class DeleteActionCommand extends Command
 
@@ -18,7 +18,7 @@ class DeleteActionCommand extends Command
       conn.execute statement, (err, card) =>
         return callback(err) if err?
         result.messages.changed(card)
-        result.addNote(new ActionDeletedNote(@user, action))
+        result.addNote(ActionDeletedNote.create(@user, action))
         result.action = action
         callback(null, result)
 

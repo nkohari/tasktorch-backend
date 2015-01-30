@@ -1,8 +1,11 @@
-_        = require 'lodash'
-async    = require 'async'
-Hapi     = require 'hapi'
-Boom     = require 'boom'
-Response = require './Response'
+_                   = require 'lodash'
+async               = require 'async'
+Hapi                = require 'hapi'
+Boom                = require 'boom'
+Document            = require 'data/framework/Document'
+QueryResult         = require 'data/framework/QueryResult'
+DocumentResponse    = require './DocumentResponse'
+QueryResultResponse = require './QueryResultResponse'
 
 class Handler
 
@@ -23,6 +26,11 @@ class Handler
     throw new Error("You must implement handle() on #{@constructor.name}")
 
   response: (content) ->
-    new Response(content)
+    if content instanceof Document
+      return new DocumentResponse(content)
+    else if content instanceof QueryResult
+      return new QueryResultResponse(content)
+    else
+      throw new Error("Don't know how to create a response for content of type #{content.constructor.name}")
 
 module.exports = Handler

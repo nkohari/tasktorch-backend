@@ -1,5 +1,5 @@
 r               = require 'rethinkdb'
-Card            = require 'data/schemas/Card'
+Card            = require 'data/documents/Card'
 UpdateStatement = require 'data/framework/statements/UpdateStatement'
 
 class AddActionToCardStatement extends UpdateStatement

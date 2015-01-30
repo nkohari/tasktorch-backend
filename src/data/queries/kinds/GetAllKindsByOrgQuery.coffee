@@ -1,5 +1,5 @@
 GetAllByIndexQuery = require 'data/framework/queries/GetAllByIndexQuery'
-Kind               = require 'data/schemas/Kind'
+Kind               = require 'data/documents/Kind'
 
 class GetAllKindsByOrgQuery extends GetAllByIndexQuery
 

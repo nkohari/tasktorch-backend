@@ -1,5 +1,5 @@
-Command              = require 'domain/Command'
-CommandResult        = require 'domain/CommandResult'
+Command              = require 'domain/framework/Command'
+CommandResult        = require 'domain/framework/CommandResult'
 DeleteStackStatement = require 'data/statements/DeleteStackStatement'
 
 class DeleteStackCommand extends Command

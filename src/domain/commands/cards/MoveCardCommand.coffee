@@ -1,11 +1,11 @@
 r                             = require 'rethinkdb'
-Command                       = require 'domain/Command'
-CommandResult                 = require 'domain/CommandResult'
-Move                          = require 'domain/documents/Move'
+Command                       = require 'domain/framework/Command'
+CommandResult                 = require 'domain/framework/CommandResult'
+CardMovedNote                 = require 'data/documents/notes/CardMovedNote'
+Move                          = require 'data/structs/Move'
 RemoveCardFromStacksStatement = require 'data/statements/RemoveCardFromStacksStatement'
 AddCardToStackStatement       = require 'data/statements/AddCardToStackStatement'
 UpdateCardStatement           = require 'data/statements/UpdateCardStatement'
-CardMovedNote                 = require 'domain/documents/notes/CardMovedNote'
 
 class MoveCardCommand extends Command
 
@@ -34,7 +34,7 @@ class MoveCardCommand extends Command
         conn.execute statement, (err, card, previous) =>
           return callback(err) if err?
           result.messages.changed(card)
-          result.addNote(new CardMovedNote(@user, card, previous))
+          result.addNote(CardMovedNote.create(@user, card, previous))
           result.card = card
           callback(null, result)
 

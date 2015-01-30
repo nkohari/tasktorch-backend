@@ -1,6 +1,6 @@
-Command                  = require 'domain/Command'
-CommandResult            = require 'domain/CommandResult'
-ActionCreatedNote        = require 'domain/documents/notes/ActionCreatedNote'
+Command                  = require 'domain/framework/Command'
+CommandResult            = require 'domain/framework/CommandResult'
+ActionCreatedNote        = require 'data/documents/notes/ActionCreatedNote'
 CreateActionStatement    = require 'data/statements/CreateActionStatement'
 AddActionToCardStatement = require 'data/statements/AddActionToCardStatement'
 
@@ -18,7 +18,7 @@ class CreateActionCommand extends Command
       conn.execute statement, (err, card) =>
         return callback(err) if err?
         result.messages.changed(card)
-        result.addNote(new ActionCreatedNote(@user, action))
+        result.addNote(ActionCreatedNote.create(@user, action))
         result.action = action
         callback(null, result)
 

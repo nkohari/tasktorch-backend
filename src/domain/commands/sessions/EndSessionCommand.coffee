@@ -1,5 +1,5 @@
-Command                 = require 'domain/Command'
-CommandResult           = require 'domain/CommandResult'
+Command                 = require 'domain/framework/Command'
+CommandResult           = require 'domain/framework/CommandResult'
 UpdateSessionStatement  = require 'data/statements/UpdateSessionStatement'
 
 class EndSessionCommand extends Command

@@ -3,8 +3,8 @@ Query = require './Query'
 
 class GetQuery extends Query
 
-  constructor: (schema, id, options) ->
-    super(schema, options)
+  constructor: (doctype, id, options) ->
+    super(doctype, options)
     @rql = r.table(@schema.table).get(id).default(null)
 
 module.exports = GetQuery

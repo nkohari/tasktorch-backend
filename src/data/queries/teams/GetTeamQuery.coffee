@@ -1,5 +1,5 @@
 GetQuery = require 'data/framework/queries/GetQuery'
-Team     = require 'data/schemas/Team'
+Team     = require 'data/documents/Team'
 
 class GetTeamQuery extends GetQuery
 

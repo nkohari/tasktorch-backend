@@ -1,6 +1,6 @@
 GetAllByListQuery = require 'data/framework/queries/GetAllByListQuery'
-Card              = require 'data/schemas/Card'
-User              = require 'data/schemas/User'
+Card              = require 'data/documents/Card'
+User              = require 'data/documents/User'
 
 class GetAllFollowersByCardQuery extends GetAllByListQuery
 
