@@ -8,8 +8,11 @@ describe 'ListNotesByCardHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
-  before ->
-    @tester = TestHarness.createTester(ListNotesByCardHandler)
+  before (ready) ->
+    TestHarness.start (err) =>
+      return ready(err) if err?
+      @tester = TestHarness.createTester(ListNotesByCardHandler)
+      ready()
 
   credentials =
     user: {id: 'user-charlie'}

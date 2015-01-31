@@ -8,8 +8,11 @@ describe 'GetCardHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
-  before ->
-    @tester = TestHarness.createTester(GetCardHandler)
+  before (ready) ->
+    TestHarness.start (err) =>
+      return ready(err) if err?
+      @tester = TestHarness.createTester(GetCardHandler)
+      ready()
 
   credentials =
     user: {id: 'user-charlie'}

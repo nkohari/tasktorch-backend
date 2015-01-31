@@ -8,8 +8,11 @@ describe 'GetOrgHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
-  before ->
-    @tester = TestHarness.createTester(GetOrgHandler)
+  before (ready) ->
+    TestHarness.start (err) =>
+      return ready(err) if err?
+      @tester = TestHarness.createTester(GetOrgHandler)
+      ready()
 
   credentials =
     user: {id: 'user-charlie'}

@@ -8,8 +8,11 @@ describe 'GetStackHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
-  before ->
-    @tester = TestHarness.createTester(GetStackHandler)
+  before (ready) ->
+    TestHarness.start (err) =>
+      return ready(err) if err?
+      @tester = TestHarness.createTester(GetStackHandler)
+      ready()
 
   credentials =
     user: {id: 'user-charlie'}

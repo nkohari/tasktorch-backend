@@ -8,8 +8,11 @@ describe 'ListMembersByOrgHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
-  before ->
-    @tester = TestHarness.createTester(ListMembersByOrgHandler)
+  before (ready) ->
+    TestHarness.start (err) =>
+      return ready(err) if err?
+      @tester = TestHarness.createTester(ListMembersByOrgHandler)
+      ready()
 
   credentials =
     user: {id: 'user-charlie'}

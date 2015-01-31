@@ -8,8 +8,11 @@ describe 'ListStagesByKindHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
-  before ->
-    @tester = TestHarness.createTester(ListStagesByKindHandler)
+  before (ready) ->
+    TestHarness.start (err) =>
+      return ready(err) if err?
+      @tester = TestHarness.createTester(ListStagesByKindHandler)
+      ready()
 
   credentials =
     user: {id: 'user-charlie'}

@@ -8,8 +8,11 @@ describe 'ListActionsByCardHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
-  before ->
-    @tester = TestHarness.createTester(ListActionsByCardHandler)
+  before (ready) ->
+    TestHarness.start (err) =>
+      return ready(err) if err?
+      @tester = TestHarness.createTester(ListActionsByCardHandler)
+      ready()
 
   credentials =
     user: {id: 'user-charlie'}

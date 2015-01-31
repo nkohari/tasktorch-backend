@@ -8,8 +8,11 @@ describe 'GetGoalHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
-  before ->
-    @tester = TestHarness.createTester(GetGoalHandler)
+  before (ready) ->
+    TestHarness.start (err) =>
+      return ready(err) if err?
+      @tester = TestHarness.createTester(GetGoalHandler)
+      ready()
 
   credentials =
     user: {id: 'user-charlie'}

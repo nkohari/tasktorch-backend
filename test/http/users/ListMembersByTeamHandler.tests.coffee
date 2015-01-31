@@ -8,8 +8,11 @@ describe 'ListMembersByTeamHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
-  before ->
-    @tester = TestHarness.createTester(ListMembersByTeamHandler)
+  before (ready) ->
+    TestHarness.start (err) =>
+      return ready(err) if err?
+      @tester = TestHarness.createTester(ListMembersByTeamHandler)
+      ready()
 
   credentials =
     user: {id: 'user-charlie'}

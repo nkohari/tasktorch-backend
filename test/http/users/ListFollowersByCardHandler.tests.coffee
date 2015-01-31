@@ -8,8 +8,11 @@ describe 'ListFollowersByCardHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
-  before ->
-    @tester = TestHarness.createTester(ListFollowersByCardHandler)
+  before (ready) ->
+    TestHarness.start (err) =>
+      return ready(err) if err?
+      @tester = TestHarness.createTester(ListFollowersByCardHandler)
+      ready()
 
   credentials =
     user: {id: 'user-charlie'}

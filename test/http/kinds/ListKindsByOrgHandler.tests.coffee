@@ -8,8 +8,11 @@ describe 'ListKindsByOrgHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
-  before ->
-    @tester = TestHarness.createTester(ListKindsByOrgHandler)
+  before (ready) ->
+    TestHarness.start (err) =>
+      return ready(err) if err?
+      @tester = TestHarness.createTester(ListKindsByOrgHandler)
+      ready()
 
   credentials =
     user: {id: 'user-charlie'}

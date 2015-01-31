@@ -7,8 +7,11 @@ describe 'GetMeHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
-  before ->
-    @tester = TestHarness.createTester(GetMeHandler)
+  before (ready) ->
+    TestHarness.start (err) =>
+      return ready(err) if err?
+      @tester = TestHarness.createTester(GetMeHandler)
+      ready()
 
   credentials =
     user: {id: 'user-charlie'}

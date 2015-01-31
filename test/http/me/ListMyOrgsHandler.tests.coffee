@@ -7,8 +7,11 @@ describe 'ListMyOrgsHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
-  before ->
-    @tester = TestHarness.createTester(ListMyOrgsHandler)
+  before (ready) ->
+    TestHarness.start (err) =>
+      return ready(err) if err?
+      @tester = TestHarness.createTester(ListMyOrgsHandler)
+      ready()
 
   credentials =
     user: {id: 'user-charlie'}

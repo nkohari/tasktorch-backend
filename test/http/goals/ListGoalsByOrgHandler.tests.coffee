@@ -8,8 +8,11 @@ describe 'ListGoalsByOrgHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
-  before ->
-    @tester = TestHarness.createTester(ListGoalsByOrgHandler)
+  before (ready) ->
+    TestHarness.start (err) =>
+      return ready(err) if err?
+      @tester = TestHarness.createTester(ListGoalsByOrgHandler)
+      ready()
 
   credentials =
     user: {id: 'user-charlie'}
