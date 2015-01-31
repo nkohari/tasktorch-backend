@@ -17,8 +17,8 @@ class DeleteActionHandler extends Handler
   handle: (request, reply) ->
     {action} = request.pre
     command = new DeleteActionCommand(request.auth.credentials.user, action)
-    @processor.execute command, (err, result) =>
+    @processor.execute command, (err, action) =>
       return reply err if err?
-      reply @response(result.action)
+      reply @response(action)
 
 module.exports = DeleteActionHandler

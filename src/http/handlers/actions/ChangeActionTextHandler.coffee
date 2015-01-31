@@ -23,8 +23,8 @@ class ChangeActionTextHandler extends Handler
       return reply @error.badRequest("Missing required parameter 'test'")
 
     command = new ChangeActionTextCommand(request.auth.credentials.user, action, text)
-    @processor.execute command, (err, result) =>
+    @processor.execute command, (err, action) =>
       return reply err if err?
-      reply @response(result.action)
+      reply @response(action)
 
 module.exports = ChangeActionTextHandler

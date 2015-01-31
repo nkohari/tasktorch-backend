@@ -1,7 +1,7 @@
 Command              = require 'domain/framework/Command'
-CommandResult        = require 'domain/framework/CommandResult'
 CardTitleChangedNote = require 'data/documents/notes/CardTitleChangedNote'
 UpdateCardStatement  = require 'data/statements/UpdateCardStatement'
+CreateNoteStatement  = require 'data/statements/CreateNoteStatement'
 
 class ChangeCardTitleCommand extends Command
 
@@ -9,13 +9,13 @@ class ChangeCardTitleCommand extends Command
     super()
 
   execute: (conn, callback) ->
-    result    = new CommandResult(@user)
-    statement = new UpdateCardStatement(@cardid, {title: @title})
+    statement = new UpdateCardStatement(@cardid, {@title})
     conn.execute statement, (err, card, previous) =>
       return callback(err) if err?
-      result.messages.changed(card)
-      result.addNote(CardTitleChangedNote.create(@user, card, previous))
-      result.card = card
-      callback(null, result)
+      note = CardTitleChangedNote.create(@user, card, previous)
+      statement = new CreateNoteStatement(note)
+      conn.execute statement, (err) =>
+        return callback(err) if err?
+        callback(null, card)
 
 module.exports = ChangeCardTitleCommand

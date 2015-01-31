@@ -28,8 +28,8 @@ class AcceptCardHandler extends Handler
       return reply err if err?
       {stack} = result
       command = new AcceptCardCommand(user, card.id, stack.id)
-      @processor.execute command, (err, result) =>
+      @processor.execute command, (err, card) =>
         return reply err if err?
-        reply @response(result.card)
+        reply @response(card)
 
 module.exports = AcceptCardHandler

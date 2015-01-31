@@ -1,10 +1,10 @@
 r                             = require 'rethinkdb'
 Command                       = require 'domain/framework/Command'
-CommandResult                 = require 'domain/framework/CommandResult'
 ActionMovedNote               = require 'data/documents/notes/ActionMovedNote'
 RemoveActionFromCardStatement = require 'data/statements/RemoveActionFromCardStatement'
 AddActionToCardStatement      = require 'data/statements/AddActionToCardStatement'
 UpdateActionStatement         = require 'data/statements/UpdateActionStatement'
+CreateNoteStatement           = require 'data/statements/CreateNoteStatement'
 
 # TODO: This allows for movement from multiple previous cards. This is only
 # to allow the data to self-heal in the case of multiple simultaneous
@@ -16,25 +16,22 @@ class MoveActionCommand extends Command
     super()
 
   execute: (conn, callback) ->
-    result    = new CommandResult(@user)
     statement = new RemoveActionFromCardStatement(@actionid)
     conn.execute statement, (err, previousCards) =>
       return callback(err) if err?
       statement = new AddActionToCardStatement(@actionid, @cardid, @stageid, @position)
       conn.execute statement, (err, currentCard) =>
         return callback(err) if err?
-        result.messages.changed(currentCard)
-        for previousCard in previousCards
-          result.messages.changed(previousCard) unless previousCard.id == currentCard.id
         statement = new UpdateActionStatement(@actionid, {
           card:  @cardid
           stage: @stageid
         })
         conn.execute statement, (err, action, previous) =>
           return callback(err) if err?
-          result.messages.changed(action)
-          result.addNote(ActionMovedNote.create(@user, action, previous))
-          result.action = action
-          callback(null, result)
+          note = ActionMovedNote.create(@user, action, previous)
+          statement = new CreateNoteStatement(note)
+          conn.execute statement, (err) =>
+            return callback(err) if err?
+            callback(null, action)
 
 module.exports = MoveActionCommand

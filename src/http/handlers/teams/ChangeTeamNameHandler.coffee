@@ -25,8 +25,8 @@ class ChangeTeamNameHandler extends Handler
       return reply @error.badRequest("Missing required argument 'name'")
 
     command = new ChangeTeamNameCommand(user, team, name)
-    @processor.execute command, (err, result) =>
+    @processor.execute command, (err, team) =>
       return reply err if err?
-      return reply @response(result.team)
+      return reply @response(team)
 
 module.exports = ChangeTeamNameHandler

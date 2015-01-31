@@ -20,7 +20,7 @@ class DeleteCardHandler extends Handler
     {user} = request.auth.credentials
 
     command = new DeleteCardCommand(user, card)
-    @processor.execute command, (err, result) =>
+    @processor.execute command, (err, card) =>
       return reply err if err?
       reply()
 

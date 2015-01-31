@@ -14,7 +14,7 @@ class ChangeMyPasswordHandler extends Handler
 
     hashedPassword = @passwordHasher.hash(password)
     command = new ChangeUserPasswordCommand(user, hashedPassword)
-    @processor.execute command, (err, result) =>
+    @processor.execute command, (err, user) =>
       return reply err if err?
       reply()
 

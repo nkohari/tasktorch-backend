@@ -1,5 +1,4 @@
 Command             = require 'domain/framework/Command'
-CommandResult       = require 'domain/framework/CommandResult'
 CreateNoteStatement = require 'data/statements/CreateNoteStatement'
 
 class CreateNoteCommand extends Command
@@ -8,12 +7,9 @@ class CreateNoteCommand extends Command
     super()
 
   execute: (conn, callback) ->
-    result    = new CommandResult(@user)
     statement = new CreateNoteStatement(@note)
     conn.execute statement, (err, note) =>
       return callback(err) if err?
-      result.messages.created(note)
-      result.note = note
-      callback(null, result)
+      callback(null, note)
 
 module.exports = CreateNoteCommand

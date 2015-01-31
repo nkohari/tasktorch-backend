@@ -31,8 +31,8 @@ class CreateUserStackHandler extends Handler
     }
 
     command = new CreateStackCommand(user, stack)
-    @processor.execute command, (err, result) =>
+    @processor.execute command, (err, stack) =>
       return reply err if err?
-      return reply @response(result.stack)
+      return reply @response(stack)
 
 module.exports = CreateUserStackHandler

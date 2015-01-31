@@ -1,3 +1,4 @@
+async                 = require 'async'
 Application           = require 'common/Application'
 ProductionEnvironment = require './ProductionEnvironment'
 
@@ -8,15 +9,18 @@ class ApiApplication extends Application
   constructor: (environment = new ProductionEnvironment()) ->
     super(environment)
 
-  start: ->
+  start: (callback = (->)) ->
     super()
-    databaseWatcher = @forge.get('databaseWatcher')
-    databaseWatcher.start (err) =>
-      console.log 'here'
-      if err?
-        @log.error "Error starting database watcher: #{err}"
-        process.exit(1)
-      server = @forge.get('server')
-      server.start()
+
+    startService = (name, next) =>
+      service = @forge.get(name)
+      service.start (err) =>
+        if err?
+          @log.error "Error starting service #{name}: #{err}"
+          process.exit(1)
+        next()
+
+    services = ['databaseWatcher', 'messageBus', 'server']
+    async.eachSeries(services, startService, callback)
 
 module.exports = ApiApplication

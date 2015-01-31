@@ -16,8 +16,8 @@ class ChangeMyNameHandler extends Handler
       return reply @error.badRequest("Missing required parameter 'name'")
 
     command = new ChangeUserNameCommand(user, name)
-    @processor.execute command, (err, result) =>
+    @processor.execute command, (err, user) =>
       return reply err if err?
-      reply @response(result.user)
+      reply @response(user)
 
 module.exports = ChangeMyNameHandler

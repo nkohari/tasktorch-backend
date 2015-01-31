@@ -33,8 +33,8 @@ class MoveActionHandler extends Handler
         return reply @error.badRequest("Stage #{stage.id} is not part of the kind #{kind.id}")
 
       command = new MoveActionCommand(request.auth.credentials.user, action.id, card.id, stage.id, position)
-      @processor.execute command, (err, result) =>
+      @processor.execute command, (err, action) =>
         return reply err if err?
-        reply @response(result.action)
+        reply @response(action)
 
 module.exports = MoveActionHandler

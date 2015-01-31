@@ -1,11 +1,11 @@
 r                             = require 'rethinkdb'
 Command                       = require 'domain/framework/Command'
-CommandResult                 = require 'domain/framework/CommandResult'
 CardMovedNote                 = require 'data/documents/notes/CardMovedNote'
 Move                          = require 'data/structs/Move'
 RemoveCardFromStacksStatement = require 'data/statements/RemoveCardFromStacksStatement'
 AddCardToStackStatement       = require 'data/statements/AddCardToStackStatement'
 UpdateCardStatement           = require 'data/statements/UpdateCardStatement'
+CreateNoteStatement           = require 'data/statements/CreateNoteStatement'
 
 class MoveCardCommand extends Command
 
@@ -13,14 +13,12 @@ class MoveCardCommand extends Command
     super()
 
   execute: (conn, callback) ->
-    result    = new CommandResult(@user)
     statement = new RemoveCardFromStacksStatement(@cardid)
     conn.execute statement, (err, previousStacks) =>
       return callback(err) if err?
       statement = new AddCardToStackStatement(@stackid, @cardid, @position)
       conn.execute statement, (err, currentStack) =>
         return callback(err) if err?
-        result.messages.changed(currentStack)
         patch = {stack: @stackid, owner: currentStack.user ? null}
         # TODO: Cards should only be in one stack at a time. The RemoveCardFromStackStatement
         # ensures that we'll be putting the card into only one stack, so previousStacks
@@ -29,13 +27,13 @@ class MoveCardCommand extends Command
         if previousStack.id != currentStack.id
           move = new Move(@user, previousStack, currentStack)
           patch.moves = r.row('moves').append(move)
-          result.messages.changed(previousStacks)
         statement = new UpdateCardStatement(@cardid, patch)
         conn.execute statement, (err, card, previous) =>
           return callback(err) if err?
-          result.messages.changed(card)
-          result.addNote(CardMovedNote.create(@user, card, previous))
-          result.card = card
-          callback(null, result)
+          note = CardMovedNote.create(@user, card, previous)
+          statement = new CreateNoteStatement(note)
+          conn.execute statement, (err) =>
+            return callback(err) if err?
+            callback(null, card)
 
 module.exports = MoveCardCommand

@@ -1,20 +1,20 @@
 Command                 = require 'domain/framework/Command'
-CommandResult           = require 'domain/framework/CommandResult'
 ActionStatusChangedNote = require 'data/documents/notes/ActionStatusChangedNote'
 UpdateActionStatement   = require 'data/statements/UpdateActionStatement'
+CreateNoteStatement     = require 'data/statements/CreateNoteStatement'
 
 class ChangeActionStatusCommand extends Command
 
   constructor: (@user, @action, @status) ->
 
   execute: (conn, callback) ->
-    result    = new CommandResult(@user)
     statement = new UpdateActionStatement(@action.id, {@status})
     conn.execute statement, (err, action, previous) =>
       return callback(err) if err?
-      result.messages.changed(action)
-      result.addNote(ActionStatusChangedNote.create(@user, action, previous))
-      result.action = action
-      callback(null, result)
+      note = ActionStatusChangedNote.create(@user, action, previous)
+      statement = new CreateNoteStatement(note)
+      conn.execute statement, (err) =>
+        return callback(err) if err?
+        callback(null, action)
 
 module.exports = ChangeActionStatusCommand

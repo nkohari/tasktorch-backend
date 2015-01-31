@@ -25,8 +25,8 @@ class RemoveMemberFromTeamHandler extends Handler
       return reply @error.badRequest("The user #{user.id} is not a member of the team #{team.id}")
 
     command = new RemoveMemberFromTeamCommand(requester, team, user)
-    @processor.execute command, (err, result) =>
+    @processor.execute command, (err, team) =>
       return reply err if err?
-      return reply @response(result.team)
+      return reply @response(team)
 
 module.exports = RemoveMemberFromTeamHandler

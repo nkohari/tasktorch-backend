@@ -12,12 +12,14 @@ class ApiServer
     @server.ext 'onRequest',     @onRequest.bind(this)
     @server.on  'request-error', @onError.bind(this)
 
-  start: ->
+  start: (callback = (->)) ->
+    @log.info '[http] Starting server'
     @setupAuthStrategy()
     handlers = @forge.getAll('handler')
     @register(handler) for handler in @forge.getAll('handler')
     @server.start =>
-      @log.info 'Server listening'
+      @log.info '[http] Server listening'
+      callback()
 
   register: (handler) ->
 

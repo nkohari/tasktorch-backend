@@ -30,8 +30,8 @@ class MoveCardHandler extends Handler
       return reply @error.unauthorized("You cannot move a card to a stack owned by another user")
 
     command = new MoveCardCommand(user, card.id, stack.id, position)
-    @processor.execute command, (err, result) =>
+    @processor.execute command, (err, card) =>
       return reply err if err?
-      reply @response(result.card)
+      reply @response(card)
 
 module.exports = MoveCardHandler

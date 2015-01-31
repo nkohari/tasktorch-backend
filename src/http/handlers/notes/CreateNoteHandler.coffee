@@ -34,8 +34,8 @@ class CreateNoteHandler extends Handler
         return reply @error.badRequest()
 
     command = new CreateNoteCommand(user, note)
-    @processor.execute command, (err, result) =>
+    @processor.execute command, (err, note) =>
       return reply err if err?
-      reply @response(result.note)
+      reply @response(note)
 
 module.exports = CreateNoteHandler

@@ -21,7 +21,7 @@ class DeleteTeamHandler extends Handler
     {user}      = request.auth.credentials
 
     command = new DeleteTeamCommand(user, team)
-    @processor.execute command, (err) =>
+    @processor.execute command, (err, team) =>
       return reply err if err?
       return reply()
 

@@ -1,5 +1,6 @@
 Handler                = require 'http/framework/Handler'
 CreateSessionCommand   = require 'domain/commands/sessions/CreateSessionCommand'
+Session                = require 'data/documents/Session'
 GetUserByUsernameQuery = require 'data/queries/users/GetUserByUsernameQuery'
 GetUserByEmailQuery    = require 'data/queries/users/GetUserByEmailQuery'
 
@@ -23,12 +24,15 @@ class CreateSessionHandler extends Handler
     @resolveUser login, (err, user) =>
       return reply err if err?
       return reply @error.forbidden() unless user? and @passwordHasher.verify(user.password, password)
-      session = {user: user.id, isActive: true}
+      session = new Session {
+        user: user.id
+        isActive: true
+      }
       command = new CreateSessionCommand(user, session)
-      @processor.execute command, (err, result) =>
+      @processor.execute command, (err, session) =>
         return reply err if err?
-        request.auth.session.set {userid: user.id, sessionid: result.session.id}
-        reply @response(result.session)
+        request.auth.session.set {userid: user.id, sessionid: session.id}
+        reply @response(session)
 
   resolveUser: (login, callback) ->
     query = new GetUserByUsernameQuery(login)

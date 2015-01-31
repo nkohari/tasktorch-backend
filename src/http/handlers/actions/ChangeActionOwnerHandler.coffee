@@ -19,8 +19,8 @@ class ChangeActionOwnerHandler extends Handler
   handle: (request, reply) ->
     {action, user} = request.pre
     command = new ChangeActionOwnerCommand(request.auth.credentials.user, action, user)
-    @processor.execute command, (err, result) =>
+    @processor.execute command, (err, action) =>
       return reply err if err?
-      reply @response(result.action)
+      reply @response(action)
 
 module.exports = ChangeActionOwnerHandler

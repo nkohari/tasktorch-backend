@@ -28,8 +28,8 @@ class DeleteStackHandler extends Handler
       return reply @error.badRequest("Stacks containing cards cannot be deleted")
 
     command = new DeleteStackCommand(user, stack)
-    @processor.execute command, (err, result) =>
+    @processor.execute command, (err, stack) =>
       return reply err if err?
-      return reply @response(result.stack)
+      reply()
 
 module.exports = DeleteStackHandler

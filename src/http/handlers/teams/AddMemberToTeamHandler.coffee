@@ -25,8 +25,8 @@ class AddMemberToTeamHandler extends Handler
       return reply @error.badRequest("Missing required argument 'user'")
 
     command = new AddMemberToTeamCommand(requester, team, user)
-    @processor.execute command, (err, result) =>
+    @processor.execute command, (err, team) =>
       return reply err if err?
-      return reply @response(result.team)
+      return reply @response(team)
 
 module.exports = AddMemberToTeamHandler

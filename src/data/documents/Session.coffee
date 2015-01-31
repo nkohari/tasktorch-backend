@@ -9,7 +9,6 @@ class Session extends Document
   @field  'id'
   @field  'version'
   @field  'status', {default: DocumentStatus.Normal}
-  @field  'name'
   @field  'isActive' # TODO: Move to status
 
   @hasOne 'user',   {type: 'User'}

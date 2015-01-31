@@ -35,8 +35,8 @@ class PassCardHandler extends Handler
       return reply err if err?
       {stack} = result
       command = new PassCardCommand(request.auth.credentials.user, card, stack)
-      @processor.execute command, (err, result) =>
+      @processor.execute command, (err, card) =>
         return reply err if err?
-        reply @response(result.card)
+        reply @response(card)
 
 module.exports = PassCardHandler

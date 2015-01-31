@@ -21,8 +21,8 @@ class ChangeCardTitleHandler extends Handler
     {title} = request.payload
 
     command = new ChangeCardTitleCommand(user, card.id, title)
-    @processor.execute command, (err, result) =>
+    @processor.execute command, (err, card) =>
       return reply err if err?
-      reply @response(result.card)
+      reply @response(card)
         
 module.exports = ChangeCardTitleHandler

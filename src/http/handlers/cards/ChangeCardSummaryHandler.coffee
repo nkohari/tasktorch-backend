@@ -21,8 +21,8 @@ class ChangeCardSummaryHandler extends Handler
     {summary} = request.payload
 
     command = new ChangeCardSummaryCommand(user, card.id, summary)
-    @processor.execute command, (err, result) =>
+    @processor.execute command, (err, card) =>
       return reply err if err?
-      reply @response(result.card)
+      reply @response(card)
 
 module.exports = ChangeCardSummaryHandler

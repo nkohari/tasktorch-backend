@@ -10,7 +10,7 @@ class EndSessionHandler extends Handler
   handle: (request, reply) ->
     {session, user} = request.auth.credentials
     command = new EndSessionCommand(user, session.id)
-    @processor.execute command, (err, result) =>
+    @processor.execute command, (err, session) =>
       return reply @error.notFound() if err is Error.DocumentNotFound
       return reply @error.conflict() if err is Error.VersionMismatch
       return reply err if err?

@@ -1,5 +1,4 @@
 Command              = require 'domain/framework/Command'
-CommandResult        = require 'domain/framework/CommandResult'
 CreateStackStatement = require 'data/statements/CreateStackStatement'
 
 class CreateStackCommand extends Command
@@ -7,12 +6,9 @@ class CreateStackCommand extends Command
   constructor: (@user, @stack) ->
 
   execute: (conn, callback) ->
-    result    = new CommandResult(@user)
     statement = new CreateStackStatement(@stack)
     conn.execute statement, (err, stack) =>
       return callback(err) if err?
-      result.messages.created(stack)
-      result.stack = stack
-      callback(null, result)
+      callback(null, stack)
 
 module.exports = CreateStackCommand
