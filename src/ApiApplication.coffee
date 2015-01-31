@@ -10,7 +10,13 @@ class ApiApplication extends Application
 
   start: ->
     super()
-    server = @forge.get('server')
-    server.start()
+    databaseWatcher = @forge.get('databaseWatcher')
+    databaseWatcher.start (err) =>
+      console.log 'here'
+      if err?
+        @log.error "Error starting database watcher: #{err}"
+        process.exit(1)
+      server = @forge.get('server')
+      server.start()
 
 module.exports = ApiApplication

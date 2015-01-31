@@ -6,14 +6,14 @@ Header = require './framework/Header'
 
 class ApiServer
 
-  constructor: (@forge, @config, @log, @authenticator) ->
+  constructor: (@forge, @config, @log, @keymaster) ->
     @server = new Hapi.Server()
     @server.connection(@config.http)
     @server.ext 'onRequest',     @onRequest.bind(this)
     @server.on  'request-error', @onError.bind(this)
-    @authenticator.init(@server)
 
   start: ->
+    @setupAuthStrategy()
     handlers = @forge.getAll('handler')
     @register(handler) for handler in @forge.getAll('handler')
     @server.start =>
@@ -43,7 +43,26 @@ class ApiServer
       config:  config
     }
 
-    @log.debug "Mounted #{name} at #{verb} #{path}"
+    @log.debug "[http] Mounted #{name} at #{verb} #{path}"
+
+  setupAuthStrategy: ->
+    {cookie} = @config.security
+
+    options =
+      cookie:       cookie.name
+      domain:       cookie.domain
+      ttl:          cookie.ttl
+      password:     cookie.secret
+      isSecure:     cookie.secure
+      clearInvalid: true
+      validateFunc: (state, callback) =>
+        return callback(null, false) unless state?
+        {sessionid, userid} = state
+        @keymaster.validateSession(sessionid, userid, callback)
+
+    @server.register require('hapi-auth-cookie'), (err) =>
+      throw err if err?
+      @server.auth.strategy('session', 'cookie', 'required', options)
 
   onRequest: (request, reply) ->
     

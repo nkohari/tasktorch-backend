@@ -1,18 +1,20 @@
-_              = require 'lodash'
-loadFiles      = require 'common/util/loadFiles'
-humanize       = require 'common/util/humanize'
-Config         = require 'common/Config'
-Log            = require 'common/Log'
-PasswordHasher = require 'common/PasswordHasher'
-Database       = require 'data/Database'
-ConnectionPool = require 'data/framework/ConnectionPool'
-Processor      = require 'domain/Processor'
-ApiServer      = require 'http/ApiServer'
-Authenticator  = require 'http/framework/Authenticator'
-PusherClient   = require 'messaging/PusherClient'
-MessageBus     = require 'messaging/MessageBus'
-SearchEngine   = require 'search/SearchEngine'
-SearchIndexer  = require 'search/SearchIndexer'
+_               = require 'lodash'
+loadFiles       = require 'common/util/loadFiles'
+humanize        = require 'common/util/humanize'
+Config          = require 'common/Config'
+Log             = require 'common/Log'
+Database        = require 'data/Database'
+DatabaseWatcher = require 'data/DatabaseWatcher'
+ConnectionPool  = require 'data/framework/ConnectionPool'
+Processor       = require 'domain/Processor'
+ApiServer       = require 'http/ApiServer'
+PusherClient    = require 'messaging/PusherClient'
+MessageBus      = require 'messaging/MessageBus'
+SearchEngine    = require 'search/SearchEngine'
+SearchIndexer   = require 'search/SearchIndexer'
+Gatekeeper      = require 'security/Gatekeeper'
+Keymaster       = require 'security/Keymaster'
+PasswordHasher  = require 'security/PasswordHasher'
 
 class ProductionEnvironment
 
@@ -21,15 +23,17 @@ class ProductionEnvironment
     forge.bind('app').to.instance(app)
     forge.bind('config').to.type(Config)
     forge.bind('log').to.type(Log)
+
+    forge.bind('gatekeeper').to.type(Gatekeeper)
+    forge.bind('keymaster').to.type(Keymaster)
     forge.bind('passwordHasher').to.type(PasswordHasher)
 
     forge.bind('connectionPool').to.type(ConnectionPool)
     forge.bind('database').to.type(Database)
-
+    forge.bind('databaseWatcher').to.type(DatabaseWatcher)
     forge.bind('processor').to.type(Processor)
 
     forge.bind('server').to.type(ApiServer)
-    forge.bind('authenticator').to.type(Authenticator)
 
     forge.bind('pusher').to.type(PusherClient)
     forge.bind('messageBus').to.type(MessageBus)
