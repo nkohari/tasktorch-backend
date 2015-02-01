@@ -9,7 +9,7 @@ class CreateSessionHandler extends Handler
   @route 'post /api/sessions'
   @auth  {mode: 'try'}
 
-  constructor: (@database, @processor, @passwordHasher) ->
+  constructor: (@config, @database, @processor, @passwordHasher) ->
 
   handle: (request, reply) ->
 
@@ -32,6 +32,7 @@ class CreateSessionHandler extends Handler
       @processor.execute command, (err, session) =>
         return reply err if err?
         request.auth.session.set {userid: user.id, sessionid: session.id}
+        reply.state('tt-userid', user.id)
         reply @response(session)
 
   resolveUser: (login, callback) ->

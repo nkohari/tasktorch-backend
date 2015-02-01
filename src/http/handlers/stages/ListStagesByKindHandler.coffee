@@ -10,7 +10,7 @@ class ListStagesByKindHandler extends Handler
     'resolve kind'
     'resolve query options'
     'ensure kind belongs to org'
-    'ensure requester is member of org'
+    'ensure requester can access org'
   ]
 
   constructor: (@database) ->

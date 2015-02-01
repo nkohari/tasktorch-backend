@@ -8,7 +8,7 @@ class ListMembersByOrgHandler extends Handler
 
   @pre [
     'resolve org'
-    'ensure requester is member of org'
+    'ensure requester can access org'
   ]
 
   constructor: (@database) ->

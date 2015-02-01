@@ -10,7 +10,7 @@ class AddMemberToTeamHandler extends Handler
     'resolve team'
     'resolve user argument'
     'ensure team belongs to org'
-    'ensure requester is member of org'
+    'ensure requester can access team'
     'ensure user is member of org'
   ]
 

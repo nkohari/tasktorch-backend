@@ -11,7 +11,7 @@ class CreateTeamHandler extends Handler
     'resolve org'
     'resolve members argument'
     'resolve leaders argument'
-    'ensure requester is member of org'
+    'ensure requester can access org'
   ]
 
   constructor: (@log, @processor) ->

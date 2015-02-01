@@ -13,7 +13,7 @@ class PassCardHandler extends Handler
     'resolve card'
     'resolve optional team argument'
     'resolve optional user argument'
-    'ensure requester is member of org'
+    'ensure requester can access card'
     'ensure team belongs to org'
     'ensure user is member of org'
   ]

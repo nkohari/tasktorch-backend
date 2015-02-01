@@ -44,14 +44,14 @@ class TestEnvironment
     forge.bind('searchEngine').to.type(SearchEngine)
     forge.bind('searchIndexer').to.type(SearchIndexer)
 
-    for name, type of loadFiles('data/documents', SRC_DIR)
-      forge.bind('schema').to.type(type).when(name)
-
     for name, type of loadFiles('http/handlers', SRC_DIR)
       forge.bind('handler').to.type(type).when(name)
       
     for name, type of loadFiles('http/preconditions', SRC_DIR)
       forge.bind('precondition').to.type(type).when(humanize(name))
+
+    for name, type of loadFiles('security/gates', SRC_DIR)
+      forge.bind('gate').to.type(type).when(name)
 
     for name, type of loadFiles('search/factories', SRC_DIR)
       forge.bind('searchModelFactory').to.type(type).when(name)

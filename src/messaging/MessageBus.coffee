@@ -1,8 +1,10 @@
-Message = require 'messaging/Message'
+_        = require 'lodash'
+Activity = require 'messaging/Activity'
+Message  = require 'messaging/Message'
 
 class MessageBus
 
-  constructor: (@log, @databaseWatcher, @pusher) ->
+  constructor: (@log, @databaseWatcher, @gatekeeper, @pusher) ->
 
   start: (callback = (->)) ->
     @databaseWatcher.on('create', @onCreate)
@@ -11,17 +13,22 @@ class MessageBus
     callback()
 
   onCreate: (event) =>
-    @publish Message.create('Created', event.document)
+    @publish(Activity.Created, event.document)
 
   onUpdate: (event) =>
-    @publish Message.create('Changed', event.document)
+    @publish(Activity.Changed, event.document)
 
   onDelete: (event) =>
-    @publish Message.create('Deleted', event.document)
+    @publish(Activity.Deleted, event.document)
 
-  publish: (message) =>
-    channels = message.getChannels()
-    @log.debug "Sending #{message.activity} to channels: [#{channels.join(',')}]"
-    @pusher.trigger(channels, message.activity, message)
+  publish: (activity, document) =>
+    message = new Message(activity, document)
+    @gatekeeper.getAccessList document, (err, userids) =>
+      if err?
+        @log.error "Error resolving access list for #{document.constructor.name}: #{err}"
+        return
+      channels = _.map userids, (userid) -> "private-user-#{userid}"
+      @log.debug "Sending #{message.activity} to channels: [#{channels.join(',')}]"
+      @pusher.trigger(channels, message.activity, message)
 
 module.exports = MessageBus

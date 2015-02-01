@@ -1,15 +1,7 @@
 {EventEmitter} = require 'events'
 async          = require 'async'
-loadFiles      = require 'common/util/loadFiles'
+Schema         = require 'data/framework/Schema'
 Subscription   = require 'data/framework/Subscription'
-
-DocTypes = [
-  require 'data/documents/Action'
-  require 'data/documents/Card'
-  require 'data/documents/Note'
-  require 'data/documents/Stack'
-  require 'data/documents/Team'
-]
 
 class DatabaseWatcher extends EventEmitter
 
@@ -18,7 +10,8 @@ class DatabaseWatcher extends EventEmitter
   start: (callback = (->)) ->
     @log.debug "[dbwatcher] Subscribing to changefeeds"
 
-    createSubscription = (doctype, next) =>
+    createSubscription = (schema, next) =>
+      doctype = schema.getDoctype()
       subscription = new Subscription(@connectionPool, doctype)
       subscription.start (err) =>
         return next(err) if err?
@@ -28,7 +21,7 @@ class DatabaseWatcher extends EventEmitter
         subscription.on 'delete', @onDelete
         next(null, subscription)
 
-    async.map DocTypes, createSubscription, (err, subscriptions) =>
+    async.map Schema.getAll(), createSubscription, (err, subscriptions) =>
       return callback(err) if err?
       @subscriptions = subscriptions
       @log.debug "[dbwatcher] Subscribed to changes on #{@subscriptions.length} tables"

@@ -9,7 +9,7 @@ class DeleteCardHandler extends Handler
     'resolve org'
     'resolve card'
     'ensure card belongs to org'
-    'ensure requester is member of org'
+    'ensure requester can access card'
   ]
 
   constructor: (@processor) ->

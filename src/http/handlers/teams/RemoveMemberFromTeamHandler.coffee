@@ -10,8 +10,7 @@ class RemoveMemberFromTeamHandler extends Handler
     'resolve org'
     'resolve team'
     'resolve user'
-    'ensure requester is member of org'
-    'ensure requester is member of team'
+    'ensure requester can access team'
   ]
 
   constructor: (@processor) ->

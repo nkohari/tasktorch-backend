@@ -9,7 +9,7 @@ class ChangeStackNameHandler extends Handler
     'resolve org'
     'resolve stack'
     'ensure stack belongs to org'
-    'ensure requester is member of org'
+    'ensure requester can access stack'
   ]
 
   constructor: (@processor) ->

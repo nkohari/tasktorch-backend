@@ -40,7 +40,7 @@ describe 'GetGoalHandler', ->
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a valid goal in an org of which the requester is a member', ->
-    it 'returns the stack', (done) ->
+    it 'returns the goal', (done) ->
       @tester.request {orgid: 'org-paddys', goalid: 'goal-gascrisis', credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.body).to.exist()

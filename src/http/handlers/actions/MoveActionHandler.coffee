@@ -13,7 +13,8 @@ class MoveActionHandler extends Handler
     'resolve card argument'
     'resolve stage argument'
     'ensure action belongs to org'
-    'ensure requester is member of org'
+    'ensure requester can access action'
+    'ensure requester can access card'
     'ensure position argument is valid'
   ]
 

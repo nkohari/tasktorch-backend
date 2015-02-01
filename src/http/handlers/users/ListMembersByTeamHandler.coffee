@@ -10,7 +10,7 @@ class ListMembersByTeamHandler extends Handler
     'resolve team'
     'resolve query options'
     'ensure team belongs to org'
-    'ensure requester is member of org'
+    'ensure requester can access team'
   ]
 
   constructor: (@database) ->

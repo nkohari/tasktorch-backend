@@ -1,4 +1,5 @@
 Handler                    = require 'http/framework/Handler'
+StackType                  = require 'data/enums/StackType'
 GetSpecialStackByUserQuery = require 'data/queries/stacks/GetSpecialStackByUserQuery'
 AcceptCardCommand          = require 'domain/commands/cards/AcceptCardCommand'
 
@@ -10,10 +11,10 @@ class AcceptCardHandler extends Handler
     'resolve org'
     'resolve card'
     'ensure card belongs to org'
-    'ensure requester is member of org'
+    'ensure requester can access card'
   ]
 
-  constructor: (@processor) ->
+  constructor: (@database, @processor) ->
 
   handle: (request, reply) ->
 
@@ -23,7 +24,7 @@ class AcceptCardHandler extends Handler
     if card.owner? and card.owner != user.id
       return reply @error.unauthorized("You cannot accept a card that is owned by another user")
 
-    query = new GetSpecialStackByUserQuery(org.id, user.id)
+    query = new GetSpecialStackByUserQuery(org.id, user.id, StackType.Queue)
     @database.execute query, (err, result) =>
       return reply err if err?
       {stack} = result

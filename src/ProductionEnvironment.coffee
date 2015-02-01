@@ -47,6 +47,9 @@ class ProductionEnvironment
     for name, type of loadFiles('http/preconditions', __dirname)
       forge.bind('precondition').to.type(type).when(humanize(name))
 
+    for name, type of loadFiles('security/gates', __dirname)
+      forge.bind('gate').to.type(type).when(name)
+
     for name, type of loadFiles('search/factories', __dirname)
       forge.bind('searchModelFactory').to.type(type).when(name)
 

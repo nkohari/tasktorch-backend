@@ -14,8 +14,8 @@ describe 'ChangeActionOwnerHandler', ->
       @tester = TestHarness.createTester(ChangeActionOwnerHandler)
       ready()
 
-  afterEach (done) ->
-    TestData.reset ['actions'], done
+  reset = (callback) ->
+    TestData.reset ['actions', 'notes'], callback
 
   credentials =
     user: {id: 'user-charlie'}
@@ -62,7 +62,7 @@ describe 'ChangeActionOwnerHandler', ->
         {action} = res.body
         expect(action.id).to.equal('action-takedbaby')
         expect(action.owner).to.equal(null)
-        done()
+        reset(done)
 
 #---------------------------------------------------------------------------------------------------
 
@@ -75,6 +75,6 @@ describe 'ChangeActionOwnerHandler', ->
         {action} = res.body
         expect(action.id).to.equal('action-takedbaby')
         expect(action.owner).to.equal('user-dee')
-        done()
+        reset(done)
 
 #---------------------------------------------------------------------------------------------------

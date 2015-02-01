@@ -6,13 +6,16 @@ HasManyForeignRelation = require './properties/HasManyForeignRelation'
 
 class Schema
 
-  @schemas = {}
+  @schemas: {}
 
   @get: (name) ->
     schema = Schema.schemas[name]
     unless schema?
       throw new Error("Cannot resolve document schema named #{name}")
     return schema
+
+  @getAll: ->
+    _.values(Schema.schemas)
 
   @getOrCreate: (doctype) ->
     schema = Schema.schemas[doctype.name] ?= new this(doctype)

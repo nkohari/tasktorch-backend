@@ -10,7 +10,7 @@ class ChangeActionStatusHandler extends Handler
     'resolve org'
     'resolve action'
     'ensure action belongs to org'
-    'ensure requester is member of org'
+    'ensure requester can access action'
   ]
 
   constructor: (@processor) ->

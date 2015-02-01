@@ -14,8 +14,8 @@ describe 'ChangeMyNameHandler', ->
       @tester = TestHarness.createTester(ChangeMyNameHandler)
       ready()
 
-  afterEach (done) ->
-    TestData.reset ['users'], done
+  reset = (callback) ->
+    TestData.reset ['users'], callback
 
   credentials =
     user: {id: 'user-charlie'}
@@ -45,6 +45,6 @@ describe 'ChangeMyNameHandler', ->
         expect(user.id).to.equal('user-charlie')
         expect(user.version).to.equal(1)
         expect(user.name).to.equal('Dayman')
-        done()
+        reset(done)
 
 #---------------------------------------------------------------------------------------------------

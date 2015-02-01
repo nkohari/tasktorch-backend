@@ -13,7 +13,7 @@ class CreateCardHandler extends Handler
     'resolve org'
     'resolve kind argument'
     'ensure kind belongs to org'
-    'ensure requester is member of org'
+    'ensure requester can access org'
   ]
 
   constructor: (@database, @processor) ->

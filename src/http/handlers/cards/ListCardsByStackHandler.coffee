@@ -10,7 +10,7 @@ class ListCardsByStackHandler extends Handler
     'resolve stack'
     'resolve query options'
     'ensure stack belongs to org'
-    'ensure requester is member of org'
+    'ensure requester can access stack'
   ]
 
   constructor: (@database) ->

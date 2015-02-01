@@ -1,9 +1,10 @@
-_    = require 'lodash'
-Gate = require 'security/framework/Gate'
+_           = require 'lodash'
+Gate        = require 'security/framework/Gate'
+GetOrgQuery = require 'data/queries/orgs/GetOrgQuery'
 
 class CardGate extends Gate
 
-  handles: 'Card'
+  guards: 'Card'
 
   constructor: (@database) ->
 

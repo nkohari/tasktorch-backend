@@ -15,6 +15,7 @@ class EndSessionHandler extends Handler
       return reply @error.conflict() if err is Error.VersionMismatch
       return reply err if err?
       request.auth.session.clear()
+      reply.unstate('tt-userid')
       reply()
 
 module.exports = EndSessionHandler

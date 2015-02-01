@@ -15,6 +15,7 @@ class ApiServer
   start: (callback = (->)) ->
     @log.info '[http] Starting server'
     @setupAuthStrategy()
+    @setupCookies()
     handlers = @forge.getAll('handler')
     @register(handler) for handler in @forge.getAll('handler')
     @server.start =>
@@ -48,14 +49,14 @@ class ApiServer
     @log.debug "[http] Mounted #{name} at #{verb} #{path}"
 
   setupAuthStrategy: ->
-    {cookie} = @config.security
+    config = @config.security.session
 
     options =
-      cookie:       cookie.name
-      domain:       cookie.domain
-      ttl:          cookie.ttl
-      password:     cookie.secret
-      isSecure:     cookie.secure
+      cookie:       config.cookie
+      domain:       config.domain
+      ttl:          config.ttl
+      password:     config.secret
+      isSecure:     config.secure
       clearInvalid: true
       validateFunc: (state, callback) =>
         return callback(null, false) unless state?
@@ -65,6 +66,10 @@ class ApiServer
     @server.register require('hapi-auth-cookie'), (err) =>
       throw err if err?
       @server.auth.strategy('session', 'cookie', 'required', options)
+
+  setupCookies: ->
+    for name, config of @config.security.cookies
+      @server.state(name, config)
 
   onRequest: (request, reply) ->
     

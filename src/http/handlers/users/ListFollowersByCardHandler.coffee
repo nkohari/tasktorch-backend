@@ -10,7 +10,7 @@ class ListFollowersByCardHandler extends Handler
     'resolve card'
     'resolve query options'
     'ensure card belongs to org'
-    'ensure requester is member of org'
+    'ensure requester can access card'
   ]
 
   constructor: (@database) ->

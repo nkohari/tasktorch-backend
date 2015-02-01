@@ -13,7 +13,7 @@ class ChangeActionTextCommand extends Command
       return callback(err) if err?
       note = ActionTextChangedNote.create(@user, action, previous)
       statement = new CreateNoteStatement(note)
-      statement.execute note, (err) =>
+      conn.execute statement, (err) =>
         return callback(err) if err?
         callback(null, action)
 

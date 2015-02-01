@@ -9,8 +9,7 @@ class ChangeTeamNameHandler extends Handler
     'resolve org'
     'resolve team'
     'ensure team belongs to org'
-    'ensure requester is member of org'
-    'ensure requester is member of team'
+    'ensure requester can access team'
   ]
 
   constructor: (@processor) ->

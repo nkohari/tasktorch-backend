@@ -8,7 +8,7 @@ class GetStackHandler extends Handler
   @pre [
     'resolve org'
     'resolve query options'
-    'ensure requester is member of org'
+    'ensure requester can access org'
   ]
 
   constructor: (@database) ->

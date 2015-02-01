@@ -3,7 +3,7 @@ _ = require 'lodash'
 class Gatekeeper
 
   constructor: (@forge) ->
-    @gates = _.object _.map @forge.getAll('gate'), (gate) -> [gate.handles, gate]
+    @gates = _.object _.map @forge.getAll('gate'), (gate) -> [gate.guards, gate]
 
   canUserAccess: (document, user, callback) ->
     @getAccessList document, (err, userids) =>
@@ -11,9 +11,9 @@ class Gatekeeper
       return callback null, _.contains(userids, user.id)
 
   getAccessList: (document, callback) ->
-    gate = @gates[document.type.name]
+    gate = @gates[document.constructor.name]
     unless gate?
-      return callback new Error("Don't know how to resolve access for a document of type #{document.type.name}")
+      return callback new Error("Don't know how to resolve access for a document of type #{document.constructor.name}")
     gate.getAccessList(document, callback)
 
 module.exports = Gatekeeper

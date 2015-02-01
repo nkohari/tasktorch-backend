@@ -14,8 +14,8 @@ describe 'ChangeMyPasswordHandler', ->
       @tester = TestHarness.createTester(ChangeMyPasswordHandler)
       ready()
 
-  afterEach (done) ->
-    TestData.reset ['users'], done
+  reset = (callback) ->
+    TestData.reset ['users'], callback
 
   credentials =
     user: {id: 'user-charlie'}
@@ -35,11 +35,10 @@ describe 'ChangeMyPasswordHandler', ->
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a password argument', ->
-
     it 'returns 200 ok', (done) ->
       payload = {password: 'ghouls'}
       @tester.request {credentials, payload}, (res) ->
         expect(res.statusCode).to.equal(200)
-        done()
+        reset(done)
 
 #---------------------------------------------------------------------------------------------------
