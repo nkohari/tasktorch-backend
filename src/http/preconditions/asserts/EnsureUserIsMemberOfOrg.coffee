@@ -5,7 +5,7 @@ class EnsureUserIsMemberOfOrg extends Precondition
 
   execute: (request, reply) ->
     {org, user} = request.pre
-    if not user? or _.contains(org.members, user.id)
+    if not user? or org.hasMember(user.id)
       return reply()
     else
       return reply @error.notFound()

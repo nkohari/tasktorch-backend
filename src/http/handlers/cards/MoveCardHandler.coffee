@@ -24,7 +24,7 @@ class MoveCardHandler extends Handler
     {user}                   = request.auth.credentials
     {position}               = request.payload
 
-    if team? and not _.contains(team.members, user.id)
+    if team? and not team.hasMember(user.id)
       return reply @error.unauthorized("You cannot move a card to a stack owned by a team of which you are not a member")
 
     if stack.user? and stack.user != user.id

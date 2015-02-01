@@ -22,7 +22,7 @@ class GetOrgHandler extends Handler
     @database.execute query, (err, result) =>
       return reply err if err?
       return reply @error.notFound()  unless result.org?
-      return reply @error.forbidden() unless _.contains(result.org.members, user.id)
+      return reply @error.forbidden() unless result.org.hasMember(user.id)
       reply @response(result)
 
 module.exports = GetOrgHandler

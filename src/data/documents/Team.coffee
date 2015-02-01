@@ -1,3 +1,4 @@
+_              = require 'lodash'
 Document       = require 'data/framework/Document'
 DocumentStatus = require 'data/enums/DocumentStatus'
 
@@ -16,5 +17,11 @@ class Team extends Document
   @hasMany 'members', {type: 'User', default: []}
 
   @hasManyForeign 'stacks', {type: 'Stack', index: 'team'}
+
+  hasLeader: (userid) ->
+    _.contains(@leaders, userid)
+
+  hasMember: (userid) ->
+    _.contains(@members, userid)
 
 module.exports = Team

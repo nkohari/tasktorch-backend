@@ -12,7 +12,6 @@ class Org extends Document
   @field   'status',  {default: DocumentStatus.Normal}
   @field   'name'
 
-  @hasMany 'teams',   {type: 'Team'}
   @hasMany 'members', {type: 'User'}
   @hasMany 'leaders', {type: 'User'}
 

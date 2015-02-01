@@ -31,7 +31,7 @@ class PusherAuthHandler extends Handler
     @database.execute query, (err, result) =>
       return callback err if err?
       return callback @error.notFound()  unless result.org?
-      return callback @error.forbidden() unless _.contains(result.org.members, user.id)
+      return callback @error.forbidden() unless result.org.hasMember(user.id)
       presenceInfo =
         user_id:   user.id
         user_info: new UserModel(user)

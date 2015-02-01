@@ -22,7 +22,7 @@ class GetOrgMemberHandler extends Handler
     @database.execute query, (err, result) =>
       return reply err if err?
       return reply @error.notFound() unless result.user?
-      return reply @error.notFound() unless _.contains(org.members, result.user.id)
+      return reply @error.notFound() unless org.hasMember(result.user.id)
       reply @response(result)
 
 module.exports = GetOrgMemberHandler

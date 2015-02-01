@@ -20,7 +20,7 @@ class RemoveMemberFromTeamHandler extends Handler
     {org, team, user} = request.pre
     requester         = request.auth.credentials.user
 
-    unless _.contains(team.members, user.id)
+    unless team.hasMember(user.id)
       return reply @error.badRequest("The user #{user.id} is not a member of the team #{team.id}")
 
     command = new RemoveMemberFromTeamCommand(requester, team, user)

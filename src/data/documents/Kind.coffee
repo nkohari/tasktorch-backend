@@ -1,3 +1,4 @@
+_              = require 'lodash'
 Document       = require 'data/framework/Document'
 DocumentStatus = require 'data/enums/DocumentStatus'
 
@@ -14,5 +15,8 @@ class Kind extends Document
 
   @hasOne  'org',    {type: 'Org'}
   @hasMany 'stages', {type: 'Stage'}
+
+  hasStage: (stageid) ->
+    _.contains(@stages, stageid)
 
 module.exports = Kind

@@ -11,6 +11,7 @@ class CreateActionHandler extends Handler
   @pre [
     'resolve org'
     'resolve card'
+    'resolve stage argument'
     'ensure card belongs to org'
     'ensure requester can access action'
   ]
@@ -19,16 +20,16 @@ class CreateActionHandler extends Handler
 
   handle: (request, reply) ->
 
-    {org, card}   = request.pre
-    {stage, text} = request.payload
+    {org, card, stage} = request.pre
+    {text}             = request.payload
 
     query = new GetKindQuery(card.kind)
     @database.execute query, (err, result) =>
       return reply err if err?
 
       {kind} = result
-      unless _.contains(kind.stages, stage)
-        return reply @error.badRequest("Invalid stage #{stage}")
+      unless kind.hasStage(stage.id)
+        return reply @error.badRequest("Stage #{stage.id} is not part of the kind #{kind.id}")
 
       action = new Action {
         org:   org.id

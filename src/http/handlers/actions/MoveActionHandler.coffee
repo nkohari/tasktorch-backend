@@ -29,8 +29,8 @@ class MoveActionHandler extends Handler
     @database.execute query, (err, result) =>
       return reply err if err?
 
-      kind = result.kind
-      unless _.contains(kind.stages, stage.id)
+      {kind} = result
+      unless kind.hasStage(stage.id)
         return reply @error.badRequest("Stage #{stage.id} is not part of the kind #{kind.id}")
 
       command = new MoveActionCommand(request.auth.credentials.user, action.id, card.id, stage.id, position)

@@ -25,10 +25,10 @@ class CreateTeamHandler extends Handler
     unless name?.length > 0
       return @error.badRequest("Missing required argument 'name'")
 
-    if members?.length > 0 and not _.every(members, (u) -> _.contains(org.members, u.id))
+    if members?.length > 0 and not _.every(members, (u) -> org.hasMember(u.id))
       return @error.badRequest("All users in the 'members' list must be members of the organization")
 
-    if leaders?.length > 0 and not _.every(leaders, (u) -> _.contains(org.members, u.id))
+    if leaders?.length > 0 and not _.every(leaders, (u) -> org.hasMember(u.id))
       return @error.badRequest("All users in the 'leaders' list must be members of the organization")
 
     team = new Team {
