@@ -8,7 +8,7 @@ table = (records) ->
 record = (data) ->
   _.extend {status: 'Normal', version: 0}, data
 
-TestData = {}
+TestData = {dbname: 'torchtest'}
 
 #---------------------------------------------------------------------------------------------------
 
@@ -398,37 +398,37 @@ TestData.teams = table [
 #---------------------------------------------------------------------------------------------------
 
 TestData.users = table [
-  {
+  record {
     id:       'user-charlie'
     name:     'Charlie Kelly'
     username: 'dayman'
     emails:   ['charlie.kelly@paddyspub.com']
   }
-  {
+  record {
     id:       'user-mac'
     name:     'Mac'
     username: 'mac'
     emails:   ['ronald.mcdonald@paddyspub.com']
   }
-  {
+  record {
     id:       'user-dee'
     name:     'Dee Reynolds'
     username: 'sweetdee'
     emails:   ['dee.reynolds@paddyspub.com']
   }
-  {
+  record {
     id:       'user-dennis'
     name:     'Dennis Reynolds'
     username: '80srockgod'
     emails:   ['dennis.reynolds@paddyspub.com']
   }
-  {
+  record {
     id:       'user-frank'
     name:     'Frank Reynolds'
     username: 'mantis'
     emails:   ['frank.reynolds@paddyspub.com']
   }
-  {
+  record {
     id:       'user-greg'
     name:     'Greg'
     username: 'greg'
@@ -454,23 +454,23 @@ TestData.tables = [
 
 #---------------------------------------------------------------------------------------------------
 
-runBatch = (dbname, statements, callback) ->
-  r.connect {db: dbname}, (err, conn) ->
+runBatch = (statements, callback) ->
+  r.connect {db: TestData.dbname}, (err, conn) ->
     return callback(err) if err?
     async.eachSeries statements, ((statement, next) -> statement.run(conn, next)), callback
 
-TestData.clear = (dbname, callback) ->
-  statements = _.map TestData.tables, (name) -> r.table(name).delete()
-  runBatch(dbname, statements, callback)
+TestData.clear = (tables, callback) ->
+  statements = _.map tables, (name) -> r.table(name).delete()
+  runBatch(statements, callback)
 
-TestData.populate = (dbname, callback) ->
-  statements = _.map TestData.tables, (name) -> r.table(name).insert _.values(TestData[name])
-  runBatch(dbname, statements, callback)
+TestData.populate = (tables, callback) ->
+  statements = _.map tables, (name) -> r.table(name).insert _.values(TestData[name])
+  runBatch(statements, callback)
 
-TestData.reset = (dbname, callback) ->
-  TestData.clear dbname, (err) ->
+TestData.reset = (tables, callback) ->
+  TestData.clear tables, (err) ->
     return callback(err) if err?
-    TestData.populate dbname, (err) ->
+    TestData.populate tables, (err) ->
       return callback(err) if err?
       callback()
 

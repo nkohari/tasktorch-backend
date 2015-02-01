@@ -12,7 +12,7 @@ class ResolveOptionalTeamArgument extends Precondition
     query = new GetTeamQuery(request.payload.team)
     @database.execute query, (err, result) =>
       return reply err if err?
-      return reply @error.notFound() unless result.team?
+      return reply @error.badRequest() unless result.team?
       reply(result.team)
 
 module.exports = ResolveOptionalTeamArgument

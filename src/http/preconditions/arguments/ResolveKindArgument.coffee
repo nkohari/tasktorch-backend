@@ -11,7 +11,7 @@ class ResolveKindArgument extends Precondition
     query = new GetKindQuery(request.payload.kind)
     @database.execute query, (err, result) =>
       return reply err if err?
-      return reply @error.notFound() unless result.kind?
+      return reply @error.badRequest() unless result.kind?
       reply(result.kind)
 
 module.exports = ResolveKindArgument

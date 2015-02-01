@@ -11,5 +11,5 @@ CommonBehaviors.requiresAuthentication = (options = {}) ->
       @tester.request config, (res) ->
         expect(res.statusCode).to.equal(401)
         done()
-        
+
 module.exports = CommonBehaviors

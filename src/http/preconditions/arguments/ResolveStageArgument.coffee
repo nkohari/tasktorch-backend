@@ -11,7 +11,7 @@ class ResolveStageArgument extends Precondition
     query = new GetStageQuery(request.payload.stage)
     @database.execute query, (err, result) =>
       return reply err if err?
-      return reply @error.notFound() unless result.stage?
+      return reply @error.badRequest() unless result.stage?
       reply(result.stage)
 
 module.exports = ResolveStageArgument

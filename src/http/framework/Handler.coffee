@@ -1,6 +1,7 @@
 _                   = require 'lodash'
 async               = require 'async'
 Hapi                = require 'hapi'
+Joi                 = require 'joi'
 Boom                = require 'boom'
 Document            = require 'data/framework/Document'
 QueryResult         = require 'data/framework/QueryResult'
@@ -9,7 +10,8 @@ QueryResultResponse = require './QueryResultResponse'
 
 class Handler
 
-  error: Boom
+  @mustBe: Joi
+  error:   Boom
 
   @route: (route) ->
     [verb, path] = route.split(/\s+/, 2)
@@ -21,6 +23,10 @@ class Handler
   @auth: (auth) ->
     @options ?= {}
     (@options.config ?= {}).auth = auth
+
+  @validate: (spec) ->
+    @options ?= {}
+    (@options.config ?= {}).validate = spec
 
   handle: (request, reply) ->
     throw new Error("You must implement handle() on #{@constructor.name}")

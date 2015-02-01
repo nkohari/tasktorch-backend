@@ -5,10 +5,14 @@ class ChangeActionOwnerHandler extends Handler
 
   @route 'post /api/{orgid}/actions/{actionid}/owner'
 
+  @validate
+    payload:
+      user: @mustBe.string().allow(null).required()
+
   @pre [
     'resolve org'
     'resolve action'
-    'resolve user argument'
+    'resolve optional user argument'
     'ensure action belongs to org'
     'ensure requester is member of org'
     'ensure user is member of org'

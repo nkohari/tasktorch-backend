@@ -11,7 +11,7 @@ class ResolveStackArgument extends Precondition
     query = new GetStackQuery(request.payload.stack)
     @database.execute query, (err, result) =>
       return reply err if err?
-      return reply @error.notFound() unless result.stack?
+      return reply @error.badRequest() unless result.stack?
       reply(result.stack)
 
 module.exports = ResolveStackArgument

@@ -11,7 +11,7 @@ class ResolveCardArgument extends Precondition
     query = new GetCardQuery(request.payload.card)
     @database.execute query, (err, result) =>
       return reply err if err?
-      return reply @error.notFound() unless result.card?
+      return reply @error.badRequest() unless result.card?
       reply(result.card)
 
 module.exports = ResolveCardArgument

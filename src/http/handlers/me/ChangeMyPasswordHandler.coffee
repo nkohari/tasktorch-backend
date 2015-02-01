@@ -4,6 +4,10 @@ ChangeUserPasswordCommand = require 'domain/commands/users/ChangeUserPasswordCom
 class ChangeMyPasswordHandler extends Handler
 
   @route 'post /api/me/password'
+
+  @validate
+    payload:
+      password: @mustBe.string().required()
   
   constructor: (@processor, @passwordHasher) ->
 

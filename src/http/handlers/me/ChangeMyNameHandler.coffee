@@ -5,15 +5,16 @@ class ChangeMyNameHandler extends Handler
 
   @route 'post /api/me/name'
 
+  @validate
+    payload:
+      name: @mustBe.string().required()
+
   constructor: (@processor) ->
 
   handle: (request, reply) ->
 
     {user} = request.auth.credentials
     {name} = request.payload
-
-    unless name?.length > 0
-      return reply @error.badRequest("Missing required parameter 'name'")
 
     command = new ChangeUserNameCommand(user, name)
     @processor.execute command, (err, user) =>
