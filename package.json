@@ -37,6 +37,6 @@
   },
   "scripts": {
     "test": "mocha",
-    "prepublish": "ln -snf `pwd`/test ./node_modules/test; for LINK in 'common' 'data' 'domain' 'http' 'messaging' 'search' 'security'; do ln -snf `pwd`/src/$LINK ./node_modules/$LINK; done"
+    "prepublish": "scripts/create-symlinks"
   }
 }

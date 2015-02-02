@@ -1,0 +1,10 @@
+#!/bin/bash
+
+ln -snf test          ./node_modules/test
+ln -snf src/common    ./node_modules/common
+ln -snf src/data      ./node_modules/data
+ln -snf src/domain    ./node_modules/domain
+ln -snf src/http      ./node_modules/http
+ln -snf src/messaging ./node_modules/messaging
+ln -snf src/search    ./node_modules/search
+ln -snf src/security  ./node_modules/security
