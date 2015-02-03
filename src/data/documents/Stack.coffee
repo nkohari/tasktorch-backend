@@ -9,12 +9,12 @@ class Stack extends Document
   @field   'id'
   @field   'version'
   @field   'status', {default: DocumentStatus.Normal}
-  @field   'name'
+  @field   'name',   {default: null}
   @field   'type'
 
   @hasOne  'org',    {type: 'Org'}
   @hasOne  'user',   {type: 'User', default: null}
   @hasOne  'team',   {type: 'Team', default: null}
-  @hasMany 'cards',  {type: 'Card'}
+  @hasMany 'cards',  {type: 'Card', default: []}
 
 module.exports = Stack

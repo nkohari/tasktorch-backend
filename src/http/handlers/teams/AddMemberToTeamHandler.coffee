@@ -24,6 +24,9 @@ class AddMemberToTeamHandler extends Handler
     unless user?
       return reply @error.badRequest("Missing required argument 'user'")
 
+    if team.hasMember(user)
+      return reply @response(team)
+
     command = new AddMemberToTeamCommand(requester, team, user)
     @processor.execute command, (err, team) =>
       return reply err if err?
