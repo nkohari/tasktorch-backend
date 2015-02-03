@@ -77,8 +77,8 @@ Tables.users = [
 
 DatabaseCreator = {}
 
-DatabaseCreator.create = (dbname, callback) ->
-  r.connect (err, conn) ->
+DatabaseCreator.create = (dbname, options = {}, callback) ->
+  r.connect options, (err, conn) ->
     return callback(err) if err?
     r.dbCreate(dbname).run conn, (err) ->
       return callback(err) if err?

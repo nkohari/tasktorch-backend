@@ -2,13 +2,15 @@
 
 DatabaseCreator = require 'test/framework/DatabaseCreator'
 
-dbname = process.argv[2]
-unless dbname?.length > 0
-  console.error "Usage: create-database <dbname>"
+unless process.argv.length == 4
+  console.error "Usage: create-database <host> <dbname>"
   process.exit(1)
 
+host   = process.argv[2]
+dbname = process.argv[3]
+
 console.log "Creating database #{dbname}"
-DatabaseCreator.create dbname, (err) ->
+DatabaseCreator.create dbname, {host}, (err) ->
   if err?
     console.error "Error creating database: #{err}"
     process.exit(1)
