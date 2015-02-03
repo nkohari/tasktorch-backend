@@ -11,8 +11,6 @@ Processor       = require 'domain/Processor'
 ApiServer       = require 'http/ApiServer'
 PusherClient    = require 'messaging/PusherClient'
 MessageBus      = require 'messaging/MessageBus'
-SearchEngine    = require 'search/SearchEngine'
-SearchIndexer   = require 'search/SearchIndexer'
 Gatekeeper      = require 'security/Gatekeeper'
 Keymaster       = require 'security/Keymaster'
 PasswordHasher  = require 'security/PasswordHasher'
@@ -41,9 +39,6 @@ class TestEnvironment
     forge.bind('pusher').to.type(PusherClient)
     forge.bind('messageBus').to.type(MessageBus)
 
-    forge.bind('searchEngine').to.type(SearchEngine)
-    forge.bind('searchIndexer').to.type(SearchIndexer)
-
     for name, type of loadFiles('http/handlers', SRC_DIR)
       forge.bind('handler').to.type(type).when(name)
       
@@ -52,8 +47,5 @@ class TestEnvironment
 
     for name, type of loadFiles('security/gates', SRC_DIR)
       forge.bind('gate').to.type(type).when(name)
-
-    for name, type of loadFiles('search/factories', SRC_DIR)
-      forge.bind('searchModelFactory').to.type(type).when(name)
 
 module.exports = TestEnvironment
