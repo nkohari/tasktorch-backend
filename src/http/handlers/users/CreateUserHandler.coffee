@@ -6,7 +6,8 @@ CreateUserCommand = require 'domain/commands/users/CreateUserCommand'
 class CreateUserHandler extends Handler
 
   @route 'post /api/users'
-
+  @auth  {mode: 'try'}
+  
   @validate
     payload:
       name:     @mustBe.string().required()
