@@ -8,10 +8,11 @@ class ResolveStackArgument extends Precondition
   constructor: (@database) ->
 
   execute: (request, reply) ->
-    query = new GetStackQuery(request.payload.stack)
+    stackid = request.payload.stack
+    query = new GetStackQuery(stackid)
     @database.execute query, (err, result) =>
       return reply err if err?
-      return reply @error.badRequest() unless result.stack?
+      return reply @error.badRequest("No such stack #{stackid}") unless result.stack?
       reply(result.stack)
 
 module.exports = ResolveStackArgument

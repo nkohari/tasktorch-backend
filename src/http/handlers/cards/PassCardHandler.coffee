@@ -8,14 +8,19 @@ class PassCardHandler extends Handler
 
   @route 'put /api/{orgid}/cards/{cardid}/pass'
 
+  @validate
+    payload:
+      team: @mustBe.string()
+      user: @mustBe.string()
+
   @pre [
     'resolve org'
     'resolve card'
     'resolve optional team argument'
     'resolve optional user argument'
     'ensure requester can access card'
-    'ensure team belongs to org'
-    'ensure user is member of org'
+    'ensure team argument belongs to org'
+    'ensure user argument is member of org'
   ]
 
   constructor: (@database, @processor) ->
@@ -30,6 +35,8 @@ class PassCardHandler extends Handler
       query = new GetSpecialStackByUserQuery(org.id, user.id, StackType.Inbox)
     else if team?
       query = new GetInboxByTeamQuery(team.id)
+    else
+      return reply @error.badRequest("You must specify either a team or a user")
 
     @database.execute query, (err, result) =>
       return reply err if err?

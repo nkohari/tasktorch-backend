@@ -58,8 +58,8 @@ describe 'ChangeActionOwnerHandler', ->
       payload = {user: null}
       @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        {action} = res.body
+        expect(res.result).to.exist()
+        {action} = res.result
         expect(action.id).to.equal('action-takedbaby')
         expect(action.owner).to.equal(null)
         reset(done)
@@ -71,8 +71,8 @@ describe 'ChangeActionOwnerHandler', ->
       payload = {user: 'user-dee'}
       @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        {action} = res.body
+        expect(res.result).to.exist()
+        {action} = res.result
         expect(action.id).to.equal('action-takedbaby')
         expect(action.owner).to.equal('user-dee')
         reset(done)

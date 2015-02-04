@@ -11,7 +11,7 @@ class AddMemberToTeamHandler extends Handler
     'resolve user argument'
     'ensure team belongs to org'
     'ensure requester can access team'
-    'ensure user is member of org'
+    'ensure user argument is member of org'
   ]
 
   constructor: (@processor) ->

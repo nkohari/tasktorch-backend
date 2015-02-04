@@ -27,8 +27,8 @@ describe 'ListMyTeamsHandler', ->
     it 'returns an array of teams owned by the requester in that org', (done) ->
       @tester.request {orgid: 'org-paddys', credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        {teams} = res.body
+        expect(res.result).to.exist()
+        {teams} = res.result
         expect(teams).to.be.an('array')
         expect(teams).to.have.length(2)
         expect(_.pluck(teams, 'id')).to.have.members ['team-thegang', 'team-gruesometwosome']

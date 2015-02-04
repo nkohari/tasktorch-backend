@@ -1,9 +1,14 @@
 Handler                = require 'http/framework/Handler'
+StackType              = require 'data/enums/StackType'
 ChangeStackNameCommand = require 'domain/commands/stacks/ChangeStackNameCommand'
 
 class ChangeStackNameHandler extends Handler
 
   @route 'post /api/{orgid}/stacks/{stackid}/name'
+
+  @validate
+    payload:
+      name: @mustBe.string().required()
 
   @pre [
     'resolve org'
@@ -20,8 +25,8 @@ class ChangeStackNameHandler extends Handler
     {user}       = request.auth.credentials
     {name}       = request.payload
 
-    unless name?.length > 0
-      return reply @error.badRequest("Missing required argument 'name'")
+    unless stack.type == StackType.Backlog
+      return reply @error.badRequest("Cannot change the name of a stack with type #{stack.type}")
 
     command = new ChangeStackNameCommand(user, stack, name)
     @processor.execute command, (err, stack) =>

@@ -10,7 +10,7 @@ class EnsureRequesterCanAccessOrg extends Precondition
     {user} = request.auth.credentials
     @gatekeeper.canUserAccess org, user, (err, isAllowed) =>
       return reply err if err?
-      return reply @error.forbidden() unless isAllowed
+      return reply @error.forbidden("You do not have permission to access org #{org.id}") unless isAllowed
       return reply()
 
 module.exports = EnsureRequesterCanAccessOrg

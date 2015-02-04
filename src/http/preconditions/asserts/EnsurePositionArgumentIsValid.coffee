@@ -8,6 +8,6 @@ class EnsurePositionArgumentIsValid extends Precondition
     if not position? or _.isNumber(position) or position is 'append' or position is 'prepend'
       return reply()
     else
-      return @error.badRequest()
+      return @error.badRequest("Invalid value specified for position argument")
 
 module.exports = EnsurePositionArgumentIsValid

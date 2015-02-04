@@ -9,17 +9,16 @@ class CreateSessionHandler extends Handler
   @route 'post /api/sessions'
   @auth  {mode: 'try'}
 
-  constructor: (@config, @database, @processor, @passwordHasher) ->
+  @validate
+    payload:
+      login: @mustBe.string().required()
+      password: @mustBe.string().required()
+
+  constructor: (@database, @processor, @passwordHasher) ->
 
   handle: (request, reply) ->
 
     {login, password} = request.payload
-
-    unless login?.length > 0
-      return reply @error.badRequest("Missing required argument 'login'")
-
-    unless password?.length > 0
-      return reply @error.badRequest("Missing required argument 'password'")
 
     @resolveUser login, (err, user) =>
       return reply err if err?

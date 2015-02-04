@@ -43,8 +43,8 @@ describe 'GetOrgMemberHandler', ->
     it 'returns the user', (done) ->
       @tester.request {orgid: 'org-paddys', userid: 'user-frank', credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        {user} = res.body
+        expect(res.result).to.exist()
+        {user} = res.result
         expect(user).to.exist()
         expect(user.id).to.equal('user-frank')
         done()

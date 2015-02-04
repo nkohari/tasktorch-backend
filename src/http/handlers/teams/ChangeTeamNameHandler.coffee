@@ -5,6 +5,10 @@ class ChangeTeamNameHandler extends Handler
 
   @route 'post /api/{orgid}/teams/{teamid}/name'
 
+  @validate
+    payload:
+      name: @mustBe.string().required()
+
   @pre [
     'resolve org'
     'resolve team'
@@ -19,9 +23,6 @@ class ChangeTeamNameHandler extends Handler
     {org, team} = request.pre
     {user}      = request.auth.credentials
     {name}      = request.payload
-
-    unless name?.length > 0
-      return reply @error.badRequest("Missing required argument 'name'")
 
     command = new ChangeTeamNameCommand(user, team, name)
     @processor.execute command, (err, team) =>

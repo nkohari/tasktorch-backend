@@ -43,8 +43,8 @@ describe 'GetCardHandler', ->
     it 'returns the card', (done) ->
       @tester.request {orgid: 'org-paddys', cardid: 'card-takedbaby', credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        {card} = res.body
+        expect(res.result).to.exist()
+        {card} = res.result
         expect(card).to.exist()
         expect(card.id).to.equal('card-takedbaby')
         done()

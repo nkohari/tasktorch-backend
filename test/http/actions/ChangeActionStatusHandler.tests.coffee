@@ -67,8 +67,8 @@ describe 'ChangeActionStatusHandler', ->
       payload = {status: 'InProgress'}
       @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        {action} = res.body
+        expect(res.result).to.exist()
+        {action} = res.result
         expect(action.id).to.equal('action-takedbaby')
         expect(action.status).to.equal('InProgress')
         reset(done)

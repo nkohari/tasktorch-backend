@@ -8,10 +8,11 @@ class ResolveAction extends Precondition
   constructor: (@database) ->
 
   execute: (request, reply) ->
-    query = new GetActionQuery(request.params.actionid)
+    {actionid} = request.params
+    query = new GetActionQuery(actionid)
     @database.execute query, (err, result) =>
       return reply err if err?
-      return reply @error.notFound() unless result.action?
+      return reply @error.notFound("No action found with id #{actionid}") unless result.action?
       reply(result.action)
 
 module.exports = ResolveAction

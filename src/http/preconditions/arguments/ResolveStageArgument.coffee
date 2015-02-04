@@ -8,10 +8,11 @@ class ResolveStageArgument extends Precondition
   constructor: (@database) ->
 
   execute: (request, reply) ->
-    query = new GetStageQuery(request.payload.stage)
+    stageid = request.payload.stage
+    query = new GetStageQuery(stageid)
     @database.execute query, (err, result) =>
       return reply err if err?
-      return reply @error.badRequest() unless result.stage?
+      return reply @error.badRequest("No such stage #{stageid}") unless result.stage?
       reply(result.stage)
 
 module.exports = ResolveStageArgument

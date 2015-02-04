@@ -25,8 +25,6 @@ class HandlerTester
       headers:     options.headers                 if options.headers?
       credentials: options.credentials             if options.credentials?
       payload:     JSON.stringify(options.payload) if options.payload?
-    }, (res) =>
-      res.body = JSON.parse(res.payload) if res.payload?.length > 0
-      callback(res)
+    }, callback
 
 module.exports = HandlerTester

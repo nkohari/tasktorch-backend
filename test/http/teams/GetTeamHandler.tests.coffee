@@ -43,8 +43,8 @@ describe 'GetTeamHandler', ->
     it 'returns the team', (done) ->
       @tester.request {orgid: 'org-paddys', teamid: 'team-thegang', credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        {team} = res.body
+        expect(res.result).to.exist()
+        {team} = res.result
         expect(team).to.exist()
         expect(team.id).to.equal('team-thegang')
         done()

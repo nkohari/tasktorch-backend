@@ -26,8 +26,8 @@ describe 'GetMeHandler', ->
     it 'returns the requester', (done) ->
       @tester.request {credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        {user} = res.body
+        expect(res.result).to.exist()
+        {user} = res.result
         expect(user).to.exist()
         expect(user.id).to.equal('user-charlie')
         done()

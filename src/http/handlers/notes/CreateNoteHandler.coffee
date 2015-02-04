@@ -6,6 +6,11 @@ class CreateNoteHandler extends Handler
 
   @route 'post /api/{orgid}/cards/{cardid}/notes'
 
+  @validate
+    payload:
+      type:    @mustBe.string().required()
+      content: @mustBe.any().required()
+
   @pre [
     'resolve org'
     'resolve card'
@@ -20,9 +25,6 @@ class CreateNoteHandler extends Handler
     {card}          = request.pre
     {user}          = request.auth.credentials
     {type, content} = request.payload
-
-    unless type?.length > 0
-      return reply @error.badRequest("Missing required argument 'type'")
 
     # TODO: Improve this if we end up supporting additional note types.
     switch type

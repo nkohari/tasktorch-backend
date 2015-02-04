@@ -35,8 +35,8 @@ describe 'ListTeamsByOrgHandler', ->
     it 'returns an array of teams belonging to the org', (done) ->
       @tester.request {orgid: 'org-paddys', credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        {teams} = res.body
+        expect(res.result).to.exist()
+        {teams} = res.result
         expect(teams).to.exist()
         expect(teams).to.have.length(3)
         expect(_.pluck(teams, 'id')).to.have.members ['team-thegang', 'team-dynamicduo', 'team-gruesometwosome']
@@ -48,8 +48,8 @@ describe 'ListTeamsByOrgHandler', ->
     it 'returns an array of teams whose names begin with the specified value', (done) ->
       @tester.request {orgid: 'org-paddys', query: {suggest: 'g'}, credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        {teams} = res.body
+        expect(res.result).to.exist()
+        {teams} = res.result
         expect(teams).to.exist()
         expect(teams).to.have.length(1)
         expect(_.pluck(teams, 'id')).to.have.members ['team-gruesometwosome']

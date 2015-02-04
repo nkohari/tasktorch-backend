@@ -6,7 +6,7 @@ class CommentNote
     new Note {
       type:    'Comment'
       user:    user.id
-      org:     org.id
+      org:     card.org
       card:    card.id
       content: content
     }

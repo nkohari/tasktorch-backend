@@ -10,7 +10,7 @@ ConnectionPool  = require 'data/framework/ConnectionPool'
 Processor       = require 'domain/Processor'
 ApiServer       = require 'http/ApiServer'
 PusherClient    = require 'messaging/PusherClient'
-MessageBus      = require 'messaging/MessageBus'
+MockMessageBus  = require 'test/framework/MockMessageBus'
 Gatekeeper      = require 'security/Gatekeeper'
 Keymaster       = require 'security/Keymaster'
 PasswordHasher  = require 'security/PasswordHasher'
@@ -35,9 +35,9 @@ class TestEnvironment
     forge.bind('processor').to.type(Processor)
 
     forge.bind('server').to.type(ApiServer)
-
+    
     forge.bind('pusher').to.type(PusherClient)
-    forge.bind('messageBus').to.type(MessageBus)
+    forge.bind('messageBus').to.type(MockMessageBus)
 
     for name, type of loadFiles('http/handlers', SRC_DIR)
       forge.bind('handler').to.type(type).when(name)

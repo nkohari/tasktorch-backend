@@ -27,11 +27,11 @@ describe 'ListMyStacksHandler', ->
     it 'returns an array of stacks owned by the requester in that org', (done) ->
       @tester.request {orgid: 'org-paddys', credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        {stacks} = res.body
+        expect(res.result).to.exist()
+        {stacks} = res.result
         expect(stacks).to.be.an('array')
-        expect(stacks).to.have.length(3)
-        expect(_.pluck(stacks, 'id')).to.have.members ['stack-charlie-inbox', 'stack-charlie-queue', 'stack-charlie-drafts']
+        expect(stacks).to.have.length(4)
+        expect(_.pluck(stacks, 'id')).to.have.members ['stack-charlie-inbox', 'stack-charlie-queue', 'stack-charlie-drafts', 'stack-charlie-dreams']
         done()
 
 #---------------------------------------------------------------------------------------------------

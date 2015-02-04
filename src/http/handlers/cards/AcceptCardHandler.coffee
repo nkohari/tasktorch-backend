@@ -22,7 +22,7 @@ class AcceptCardHandler extends Handler
     {user}      = request.auth.credentials
 
     if card.owner? and card.owner != user.id
-      return reply @error.unauthorized("You cannot accept a card that is owned by another user")
+      return reply @error.badRequest("You cannot accept a card that is owned by another user")
 
     query = new GetSpecialStackByUserQuery(org.id, user.id, StackType.Queue)
     @database.execute query, (err, result) =>

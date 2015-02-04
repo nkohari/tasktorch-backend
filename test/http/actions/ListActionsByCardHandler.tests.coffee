@@ -43,8 +43,8 @@ describe 'ListActionsByCardHandler', ->
     it 'returns an array of actions belonging to the card', (done) ->
       @tester.request {orgid: 'org-paddys', cardid: 'card-takedbaby', credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        {actions} = res.body
+        expect(res.result).to.exist()
+        {actions} = res.result
         expect(actions).to.exist()
         expect(actions).to.have.length(3)
         expect(_.pluck(actions, 'id')).to.have.members ['action-takedbaby', 'action-meetwaitress', 'action-meetatlaterbar']

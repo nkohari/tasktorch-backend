@@ -43,8 +43,8 @@ describe 'ListStagesByKindHandler', ->
     it 'returns an array of stages belonging to the kind', (done) ->
       @tester.request {orgid: 'org-paddys', kindid: 'kind-scheme', credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        {stages} = res.body
+        expect(res.result).to.exist()
+        {stages} = res.result
         expect(stages).to.exist()
         expect(stages).to.have.length(3)
         expect(_.pluck(stages, 'id')).to.have.members ['stage-scheme-plan', 'stage-scheme-do', 'stage-scheme-drink']

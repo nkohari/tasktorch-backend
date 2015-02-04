@@ -20,7 +20,7 @@ class Card extends Document
   @hasOne  'kind',      {type: 'Kind'}
   @hasOne  'org',       {type: 'Org'}
   @hasOne  'owner',     {type: 'User'}
-  @hasOne  'stack',     {type: 'Stack'}
+  @hasOne  'stack',     {type: 'Stack', default: null}
 
   @hasManyForeign 'notes', {type: 'Note', index: 'card', order: {field: 'time'}}
 

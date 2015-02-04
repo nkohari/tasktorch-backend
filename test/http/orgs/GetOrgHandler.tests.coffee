@@ -35,7 +35,7 @@ describe 'GetOrgHandler', ->
     it 'returns the org', (done) ->
       @tester.request {orgid: 'org-paddys', credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
-        {org} = res.body
+        {org} = res.result
         expect(org).to.exist()
         expect(org.id).to.equal('org-paddys')
         done()
@@ -54,10 +54,10 @@ describe 'GetOrgHandler', ->
     it 'returns the org and the users in the members list', (done) ->
       @tester.request {orgid: 'org-paddys', query: {expand: 'members'}, credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        expect(res.body.related).to.exist()
-        {org}   = res.body
-        {users} = res.body.related
+        expect(res.result).to.exist()
+        expect(res.result.related).to.exist()
+        {org}   = res.result
+        {users} = res.result.related
         missing = _.difference(org.members, _.keys(users))
         expect(missing).to.be.empty()
         done()
@@ -68,10 +68,10 @@ describe 'GetOrgHandler', ->
     it 'returns the org and the users in the leaders list', (done) ->
       @tester.request {orgid: 'org-paddys', query: {expand: 'leaders'}, credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        expect(res.body.related).to.exist()
-        {org}   = res.body
-        {users} = res.body.related
+        expect(res.result).to.exist()
+        expect(res.result.related).to.exist()
+        {org}   = res.result
+        {users} = res.result.related
         missing = _.difference(org.leaders, _.keys(users))
         expect(missing).to.be.empty()
         done()

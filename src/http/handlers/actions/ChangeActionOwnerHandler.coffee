@@ -15,7 +15,7 @@ class ChangeActionOwnerHandler extends Handler
     'resolve optional user argument'
     'ensure action belongs to org'
     'ensure requester can access action'
-    'ensure user is member of org'
+    'ensure user argument is member of org'
   ]
 
   constructor: (@processor) ->

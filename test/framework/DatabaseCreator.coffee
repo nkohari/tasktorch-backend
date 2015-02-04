@@ -13,7 +13,7 @@ Tables.actions = [
 
 Tables.cards = [
   r.tableCreate('cards')
-  r.table('cards').indexCreate('action', ((card) ->
+  r.table('cards').indexCreate('actions', ((card) ->
     card('actions').keys()
       .map (key) -> card('actions')(key)
       .reduce (left, right) -> left.default([]).setUnion(right)

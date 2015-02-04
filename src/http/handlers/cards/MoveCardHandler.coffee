@@ -6,6 +6,11 @@ class MoveCardHandler extends Handler
 
   @route 'post /api/{orgid}/cards/{cardid}/move'
 
+  @validate
+    payload:
+      stack:    @mustBe.string().required()
+      position: @mustBe.number().integer().allow('prepend', 'append').required()
+
   @pre [
     'resolve org'
     'resolve card'
@@ -25,10 +30,10 @@ class MoveCardHandler extends Handler
     {position}               = request.payload
 
     if team? and not team.hasMember(user.id)
-      return reply @error.unauthorized("You cannot move a card to a stack owned by a team of which you are not a member")
+      return reply @error.forbidden("You cannot move a card to a stack owned by a team of which you are not a member")
 
     if stack.user? and stack.user != user.id
-      return reply @error.unauthorized("You cannot move a card to a stack owned by another user")
+      return reply @error.forbidden("You cannot move a card to a stack owned by another user")
 
     command = new MoveCardCommand(user, card.id, stack.id, position)
     @processor.execute command, (err, card) =>

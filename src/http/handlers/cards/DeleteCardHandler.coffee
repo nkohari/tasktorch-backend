@@ -22,6 +22,6 @@ class DeleteCardHandler extends Handler
     command = new DeleteCardCommand(user, card)
     @processor.execute command, (err, card) =>
       return reply err if err?
-      reply()
+      return reply @response(card)
 
 module.exports = DeleteCardHandler

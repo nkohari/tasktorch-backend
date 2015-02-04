@@ -15,8 +15,11 @@ class DeleteActionHandler extends Handler
   constructor: (@processor) ->
 
   handle: (request, reply) ->
+
     {action} = request.pre
-    command = new DeleteActionCommand(request.auth.credentials.user, action)
+    {user}   = request.auth.credentials
+
+    command = new DeleteActionCommand(user, action)
     @processor.execute command, (err, action) =>
       return reply err if err?
       reply @response(action)

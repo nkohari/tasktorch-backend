@@ -37,6 +37,14 @@ TestData.actions = table [
     text:   'Meet Mac and Dee at later bar'
     status: 'NotStarted'
   }
+  record {
+    id:     'action-ringbell'
+    org:    'org-sudz'
+    card:   'card-ringbell'
+    stage:  'stage-task-do'
+    text:   'Ring the bell'
+    status: 'NotStarted'
+  }
 ]
 
 #---------------------------------------------------------------------------------------------------
@@ -50,8 +58,8 @@ TestData.cards = table [
     kind:      'kind-scheme'
     title:     'Taked baby'
     summary:   'Meet at later bar, day or night, sometime'
-    owner:     'user-dee'
-    stack:     'user-dee-inbox'
+    owner:     null
+    stack:     'stack-thegang-inbox'
     moves:     []
     actions:
       'stage-scheme-plan':  []
@@ -87,7 +95,7 @@ TestData.cards = table [
     stack:     'user-greg-queue'
     moves:     []
     actions:
-      'stage-task-do': []
+      'stage-task-do': ['action-ringbell']
   }
 ]
 
@@ -196,13 +204,21 @@ TestData.stacks = table [
     user:  'user-charlie'
     cards: []
   }
+  record {
+    id:    "stack-charlie-dreams"
+    org:   'org-paddys'
+    type:  'Backlog'
+    name:  'Dreams'
+    user:  'user-charlie'
+    cards: []
+  }
   # Dee
   record {
     id:    "stack-dee-inbox"
     org:   'org-paddys'
     type:  'Inbox'
     user:  'user-dee'
-    cards: ['card-takedbaby']
+    cards: []
   }
   record {
     id:    "stack-dee-queue"
@@ -342,21 +358,25 @@ TestData.stacks = table [
 TestData.stages = [
   record {
     id:   'stage-scheme-plan'
+    org:  'org-paddys'
     kind: 'kind-scheme'
     name: 'Plan'
   }
   record {
     id:   'stage-scheme-do'
+    org:  'org-paddys'
     kind: 'kind-scheme'
     name: 'Execute'
   }
   record {
     id:   'stage-scheme-drink'
+    org:  'org-paddys'
     kind: 'kind-scheme'
     name: 'Drink'
   }
   record {
     id:   'stage-task-do'
+    org:  'org-sudz'
     kind: 'kind-task'
     name: 'Do'
   }
@@ -403,36 +423,48 @@ TestData.users = table [
     name:     'Charlie Kelly'
     username: 'dayman'
     emails:   ['charlie.kelly@paddyspub.com']
+    # waitress
+    password: 'c2NyeXB0AA4AAAAIAAAAAaF626neJ1gQrqKS+qkxcpMNQd76mLpkXQhjyZEAKhJjAstfoKlh4dnncpN4Oaurq6ebVGo6n9sEK/Z4gVMI6eqPsYt3NEZBcwfnU4Ud/QxZ'
   }
   record {
     id:       'user-mac'
     name:     'Mac'
     username: 'mac'
     emails:   ['ronald.mcdonald@paddyspub.com']
+    # badass
+    password: 'c2NyeXB0AA4AAAAIAAAAAY6zpclMXNqwYpx5vlyOJIy4k4bMFIcZbEOKjyTorYSJeFtAgK0mYiehWJxY/5AtWdcxudDB7TJELSueYwl9Ky03mdTWyHC5c+tmxsEU3xSc'
   }
   record {
     id:       'user-dee'
     name:     'Dee Reynolds'
     username: 'sweetdee'
     emails:   ['dee.reynolds@paddyspub.com']
+    # joshgroban
+    password: 'c2NyeXB0AA4AAAAIAAAAAUydbuvH6huaxIkHP7IHtDpPhU2qUdUEivMAd37WoQn2ad2txXL/364gi0YpWPCU5hSMukKyT7jDTZHkVSIu4ezWfVrTH2+6fGm2eEGCfmbU'
   }
   record {
     id:       'user-dennis'
     name:     'Dennis Reynolds'
     username: '80srockgod'
     emails:   ['dennis.reynolds@paddyspub.com']
+    # dennis
+    password: 'c2NyeXB0AA4AAAAIAAAAAQ4/0t2PcxibqPK17NrzpZ6bX2Get+e0XVZNTn23M/L51pufBCroXLQfXhjjCdaU4zvvDqBap6/+8sQWT7jLTrzkLnwDYbBUCbzzWZ4zPuOd'
   }
   record {
     id:       'user-frank'
     name:     'Frank Reynolds'
     username: 'mantis'
     emails:   ['frank.reynolds@paddyspub.com']
+    # egg
+    password: 'c2NyeXB0AA4AAAAIAAAAATBPGguuUu+9+SPHFnUREJBwzVMxP1rVV3kePeHwLvpZq9urXoQtdsRft4bGugZV/6lgNBlDHjrpjHo52MD7XjiujEnfYNv5lgspeH9ptIyj'
   }
   record {
     id:       'user-greg'
     name:     'Greg'
     username: 'greg'
     emails:   ['greg@sudz.com']
+    # maxwell
+    password: 'c2NyeXB0AA4AAAAIAAAAAWvXMRsISN9AyD9y/vLE9MVZvCn0KDUlbr3wBg8FrFHQoMSSO2G3Updhru9hD+cyyGmH69idaSeXJu49x06t55YJeANMFbdOaCMQwRuf+Vkd'
   }
 ]
 

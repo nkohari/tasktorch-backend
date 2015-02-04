@@ -58,8 +58,8 @@ describe 'ChangeActionTextHandler', ->
       payload = {text: null}
       @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        {action} = res.body
+        expect(res.result).to.exist()
+        {action} = res.result
         expect(action.id).to.equal('action-takedbaby')
         expect(action.text).to.equal(null)
         reset(done)
@@ -71,8 +71,8 @@ describe 'ChangeActionTextHandler', ->
       payload = {text: 'Test'}
       @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        {action} = res.body
+        expect(res.result).to.exist()
+        {action} = res.result
         expect(action.id).to.equal('action-takedbaby')
         expect(action.text).to.equal('Test')
         reset(done)

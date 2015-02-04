@@ -7,6 +7,6 @@ class EnsureKindBelongsToOrg extends Precondition
     if not kind? or kind.org == org.id
       return reply()
     else
-      return reply @error.notFound()
+      return reply @error.notFound("No kind #{kind.id} found in org #{org.id}")
 
 module.exports = EnsureKindBelongsToOrg

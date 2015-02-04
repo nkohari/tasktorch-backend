@@ -10,7 +10,7 @@ class EnsureRequesterCanAccessStack extends Precondition
     {user}  = request.auth.credentials
     @gatekeeper.canUserAccess stack, user, (err, isAllowed) =>
       return reply err if err?
-      return reply @error.forbidden() unless isAllowed
+      return reply @error.forbidden("You do not have permission to access stack #{stack.id}") unless isAllowed
       return reply()
 
 module.exports = EnsureRequesterCanAccessStack

@@ -8,12 +8,17 @@ class CreateActionHandler extends Handler
 
   @route 'post /api/{orgid}/cards/{cardid}/actions'
 
+  @validate
+    payload:
+      text:  @mustBe.string().allow(null).required()
+      stage: @mustBe.string().required()
+
   @pre [
     'resolve org'
     'resolve card'
     'resolve stage argument'
     'ensure card belongs to org'
-    'ensure requester can access action'
+    'ensure requester can access card'
   ]
 
   constructor: (@database, @processor) ->
@@ -22,6 +27,7 @@ class CreateActionHandler extends Handler
 
     {org, card, stage} = request.pre
     {text}             = request.payload
+    {user}             = request.auth.credentials
 
     query = new GetKindQuery(card.kind)
     @database.execute query, (err, result) =>
@@ -34,11 +40,11 @@ class CreateActionHandler extends Handler
       action = new Action {
         org:   org.id
         card:  card.id
-        stage: stage
+        stage: stage.id
         text:  text
       }
 
-      command = new CreateActionCommand(request.auth.credentials.user, action)
+      command = new CreateActionCommand(user, action)
       @processor.execute command, (err, action) =>
         return reply err if err?
         reply @response(action)

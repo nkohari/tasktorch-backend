@@ -19,4 +19,7 @@ class TestHarness
   createTester: (handler) ->
     new HandlerTester(@server, handler)
 
+  getDatabase: ->
+    @app.forge.get('database')
+
 module.exports = new TestHarness()

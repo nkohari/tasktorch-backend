@@ -8,12 +8,13 @@ class ResolveOptionalUserArgument extends Precondition
   constructor: (@database) ->
 
   execute: (request, reply) ->
-    return reply(undefined) if request.payload.user is undefined
-    return reply(null)      if request.payload.user is null
-    query = new GetUserQuery(request.payload.user)
+    userid = request.payload.user
+    return reply(undefined) if userid is undefined
+    return reply(null)      if userid is null
+    query = new GetUserQuery(userid)
     @database.execute query, (err, result) =>
       return reply err if err?
-      return reply @error.badRequest() unless result.user?
+      return reply @error.badRequest("No such user #{userid}") unless result.user?
       reply(result.user)
 
 module.exports = ResolveOptionalUserArgument

@@ -4,6 +4,6 @@ class SessionModel extends Model
 
   constructor: (session) ->
     super(session)
-    user = session.user
+    @user = session.user
 
 module.exports = SessionModel

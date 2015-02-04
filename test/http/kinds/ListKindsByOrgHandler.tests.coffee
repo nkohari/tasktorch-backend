@@ -35,8 +35,8 @@ describe 'ListKindsByOrgHandler', ->
     it 'returns an array of kinds defined for the org', (done) ->
       @tester.request {orgid: 'org-paddys', credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        {kinds} = res.body
+        expect(res.result).to.exist()
+        {kinds} = res.result
         expect(kinds).to.exist()
         expect(kinds).to.have.length(1)
         expect(_.pluck(kinds, 'id')).to.have.members ['kind-scheme']

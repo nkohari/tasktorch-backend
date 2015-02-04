@@ -7,6 +7,12 @@ class MoveActionHandler extends Handler
 
   @route 'post /api/{orgid}/actions/{actionid}/move'
 
+  @validate
+    payload:
+      card:     @mustBe.string().required()
+      stage:    @mustBe.string().required()
+      position: @mustBe.number().integer().allow('prepend', 'append').required()
+
   @pre [
     'resolve org'
     'resolve action'

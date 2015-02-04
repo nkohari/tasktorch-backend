@@ -8,11 +8,12 @@ class ResolveOptionalTeamArgument extends Precondition
   constructor: (@database) ->
 
   execute: (request, reply) ->
-    return reply(null) unless request.payload?.team?
-    query = new GetTeamQuery(request.payload.team)
+    teamid = request.payload.team
+    return reply(null) unless teamid?
+    query = new GetTeamQuery(teamid)
     @database.execute query, (err, result) =>
       return reply err if err?
-      return reply @error.badRequest() unless result.team?
+      return reply @error.badRequest("No such team #{teamid}") unless result.team?
       reply(result.team)
 
 module.exports = ResolveOptionalTeamArgument

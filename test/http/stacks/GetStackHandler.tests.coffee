@@ -43,8 +43,8 @@ describe 'GetStackHandler', ->
     it 'returns the stack', (done) ->
       @tester.request {orgid: 'org-paddys', stackid: 'stack-charlie-inbox', credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        {stack} = res.body
+        expect(res.result).to.exist()
+        {stack} = res.result
         expect(stack).to.exist()
         expect(stack.id).to.equal('stack-charlie-inbox')
         done()

@@ -35,8 +35,8 @@ describe 'ListGoalsByOrgHandler', ->
     it 'returns an array of goals defined for the org', (done) ->
       @tester.request {orgid: 'org-paddys', credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.body).to.exist()
-        {goals} = res.body
+        expect(res.result).to.exist()
+        {goals} = res.result
         expect(goals).to.exist()
         expect(goals).to.have.length(2)
         expect(_.pluck(goals, 'id')).to.have.members ['goal-streetfighter', 'goal-gascrisis']
