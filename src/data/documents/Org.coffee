@@ -12,8 +12,8 @@ class Org extends Document
   @field   'status',  {default: DocumentStatus.Normal}
   @field   'name'
 
-  @hasMany 'members', {type: 'User'}
-  @hasMany 'leaders', {type: 'User'}
+  @hasMany 'members', {type: 'User', default: []}
+  @hasMany 'leaders', {type: 'User', default: []}
 
   hasLeader: (userid) ->
     _.contains(@leaders, userid)
