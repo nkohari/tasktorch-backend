@@ -3,10 +3,10 @@ RemoveMemberFromTeamStatement = require 'data/statements/RemoveMemberFromTeamSta
 
 class RemoveMemberFromTeamCommand extends Command
 
-  constructor: (@user, @team, @member) ->
+  constructor: (@requester, @team, @user) ->
 
   execute: (conn, callback) ->
-    statement = new RemoveMemberFromTeamStatement(@team.id, @member.id)
+    statement = new RemoveMemberFromTeamStatement(@team.id, @user.id)
     conn.execute statement, (err, team) =>
       return callback(err) if err?
       callback(null, team)

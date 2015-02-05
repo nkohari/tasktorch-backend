@@ -30,6 +30,6 @@ class DeleteStackHandler extends Handler
     command = new DeleteStackCommand(user, stack)
     @processor.execute command, (err, stack) =>
       return reply err if err?
-      reply()
+      return reply @response(stack)
 
 module.exports = DeleteStackHandler

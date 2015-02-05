@@ -7,10 +7,15 @@ class CreateTeamStackHandler extends Handler
 
   @route 'post /api/{orgid}/teams/{teamid}/stacks'
 
+  @validate
+    payload:
+      name: @mustBe.string().required()
+
   @pre [
     'resolve org'
     'resolve team'
     'ensure team belongs to org'
+    'ensure requester can access org'
     'ensure requester can access team'
   ]
 
@@ -21,9 +26,6 @@ class CreateTeamStackHandler extends Handler
     {org, team} = request.pre
     {user}      = request.auth.credentials
     {name}      = request.payload
-
-    unless name?.length > 0
-      return reply @error.badRequest("Missing required argument 'name'")
 
     stack = new Stack {
       org:  org.id

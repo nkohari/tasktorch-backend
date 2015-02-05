@@ -22,6 +22,6 @@ class DeleteTeamHandler extends Handler
     command = new DeleteTeamCommand(user, team)
     @processor.execute command, (err, team) =>
       return reply err if err?
-      return reply()
+      return reply @response(team)
 
 module.exports = DeleteTeamHandler

@@ -5,6 +5,10 @@ class AddMemberToTeamHandler extends Handler
 
   @route 'post /api/{orgid}/teams/{teamid}/members'
 
+  @validate
+    payload:
+      user: @mustBe.string().required()
+
   @pre [
     'resolve org'
     'resolve team'
@@ -20,9 +24,6 @@ class AddMemberToTeamHandler extends Handler
 
     {org, team, user} = request.pre
     requester         = request.auth.credentials.user
-
-    unless user?
-      return reply @error.badRequest("Missing required argument 'user'")
 
     if team.hasMember(user)
       return reply @response(team)

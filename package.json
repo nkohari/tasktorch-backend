@@ -32,8 +32,8 @@
     "winston": "0.8.0"
   },
   "devDependencies": {
-    "mocha": "2.1.0",
     "chai": "1.10.0",
+    "mocha": "2.1.0",
     "url-template": "2.0.4"
   },
   "scripts": {

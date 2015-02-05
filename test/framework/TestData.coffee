@@ -84,6 +84,22 @@ TestData.cards = table [
       'stage-scheme-drink': []
   }
   record {
+    id:        'card-boildenim'
+    org:       'org-paddys'
+    creator:   'user-charlie'
+    followers: ['user-charlie', 'user-frank']
+    kind:      'kind-scheme'
+    title:     'Boil Denim'
+    summary:   '4 denim chiken?'
+    owner:     null
+    stack:     'stack-gruesometwosome-plans'
+    moves:     []
+    actions:
+      'stage-scheme-plan':  []
+      'stage-scheme-do':    []
+      'stage-scheme-drink': []
+  }
+  record {
     id:        'card-ringbell'
     org:       'org-sudz'
     creator:   'user-greg'
@@ -343,6 +359,13 @@ TestData.stacks = table [
     type:  'Inbox'
     team:  'team-gruesometwosome'
     cards: []
+  }
+  record {
+    id:    'stack-gruesometwosome-plans'
+    org:   'org-paddys'
+    type:  'Backlog'
+    team:  'team-gruesometwosome'
+    cards: ['card-boildenim']
   }
   record {
     id:    'stack-sudz-inbox'

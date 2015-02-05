@@ -1,14 +1,14 @@
 r               = require 'rethinkdb'
-Team            = require 'data/documents/Team'
+Org             = require 'data/documents/Org'
 UpdateStatement = require 'data/framework/statements/UpdateStatement'
 
-class RemoveMemberFromTeamStatement extends UpdateStatement
+class RemoveMemberFromOrgStatement extends UpdateStatement
 
-  constructor: (teamid, userid) ->
+  constructor: (orgid, userid) ->
     patch = {
       leaders: r.row('leaders').setDifference([userid])
       members: r.row('members').setDifference([userid])
     }
-    super(Team, teamid, patch)
+    super(Org, orgid, patch)
 
-module.exports = RemoveMemberFromTeamStatement
+module.exports = RemoveMemberFromOrgStatement

@@ -7,6 +7,10 @@ class CreateUserStackHandler extends Handler
 
   @route 'post /api/{orgid}/me/stacks'
 
+  @validate
+    payload:
+      name: @mustBe.string().required()
+
   @pre [
     'resolve org'
     'ensure requester can access org'
@@ -19,9 +23,6 @@ class CreateUserStackHandler extends Handler
     {org}  = request.pre
     {user} = request.auth.credentials
     {name} = request.payload
-
-    unless name?.length > 0
-      return reply @error.badRequest("Missing required argument 'name'")
 
     stack = new Stack {
       org:  org.id

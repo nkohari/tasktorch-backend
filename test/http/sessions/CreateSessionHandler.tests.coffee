@@ -1,4 +1,5 @@
 _                    = require 'lodash'
+cookie               = require 'cookie'
 expect               = require('chai').expect
 TestData             = require 'test/framework/TestData'
 TestHarness          = require 'test/framework/TestHarness'
@@ -66,6 +67,15 @@ describe 'CreateSessionHandler', ->
         expect(session).to.exist()
         expect(session.user).to.equal('user-charlie')
         reset(done)
+    it 'sets the value of the tt-session and tt-userid cookies', (done) ->
+      @tester.request {payload}, (res) =>
+        expect(res.statusCode).to.equal(200)
+        cookies = res.headers['set-cookie']
+        expect(cookies).to.be.an('array')
+        expect(cookies).to.have.length(2)
+        expect(cookies[0]).to.match(/^tt-session/)
+        expect(cookies[1]).to.match(/^tt-userid/)
+        reset(done)
 
 #---------------------------------------------------------------------------------------------------
 
@@ -78,6 +88,15 @@ describe 'CreateSessionHandler', ->
         {session} = res.result
         expect(session).to.exist()
         expect(session.user).to.equal('user-charlie')
+        reset(done)
+    it 'sets the value of the tt-session and tt-userid cookies', (done) ->
+      @tester.request {payload}, (res) =>
+        expect(res.statusCode).to.equal(200)
+        cookies = res.headers['set-cookie']
+        expect(cookies).to.be.an('array')
+        expect(cookies).to.have.length(2)
+        expect(cookies[0]).to.match(/^tt-session/)
+        expect(cookies[1]).to.match(/^tt-userid/)
         reset(done)
 
 #---------------------------------------------------------------------------------------------------

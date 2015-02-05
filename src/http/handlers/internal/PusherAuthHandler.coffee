@@ -8,6 +8,11 @@ class PusherAuthHandler extends Handler
 
   @route 'post /api/_wsauth'
 
+  @validate
+    payload:
+      socket_id:    @mustBe.string().required()
+      channel_name: @mustBe.string().required()
+
   constructor: (@database, @pusher) ->
 
   handle: (request, reply) ->
@@ -21,29 +26,27 @@ class PusherAuthHandler extends Handler
     else
       getAuthToken = @getAuthTokenForUserChannel
 
-    getAuthToken user, socket, channel, (err, token) =>
-      return reply(err) if err?
-      reply(token)
+    getAuthToken(user, socket, channel, reply)
 
-  getAuthTokenForPresenceChannel: (user, socket, channel, callback) =>
+  getAuthTokenForPresenceChannel: (user, socket, channel, reply) =>
     orgid = channel.replace('presence-org-', '')
     query = new GetOrgQuery(orgid)
     @database.execute query, (err, result) =>
-      return callback err if err?
-      return callback @error.notFound()  unless result.org?
-      return callback @error.forbidden() unless result.org.hasMember(user.id)
+      return reply err if err?
+      return reply @error.badRequest("No such org #{orgid}") unless result.org?
+      return reply @error.forbidden() unless result.org.hasMember(user.id)
       presenceInfo =
         user_id:   user.id
         user_info: new UserModel(user)
-      callback @pusher.getAuthToken(socket, channel, presenceInfo)
+      reply @pusher.getAuthToken(socket, channel, presenceInfo)
 
-  getAuthTokenForUserChannel: (user, socket, channel, callback) =>
+  getAuthTokenForUserChannel: (user, socket, channel, reply) =>
     userid = channel.replace('private-user-', '')
     query  = new GetUserQuery(userid)
     @database.execute query, (err, result) =>
-      return callback err if err?
-      return callback @error.notFound()  unless result.user?
-      return callback @error.forbidden() unless result.user.id == user.id
-      callback @pusher.getAuthToken(socket, channel)
+      return reply err if err?
+      return reply @error.badRequest("No such user #{userid}") unless result.user?
+      return reply @error.forbidden()  unless result.user.id == user.id
+      reply @pusher.getAuthToken(socket, channel)
 
 module.exports = PusherAuthHandler

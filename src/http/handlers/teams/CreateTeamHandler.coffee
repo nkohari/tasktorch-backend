@@ -7,6 +7,12 @@ class CreateTeamHandler extends Handler
 
   @route 'post /api/{orgid}/teams'
 
+  @validate
+    payload:
+      name:    @mustBe.string().required()
+      leaders: @mustBe.array().includes(@mustBe.string())
+      members: @mustBe.array().includes(@mustBe.string())
+
   @pre [
     'resolve org'
     'resolve members argument'
@@ -22,20 +28,27 @@ class CreateTeamHandler extends Handler
     {user}                  = request.auth.credentials
     {name}                  = request.payload
 
-    unless name?.length > 0
-      return @error.badRequest("Missing required argument 'name'")
+    if members.length == 0
+      members = [user]
+    else if not _.every(members, (u) -> org.hasMember(u.id))
+      return reply @error.badRequest("All users in the members list must be members of the org")
 
-    if members?.length > 0 and not _.every(members, (u) -> org.hasMember(u.id))
-      return @error.badRequest("All users in the 'members' list must be members of the organization")
+    if leaders.length == 0
+      leaders = [user]
+    else if not _.every(leaders, (u) -> org.hasMember(u.id))
+      return reply @error.badRequest("All users in the leaders list must be members of the org")
 
-    if leaders?.length > 0 and not _.every(leaders, (u) -> org.hasMember(u.id))
-      return @error.badRequest("All users in the 'leaders' list must be members of the organization")
+    memberids = _.pluck(members, 'id')
+    leaderids = _.pluck(leaders, 'id')
+
+    if _.difference(leaderids, memberids).length > 0
+      return reply @error.badRequest("The leaders list must be a proper subset of the members list")
 
     team = new Team {
       org:     org.id
       name:    name
-      members: _.pluck(members, 'id')
-      leaders: _.pluck(leaders, 'id')
+      members: memberids
+      leaders: leaderids
     }
 
     command = new CreateTeamCommand(user, team)

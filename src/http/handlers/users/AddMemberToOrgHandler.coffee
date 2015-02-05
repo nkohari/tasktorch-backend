@@ -5,6 +5,10 @@ class AddMemberToOrgHandler extends Handler
 
   @route 'post /api/{orgid}/members'
 
+  @validate
+    payload:
+      user: @mustBe.string().required()
+
   @pre [
     'resolve org'
     'resolve user argument'
@@ -17,9 +21,6 @@ class AddMemberToOrgHandler extends Handler
 
     {org, user} = request.pre
     requester   = request.auth.credentials.user
-
-    unless user?
-      return reply @error.badRequest("Missing required argument 'user'")
 
     if org.hasMember(user)
       return reply @response(org)

@@ -23,11 +23,6 @@ class MockMessageBus extends EventEmitter
     @publish(Activity.Deleted, event.document)
 
   publish: (activity, document) =>
-    message = new Message(activity, document)
-    @gatekeeper.getAccessList document, (err, userids) =>
-      if err?
-        @log.error "Error resolving access list for #{document.constructor.name}: #{err}"
-        return
-      @emit(userid, message) for userid in userids
+    @emit('message', new Message(activity, document))
 
 module.exports = MockMessageBus
