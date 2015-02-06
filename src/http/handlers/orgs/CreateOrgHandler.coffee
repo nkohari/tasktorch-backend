@@ -7,7 +7,7 @@ class CreateOrgHandler extends Handler
 
   @route 'post /api/orgs'
 
-  @validate
+  @ensure
     payload:
       name: @mustBe.string().required()
   

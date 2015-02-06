@@ -5,7 +5,7 @@ class GetGoalHandler extends Handler
 
   @route 'get /api/{orgid}/goals/{goalid}'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve query options'
     'ensure requester can access org'

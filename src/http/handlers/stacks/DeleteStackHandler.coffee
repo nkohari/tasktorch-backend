@@ -6,7 +6,7 @@ class DeleteStackHandler extends Handler
 
   @route 'delete /api/{orgid}/stacks/{stackid}'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve stack'
     'ensure stack belongs to org'

@@ -9,13 +9,13 @@ class CreateCardHandler extends Handler
 
   @route 'post /api/{orgid}/cards'
 
-  @validate
+  @ensure
     payload:
       kind:    @mustBe.string().required()
       title:   @mustBe.string().allow(null)
       summary: @mustBe.string().allow(null)
 
-  @pre [
+  @before [
     'resolve org'
     'resolve kind argument'
     'ensure kind belongs to org'

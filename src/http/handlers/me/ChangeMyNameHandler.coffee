@@ -5,7 +5,7 @@ class ChangeMyNameHandler extends Handler
 
   @route 'post /api/me/name'
 
-  @validate
+  @ensure
     payload:
       name: @mustBe.string().required()
 

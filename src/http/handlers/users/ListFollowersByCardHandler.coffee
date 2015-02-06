@@ -5,7 +5,7 @@ class ListFollowersByCardHandler extends Handler
 
   @route 'get /api/{orgid}/cards/{cardid}/followers'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve card'
     'resolve query options'

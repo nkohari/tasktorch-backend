@@ -6,7 +6,7 @@ class GetOrgMemberHandler extends Handler
 
   @route 'get /api/{orgid}/members/{userid}'
 
-  @pre [
+  @before [
     'resolve org'
     'ensure requester can access org'
   ]

@@ -5,11 +5,11 @@ class ChangeTeamNameHandler extends Handler
 
   @route 'post /api/{orgid}/teams/{teamid}/name'
 
-  @validate
+  @ensure
     payload:
       name: @mustBe.string().required()
 
-  @pre [
+  @before [
     'resolve org'
     'resolve team'
     'ensure team belongs to org'

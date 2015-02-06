@@ -5,7 +5,7 @@ class ListMyOrgsHandler extends Handler
 
   @route 'get /api/me/orgs'
 
-  @pre [
+  @before [
     'resolve query options'
   ]
 

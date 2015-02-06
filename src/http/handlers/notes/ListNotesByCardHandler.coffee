@@ -5,7 +5,7 @@ class ListNotesByCardHandler extends Handler
 
   @route 'get /api/{orgid}/cards/{cardid}/notes'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve card'
     'resolve query options'

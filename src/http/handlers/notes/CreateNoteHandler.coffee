@@ -6,12 +6,12 @@ class CreateNoteHandler extends Handler
 
   @route 'post /api/{orgid}/cards/{cardid}/notes'
 
-  @validate
+  @ensure
     payload:
       type:    @mustBe.string().required()
       content: @mustBe.any().required()
 
-  @pre [
+  @before [
     'resolve org'
     'resolve card'
     'ensure card belongs to org'

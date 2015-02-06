@@ -5,7 +5,7 @@ class ListStagesByKindHandler extends Handler
 
   @route 'get /api/{orgid}/kinds/{kindid}/stages'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve kind'
     'resolve query options'

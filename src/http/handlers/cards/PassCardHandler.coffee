@@ -8,12 +8,12 @@ class PassCardHandler extends Handler
 
   @route 'put /api/{orgid}/cards/{cardid}/pass'
 
-  @validate
+  @ensure
     payload:
       team: @mustBe.string()
       user: @mustBe.string()
 
-  @pre [
+  @before [
     'resolve org'
     'resolve card'
     'resolve optional team argument'

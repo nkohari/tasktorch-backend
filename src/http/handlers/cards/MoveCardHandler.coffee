@@ -6,12 +6,12 @@ class MoveCardHandler extends Handler
 
   @route 'post /api/{orgid}/cards/{cardid}/move'
 
-  @validate
+  @ensure
     payload:
       stack:    @mustBe.string().required()
       position: @mustBe.number().integer().allow('prepend', 'append').required()
 
-  @pre [
+  @before [
     'resolve org'
     'resolve card'
     'resolve stack argument'

@@ -31,12 +31,12 @@ class ApiServer
       json: {space: 2}
     }, options.config
 
-    if options.pre?
-      config.pre = _.map options.pre, (name) =>
-        pre = @forge.get('precondition', name)
+    if options.preconditions?
+      config.pre = _.map options.preconditions, (name) =>
+        precond = @forge.get('precondition', name)
         return {
-          method: pre.execute.bind(pre)
-          assign: pre.assign ? undefined
+          method: precond.execute.bind(precond)
+          assign: precond.assign ? undefined
         }
 
     @server.route {

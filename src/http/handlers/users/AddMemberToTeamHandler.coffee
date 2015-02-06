@@ -5,11 +5,11 @@ class AddMemberToTeamHandler extends Handler
 
   @route 'post /api/{orgid}/teams/{teamid}/members'
 
-  @validate
+  @ensure
     payload:
       user: @mustBe.string().required()
 
-  @pre [
+  @before [
     'resolve org'
     'resolve team'
     'resolve user argument'

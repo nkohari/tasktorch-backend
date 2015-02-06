@@ -5,7 +5,7 @@ class ChangeMyPasswordHandler extends Handler
 
   @route 'post /api/me/password'
 
-  @validate
+  @ensure
     payload:
       password: @mustBe.string().required()
   

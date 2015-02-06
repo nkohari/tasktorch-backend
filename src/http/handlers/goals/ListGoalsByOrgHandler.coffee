@@ -5,7 +5,7 @@ class ListGoalsByOrgHandler extends Handler
 
   @route 'get /api/{orgid}/goals'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve query options'
     'ensure requester can access org'

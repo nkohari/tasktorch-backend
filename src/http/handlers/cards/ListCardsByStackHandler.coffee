@@ -5,7 +5,7 @@ class ListCardsByStackHandler extends Handler
 
   @route 'get /api/{orgid}/stacks/{stackid}/cards'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve stack'
     'resolve query options'

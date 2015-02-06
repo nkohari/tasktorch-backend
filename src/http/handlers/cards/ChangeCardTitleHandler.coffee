@@ -5,11 +5,11 @@ class ChangeCardTitleHandler extends Handler
 
   @route 'post /api/{orgid}/cards/{cardid}/title'
 
-  @validate
+  @ensure
     payload:
       title: @mustBe.string().allow(null).required()
 
-  @pre [
+  @before [
     'resolve org'
     'resolve card'
     'ensure card belongs to org'

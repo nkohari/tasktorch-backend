@@ -8,7 +8,7 @@ class CreateUserHandler extends Handler
   @route 'post /api/users'
   @auth  {mode: 'try'}
   
-  @validate
+  @ensure
     payload:
       name:     @mustBe.string().required()
       username: @mustBe.string().required()

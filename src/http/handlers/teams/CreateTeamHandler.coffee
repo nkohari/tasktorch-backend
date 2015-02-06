@@ -7,13 +7,13 @@ class CreateTeamHandler extends Handler
 
   @route 'post /api/{orgid}/teams'
 
-  @validate
+  @ensure
     payload:
       name:    @mustBe.string().required()
       leaders: @mustBe.array().includes(@mustBe.string())
       members: @mustBe.array().includes(@mustBe.string())
 
-  @pre [
+  @before [
     'resolve org'
     'resolve members argument'
     'resolve leaders argument'

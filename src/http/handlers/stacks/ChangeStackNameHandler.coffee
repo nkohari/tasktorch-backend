@@ -6,11 +6,11 @@ class ChangeStackNameHandler extends Handler
 
   @route 'post /api/{orgid}/stacks/{stackid}/name'
 
-  @validate
+  @ensure
     payload:
       name: @mustBe.string().required()
 
-  @pre [
+  @before [
     'resolve org'
     'resolve stack'
     'ensure stack belongs to org'

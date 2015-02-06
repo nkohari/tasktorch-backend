@@ -6,7 +6,7 @@ class GetOrgHandler extends Handler
 
   @route 'get /api/{orgid}'
 
-  @pre [
+  @before [
     'resolve query options'
   ]
 

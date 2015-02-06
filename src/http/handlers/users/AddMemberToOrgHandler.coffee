@@ -5,11 +5,11 @@ class AddMemberToOrgHandler extends Handler
 
   @route 'post /api/{orgid}/members'
 
-  @validate
+  @ensure
     payload:
       user: @mustBe.string().required()
 
-  @pre [
+  @before [
     'resolve org'
     'resolve user argument'
     'ensure requester can access org'

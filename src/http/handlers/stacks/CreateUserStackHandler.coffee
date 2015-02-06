@@ -7,11 +7,11 @@ class CreateUserStackHandler extends Handler
 
   @route 'post /api/{orgid}/me/stacks'
 
-  @validate
+  @ensure
     payload:
       name: @mustBe.string().required()
 
-  @pre [
+  @before [
     'resolve org'
     'ensure requester can access org'
   ]

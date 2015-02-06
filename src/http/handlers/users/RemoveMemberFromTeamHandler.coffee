@@ -6,7 +6,7 @@ class RemoveMemberFromTeamHandler extends Handler
 
   @route 'delete /api/{orgid}/teams/{teamid}/members/{userid}'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve team'
     'resolve user'

@@ -8,12 +8,12 @@ class CreateActionHandler extends Handler
 
   @route 'post /api/{orgid}/cards/{cardid}/actions'
 
-  @validate
+  @ensure
     payload:
       text:  @mustBe.string().allow(null).required()
       stage: @mustBe.string().required()
 
-  @pre [
+  @before [
     'resolve org'
     'resolve card'
     'resolve stage argument'

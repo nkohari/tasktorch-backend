@@ -5,7 +5,7 @@ class ListActionsByCardHandler extends Handler
 
   @route 'get /api/{orgid}/cards/{cardid}/actions'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve card'
     'resolve query options'

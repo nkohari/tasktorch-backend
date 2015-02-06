@@ -5,7 +5,7 @@ class DeleteCardHandler extends Handler
 
   @route 'delete /api/{orgid}/cards/{cardid}'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve card'
     'ensure card belongs to org'

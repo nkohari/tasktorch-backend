@@ -5,7 +5,7 @@ class GetCardHandler extends Handler
 
   @route 'get /api/{orgid}/cards/{cardid}'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve query options'
     'ensure requester can access org'

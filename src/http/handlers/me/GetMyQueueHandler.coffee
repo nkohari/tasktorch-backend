@@ -6,7 +6,7 @@ class GetMyQueueHandler extends Handler
 
   @route 'get /api/{orgid}/me/queue'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve query options'
     'ensure requester can access org'

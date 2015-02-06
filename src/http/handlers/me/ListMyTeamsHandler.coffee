@@ -5,7 +5,7 @@ class ListMyTeamsHandler extends Handler
 
   @route 'get /api/{orgid}/me/teams'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve query options'
     'ensure requester can access org'

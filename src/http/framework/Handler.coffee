@@ -17,14 +17,14 @@ class Handler
     [verb, path] = route.split(/\s+/, 2)
     (@options ?= {}).route = {verb, path}
 
-  @pre: (pre) ->
-    (@options ?= {}).pre = pre
+  @before: (preconditions) ->
+    (@options ?= {}).preconditions = preconditions
     
   @auth: (auth) ->
     @options ?= {}
     (@options.config ?= {}).auth = auth
 
-  @validate: (spec) ->
+  @ensure: (spec) ->
     @options ?= {}
     (@options.config ?= {}).validate = spec
 

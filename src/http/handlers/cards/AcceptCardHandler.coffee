@@ -7,7 +7,7 @@ class AcceptCardHandler extends Handler
 
   @route 'post /api/{orgid}/cards/{cardid}/accept'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve card'
     'ensure card belongs to org'

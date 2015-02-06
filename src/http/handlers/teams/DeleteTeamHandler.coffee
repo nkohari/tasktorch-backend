@@ -5,7 +5,7 @@ class DeleteTeamHandler extends Handler
 
   @route 'delete /api/{orgid}/teams/{teamid}'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve team'
     'ensure team belongs to org'

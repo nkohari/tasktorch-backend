@@ -5,7 +5,7 @@ class ListMembersByTeamHandler extends Handler
 
   @route 'get /api/{orgid}/teams/{teamid}/members'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve team'
     'resolve query options'

@@ -5,11 +5,11 @@ class ChangeActionOwnerHandler extends Handler
 
   @route 'post /api/{orgid}/actions/{actionid}/owner'
 
-  @validate
+  @ensure
     payload:
       user: @mustBe.string().allow(null).required()
 
-  @pre [
+  @before [
     'resolve org'
     'resolve action'
     'resolve optional user argument'
@@ -21,8 +21,11 @@ class ChangeActionOwnerHandler extends Handler
   constructor: (@processor) ->
 
   handle: (request, reply) ->
+
     {action, user} = request.pre
-    command = new ChangeActionOwnerCommand(request.auth.credentials.user, action, user)
+    requester      = request.auth.credentials.user
+
+    command = new ChangeActionOwnerCommand(requester, action, user)
     @processor.execute command, (err, action) =>
       return reply err if err?
       reply @response(action)

@@ -6,7 +6,7 @@ class RemoveMemberFromOrgHandler extends Handler
 
   @route 'delete /api/{orgid}/members/{userid}'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve user'
     'ensure requester can access org'

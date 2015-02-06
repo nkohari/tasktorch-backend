@@ -8,7 +8,7 @@ class PusherAuthHandler extends Handler
 
   @route 'post /api/_wsauth'
 
-  @validate
+  @ensure
     payload:
       socket_id:    @mustBe.string().required()
       channel_name: @mustBe.string().required()

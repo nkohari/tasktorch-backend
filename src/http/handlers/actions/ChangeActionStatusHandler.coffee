@@ -1,3 +1,4 @@
+_                         = require 'lodash'
 Handler                   = require 'http/framework/Handler'
 ChangeActionStatusCommand = require 'domain/commands/actions/ChangeActionStatusCommand'
 ActionStatus              = require 'data/enums/ActionStatus'
@@ -6,7 +7,11 @@ class ChangeActionStatusHandler extends Handler
 
   @route 'post /api/{orgid}/actions/{actionid}/status'
 
-  @pre [
+  @ensure
+    payload:
+      status: @mustBe.valid(_.keys(ActionStatus)).required()
+
+  @before [
     'resolve org'
     'resolve action'
     'ensure action belongs to org'
@@ -19,11 +24,9 @@ class ChangeActionStatusHandler extends Handler
 
     {action} = request.pre
     {status} = request.payload
+    {user}   = request.auth.credentials
 
-    unless status?.length > 0 and ActionStatus[status]?
-      return reply @error.badRequest("Couldn't understand action status #{status}")
-
-    command = new ChangeActionStatusCommand(request.auth.credentials.user, action, status)
+    command = new ChangeActionStatusCommand(user, action, status)
     @processor.execute command, (err, action) =>
       return reply err if err?
       reply @response(action)

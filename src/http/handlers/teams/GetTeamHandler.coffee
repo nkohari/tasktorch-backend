@@ -5,7 +5,7 @@ class GetTeamHandler extends Handler
 
   @route 'get /api/{orgid}/teams/{teamid}'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve query options'
     'ensure requester can access org'

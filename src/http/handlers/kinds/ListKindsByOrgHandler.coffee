@@ -5,7 +5,7 @@ class ListKindsByOrgHandler extends Handler
 
   @route 'get /api/{orgid}/kinds'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve query options'
     'ensure requester can access org'

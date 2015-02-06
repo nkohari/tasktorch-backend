@@ -5,7 +5,7 @@ class DeleteActionHandler extends Handler
 
   @route 'delete /api/{orgid}/actions/{actionid}'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve action'
     'ensure action belongs to org'

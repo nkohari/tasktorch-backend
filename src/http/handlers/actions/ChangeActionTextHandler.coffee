@@ -5,11 +5,11 @@ class ChangeActionTextHandler extends Handler
 
   @route 'post /api/{orgid}/actions/{actionid}/text'
 
-  @validate
+  @ensure
     payload:
       text: @mustBe.string().allow(null, '').required()
 
-  @pre [
+  @before [
     'resolve org'
     'resolve action'
     'ensure action belongs to org'
@@ -22,8 +22,9 @@ class ChangeActionTextHandler extends Handler
 
     {action} = request.pre
     {text}   = request.payload
+    {user}   = request.auth.credentials
 
-    command = new ChangeActionTextCommand(request.auth.credentials.user, action, text)
+    command = new ChangeActionTextCommand(user, action, text)
     @processor.execute command, (err, action) =>
       return reply err if err?
       reply @response(action)

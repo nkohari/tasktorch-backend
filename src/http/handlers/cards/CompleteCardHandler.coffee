@@ -5,7 +5,7 @@ class ArchiveCardHandler extends Handler
 
   @route 'post /api/{orgid}/cards/{cardid}/complete'
   
-  @pre [
+  @before [
     'resolve org'
     'resolve card'
     'ensure card belongs to org'

@@ -5,7 +5,7 @@ class GetStackHandler extends Handler
 
   @route 'get /api/{orgid}/stacks/{stackid}'
 
-  @pre [
+  @before [
     'resolve org'
     'resolve query options'
     'ensure requester can access org'

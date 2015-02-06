@@ -9,7 +9,7 @@ class CreateSessionHandler extends Handler
   @route 'post /api/sessions'
   @auth  {mode: 'try'}
 
-  @validate
+  @ensure
     payload:
       login: @mustBe.string().required()
       password: @mustBe.string().required()

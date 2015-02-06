@@ -5,11 +5,11 @@ class ChangeCardSummaryHandler extends Handler
 
   @route 'post /api/{orgid}/cards/{cardid}/summary'
 
-  @validate
+  @ensure
     payload:
       summary: @mustBe.string().allow(null).required()
   
-  @pre [
+  @before [
     'resolve org'
     'resolve card'
     'ensure card belongs to org'
