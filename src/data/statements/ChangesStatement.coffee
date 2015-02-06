@@ -1,5 +1,5 @@
 r         = require 'rethinkdb'
-Statement = require 'data/framework/statements/Statement'
+Statement = require 'data/framework/Statement'
 
 class ChangesStatement extends Statement
 

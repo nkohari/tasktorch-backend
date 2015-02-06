@@ -1,6 +1,6 @@
 r               = require 'rethinkdb'
 Stack           = require 'data/documents/Stack'
-UpdateStatement = require 'data/framework/statements/UpdateStatement'
+UpdateStatement = require 'data/statements/UpdateStatement'
 
 class AddCardToStackStatement extends UpdateStatement
 

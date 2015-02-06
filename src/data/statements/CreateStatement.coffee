@@ -2,12 +2,12 @@ _              = require 'lodash'
 r              = require 'rethinkdb'
 uuid           = require 'common/util/uuid'
 DocumentStatus = require 'data/enums/DocumentStatus'
-Statement      = require 'data/framework/statements/Statement'
+Statement      = require 'data/framework/Statement'
 
 class CreateStatement extends Statement
 
-  constructor: (doctype, document) ->
-    super(doctype)
+  constructor: (document) ->
+    super(document.constructor)
 
     document.id      ?= uuid()
     document.version ?= 0

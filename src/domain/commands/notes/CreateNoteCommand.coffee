@@ -1,5 +1,5 @@
-Command             = require 'domain/framework/Command'
-CreateNoteStatement = require 'data/statements/CreateNoteStatement'
+Command         = require 'domain/framework/Command'
+CreateStatement = require 'data/statements/CreateStatement'
 
 class CreateNoteCommand extends Command
 
@@ -7,7 +7,7 @@ class CreateNoteCommand extends Command
     super()
 
   execute: (conn, callback) ->
-    statement = new CreateNoteStatement(@note)
+    statement = new CreateStatement(@note)
     conn.execute statement, (err, note) =>
       return callback(err) if err?
       callback(null, note)

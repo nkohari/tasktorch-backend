@@ -440,6 +440,15 @@ TestData.teams = table [
 
 #---------------------------------------------------------------------------------------------------
 
+TestData.tokens = table [
+  record {
+    id:      'token-waitress'
+    comment: 'waitress@coffeeshop.com'
+  }
+]
+
+#---------------------------------------------------------------------------------------------------
+
 TestData.users = table [
   record {
     id:       'user-charlie'
@@ -504,6 +513,7 @@ TestData.tables = [
   'stacks'
   'stages'
   'teams'
+  'tokens'
   'users'
 ]
 

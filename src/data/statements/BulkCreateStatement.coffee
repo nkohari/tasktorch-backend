@@ -2,7 +2,7 @@ _              = require 'lodash'
 r              = require 'rethinkdb'
 uuid           = require 'common/util/uuid'
 DocumentStatus = require 'data/enums/DocumentStatus'
-Statement      = require 'data/framework/statements/Statement'
+Statement      = require 'data/framework/Statement'
 
 class BulkCreateStatement extends Statement
 

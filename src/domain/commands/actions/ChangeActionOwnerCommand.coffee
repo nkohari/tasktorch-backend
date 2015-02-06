@@ -1,7 +1,8 @@
 Command                = require 'domain/framework/Command'
+Action                 = require 'data/documents/Action'
 ActionOwnerChangedNote = require 'data/documents/notes/ActionOwnerChangedNote'
-UpdateActionStatement  = require 'data/statements/UpdateActionStatement'
-CreateNoteStatement    = require 'data/statements/CreateNoteStatement'
+UpdateStatement        = require 'data/statements/UpdateStatement'
+CreateStatement        = require 'data/statements/CreateStatement'
 
 class ChangeActionOwnerCommand extends Command
 
@@ -12,11 +13,11 @@ class ChangeActionOwnerCommand extends Command
       patch = {owner: if @owner? then @owner.id else null}
     else
       patch = {owner: null}
-    statement = new UpdateActionStatement(@action.id, patch)
+    statement = new UpdateStatement(Action, @action.id, patch)
     conn.execute statement, (err, action, previous) =>
       return callback(err) if err?
       note = ActionOwnerChangedNote.create(@user, action, previous)
-      statement = new CreateNoteStatement(note)
+      statement = new CreateStatement(note)
       conn.execute statement, (err) =>
         return callback(err) if err?
         callback(null, action)

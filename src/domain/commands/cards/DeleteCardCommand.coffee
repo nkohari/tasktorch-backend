@@ -1,9 +1,10 @@
 Command                       = require 'domain/framework/Command'
+Card                          = require 'data/documents/Card'
 CardDeletedNote               = require 'data/documents/notes/CardDeletedNote'
 CardStatus                    = require 'data/enums/CardStatus'
-UpdateCardStatement           = require 'data/statements/UpdateCardStatement'
+CreateStatement               = require 'data/statements/CreateStatement'
 RemoveCardFromStacksStatement = require 'data/statements/RemoveCardFromStacksStatement'
-CreateNoteStatement           = require 'data/statements/CreateNoteStatement'
+UpdateStatement               = require 'data/statements/UpdateStatement'
 
 class DeleteCardCommand extends Command
 
@@ -13,7 +14,7 @@ class DeleteCardCommand extends Command
     statement = new RemoveCardFromStacksStatement(@card.id)
     conn.execute statement, (err, stacks) =>
       return callback(err) if err?
-      statement = new UpdateCardStatement(@card.id, {
+      statement = new UpdateStatement(Card, @card.id, {
         owner:  null
         stack:  null
         status: CardStatus.Deleted
@@ -21,7 +22,7 @@ class DeleteCardCommand extends Command
       conn.execute statement, (err, card, previous) =>
         return callback(err) if err?
         note = CardDeletedNote.create(@user, card, previous)
-        statement = new CreateNoteStatement(note)
+        statement = new CreateStatement(note)
         conn.execute statement, (err) =>
           return callback(err) if err?
           callback(null, card)

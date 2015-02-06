@@ -69,6 +69,10 @@ Tables.teams = [
   r.table('teams').indexCreate('org')
 ]
 
+Tables.tokens = [
+  r.tableCreate('tokens')
+]
+
 Tables.users = [
   r.tableCreate('users')
   r.table('users').indexCreate('emails', {multi: true})

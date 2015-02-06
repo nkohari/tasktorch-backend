@@ -22,9 +22,9 @@ class Query
     @expansions = @expansions.concat _.flatten(fields)
 
   prepare: (conn, callback) ->
-    @_addExpansionClause() if @expansions?
-    @_addPluckClause()     if @fields?
-    @_addStatusFilterClause()
+    @_addExpansionClause()    if @expansions?
+    @_addPluckClause()        if @fields?
+    @_addStatusFilterClause() unless @options.allowDeleted
     callback()
 
   run: (conn, callback) ->

@@ -1,5 +1,5 @@
 {EventEmitter}   = require 'events'
-ChangesStatement = require 'data/framework/statements/ChangesStatement'
+ChangesStatement = require 'data/statements/ChangesStatement'
 
 class Subscription extends EventEmitter
 

@@ -1,15 +1,14 @@
-Command              = require 'domain/framework/Command'
-Stack                = require 'data/documents/Stack'
-StackType            = require 'data/enums/StackType'
-CreateTeamStatement  = require 'data/statements/CreateTeamStatement'
-CreateStackStatement = require 'data/statements/CreateStackStatement'
+Command         = require 'domain/framework/Command'
+Stack           = require 'data/documents/Stack'
+StackType       = require 'data/enums/StackType'
+CreateStatement = require 'data/statements/CreateStatement'
 
 class CreateTeamCommand extends Command
 
   constructor: (@user, @team) ->
 
   execute: (conn, callback) ->
-    statement = new CreateTeamStatement(@team)
+    statement = new CreateStatement(@team)
     conn.execute statement, (err, team) =>
       return callback(err) if err?
       inbox = new Stack {
@@ -17,7 +16,7 @@ class CreateTeamCommand extends Command
         type: StackType.Inbox
         team: @team.id
       }
-      statement = new CreateStackStatement(inbox)
+      statement = new CreateStatement(inbox)
       conn.execute statement, (err, stack) =>
         return callback(err) if err?
         callback(null, team)

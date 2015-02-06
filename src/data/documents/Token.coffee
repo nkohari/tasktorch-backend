@@ -1,0 +1,15 @@
+_              = require 'lodash'
+Document       = require 'data/framework/Document'
+DocumentStatus = require 'data/enums/DocumentStatus'
+
+class Token extends Document
+
+  @table  'tokens'
+  @naming {singular: 'token', plural: 'tokens'}
+
+  @field  'id'
+  @field  'version'
+  @field  'status', {default: DocumentStatus.Normal}
+  @field  'comment'
+
+module.exports = Token

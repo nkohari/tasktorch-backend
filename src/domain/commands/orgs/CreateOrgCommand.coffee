@@ -1,5 +1,5 @@
 Command                          = require 'domain/framework/Command'
-CreateOrgStatement               = require 'data/statements/CreateOrgStatement'
+CreateStatement                  = require 'data/statements/CreateStatement'
 CreateDefaultUserStacksStatement = require 'data/statements/CreateDefaultUserStacksStatement'
 
 class CreateOrgCommand extends Command
@@ -7,7 +7,7 @@ class CreateOrgCommand extends Command
   constructor: (@user, @org) ->
 
   execute: (conn, callback) ->
-    statement = new CreateOrgStatement(@org)
+    statement = new CreateStatement(@org)
     conn.execute statement, (err, org) =>
       return callback(err) if err?
       statement = new CreateDefaultUserStacksStatement(@user.id, @org.id)

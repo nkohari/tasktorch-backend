@@ -1,6 +1,6 @@
 Stack               = require 'data/documents/Stack'
 StackType           = require 'data/enums/StackType'
-BulkCreateStatement = require 'data/framework/statements/BulkCreateStatement'
+BulkCreateStatement = require 'data/statements/BulkCreateStatement'
 
 class CreateDefaultUserStacksStatement extends BulkCreateStatement
 

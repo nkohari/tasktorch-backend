@@ -1,7 +1,7 @@
 _         = require 'lodash'
 r         = require 'rethinkdb'
 Error     = require 'data/framework/Error'
-Statement = require 'data/framework/statements/Statement'
+Statement = require 'data/framework/Statement'
 
 class BulkUpdateStatement extends Statement
 

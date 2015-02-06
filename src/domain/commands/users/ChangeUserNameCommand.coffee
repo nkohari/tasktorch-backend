@@ -1,12 +1,13 @@
-Command             = require 'domain/framework/Command'
-UpdateUserStatement = require 'data/statements/UpdateUserStatement'
+Command         = require 'domain/framework/Command'
+User            = require 'data/documents/User'
+UpdateStatement = require 'data/statements/UpdateStatement'
 
 class ChangeUserNameCommand extends Command
 
   constructor: (@user, @name) ->
 
   execute: (conn, callback) ->
-    statement = new UpdateUserStatement(@user.id, {name: @name})
+    statement = new UpdateStatement(User, @user.id, {name: @name})
     conn.execute statement, (err, user) =>
       return callback(err) if err?
       callback(null, user)

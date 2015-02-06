@@ -1,7 +1,7 @@
 r                   = require 'rethinkdb'
 Action              = require 'data/documents/Action'
 Card                = require 'data/documents/Card'
-BulkUpdateStatement = require 'data/framework/statements/BulkUpdateStatement'
+BulkUpdateStatement = require 'data/statements/BulkUpdateStatement'
 
 class RemoveActionFromCardStatement extends BulkUpdateStatement
 

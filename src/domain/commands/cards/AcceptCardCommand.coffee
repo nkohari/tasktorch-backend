@@ -1,11 +1,12 @@
 r                             = require 'rethinkdb'
 Command                       = require 'domain/framework/Command'
-Move                          = require 'data/structs/Move'
+Card                          = require 'data/documents/Card'
 CardAcceptedNote              = require 'data/documents/notes/CardAcceptedNote'
-RemoveCardFromStacksStatement = require 'data/statements/RemoveCardFromStacksStatement'
 AddCardToStackStatement       = require 'data/statements/AddCardToStackStatement'
-UpdateCardStatement           = require 'data/statements/UpdateCardStatement'
-CreateNoteStatement           = require 'data/statements/CreateNoteStatement'
+CreateStatement               = require 'data/statements/CreateStatement'
+RemoveCardFromStacksStatement = require 'data/statements/RemoveCardFromStacksStatement'
+UpdateStatement               = require 'data/statements/UpdateStatement'
+Move                          = require 'data/structs/Move'
 
 class AcceptCardCommand extends Command
 
@@ -20,7 +21,7 @@ class AcceptCardCommand extends Command
       conn.execute statement, (err, currentStack) =>
         return callback(err) if err?
         move = new Move(@user, previousStacks[0], currentStack)
-        statement = new UpdateCardStatement(@cardid, {
+        statement = new UpdateStatement(Card, @cardid, {
           stack: @stackid
           owner: @user.id
           moves: r.row('moves').append(move)
@@ -28,7 +29,7 @@ class AcceptCardCommand extends Command
         conn.execute statement, (err, card, previous) =>
           return callback(err) if err?
           note = CardAcceptedNote.create(@user, card, previous)
-          statement = new CreateNoteStatement(note)
+          statement = new CreateStatement(note)
           conn.execute statement, (err) =>
             return callback(err) if err?
             callback(null, card)

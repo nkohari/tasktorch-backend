@@ -1,9 +1,10 @@
 Command                       = require 'domain/framework/Command'
+Card                          = require 'data/documents/Card'
 CardCompletedNote             = require 'data/documents/notes/CardCompletedNote'
 CardStatus                    = require 'data/enums/CardStatus'
-UpdateCardStatement           = require 'data/statements/UpdateCardStatement'
+CreateStatement               = require 'data/statements/CreateStatement'
 RemoveCardFromStacksStatement = require 'data/statements/RemoveCardFromStacksStatement'
-CreateNoteStatement           = require 'data/statements/CreateNoteStatement'
+UpdateStatement               = require 'data/statements/UpdateStatement'
 
 class CompleteCardCommand extends Command
 
@@ -13,7 +14,7 @@ class CompleteCardCommand extends Command
     statement = new RemoveCardFromStacksStatement(@cardid)
     conn.execute statement, (err, stacks) =>
       return callback(err) if err?
-      statement = new UpdateCardStatement(@cardid, {
+      statement = new UpdateStatement(Card, @cardid, {
         status: CardStatus.Complete
         owner:  null
         stack:  null
@@ -21,7 +22,7 @@ class CompleteCardCommand extends Command
       conn.execute statement, (err, card, previous) =>
         return callback(err) if err?
         note = CardCompletedNote.create(@user, card, previous)
-        statement = new CreateNoteStatement(note)
+        statement = new CreateStatement(note)
         conn.execute statement, (err) =>
           return callback(err) if err?
           callback(null, card)

@@ -1,18 +1,19 @@
 Command               = require 'domain/framework/Command'
+Action                = require 'data/documents/Action'
 ActionTextChangedNote = require 'data/documents/notes/ActionTextChangedNote'
-UpdateActionStatement = require 'data/statements/UpdateActionStatement'
-CreateNoteStatement   = require 'data/statements/CreateNoteStatement'
+CreateStatement       = require 'data/statements/CreateStatement'
+UpdateStatement       = require 'data/statements/UpdateStatement'
 
 class ChangeActionTextCommand extends Command
 
   constructor: (@user, @action, @text) ->
 
   execute: (conn, callback) ->
-    statement = new UpdateActionStatement(@action.id, {@text})
+    statement = new UpdateStatement(Action, @action.id, {@text})
     conn.execute statement, (err, action, previous) =>
       return callback(err) if err?
       note = ActionTextChangedNote.create(@user, action, previous)
-      statement = new CreateNoteStatement(note)
+      statement = new CreateStatement(note)
       conn.execute statement, (err) =>
         return callback(err) if err?
         callback(null, action)

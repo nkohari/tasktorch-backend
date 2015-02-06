@@ -1,12 +1,13 @@
-Command             = require 'domain/framework/Command'
-UpdateTeamStatement = require 'data/statements/UpdateTeamStatement'
+Command         = require 'domain/framework/Command'
+Team            = require 'data/documents/Team'
+UpdateStatement = require 'data/statements/UpdateStatement'
 
 class ChangeTeamNameCommand extends Command
 
   constructor: (@user, @team, @name) ->
 
   execute: (conn, callback) ->
-    statement = new UpdateTeamStatement(@team.id, {@name})
+    statement = new UpdateStatement(Team, @team.id, {@name})
     conn.execute statement, (err, team) =>
       return callback(err) if err?
       callback(null, team)

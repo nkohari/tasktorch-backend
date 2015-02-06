@@ -1,6 +1,6 @@
 r               = require 'rethinkdb'
 Org             = require 'data/documents/Org'
-UpdateStatement = require 'data/framework/statements/UpdateStatement'
+UpdateStatement = require 'data/statements/UpdateStatement'
 
 class RemoveMemberFromOrgStatement extends UpdateStatement
 
