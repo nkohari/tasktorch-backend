@@ -444,10 +444,12 @@ TestData.tokens = table [
   record {
     id:      'token-waitress'
     org:     'org-paddys'
+    creator: 'user-charlie'
     comment: 'waitress@coffeeshop.com'
   }
   record {
     id:      'token-ricketycricket'
+    creator: 'user-dennis'
     comment: 'rickety.cricket@underthebridge.com'
   }
 ]

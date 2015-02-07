@@ -71,6 +71,7 @@ Tables.teams = [
 
 Tables.tokens = [
   r.tableCreate('tokens')
+  r.table('tokens').indexCreate('org')
 ]
 
 Tables.users = [

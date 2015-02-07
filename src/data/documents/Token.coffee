@@ -9,9 +9,10 @@ class Token extends Document
 
   @field  'id'
   @field  'version'
-  @field  'status', {default: DocumentStatus.Normal}
-  @field  'comment'
+  @field  'status',  {default: DocumentStatus.Normal}
+  @field  'comment', {default: null}
 
-  @hasOne 'org',    {type: 'Org', default: null}
+  @hasOne 'creator', {type: 'User'}
+  @hasOne 'org',     {type: 'Org', default: null}
 
 module.exports = Token
