@@ -443,7 +443,12 @@ TestData.teams = table [
 TestData.tokens = table [
   record {
     id:      'token-waitress'
+    org:     'org-paddys'
     comment: 'waitress@coffeeshop.com'
+  }
+  record {
+    id:      'token-ricketycricket'
+    comment: 'rickety.cricket@underthebridge.com'
   }
 ]
 

@@ -1,7 +1,9 @@
-_                 = require 'lodash'
-Handler           = require 'http/framework/Handler'
-User              = require 'data/documents/User'
-CreateUserCommand = require 'domain/commands/users/CreateUserCommand'
+_                     = require 'lodash'
+Handler               = require 'http/framework/Handler'
+User                  = require 'data/documents/User'
+GetOrgQuery           = require 'data/queries/orgs/GetOrgQuery'
+CreateUserCommand     = require 'domain/commands/users/CreateUserCommand'
+AddMemberToOrgCommand = require 'domain/commands/users/AddMemberToOrgCommand'
 
 class CreateUserHandler extends Handler
 
@@ -20,7 +22,7 @@ class CreateUserHandler extends Handler
     'resolve token argument'
   ]
 
-  constructor: (@processor, @passwordHasher) ->
+  constructor: (@database, @processor, @passwordHasher) ->
 
   handle: (request, reply) ->
 
@@ -37,6 +39,17 @@ class CreateUserHandler extends Handler
     command = new CreateUserCommand(user, token)
     @processor.execute command, (err, user) =>
       return reply err if err?
-      return reply @response(user)
+      @addOrgMembership user, token, (err) =>
+        return reply err if err?
+        return reply @response(user)
+
+  addOrgMembership: (user, token, callback) ->
+    return callback() unless token.org?
+    query = new GetOrgQuery(token.org)
+    @database.execute query, (err, result) =>
+      return callback(err) if err?
+      return callback @error.badRequest() unless result.org?
+      command = new AddMemberToOrgCommand(user, user, result.org)
+      @processor.execute(command, callback)
 
 module.exports = CreateUserHandler

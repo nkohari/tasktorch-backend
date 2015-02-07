@@ -12,4 +12,6 @@ class Token extends Document
   @field  'status', {default: DocumentStatus.Normal}
   @field  'comment'
 
+  @hasOne 'org',    {type: 'Org', default: null}
+
 module.exports = Token
