@@ -16,7 +16,7 @@ class CreateTokenHandler extends Handler
     'ensure requester can access org'
   ]
 
-  constructor: (@database, @processor) ->
+  constructor: (@processor) ->
 
   handle: (request, reply) ->
 
