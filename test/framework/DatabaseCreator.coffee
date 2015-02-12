@@ -18,6 +18,7 @@ Tables.cards = [
       .map (key) -> card('actions')(key)
       .reduce (left, right) -> left.default([]).setUnion(right)
   ), {multi: true})
+  r.table('cards').indexCreate('followers', {multi: true})
   r.table('cards').indexCreate('org')
   r.table('cards').indexCreate('stack')
 ]
