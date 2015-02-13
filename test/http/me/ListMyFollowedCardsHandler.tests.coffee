@@ -1,17 +1,17 @@
-_                    = require 'lodash'
-expect               = require('chai').expect
-TestHarness          = require 'test/framework/TestHarness'
-CommonBehaviors      = require 'test/framework/CommonBehaviors'
-ListMyFollowsHandler = require 'http/handlers/me/ListMyFollowsHandler'
+_                          = require 'lodash'
+expect                     = require('chai').expect
+TestHarness                = require 'test/framework/TestHarness'
+CommonBehaviors            = require 'test/framework/CommonBehaviors'
+ListMyFollowedCardsHandler = require 'http/handlers/me/ListMyFollowedCardsHandler'
 
-describe 'ListMyFollowsHandler', ->
+describe 'ListMyFollowedCardsHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(ListMyFollowsHandler)
+      @tester = TestHarness.createTester(ListMyFollowedCardsHandler)
       ready()
 
   credentials =

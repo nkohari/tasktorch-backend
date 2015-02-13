@@ -1,9 +1,9 @@
 Handler                    = require 'http/framework/Handler'
 GetAllCardsByFollowerQuery = require 'data/queries/cards/GetAllCardsByFollowerQuery'
 
-class ListMyFollowsHandler extends Handler
+class ListMyFollowedCardsHandler extends Handler
 
-  @route 'get /api/{orgid}/me/follows'
+  @route 'get /api/{orgid}/me/following'
 
   @before [
     'resolve org'
@@ -23,4 +23,4 @@ class ListMyFollowsHandler extends Handler
       return reply err if err?
       reply @response(result)
 
-module.exports = ListMyFollowsHandler
+module.exports = ListMyFollowedCardsHandler
