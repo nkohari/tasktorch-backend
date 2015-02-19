@@ -70,7 +70,7 @@ TestData.cards = table [
     id:        'card-buygas'
     org:       'org-paddys'
     creator:   'user-mac'
-    followers: ['user-charlie', 'user-dennis', 'user-mac']
+    followers: ['user-dennis', 'user-mac']
     kind:      'kind-scheme'
     goal:      'goal-gascrisis'
     title:     'Buy a shitload of gas'

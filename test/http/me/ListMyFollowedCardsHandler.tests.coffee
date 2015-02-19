@@ -30,8 +30,8 @@ describe 'ListMyFollowedCardsHandler', ->
         expect(res.result).to.exist()
         {cards} = res.result
         expect(cards).to.be.an('array')
-        expect(cards).to.have.length(3)
-        expect(_.pluck(cards, 'id')).to.have.members ['card-takedbaby', 'card-buygas', 'card-boildenim']
+        expect(cards).to.have.length(2)
+        expect(_.pluck(cards, 'id')).to.have.members ['card-takedbaby', 'card-boildenim']
         done()
 
 #---------------------------------------------------------------------------------------------------
