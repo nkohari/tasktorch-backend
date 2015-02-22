@@ -4,7 +4,7 @@ RemoveFollowerFromCardCommand = require 'domain/commands/cards/RemoveFollowerFro
 
 class RemoveFollowerFromCardHandler extends Handler
 
-  @route 'post /api/{orgid}/cards/{cardid}/followers/{userid}'
+  @route 'delete /api/{orgid}/cards/{cardid}/followers/{userid}'
 
   @before [
     'resolve org'
