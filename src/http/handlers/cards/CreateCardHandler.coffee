@@ -39,7 +39,7 @@ class CreateCardHandler extends Handler
       card = new Card {
         org:       org.id
         creator:   user.id
-        owner:     user.id
+        user:      user.id
         kind:      kind.id
         stack:     stack.id
         title:     title

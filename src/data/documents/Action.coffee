@@ -13,7 +13,7 @@ class Action extends Document
 
   @hasOne  'card',   {type: 'Card'}
   @hasOne  'org',    {type: 'Org'}
-  @hasOne  'owner',  {type: 'User', default: null}
+  @hasOne  'user',   {type: 'User', default: null}
   @hasMany 'stage',  {type: 'Stage'}
 
 module.exports = Action

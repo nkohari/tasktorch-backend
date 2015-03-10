@@ -107,13 +107,13 @@ describe 'PassCardHandler', ->
     cardid = 'card-takedbaby'
     userid = 'user-dee'
 
-    it "sets the owner to the specified user and moves the card to the end of the user's inbox stack", (done) ->
+    it "sets the card's user to the specified user and moves the card to the end of the user's inbox stack", (done) ->
       payload = {user: userid}
       @tester.request {orgid, cardid, credentials, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {card} = res.result
-        expect(card.owner).to.equal(userid)
+        expect(card.user).to.equal(userid)
         expect(card.stack).to.equal('stack-dee-inbox')
         query = new GetStackQuery(card.stack)
         @database.execute query, (err, result) =>
@@ -132,13 +132,13 @@ describe 'PassCardHandler', ->
     cardid = 'card-takedbaby'
     teamid = 'team-dynamicduo'
 
-    it "sets the owner to null and moves the card to the end of the team's inbox stack", (done) ->
+    it "sets the card's team to the specified team and moves the card to the end of the team's inbox stack", (done) ->
       payload = {team: teamid}
       @tester.request {orgid, cardid, credentials, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {card} = res.result
-        expect(card.owner).to.equal(null)
+        expect(card.team).to.equal(teamid)
         expect(card.stack).to.equal('stack-dynamicduo-inbox')
         query = new GetStackQuery(card.stack)
         @database.execute query, (err, result) =>

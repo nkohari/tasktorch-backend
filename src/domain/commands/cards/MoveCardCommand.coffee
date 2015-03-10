@@ -20,7 +20,11 @@ class MoveCardCommand extends Command
       statement = new AddCardToStackStatement(@stackid, @cardid, @position)
       conn.execute statement, (err, currentStack) =>
         return callback(err) if err?
-        patch = {stack: @stackid, owner: currentStack.user ? null}
+        patch = {
+          stack: @stackid
+          user: currentStack.user ? null
+          team: currentStack.team ? null
+        }
         # TODO: Cards should only be in one stack at a time. The RemoveCardFromStackStatement
         # ensures that we'll be putting the card into only one stack, so previousStacks
         # should almost always only contain a single stack. This is here just to be sure.

@@ -19,7 +19,8 @@ class Card extends Document
   @hasOne  'goal',      {type: 'Goal', default: null}
   @hasOne  'kind',      {type: 'Kind'}
   @hasOne  'org',       {type: 'Org'}
-  @hasOne  'owner',     {type: 'User'}
+  @hasOne  'user',      {type: 'User', default: null}
+  @hasOne  'team',      {type: 'Team', default: null}
   @hasOne  'stack',     {type: 'Stack', default: null}
 
   @hasManyForeign 'notes', {type: 'Note', index: 'card', order: {field: 'time'}}

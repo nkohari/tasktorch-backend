@@ -58,7 +58,8 @@ TestData.cards = table [
     kind:      'kind-scheme'
     title:     'Taked baby'
     summary:   'Meet at later bar, day or night, sometime'
-    owner:     null
+    user:      null
+    team:      'team-thegang'
     stack:     'stack-thegang-inbox'
     moves:     []
     actions:
@@ -75,7 +76,8 @@ TestData.cards = table [
     goal:      'goal-gascrisis'
     title:     'Buy a shitload of gas'
     summary:   'We need to buy a shitload of gasoline'
-    owner:     'user-mac'
+    user:      'user-mac'
+    team:      null
     stack:     'user-mac-queue'
     moves:     []
     actions:
@@ -91,7 +93,8 @@ TestData.cards = table [
     kind:      'kind-scheme'
     title:     'Boil Denim'
     summary:   '4 denim chiken?'
-    owner:     null
+    user:      null
+    team:      'team-gruesometwosome'
     stack:     'stack-gruesometwosome-plans'
     moves:     []
     actions:
@@ -107,7 +110,8 @@ TestData.cards = table [
     kind:      'kind-task'
     title:     'Ring the bell so everyone drinks'
     summary:   'AND REMEMBER TO KEEP SMILING'
-    owner:     'user-greg'
+    user:      'user-greg'
+    team:      null
     stack:     'user-greg-queue'
     moves:     []
     actions:

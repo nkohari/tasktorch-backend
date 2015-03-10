@@ -24,7 +24,8 @@ class PassCardCommand extends Command
         move = new Move(@user, previousStacks[0], currentStack)
         statement = new UpdateStatement(Card, @card.id, {
           stack: currentStack.id
-          owner: currentStack.user ? null
+          user:  currentStack.user ? null
+          team:  currentStack.team ? null
           moves: r.row('moves').append(move)
         })
         conn.execute statement, (err, card, previous) =>

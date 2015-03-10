@@ -7,7 +7,7 @@ class ActionModel extends Model
     @text  = action.text
     @org   = action.org
     @card  = action.card
-    @owner = action.owner ? null
+    @user  = action.user ? null
     @stage = action.stage
 
 module.exports = ActionModel

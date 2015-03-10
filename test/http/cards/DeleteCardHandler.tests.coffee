@@ -65,13 +65,14 @@ describe 'DeleteCardHandler', ->
         expect(card.id).to.equal(cardid)
         expect(card.followers).to.have.length(0)
         reset(done)
-    it 'sets its owner to null', (done) ->
+    it 'sets its user and team to null', (done) ->
       @tester.request {orgid, cardid, credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {card} = res.result
         expect(card).to.exist()
-        expect(card.owner).to.equal(null)
+        expect(card.user).to.equal(null)
+        expect(card.team).to.equal(null)
         reset(done)
     it 'sets its status to Deleted', (done) ->
       @tester.request {orgid, cardid, credentials}, (res) =>

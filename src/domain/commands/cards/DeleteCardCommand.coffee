@@ -15,7 +15,8 @@ class DeleteCardCommand extends Command
     conn.execute statement, (err, stacks) =>
       return callback(err) if err?
       statement = new UpdateStatement(Card, @card.id, {
-        owner:     null
+        user:      null
+        team:      null
         stack:     null
         status:    CardStatus.Deleted
         followers: []

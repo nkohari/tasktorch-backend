@@ -16,7 +16,8 @@ class CompleteCardCommand extends Command
       return callback(err) if err?
       statement = new UpdateStatement(Card, @cardid, {
         status: CardStatus.Complete
-        owner:  null
+        user:   null
+        team:   null
         stack:  null
       })
       conn.execute statement, (err, card, previous) =>

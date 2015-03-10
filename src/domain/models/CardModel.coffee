@@ -9,7 +9,8 @@ class CardModel extends Model
     @kind      = card.kind
     @creator   = card.creator
     @org       = card.org
-    @owner     = card.owner ? null
+    @user      = card.user ? null
+    @team      = card.team ? null
     @followers = card.followers
     @stack     = card.stack
     @actions   = card.actions

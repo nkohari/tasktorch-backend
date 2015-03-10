@@ -10,9 +10,9 @@ class ChangeActionOwnerCommand extends Command
 
   execute: (conn, callback) ->
     if @owner?
-      patch = {owner: if @owner? then @owner.id else null}
+      patch = {user: if @owner? then @owner.id else null}
     else
-      patch = {owner: null}
+      patch = {user: null}
     statement = new UpdateStatement(Action, @action.id, patch)
     conn.execute statement, (err, action, previous) =>
       return callback(err) if err?

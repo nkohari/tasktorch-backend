@@ -23,7 +23,8 @@ class AcceptCardCommand extends Command
         move = new Move(@user, previousStacks[0], currentStack)
         statement = new UpdateStatement(Card, @cardid, {
           stack: @stackid
-          owner: @user.id
+          user:  currentStack.user ? null
+          team:  currentStack.team ? null
           moves: r.row('moves').append(move)
         })
         conn.execute statement, (err, card, previous) =>

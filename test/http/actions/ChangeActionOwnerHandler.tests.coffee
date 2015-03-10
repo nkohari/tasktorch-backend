@@ -61,7 +61,7 @@ describe 'ChangeActionOwnerHandler', ->
         expect(res.result).to.exist()
         {action} = res.result
         expect(action.id).to.equal('action-takedbaby')
-        expect(action.owner).to.equal(null)
+        expect(action.user).to.equal(null)
         reset(done)
 
 #---------------------------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ describe 'ChangeActionOwnerHandler', ->
         expect(res.result).to.exist()
         {action} = res.result
         expect(action.id).to.equal('action-takedbaby')
-        expect(action.owner).to.equal('user-dee')
+        expect(action.user).to.equal('user-dee')
         reset(done)
 
 #---------------------------------------------------------------------------------------------------

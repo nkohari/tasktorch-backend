@@ -55,7 +55,7 @@ describe 'AcceptCardHandler', ->
         {card} = res.result
         expect(card).to.exist()
         expect(card.id).to.equal(cardid)
-        expect(card.owner).to.equal('user-charlie')
+        expect(card.user).to.equal('user-charlie')
         expect(card.stack).to.equal('stack-charlie-queue')
         query = new GetStackQuery(card.stack)
         @database.execute query, (err, result) =>

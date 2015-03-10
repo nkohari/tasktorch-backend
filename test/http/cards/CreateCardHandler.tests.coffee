@@ -66,7 +66,7 @@ describe 'CreateCardHandler', ->
         {card} = res.result
         expect(card).to.exist()
         expect(card.org).to.equal(orgid)
-        expect(card.owner).to.equal('user-charlie')
+        expect(card.user).to.equal('user-charlie')
         expect(card.stack).to.equal('stack-charlie-drafts')
         query = new GetStackQuery(card.stack)
         @database.execute query, (err, result) =>
