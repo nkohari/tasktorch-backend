@@ -35,7 +35,7 @@ class Document
 
     for name, property of properties
       unless property.isForeign
-        @[name] = data[name] ? property.default
+        @[name] = data[name] ? property.getDefault()
 
   getSchema: ->
     Schema.get(@constructor.name)

@@ -11,7 +11,7 @@ class ResolveUser extends Precondition
     query = new GetUserQuery(request.params.userid)
     @database.execute query, (err, result) =>
       return reply err if err?
-      return reply @error.badRequest() unless result.user?
+      return reply @error.notFound() unless result.user?
       reply(result.user)
 
 module.exports = ResolveUser
