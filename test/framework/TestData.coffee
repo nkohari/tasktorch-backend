@@ -14,36 +14,40 @@ TestData = {dbname: 'torchtest'}
 
 TestData.actions = table [
   record {
-    id:     'action-takedbaby'
-    org:    'org-paddys'
-    card:   'card-takedbaby'
-    stage:  'stage-scheme-do'
-    text:   'Taked the baby'
-    status: 'Complete'
+    id:        'action-takedbaby'
+    org:       'org-paddys'
+    card:      'card-takedbaby'
+    checklist: 'checklist-takedbaby-do'
+    stage:     'stage-scheme-do'
+    status:    'Complete'
+    text:      'Taked the baby'
   }
   record {
-    id:     'action-meetwaitress'
-    org:    'org-paddys'
-    card:   'card-takedbaby'
-    stage:  'stage-scheme-do'
-    text:   'Meet waitress at coffee shop'
-    status: 'Warning'
+    id:        'action-meetwaitress'
+    org:       'org-paddys'
+    card:      'card-takedbaby'
+    checklist: 'checklist-takedbaby-do'
+    stage:     'stage-scheme-do'
+    status:    'Warning'
+    text:      'Meet waitress at coffee shop'
   }
   record {
-    id:     'action-meetatlaterbar'
-    org:    'org-paddys'
-    card:   'card-takedbaby'
-    stage:  'stage-scheme-do'
-    text:   'Meet Mac and Dee at later bar'
-    status: 'NotStarted'
+    id:        'action-meetatlaterbar'
+    org:       'org-paddys'
+    card:      'card-takedbaby'
+    checklist: 'checklist-takedbaby-drink'
+    stage:     'stage-scheme-drink'
+    status:    'NotStarted'
+    text:      'Meet Mac and Dee at later bar'
   }
   record {
-    id:     'action-ringbell'
-    org:    'org-sudz'
-    card:   'card-ringbell'
-    stage:  'stage-task-do'
-    text:   'Ring the bell'
-    status: 'NotStarted'
+    id:         'action-ringbell'
+    org:        'org-sudz'
+    card:       'card-ringbell'
+    checklist:  'checklist-ringbell-do'
+    stage:      'stage-task-do'
+    status:     'NotStarted'
+    text:       'Ring the bell'
   }
 ]
 
@@ -51,71 +55,140 @@ TestData.actions = table [
 
 TestData.cards = table [
   record {
-    id:        'card-takedbaby'
-    org:       'org-paddys'
-    creator:   'user-charlie'
-    followers: ['user-charlie', 'user-dee', 'user-mac']
-    kind:      'kind-scheme'
-    title:     'Taked baby'
-    summary:   'Meet at later bar, day or night, sometime'
-    user:      null
-    team:      'team-thegang'
-    stack:     'stack-thegang-inbox'
-    moves:     []
-    actions:
-      'stage-scheme-plan':  []
-      'stage-scheme-do':    ['action-takedbaby', 'action-meetwaitress']
-      'stage-scheme-drink': ['action-meetatlaterbar']
+    id:         'card-takedbaby'
+    org:        'org-paddys'
+    creator:    'user-charlie'
+    followers:  ['user-charlie', 'user-dee', 'user-mac']
+    kind:       'kind-scheme'
+    title:      'Taked baby'
+    summary:    'Meet at later bar, day or night, sometime'
+    user:       null
+    team:       'team-thegang'
+    stack:      'stack-thegang-inbox'
+    moves:      []
+    checklists: ['checklist-takedbaby-plan', 'checklist-takedbaby-do', 'checklist-takedbaby-drink']
   }
   record {
-    id:        'card-buygas'
-    org:       'org-paddys'
-    creator:   'user-mac'
-    followers: ['user-dennis', 'user-mac']
-    kind:      'kind-scheme'
-    goal:      'goal-gascrisis'
-    title:     'Buy a shitload of gas'
-    summary:   'We need to buy a shitload of gasoline'
-    user:      'user-mac'
-    team:      null
-    stack:     'user-mac-queue'
-    moves:     []
-    actions:
-      'stage-scheme-plan':  []
-      'stage-scheme-do':    []
-      'stage-scheme-drink': []
+    id:         'card-buygas'
+    org:        'org-paddys'
+    creator:    'user-mac'
+    followers:  ['user-dennis', 'user-mac']
+    kind:       'kind-scheme'
+    goal:       'goal-gascrisis'
+    title:      'Buy a shitload of gas'
+    summary:    'We need to buy a shitload of gasoline'
+    user:       'user-mac'
+    team:       null
+    stack:      'user-mac-queue'
+    moves:      []
+    checklists: ['checklist-buygas-plan', 'checklist-buygas-do', 'checklist-buygas-drink']
   }
   record {
-    id:        'card-boildenim'
-    org:       'org-paddys'
-    creator:   'user-charlie'
-    followers: ['user-charlie', 'user-frank']
-    kind:      'kind-scheme'
-    title:     'Boil Denim'
-    summary:   '4 denim chiken?'
-    user:      null
-    team:      'team-gruesometwosome'
-    stack:     'stack-gruesometwosome-plans'
-    moves:     []
-    actions:
-      'stage-scheme-plan':  []
-      'stage-scheme-do':    []
-      'stage-scheme-drink': []
+    id:         'card-boildenim'
+    org:        'org-paddys'
+    creator:    'user-charlie'
+    followers:  ['user-charlie', 'user-frank']
+    kind:       'kind-scheme'
+    title:      'Boil Denim'
+    summary:    '4 denim chiken?'
+    user:       null
+    team:       'team-gruesometwosome'
+    stack:      'stack-gruesometwosome-plans'
+    moves:      []
+    checklists: ['checklist-boildenim-plan', 'checklist-boildenim-do', 'checklist-boildenim-drink']
   }
   record {
-    id:        'card-ringbell'
-    org:       'org-sudz'
-    creator:   'user-greg'
-    followers: ['user-greg']
-    kind:      'kind-task'
-    title:     'Ring the bell so everyone drinks'
-    summary:   'AND REMEMBER TO KEEP SMILING'
-    user:      'user-greg'
-    team:      null
-    stack:     'user-greg-queue'
-    moves:     []
-    actions:
-      'stage-task-do': ['action-ringbell']
+    id:         'card-ringbell'
+    org:        'org-sudz'
+    creator:    'user-greg'
+    followers:  ['user-greg']
+    kind:       'kind-task'
+    title:      'Ring the bell so everyone drinks'
+    summary:    'AND REMEMBER TO KEEP SMILING'
+    user:       'user-greg'
+    team:       null
+    stack:      'user-greg-queue'
+    moves:      []
+    checklists: ['checklist-ringbell-do']
+  }
+]
+
+#---------------------------------------------------------------------------------------------------
+
+TestData.checklists = table [
+  # card-takedbaby
+  record {
+    id:      'checklist-takedbaby-plan'
+    org:     'org-paddys'
+    card:    'card-takedbaby'
+    stage:   'stage-scheme-plan'
+    actions: []
+  }
+  record {
+    id:      'checklist-takedbaby-do'
+    org:     'org-paddys'
+    card:    'card-takedbaby'
+    stage:   'stage-scheme-do'
+    actions: ['action-takedbaby', 'action-meetwaitress']
+  }
+  record {
+    id:      'checklist-takedbaby-drink'
+    org:     'org-paddys'
+    card:    'card-takedbaby'
+    stage:   'stage-scheme-drink'
+    actions: ['action-meetatlaterbar']
+  }
+  # card-buygas
+  record {
+    id:      'checklist-buygas-plan'
+    org:     'org-paddys'
+    card:    'card-buygas'
+    stage:   'stage-scheme-plan'
+    actions: []
+  }
+  record {
+    id:      'checklist-buygas-do'
+    org:     'org-paddys'
+    card:    'card-buygas'
+    stage:   'stage-scheme-do'
+    actions: []
+  }
+  record {
+    id:      'checklist-buygas-drink'
+    org:     'org-paddys'
+    card:    'card-buygas'
+    stage:   'stage-scheme-drink'
+    actions: []
+  }
+  # card-boildenim
+  record {
+    id:      'checklist-boildenim-plan'
+    org:     'org-paddys'
+    card:    'card-boildenim'
+    stage:   'stage-scheme-plan'
+    actions: []
+  }
+  record {
+    id:      'checklist-boildenim-do'
+    org:     'org-paddys'
+    card:    'card-boildenim'
+    stage:   'stage-scheme-do'
+    actions: []
+  }
+  record {
+    id:      'checklist-boildenim-drink'
+    org:     'org-paddys'
+    card:    'card-boildenim'
+    stage:   'stage-scheme-drink'
+    actions: []
+  }
+  # card-ringbell
+  record {
+    id:      'checklist-ringbell-do'
+    org:     'org-sudz'
+    card:    'card-ringbell'
+    stage:   'stage-task-do'
+    actions: ['action-ringbell']
   }
 ]
 
@@ -348,7 +421,7 @@ TestData.stacks = table [
     org:   'org-paddys'
     type:  'Inbox'
     team:  'team-thegang'
-    cards: ['card-taked-baby']
+    cards: ['card-takedbaby']
   }
   record {
     id:    'stack-dynamicduo-inbox'
@@ -516,6 +589,7 @@ TestData.users = table [
 TestData.tables = [
   'actions'
   'cards'
+  'checklists'
   'goals'
   'kinds'
   'notes'

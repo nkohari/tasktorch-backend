@@ -31,7 +31,7 @@ describe 'ListCardsByStackHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
-  describe 'when called for a non-existent card', ->
+  describe 'when called for a non-existent stack', ->
     it 'returns 404 not found', (done) ->
       @tester.request {orgid: 'org-paddys', stackid: 'doesnotexist', credentials}, (res) =>
         expect(res.statusCode).to.equal(404)

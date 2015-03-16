@@ -1,8 +1,8 @@
-Command                       = require 'domain/framework/Command'
-ActionDeletedNote             = require 'data/documents/notes/ActionDeletedNote'
-CreateStatement               = require 'data/statements/CreateStatement'
-DeleteStatement               = require 'data/statements/DeleteStatement'
-RemoveActionFromCardStatement = require 'data/statements/RemoveActionFromCardStatement'
+Command                             = require 'domain/framework/Command'
+ActionDeletedNote                   = require 'data/documents/notes/ActionDeletedNote'
+CreateStatement                     = require 'data/statements/CreateStatement'
+DeleteStatement                     = require 'data/statements/DeleteStatement'
+RemoveActionFromChecklistsStatement = require 'data/statements/RemoveActionFromChecklistsStatement'
 
 class DeleteActionCommand extends Command
 
@@ -12,7 +12,7 @@ class DeleteActionCommand extends Command
     statement = new DeleteStatement(@action)
     conn.execute statement, (err, action) =>
       return callback(err) if err?
-      statement = new RemoveActionFromCardStatement(@action.id)
+      statement = new RemoveActionFromChecklistsStatement(@action.id)
       conn.execute statement, (err, card) =>
         return callback(err) if err?
         note = ActionDeletedNote.create(@user, action)

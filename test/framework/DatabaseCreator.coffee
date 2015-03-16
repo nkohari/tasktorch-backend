@@ -8,19 +8,22 @@ Tables.actions = [
   r.tableCreate('actions')
   r.table('actions').indexCreate('card')
   r.table('actions').indexCreate('org')
-  r.table('actions').indexCreate('stage')
+  r.table('actions').indexCreate('checklist')
 ]
 
 Tables.cards = [
   r.tableCreate('cards')
-  r.table('cards').indexCreate('actions', ((card) ->
-    card('actions').keys()
-      .map (key) -> card('actions')(key)
-      .reduce (left, right) -> left.default([]).setUnion(right)
-  ), {multi: true})
   r.table('cards').indexCreate('followers', {multi: true})
+  r.table('cards').indexCreate('kind')
   r.table('cards').indexCreate('org')
   r.table('cards').indexCreate('stack')
+]
+
+Tables.checklists = [
+  r.tableCreate('checklists')
+  r.table('checklists').indexCreate('actions', {multi: true})
+  r.table('checklists').indexCreate('card')
+  r.table('checklists').indexCreate('stage')
 ]
 
 Tables.goals = [

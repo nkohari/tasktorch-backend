@@ -4,7 +4,7 @@ TestData          = require 'test/framework/TestData'
 TestHarness       = require 'test/framework/TestHarness'
 CommonBehaviors   = require 'test/framework/CommonBehaviors'
 MoveActionHandler = require 'http/handlers/actions/MoveActionHandler'
-GetCardQuery      = require 'data/queries/cards/GetCardQuery'
+GetChecklistQuery = require 'data/queries/checklists/GetChecklistQuery'
 
 describe 'MoveActionHandler', ->
 
@@ -18,7 +18,7 @@ describe 'MoveActionHandler', ->
       ready()
 
   reset = (callback) ->
-    TestData.reset ['actions', 'cards', 'notes'], callback
+    TestData.reset ['actions', 'checklists', 'notes'], callback
 
   credentials =
     user: {id: 'user-charlie'}
@@ -30,222 +30,284 @@ describe 'MoveActionHandler', ->
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent org', ->
+
+    actionid    = 'action-takedbaby'
+    checklistid = 'checklist-takedbaby-drink'
+    orgid       = 'doesnotexist'
+    position    = 'append'
+
     it 'returns 404 not found', (done) ->
-      payload = {card: 'card-takedbaby', stage: 'stage-scheme-drink', position: 'append'}
-      @tester.request {orgid: 'doesnotexist', actionid: 'action-takedbaby', credentials, payload}, (res) =>
+      payload = {checklist: checklistid, position}
+      @tester.request {orgid, actionid, credentials, payload}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent action', ->
+
+    actionid    = 'doesnotexist'
+    checklistid = 'checklist-takedbaby-drink'
+    orgid       = 'org-paddys'
+    position    = 'append'
+
     it 'returns 404 not found', (done) ->
-      payload = {card: 'card-takedbaby', stage: 'stage-scheme-drink', position: 'append'}
-      @tester.request {orgid: 'org-paddys', actionid: 'doesnotexist', credentials, payload}, (res) =>
+      payload = {checklist: checklistid, position}
+      @tester.request {orgid, actionid, credentials, payload}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
-  describe 'when called without a card argument', ->
+  describe 'when called with a non-existent checklist argument', ->
+
+    actionid    = 'action-takedbaby'
+    checklistid = 'doesnotexist'
+    orgid       = 'org-paddys'
+    position    = 'append'
+
     it 'returns 400 bad request', (done) ->
-      payload = {stage: 'stage-scheme-drink', position: 'append'}
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials, payload}, (res) =>
+      payload = {checklist: checklistid, position}
+      @tester.request {orgid, actionid, credentials, payload}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
-  describe 'when called with a non-existent card argument', ->
+  describe 'when called without a checklist argument', ->
+
+    actionid    = 'action-takedbaby'
+    orgid       = 'org-paddys'
+    position    = 'append'
+
     it 'returns 400 bad request', (done) ->
-      payload = {card: 'doesnotexist', stage: 'stage-scheme-drink', position: 'append'}
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials, payload}, (res) =>
-        expect(res.statusCode).to.equal(400)
-        done()
-
-#---------------------------------------------------------------------------------------------------
-
-  describe 'when called with a non-existent stage argument', ->
-    it 'returns 400 bad request', (done) ->
-      payload = {card: 'card-takedbaby', stage: 'doesnotexist', position: 'append'}
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials, payload}, (res) =>
-        expect(res.statusCode).to.equal(400)
-        done()
-
-#---------------------------------------------------------------------------------------------------
-
-  describe 'when called without a stage argument', ->
-    it 'returns 400 bad request', (done) ->
-      payload = {card: 'card-takedbaby', position: 'append'}
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials, payload}, (res) =>
-        expect(res.statusCode).to.equal(400)
-        done()
-
-#---------------------------------------------------------------------------------------------------
-
-  describe 'when called with a non-existent stage argument', ->
-    it 'returns 400 bad request', (done) ->
-      payload = {card: 'card-takedbaby', stage: 'doesnotexist', position: 'append'}
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials, payload}, (res) =>
+      payload = {position}
+      @tester.request {orgid, actionid, credentials, payload}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called without a position argument', ->
+
+    actionid    = 'action-takedbaby'
+    checklistid = 'checklist-takedbaby-drink'
+    orgid       = 'org-paddys'
+
     it 'returns 400 bad request', (done) ->
-      payload = {card: 'card-takedbaby', stage: 'stage-scheme-drink'}
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials, payload}, (res) =>
+      payload = {checklist: checklistid}
+      @tester.request {orgid, actionid, credentials, payload}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with an invalid position argument', ->
+
+    actionid    = 'action-takedbaby'
+    checklistid = 'checklist-takedbaby-drink'
+    orgid       = 'org-paddys'
+    position    = 'doesnotexist'
+
     it 'returns 400 bad request', (done) ->
-      payload = {card: 'card-takedbaby', stage: 'stage-scheme-drink', position: 'doesnotexist'}
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials, payload}, (res) =>
+      payload = {checklist: checklistid, position}
+      @tester.request {orgid, actionid, credentials, payload}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
-  describe 'when called with the same cardid, a new stageid, and position=append', ->
+  describe 'when called with a checklist from the same card and position=append', ->
 
-    orgid    = 'org-paddys'
-    actionid = 'action-takedbaby'
-    cardid   = 'card-takedbaby'
-    stageid  = 'stage-scheme-drink'
-    position = 'append'
+    orgid       = 'org-paddys'
+    actionid    = 'action-takedbaby'
+    cardid      = 'card-takedbaby'
+    checklistid = 'checklist-takedbaby-drink'
+    stageid     = 'stage-scheme-drink'
+    position    = 'append'
 
-    it 'moves the action to the end specified stage on the same card', (done) ->
-      payload = {card: cardid, stage: stageid, position}
+    it 'sets the card, checklist, and stage correctly on the action', (done) ->
+      payload = {checklist: checklistid, position}
       @tester.request {orgid, actionid, credentials, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {action} = res.result
+        expect(action).to.exist()
+        expect(action.id).to.equal(actionid)
         expect(action.card).to.equal(cardid)
+        expect(action.checklist).to.equal(checklistid)
         expect(action.stage).to.equal(stageid)
-        query = new GetCardQuery(cardid)
+        reset(done)
+
+    it 'moves the action to the end of the checklist', (done) ->
+      payload = {checklist: checklistid, position}
+      @tester.request {orgid, actionid, credentials, payload}, (res) =>
+        expect(res.statusCode).to.equal(200)
+        expect(res.result).to.exist()
+        query = new GetChecklistQuery(checklistid)
         @database.execute query, (err, result) =>
           expect(err).not.to.exist()
           expect(result).to.exist()
-          expect(result.card).to.exist()
-          actions = result.card.actions[stageid]
-          expect(actions).to.be.an('array')
-          expect(_.last(result.card.actions[stageid])).to.equal(actionid)
+          {checklist} = result
+          expect(checklist).to.exist()
+          expect(checklist.actions).to.be.an('array')
+          expect(_.last(checklist.actions)).to.equal(actionid)
           reset(done)
 
 #---------------------------------------------------------------------------------------------------
 
-  describe 'when called with the same cardid, a new stageid, and position=prepend', ->
+  describe 'when called with a checklist from the same card and position=prepend', ->
 
-    orgid    = 'org-paddys'
-    actionid = 'action-takedbaby'
-    cardid   = 'card-takedbaby'
-    stageid  = 'stage-scheme-drink'
-    position = 'prepend'
+    orgid       = 'org-paddys'
+    actionid    = 'action-takedbaby'
+    cardid      = 'card-takedbaby'
+    checklistid = 'checklist-takedbaby-drink'
+    stageid     = 'stage-scheme-drink'
+    position    = 'prepend'
 
-    it 'moves the action to the beginning of the specified stage on the same card', (done) ->
-      payload = {card: cardid, stage: stageid, position}
+    it 'sets the card, checklist, and stage correctly on the action', (done) ->
+      payload = {checklist: checklistid, position}
       @tester.request {orgid, actionid, credentials, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {action} = res.result
+        expect(action).to.exist()
+        expect(action.id).to.equal(actionid)
         expect(action.card).to.equal(cardid)
+        expect(action.checklist).to.equal(checklistid)
         expect(action.stage).to.equal(stageid)
-        query = new GetCardQuery(cardid)
+        reset(done)
+
+    it 'moves the action to the beginning of the specified checklist on the same card', (done) ->
+      payload = {checklist: checklistid, position}
+      @tester.request {orgid, actionid, credentials, payload}, (res) =>
+        expect(res.statusCode).to.equal(200)
+        expect(res.result).to.exist()
+        query = new GetChecklistQuery(checklistid)
         @database.execute query, (err, result) =>
           expect(err).not.to.exist()
           expect(result).to.exist()
-          expect(result.card).to.exist()
-          actions = result.card.actions[stageid]
-          expect(actions).to.be.an('array')
-          expect(_.first(result.card.actions[stageid])).to.equal(actionid)
+          {checklist} = result
+          expect(checklist).to.exist()
+          expect(checklist.actions).to.be.an('array')
+          expect(_.first(checklist.actions)).to.equal(actionid)
           reset(done)
 
 #---------------------------------------------------------------------------------------------------
 
-  describe 'when called with the same cardid, a new stageid, and a numeric position', ->
+  describe 'when called with a checklist from the same card and a numeric position', ->
 
-    orgid    = 'org-paddys'
-    actionid = 'action-meetatlaterbar'
-    cardid   = 'card-takedbaby'
-    stageid  = 'stage-scheme-do'
-    position = 1
+    orgid       = 'org-paddys'
+    actionid    = 'action-meetatlaterbar'
+    cardid      = 'card-takedbaby'
+    checklistid = 'checklist-takedbaby-do'
+    stageid     = 'stage-scheme-do'
+    position    = 1
 
-    it 'moves the action to the specified position in the specified stage on the same card', (done) ->
-      payload = {card: cardid, stage: stageid, position}
+    it 'sets the card, checklist, and stage correctly on the action', (done) ->
+      payload = {checklist: checklistid, position}
       @tester.request {orgid, actionid, credentials, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {action} = res.result
+        expect(action).to.exist()
+        expect(action.id).to.equal(actionid)
         expect(action.card).to.equal(cardid)
+        expect(action.checklist).to.equal(checklistid)
         expect(action.stage).to.equal(stageid)
-        query = new GetCardQuery(cardid)
+        reset(done)
+
+    it 'moves the action to the specified position in the checklist', (done) ->
+      payload = {checklist: checklistid, position}
+      @tester.request {orgid, actionid, credentials, payload}, (res) =>
+        expect(res.statusCode).to.equal(200)
+        expect(res.result).to.exist()
+        query = new GetChecklistQuery(checklistid)
         @database.execute query, (err, result) =>
           expect(err).not.to.exist()
           expect(result).to.exist()
-          expect(result.card).to.exist()
-          actions = result.card.actions[stageid]
-          expect(actions).to.be.an('array')
-          expect(result.card.actions[stageid][position]).to.equal(actionid)
+          {checklist} = result
+          expect(checklist).to.exist()
+          expect(checklist.actions).to.be.an('array')
+          expect(checklist.actions[position]).to.equal(actionid)
           reset(done)
 
 #---------------------------------------------------------------------------------------------------
 
-  describe 'when called with a new cardid, a new stageid, and position=append', ->
+  describe 'when called with checklist from a different card and position=append', ->
 
-    orgid    = 'org-paddys'
-    actionid = 'action-takedbaby'
-    cardid   = 'card-buygas'
-    stageid  = 'stage-scheme-drink'
-    position = 'append'
+    orgid       = 'org-paddys'
+    actionid    = 'action-takedbaby'
+    cardid      = 'card-buygas'
+    checklistid = 'checklist-buygas-drink'
+    stageid     = 'stage-scheme-drink'
+    position    = 'append'
 
-    it 'moves the action to the beginning of the specified stage on the new card', (done) ->
-      payload = {card: cardid, stage: stageid, position}
+    it 'sets the card, checklist, and stage correctly on the action', (done) ->
+      payload = {checklist: checklistid, position}
       @tester.request {orgid, actionid, credentials, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {action} = res.result
+        expect(action).to.exist()
+        expect(action.id).to.equal(actionid)
         expect(action.card).to.equal(cardid)
+        expect(action.checklist).to.equal(checklistid)
         expect(action.stage).to.equal(stageid)
-        query = new GetCardQuery(cardid)
+        reset(done)
+
+    it 'moves the action to the end of the checklist', (done) ->
+      payload = {checklist: checklistid, position}
+      @tester.request {orgid, actionid, credentials, payload}, (res) =>
+        expect(res.statusCode).to.equal(200)
+        expect(res.result).to.exist()
+        query = new GetChecklistQuery(checklistid)
         @database.execute query, (err, result) =>
           expect(err).not.to.exist()
           expect(result).to.exist()
-          expect(result.card).to.exist()
-          actions = result.card.actions[stageid]
-          expect(actions).to.be.an('array')
-          expect(_.last(result.card.actions[stageid])).to.equal(actionid)
+          {checklist} = result
+          expect(checklist).to.exist()
+          expect(checklist.actions).to.be.an('array')
+          expect(_.last(checklist.actions)).to.equal(actionid)
           reset(done)
 
 #---------------------------------------------------------------------------------------------------
 
-  describe 'when called with a new cardid, a new stageid, and position=prepend', ->
+  describe 'when called with a checklist on a different card and position=prepend', ->
 
-    orgid    = 'org-paddys'
-    actionid = 'action-takedbaby'
-    cardid   = 'card-buygas'
-    stageid  = 'stage-scheme-drink'
-    position = 'prepend'
+    orgid       = 'org-paddys'
+    actionid    = 'action-takedbaby'
+    cardid      = 'card-buygas'
+    checklistid = 'checklist-buygas-drink'
+    stageid     = 'stage-scheme-drink'
+    position    = 'prepend'
 
-    it 'moves the action to the beginning of the specified stage on the new card', (done) ->
-      payload = {card: cardid, stage: stageid, position}
+    it 'sets the card, checklist, and stage correctly on the action', (done) ->
+      payload = {checklist: checklistid, position}
       @tester.request {orgid, actionid, credentials, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {action} = res.result
+        expect(action).to.exist()
+        expect(action.id).to.equal(actionid)
         expect(action.card).to.equal(cardid)
+        expect(action.checklist).to.equal(checklistid)
         expect(action.stage).to.equal(stageid)
-        query = new GetCardQuery(cardid)
+        reset(done)
+
+    it 'moves the action to the beginning of specified checklist', (done) ->
+      payload = {checklist: checklistid, position}
+      @tester.request {orgid, actionid, credentials, payload}, (res) =>
+        expect(res.statusCode).to.equal(200)
+        expect(res.result).to.exist()
+        query = new GetChecklistQuery(checklistid)
         @database.execute query, (err, result) =>
           expect(err).not.to.exist()
           expect(result).to.exist()
-          expect(result.card).to.exist()
-          actions = result.card.actions[stageid]
-          expect(actions).to.be.an('array')
-          expect(_.first(result.card.actions[stageid])).to.equal(actionid)
+          {checklist} = result
+          expect(checklist).to.exist()
+          expect(checklist.actions).to.be.an('array')
+          expect(_.first(checklist.actions)).to.equal(actionid)
           reset(done)
 
 #---------------------------------------------------------------------------------------------------

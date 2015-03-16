@@ -45,11 +45,9 @@ class CreateCardHandler extends Handler
         title:     title
         summary:   summary
         followers: [user.id]
-        moves:     []
-        actions:   _.object(_.map(kind.stages, (id) -> [id, []]))
       }
 
-      command = new CreateCardCommand(user, card)
+      command = new CreateCardCommand(user, card, kind)
       @processor.execute command, (err, card) =>
         return reply err if err?
         reply @response(card)

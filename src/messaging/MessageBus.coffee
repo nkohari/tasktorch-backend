@@ -13,16 +13,18 @@ class MessageBus
     callback()
 
   onCreate: (event) =>
-    @publish(Activity.Created, event.document)
+    {document} = event
+    @publish(document, new Message(Activity.Created, document))
 
   onUpdate: (event) =>
-    @publish(Activity.Changed, event.document)
+    {document, previous} = event
+    @publish(document, new Message(Activity.Changed, document, previous))
 
   onDelete: (event) =>
-    @publish(Activity.Deleted, event.document)
+    {document} = event
+    @publish(document, new Message(Activity.Deleted, document))
 
-  publish: (activity, document) =>
-    message = new Message(activity, document)
+  publish: (document, message) ->
     @gatekeeper.getAccessList document, (err, userids) =>
       if err?
         @log.error "Error resolving access list for #{document.constructor.name}: #{err}"

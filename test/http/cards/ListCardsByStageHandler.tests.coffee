@@ -1,70 +1,68 @@
-expect              = require('chai').expect
-TestData            = require 'test/framework/TestData'
-TestHarness         = require 'test/framework/TestHarness'
-CommonBehaviors     = require 'test/framework/CommonBehaviors'
-DeleteActionHandler = require 'http/handlers/actions/DeleteActionHandler'
+_                       = require 'lodash'
+expect                  = require('chai').expect
+TestHarness             = require 'test/framework/TestHarness'
+CommonBehaviors         = require 'test/framework/CommonBehaviors'
+ListCardsByStageHandler = require 'http/handlers/cards/ListCardsByStageHandler'
 
-describe 'DeleteActionHandler', ->
+describe 'ListCardsByStageHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(DeleteActionHandler)
+      @tester = TestHarness.createTester(ListCardsByStageHandler)
       ready()
-
-  reset = (callback) ->
-    TestData.reset ['actions', 'checklists', 'notes'], callback
 
   credentials =
     user: {id: 'user-charlie'}
 
 #---------------------------------------------------------------------------------------------------
 
-  CommonBehaviors.requiresAuthentication {orgid: 'org-paddys', actionid: 'action-takedbaby'}
+  CommonBehaviors.requiresAuthentication {orgid: 'org-paddys', stageid: 'stage-scheme-do'}
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent org', ->
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'doesnotexist', actionid: 'action-takedbaby', credentials}, (res) =>
+      @tester.request {orgid: 'doesnotexist', stageid: 'stage-scheme-do', credentials}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
-  describe 'when called for a non-existent action', ->
+  describe 'when called for a non-existent stage', ->
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'org-paddys', actionid: 'doesnotexist', credentials}, (res) =>
+      @tester.request {orgid: 'org-paddys', stageid: 'doesnotexist', credentials}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
-  describe 'when called with a valid action in an org of which the requester is a member', ->
-    it 'deletes the action', (done) ->
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials}, (res) =>
+  describe 'when called for a valid stage in an org of which the requester is a member', ->
+    it 'returns an array of cards currently in the stage', (done) ->
+      @tester.request {orgid: 'org-paddys', stageid: 'stage-scheme-do', credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
-        {action} = res.result
-        expect(action.id).to.equal('action-takedbaby')
-        expect(action.status).to.equal('Deleted')
-        reset(done)
+        {cards} = res.result
+        expect(cards).to.exist()
+        expect(cards).to.have.length(1)
+        expect(_.pluck(cards, 'id')).to.have.members ['card-takedbaby']
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for an org of which the requester is not a member', ->
     it 'returns 403 forbidden', (done) ->
-      @tester.request {orgid: 'org-sudz', actionid: 'action-ringbell', credentials}, (res) =>
+      @tester.request {orgid: 'org-sudz', stageid: 'stage-task-do', credentials}, (res) =>
         expect(res.statusCode).to.equal(403)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
-  describe 'when called with a mismatched orgid and actionid', ->
+  describe 'when called with a mismatched orgid and stageid', ->
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'org-paddys', actionid: 'action-ringbell', credentials}, (res) =>
+      @tester.request {orgid: 'org-paddys', stageid: 'stage-task-do', credentials}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 

@@ -1,70 +1,67 @@
+_                   = require 'lodash'
 expect              = require('chai').expect
-TestData            = require 'test/framework/TestData'
 TestHarness         = require 'test/framework/TestHarness'
 CommonBehaviors     = require 'test/framework/CommonBehaviors'
-DeleteActionHandler = require 'http/handlers/actions/DeleteActionHandler'
+GetChecklistHandler = require 'http/handlers/checklists/GetChecklistHandler'
 
-describe 'DeleteActionHandler', ->
+describe 'GetChecklistHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(DeleteActionHandler)
+      @tester = TestHarness.createTester(GetChecklistHandler)
       ready()
-
-  reset = (callback) ->
-    TestData.reset ['actions', 'checklists', 'notes'], callback
 
   credentials =
     user: {id: 'user-charlie'}
 
 #---------------------------------------------------------------------------------------------------
 
-  CommonBehaviors.requiresAuthentication {orgid: 'org-paddys', actionid: 'action-takedbaby'}
+  CommonBehaviors.requiresAuthentication {orgid: 'org-paddys', checklistid: 'checklist-takedbaby-do'}
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent org', ->
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'doesnotexist', actionid: 'action-takedbaby', credentials}, (res) =>
+      @tester.request {orgid: 'doesnotexist', checklistid: 'checklist-takedbaby-do', credentials}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
-  describe 'when called for a non-existent action', ->
+  describe 'when called for a non-existent checklist', ->
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'org-paddys', actionid: 'doesnotexist', credentials}, (res) =>
+      @tester.request {orgid: 'org-paddys', checklistid: 'doesnotexist', credentials}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
-  describe 'when called with a valid action in an org of which the requester is a member', ->
-    it 'deletes the action', (done) ->
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials}, (res) =>
+  describe 'when called for a valid checklist in an org of which the requester is a member', ->
+    it 'returns the checklist', (done) ->
+      @tester.request {orgid: 'org-paddys', checklistid: 'checklist-takedbaby-do', credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
-        {action} = res.result
-        expect(action.id).to.equal('action-takedbaby')
-        expect(action.status).to.equal('Deleted')
-        reset(done)
+        {checklist} = res.result
+        expect(checklist).to.exist()
+        expect(checklist.id).to.equal('checklist-takedbaby-do')
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for an org of which the requester is not a member', ->
     it 'returns 403 forbidden', (done) ->
-      @tester.request {orgid: 'org-sudz', actionid: 'action-ringbell', credentials}, (res) =>
+      @tester.request {orgid: 'org-sudz', checklistid: 'checklist-ringbell', credentials}, (res) =>
         expect(res.statusCode).to.equal(403)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
-  describe 'when called with a mismatched orgid and actionid', ->
+  describe 'when called with a mismatched orgid and checklistid', ->
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'org-paddys', actionid: 'action-ringbell', credentials}, (res) =>
+      @tester.request {orgid: 'org-paddys', checklistid: 'checklist-ringbell', credentials}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 

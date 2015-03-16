@@ -6,6 +6,7 @@ Subscription   = require 'data/framework/Subscription'
 DocTypes = [
   require 'data/documents/Action'
   require 'data/documents/Card'
+  require 'data/documents/Checklist'
   require 'data/documents/Goal'
   require 'data/documents/Kind'
   require 'data/documents/Note'

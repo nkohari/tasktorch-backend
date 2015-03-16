@@ -18,7 +18,7 @@ describe 'CreateCardHandler', ->
       ready()
 
   reset = (callback) ->
-    TestData.reset ['cards', 'notes', 'stacks'], callback
+    TestData.reset ['cards', 'checklists', 'notes', 'stacks'], callback
 
   credentials =
     user: {id: 'user-charlie'}

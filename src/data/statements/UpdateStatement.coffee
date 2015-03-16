@@ -5,22 +5,22 @@ Statement = require 'data/framework/Statement'
 
 class UpdateStatement extends Statement
 
-  constructor: (doctype, match, patch, expectedVersion = undefined) ->
+  constructor: (doctype, match, patch, options = {}) ->
     super(doctype)
+    options = _.extend options, {returnChanges: true}
 
-    # TODO: We need a better way of handling the version increment for functions.
     unless _.isFunction(patch)
       patch = _.extend patch, {version: r.row('version').add(1)}
 
-    if @expectedVersion?
+    if options.expectedVersion?
       patch = (row) =>
         r.branch(
-          row('version').eq(@expectedVersion),
+          row('version').eq(@options.expectedVersion),
           patch,
           r.error(Error.VersionMismatch)
         )
 
-    @rql = r.table(@schema.table).get(match).update(patch, {returnChanges: true})
+    @rql = r.table(@schema.table).get(match).update(patch, options)
 
   run: (conn, callback) ->
     @rql.run conn, (err, response) =>

@@ -9,18 +9,16 @@ class MoveActionHandler extends Handler
 
   @ensure
     payload:
-      card:     @mustBe.string().required()
-      stage:    @mustBe.string().required()
-      position: @mustBe.number().integer().allow('prepend', 'append').required()
+      checklist: @mustBe.string().required()
+      position:  @mustBe.number().integer().allow('prepend', 'append').required()
 
   @before [
     'resolve org'
     'resolve action'
-    'resolve card argument'
-    'resolve stage argument'
+    'resolve checklist argument'
     'ensure action belongs to org'
     'ensure requester can access action'
-    'ensure requester can access card'
+    'ensure requester can access checklist'
     'ensure position argument is valid'
   ]
 
@@ -28,20 +26,12 @@ class MoveActionHandler extends Handler
 
   handle: (request, reply) ->
 
-    {action, card, stage} = request.pre
-    {position}            = request.payload
+    {action, checklist} = request.pre
+    {position}          = request.payload
 
-    query = new GetKindQuery(card.kind)
-    @database.execute query, (err, result) =>
+    command = new MoveActionCommand(request.auth.credentials.user, action.id, checklist.id, checklist.card, checklist.stage, position)
+    @processor.execute command, (err, action) =>
       return reply err if err?
-
-      {kind} = result
-      unless kind.hasStage(stage.id)
-        return reply @error.badRequest("Stage #{stage.id} is not part of the kind #{kind.id}")
-
-      command = new MoveActionCommand(request.auth.credentials.user, action.id, card.id, stage.id, position)
-      @processor.execute command, (err, action) =>
-        return reply err if err?
-        reply @response(action)
+      reply @response(action)
 
 module.exports = MoveActionHandler

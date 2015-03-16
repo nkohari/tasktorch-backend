@@ -8,12 +8,14 @@ class Action extends Document
 
   @field   'id'
   @field   'version'
-  @field   'status', {default: ActionStatus.NotStarted}
-  @field   'text',   {default: null}
+  @field   'status',    {default: ActionStatus.NotStarted}
+  @field   'text',      {default: null}
+  @field   'completed', {default: null}
 
-  @hasOne  'card',   {type: 'Card'}
-  @hasOne  'org',    {type: 'Org'}
-  @hasOne  'user',   {type: 'User', default: null}
-  @hasMany 'stage',  {type: 'Stage'}
+  @hasOne  'card',      {type: 'Card'}
+  @hasMany 'checklist', {type: 'Checklist'}
+  @hasOne  'org',       {type: 'Org'}
+  @hasOne  'stage',     {type: 'Stage'}
+  @hasOne  'user',      {type: 'User', default: null}
 
 module.exports = Action

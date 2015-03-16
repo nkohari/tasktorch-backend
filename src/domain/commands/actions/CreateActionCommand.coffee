@@ -1,7 +1,7 @@
-Command                  = require 'domain/framework/Command'
-ActionCreatedNote        = require 'data/documents/notes/ActionCreatedNote'
-AddActionToCardStatement = require 'data/statements/AddActionToCardStatement'
-CreateStatement          = require 'data/statements/CreateStatement'
+Command                       = require 'domain/framework/Command'
+ActionCreatedNote             = require 'data/documents/notes/ActionCreatedNote'
+AddActionToChecklistStatement = require 'data/statements/AddActionToChecklistStatement'
+CreateStatement               = require 'data/statements/CreateStatement'
 
 class CreateActionCommand extends Command
 
@@ -11,7 +11,7 @@ class CreateActionCommand extends Command
     statement = new CreateStatement(@action)
     conn.execute statement, (err, action) =>
       return callback(err) if err?
-      statement = new AddActionToCardStatement(action.id, action.card, action.stage, 'append')
+      statement = new AddActionToChecklistStatement(action.checklist, action.id, 'append')
       conn.execute statement, (err, card) =>
         return callback(err) if err?
         note = ActionCreatedNote.create(@user, action)

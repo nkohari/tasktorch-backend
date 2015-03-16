@@ -1,19 +1,19 @@
-path            = require 'path'
-_               = require 'lodash'
-loadFiles       = require 'common/util/loadFiles'
-humanize        = require 'common/util/humanize'
-Config          = require 'common/Config'
-Log             = require 'common/Log'
-Database        = require 'data/Database'
-DatabaseWatcher = require 'data/DatabaseWatcher'
-ConnectionPool  = require 'data/framework/ConnectionPool'
-Processor       = require 'domain/Processor'
-ApiServer       = require 'http/ApiServer'
-PusherClient    = require 'messaging/PusherClient'
-MockMessageBus  = require 'test/framework/MockMessageBus'
-Gatekeeper      = require 'security/Gatekeeper'
-Keymaster       = require 'security/Keymaster'
-PasswordHasher  = require 'security/PasswordHasher'
+path                = require 'path'
+_                   = require 'lodash'
+loadFiles           = require 'common/util/loadFiles'
+humanize            = require 'common/util/humanize'
+Config              = require 'common/Config'
+Log                 = require 'common/Log'
+Database            = require 'data/Database'
+MockDatabaseWatcher = require 'test/framework/MockDatabaseWatcher'
+ConnectionPool      = require 'data/framework/ConnectionPool'
+Processor           = require 'domain/Processor'
+ApiServer           = require 'http/ApiServer'
+PusherClient        = require 'messaging/PusherClient'
+MockMessageBus      = require 'test/framework/MockMessageBus'
+Gatekeeper          = require 'security/Gatekeeper'
+Keymaster           = require 'security/Keymaster'
+PasswordHasher      = require 'security/PasswordHasher'
 
 SRC_DIR = path.resolve(__dirname, '../../src')
 
@@ -31,7 +31,7 @@ class TestEnvironment
 
     forge.bind('connectionPool').to.type(ConnectionPool)
     forge.bind('database').to.type(Database)
-    forge.bind('databaseWatcher').to.type(DatabaseWatcher)
+    forge.bind('databaseWatcher').to.type(MockDatabaseWatcher)
     forge.bind('processor').to.type(Processor)
 
     forge.bind('server').to.type(ApiServer)
