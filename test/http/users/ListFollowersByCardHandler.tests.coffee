@@ -46,8 +46,8 @@ describe 'ListFollowersByCardHandler', ->
         expect(res.result).to.exist()
         {users} = res.result
         expect(users).to.exist()
-        expect(users).to.have.length(3)
-        expect(_.pluck(users, 'id')).to.have.members ['user-charlie', 'user-dee', 'user-mac']
+        expect(users).to.have.length(2)
+        expect(_.pluck(users, 'id')).to.have.members ['user-charlie', 'user-mac']
         done()
 
 #---------------------------------------------------------------------------------------------------

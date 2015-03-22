@@ -58,7 +58,7 @@ TestData.cards = table [
     id:         'card-takedbaby'
     org:        'org-paddys'
     creator:    'user-charlie'
-    followers:  ['user-charlie', 'user-dee', 'user-mac']
+    followers:  ['user-charlie', 'user-mac']
     kind:       'kind-scheme'
     title:      'Taked baby'
     summary:    'Meet at later bar, day or night, sometime'

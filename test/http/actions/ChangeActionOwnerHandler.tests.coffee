@@ -3,6 +3,7 @@ TestData                 = require 'test/framework/TestData'
 TestHarness              = require 'test/framework/TestHarness'
 CommonBehaviors          = require 'test/framework/CommonBehaviors'
 ChangeActionOwnerHandler = require 'http/handlers/actions/ChangeActionOwnerHandler'
+GetCardQuery             = require 'data/queries/cards/GetCardQuery'
 
 describe 'ChangeActionOwnerHandler', ->
 
@@ -12,10 +13,11 @@ describe 'ChangeActionOwnerHandler', ->
     TestHarness.start (err) =>
       return ready(err) if err?
       @tester = TestHarness.createTester(ChangeActionOwnerHandler)
+      @database = TestHarness.getDatabase()
       ready()
 
   reset = (callback) ->
-    TestData.reset ['actions', 'notes'], callback
+    TestData.reset ['actions', 'cards', 'notes'], callback
 
   credentials =
     user: {id: 'user-charlie'}
@@ -67,14 +69,35 @@ describe 'ChangeActionOwnerHandler', ->
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a valid user argument', ->
+
+    orgid    = 'org-paddys'
+    actionid = 'action-takedbaby'
+    userid   = 'user-dee'
+
     it 'assigns the action to the specified user', (done) ->
-      payload = {user: 'user-dee'}
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials, payload}, (res) =>
+      payload = {user: userid}
+      @tester.request {orgid, actionid, credentials, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {action} = res.result
-        expect(action.id).to.equal('action-takedbaby')
-        expect(action.user).to.equal('user-dee')
+        expect(action.id).to.equal(actionid)
+        expect(action.user).to.equal(userid)
         reset(done)
+
+    it 'adds the specified user as a follower of the card', (done) ->
+      payload = {user: userid}
+      @tester.request {orgid, actionid, credentials, payload}, (res) =>
+        expect(res.statusCode).to.equal(200)
+        expect(res.result).to.exist()
+        {action} = res.result
+        query = new GetCardQuery(action.card)
+        @database.execute query, (err, result) =>
+          expect(err).not.to.exist()
+          expect(result).to.exist()
+          {card} = result
+          expect(card).to.exist()
+          expect(card.followers).to.be.an('array')
+          expect(card.followers).to.contain(userid)
+          reset(done)
 
 #---------------------------------------------------------------------------------------------------
