@@ -21,13 +21,18 @@ class PassCardCommand extends Command
       statement = new AddCardToStackStatement(@stack.id, @card.id, 'append')
       conn.execute statement, (err, currentStack) =>
         return callback(err) if err?
-        move = new Move(@user, previousStacks[0], currentStack)
-        statement = new UpdateStatement(Card, @card.id, {
+
+        patch = {
           stack: currentStack.id
           user:  currentStack.user ? null
           team:  currentStack.team ? null
-          moves: r.row('moves').append(move)
-        })
+          moves: r.row('moves').append(new Move(@user, previousStacks[0], currentStack))
+        }
+
+        if currentStack.user?
+          patch.followers = r.row('followers').setInsert(currentStack.user)
+
+        statement = new UpdateStatement(Card, @card.id, patch)
         conn.execute statement, (err, card, previous) =>
           return callback(err) if err?
           note = CardPassedNote.create(@user, card, previous)

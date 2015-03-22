@@ -20,13 +20,18 @@ class AcceptCardCommand extends Command
       statement = new AddCardToStackStatement(@stackid, @cardid, 'append')
       conn.execute statement, (err, currentStack) =>
         return callback(err) if err?
-        move = new Move(@user, previousStacks[0], currentStack)
-        statement = new UpdateStatement(Card, @cardid, {
-          stack: @stackid
-          user:  currentStack.user ? null
-          team:  currentStack.team ? null
-          moves: r.row('moves').append(move)
-        })
+
+        patch = {
+          stack:     @stackid
+          user:      currentStack.user ? null
+          team:      currentStack.team ? null
+          moves:     r.row('moves').append(new Move(@user, previousStacks[0], currentStack))
+        }
+
+        if currentStack.user?
+          patch.followers = r.row('followers').setInsert(currentStack.user)
+
+        statement = new UpdateStatement(Card, @cardid, patch)
         conn.execute statement, (err, card, previous) =>
           return callback(err) if err?
           note = CardAcceptedNote.create(@user, card, previous)
