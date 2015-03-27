@@ -1,7 +1,8 @@
-_                 = require 'lodash'
-Handler           = require 'http/framework/Handler'
-GetKindQuery      = require 'data/queries/kinds/GetKindQuery'
-MoveActionCommand = require 'domain/commands/actions/MoveActionCommand'
+_                                  = require 'lodash'
+Handler                            = require 'http/framework/Handler'
+GetKindQuery                       = require 'data/queries/kinds/GetKindQuery'
+MoveActionCommand                  = require 'domain/commands/actions/MoveActionCommand'
+RepositionActionInChecklistCommand = require 'domain/commands/actions/RepositionActionInChecklistCommand'
 
 class MoveActionHandler extends Handler
 
@@ -28,10 +29,17 @@ class MoveActionHandler extends Handler
 
     {action, checklist} = request.pre
     {position}          = request.payload
+    {user}              = request.auth.credentials
 
-    command = new MoveActionCommand(request.auth.credentials.user, action.id, checklist.id, checklist.card, checklist.stage, position)
-    @processor.execute command, (err, action) =>
-      return reply err if err?
-      reply @response(action)
+    if action.checklist == checklist.id
+      command = new RepositionActionInChecklistCommand(user, action.id, checklist.id, position)
+      @processor.execute command, (err) =>
+        return reply err if err?
+        reply @response(action)
+    else
+      command = new MoveActionCommand(user, action.id, checklist.id, checklist.card, checklist.stage, position)
+      @processor.execute command, (err, action) =>
+        return reply err if err?
+        reply @response(action)
 
 module.exports = MoveActionHandler

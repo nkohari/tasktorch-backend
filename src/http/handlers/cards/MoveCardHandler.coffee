@@ -1,6 +1,7 @@
-_               = require 'lodash'
-Handler         = require 'http/framework/Handler'
-MoveCardCommand = require 'domain/commands/cards/MoveCardCommand'
+_                            = require 'lodash'
+Handler                      = require 'http/framework/Handler'
+MoveCardCommand              = require 'domain/commands/cards/MoveCardCommand'
+RepositionCardInStackCommand = require 'domain/commands/cards/RepositionCardInStackCommand'
 
 class MoveCardHandler extends Handler
 
@@ -35,9 +36,16 @@ class MoveCardHandler extends Handler
     if stack.user? and stack.user != user.id
       return reply @error.forbidden("You cannot move a card to a stack owned by another user")
 
-    command = new MoveCardCommand(user, card.id, stack.id, position)
-    @processor.execute command, (err, card) =>
-      return reply err if err?
-      reply @response(card)
+    if card.stack == stack.id
+      command = new RepositionCardInStackCommand(user, card.id, stack.id, position)
+      @processor.execute command, (err) =>
+        return reply err if err?
+        reply @response(card)
+    else
+      command = new MoveCardCommand(user, card.id, stack.id, position)
+      @processor.execute command, (err, card) =>
+        return reply err if err?
+        reply @response(card)
+
 
 module.exports = MoveCardHandler
