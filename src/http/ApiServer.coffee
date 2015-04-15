@@ -27,12 +27,12 @@ class ApiServer
     {name, options} = handler.constructor
     {verb, path}    = options.route
 
-    config = _.extend {
+    routeConfig = _.extend {
       json: {space: 2}
     }, options.config
 
     if options.preconditions?
-      config.pre = _.map options.preconditions, (name) =>
+      routeConfig.pre = _.map options.preconditions, (name) =>
         precond = @forge.get('precondition', name)
         return {
           method: precond.execute.bind(precond)
@@ -43,20 +43,20 @@ class ApiServer
       method:  verb
       path:    path
       handler: handler.handle.bind(handler)
-      config:  config
+      config:  routeConfig
     }
 
     @log.debug "[http] Mounted #{name} at #{verb} #{path}"
 
   setupAuthStrategy: ->
-    config = @config.security.session
+    sessionConfig = @config.security.session
 
     options =
-      cookie:       config.cookie
-      domain:       config.domain
-      ttl:          config.ttl
-      password:     config.secret
-      isSecure:     config.secure
+      cookie:       sessionConfig.cookie
+      domain:       sessionConfig.domain
+      ttl:          sessionConfig.ttl
+      password:     sessionConfig.secret
+      isSecure:     sessionConfig.secure
       clearInvalid: true
       validateFunc: (state, callback) =>
         return callback(null, false) unless state?
@@ -68,8 +68,8 @@ class ApiServer
       @server.auth.strategy('session', 'cookie', 'required', options)
 
   setupCookies: ->
-    for name, config of @config.security.cookies
-      @server.state(name, config)
+    for name, cookieConfig of @config.security.cookies
+      @server.state(name, cookieConfig)
 
   onRequest: (request, reply) ->
     

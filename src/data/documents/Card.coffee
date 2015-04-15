@@ -11,6 +11,7 @@ class Card extends Document
   @field   'status',    {default: CardStatus.Normal}
   @field   'title',     {default: null}
   @field   'summary',   {default: null}
+  @field   'number'
   @field   'moves',     {default: []}
 
   @hasOne  'creator',   {type: 'User'}

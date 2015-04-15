@@ -10,6 +10,7 @@ class CreateTeamHandler extends Handler
   @ensure
     payload:
       name:    @mustBe.string().required()
+      purpose: @mustBe.string()
       leaders: @mustBe.array().includes(@mustBe.string())
       members: @mustBe.array().includes(@mustBe.string())
 
@@ -26,7 +27,7 @@ class CreateTeamHandler extends Handler
 
     {org, members, leaders} = request.pre
     {user}                  = request.auth.credentials
-    {name}                  = request.payload
+    {name, purpose}         = request.payload
 
     if members.length == 0
       members = [user]
@@ -47,6 +48,7 @@ class CreateTeamHandler extends Handler
     team = new Team {
       org:     org.id
       name:    name
+      purpose: purpose
       members: memberids
       leaders: leaderids
     }

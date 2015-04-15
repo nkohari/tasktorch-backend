@@ -9,12 +9,13 @@ class Kind extends Document
 
   @field   'id'
   @field   'version'
-  @field   'status', {default: DocumentStatus.Normal}
+  @field   'status',     {default: DocumentStatus.Normal}
   @field   'name'
   @field   'color'
+  @field   'nextNumber', {default: 1}
 
-  @hasOne  'org',    {type: 'Org'}
-  @hasMany 'stages', {type: 'Stage'}
+  @hasOne  'org',        {type: 'Org'}
+  @hasMany 'stages',     {type: 'Stage'}
 
   hasStage: (stageid) ->
     _.contains(@stages, stageid)

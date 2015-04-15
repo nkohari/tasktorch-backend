@@ -60,6 +60,7 @@ TestData.cards = table [
     creator:    'user-charlie'
     followers:  ['user-charlie', 'user-mac']
     kind:       'kind-scheme'
+    number:     1
     title:      'Taked baby'
     summary:    'Meet at later bar, day or night, sometime'
     user:       null
@@ -74,6 +75,7 @@ TestData.cards = table [
     creator:    'user-mac'
     followers:  ['user-dennis', 'user-mac']
     kind:       'kind-scheme'
+    number:     2
     goal:       'goal-gascrisis'
     title:      'Buy a shitload of gas'
     summary:    'We need to buy a shitload of gasoline'
@@ -89,6 +91,7 @@ TestData.cards = table [
     creator:    'user-charlie'
     followers:  ['user-charlie', 'user-frank']
     kind:       'kind-scheme'
+    number:     3
     title:      'Boil Denim'
     summary:    '4 denim chiken?'
     user:       null
@@ -103,6 +106,7 @@ TestData.cards = table [
     creator:    'user-greg'
     followers:  ['user-greg']
     kind:       'kind-task'
+    number:     1
     title:      'Ring the bell so everyone drinks'
     summary:    'AND REMEMBER TO KEEP SMILING'
     user:       'user-greg'
@@ -216,18 +220,20 @@ TestData.goals = table [
 
 TestData.kinds = table [
   record {
-    id:     'kind-scheme'
-    org:    'org-paddys'
-    name:   'Scheme'
-    color:  '#999999'
-    stages: ['stage-scheme-plan', 'stage-scheme-do', 'stage-scheme-drink']
+    id:         'kind-scheme'
+    org:        'org-paddys'
+    name:       'Scheme'
+    color:      '#999999'
+    stages:     ['stage-scheme-plan', 'stage-scheme-do', 'stage-scheme-drink']
+    nextNumber: 4
   }
   record {
-    id:     'kind-task'
-    org:    'org-sudz'
-    name:   'Task'
-    color:  '#999999'
-    stages: ['stage-task-do']
+    id:         'kind-task'
+    org:        'org-sudz'
+    name:       'Task'
+    color:      '#999999'
+    stages:     ['stage-task-do']
+    nextNumber: 2
   }
 ]
 
@@ -489,6 +495,7 @@ TestData.teams = table [
     id:      'team-thegang'
     org:     'org-paddys'
     name:    'The Gang'
+    purpose: 'Scheming'
     members: ['user-charlie', 'user-mac', 'user-dee', 'user-dennis', 'user-frank']
     leaders: ['user-mac', 'user-dennis', 'user-frank']
   }
@@ -496,6 +503,7 @@ TestData.teams = table [
     id:      'team-dynamicduo'
     org:     'org-paddys'
     name:    'The Dynamic Duo'
+    purpose: 'Movie Night'
     members: ['user-dennis', 'user-mac']
     leaders: ['user-mac']
   }
@@ -503,6 +511,7 @@ TestData.teams = table [
     id:      'team-gruesometwosome'
     org:     'org-paddys'
     name:    'Gruesome Twosome'
+    purpose: 'Nightcrawlers'
     members: ['user-charlie', 'user-frank']
     leaders: ['user-charlie', 'user-frank']
   }
@@ -510,6 +519,7 @@ TestData.teams = table [
     id:      'team-sudz'
     org:     'org-sudz'
     name:    'Sudz Staff'
+    purpose: 'Winning awards'
     members: ['user-greg']
     leaders: []
   }

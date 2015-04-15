@@ -11,6 +11,7 @@ class Team extends Document
   @field  'version'
   @field  'status',   {default: DocumentStatus.Normal}
   @field  'name'
+  @field  'purpose',  {default: null}
 
   @hasOne  'org',     {type: 'Org'}
   @hasMany 'leaders', {type: 'User', default: []}

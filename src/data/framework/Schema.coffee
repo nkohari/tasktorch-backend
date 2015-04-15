@@ -22,7 +22,7 @@ class Schema
     return schema
 
   constructor: (@doctype) ->
-    @name = doctype.name
+    @name = @doctype.name
     @properties = {}
 
   addField: (name, config) ->

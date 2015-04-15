@@ -5,7 +5,7 @@ Statement = require 'data/framework/Statement'
 
 class BulkUpdateStatement extends Statement
 
-  constructor: (@doctype, match, patch) ->
+  constructor: (doctype, match, patch) ->
     super(doctype)
     patch = _.extend patch, {version: r.row('version').add(1)}
     @rql = match.update(patch, {returnChanges: true})

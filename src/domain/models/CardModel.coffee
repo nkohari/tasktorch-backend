@@ -7,6 +7,7 @@ class CardModel extends Model
     @title      = card.title
     @summary    = card.summary
     @kind       = card.kind
+    @number     = card.number
     @creator    = card.creator
     @org        = card.org
     @user       = card.user ? null
