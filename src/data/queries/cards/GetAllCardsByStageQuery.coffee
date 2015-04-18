@@ -1,6 +1,7 @@
 _            = require 'lodash'
 r            = require 'rethinkdb'
 ActionStatus = require 'data/enums/ActionStatus'
+CardStatus   = require 'data/enums/CardStatus'
 Action       = require 'data/documents/Action'
 Card         = require 'data/documents/Card'
 Query        = require 'data/framework/queries/Query'
@@ -17,6 +18,7 @@ class GetAllCardsByStageQuery extends Query
     emptyLookup = _.object _.map ActionStatus, (value) -> [value, []]
 
     @rql = r.table(Card.getSchema().table).getAll(kindid, {index: 'kind'})
+      .filter((card) -> card('status').eq(CardStatus.Normal))
       .filter((card) ->
         r.table(Action.getSchema().table).getAll(card('id'), {index: 'card'}).coerceTo('array')
         .do (actions) ->
