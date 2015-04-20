@@ -7,6 +7,10 @@ class AcceptCardHandler extends Handler
 
   @route 'post /api/{orgid}/cards/{cardid}/accept'
 
+  @ensure
+    payload:
+      preempt: @mustBe.boolean().default(false)
+
   @before [
     'resolve org'
     'resolve card'
@@ -20,6 +24,7 @@ class AcceptCardHandler extends Handler
 
     {card, org} = request.pre
     {user}      = request.auth.credentials
+    {preempt}   = request.payload
 
     if card.user? and card.user != user.id
       return reply @error.badRequest("You cannot accept a card that is owned by another user")
@@ -28,7 +33,7 @@ class AcceptCardHandler extends Handler
     @database.execute query, (err, result) =>
       return reply err if err?
       {stack} = result
-      command = new AcceptCardCommand(user, card.id, stack.id)
+      command = new AcceptCardCommand(user, card.id, stack.id, preempt)
       @processor.execute command, (err, card) =>
         return reply err if err?
         reply @response(card)

@@ -10,22 +10,23 @@ Move                          = require 'data/structs/Move'
 
 class AcceptCardCommand extends Command
 
-  constructor: (@user, @cardid, @stackid) ->
+  constructor: (@user, @cardid, @stackid, @preempt) ->
     super()
 
   execute: (conn, callback) ->
     statement = new RemoveCardFromStacksStatement(@cardid)
     conn.execute statement, (err, previousStacks) =>
       return callback(err) if err?
-      statement = new AddCardToStackStatement(@stackid, @cardid, 'append')
+      position  = if @preempt then 'prepend' else 'append'
+      statement = new AddCardToStackStatement(@stackid, @cardid, position)
       conn.execute statement, (err, currentStack) =>
         return callback(err) if err?
 
         patch = {
-          stack:     @stackid
-          user:      currentStack.user ? null
-          team:      currentStack.team ? null
-          moves:     r.row('moves').append(new Move(@user, previousStacks[0], currentStack))
+          stack: @stackid
+          user:  currentStack.user ? null
+          team:  currentStack.team ? null
+          moves: r.row('moves').append(new Move(@user, previousStacks[0], currentStack))
         }
 
         if currentStack.user?
