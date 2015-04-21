@@ -1,6 +1,5 @@
-_                           = require 'lodash'
+RemoveMemberFromTeamCommand = require 'domain/commands/users/RemoveMemberFromTeamCommand'
 Handler                     = require 'http/framework/Handler'
-RemoveMemberFromTeamCommand = require 'domain/commands/teams/RemoveMemberFromTeamCommand'
 
 class RemoveMemberFromTeamHandler extends Handler
 

@@ -1,9 +1,9 @@
 Handler                = require 'http/framework/Handler'
-AddMemberToTeamCommand = require 'domain/commands/users/AddMemberToTeamCommand'
+AddLeaderToTeamCommand = require 'domain/commands/users/AddLeaderToTeamCommand'
 
-class AddMemberToTeamHandler extends Handler
+class AddLeaderToTeamHandler extends Handler
 
-  @route 'post /api/{orgid}/teams/{teamid}/members'
+  @route 'post /api/{orgid}/teams/{teamid}/leaders'
 
   @ensure
     payload:
@@ -25,12 +25,12 @@ class AddMemberToTeamHandler extends Handler
     {org, team, user} = request.pre
     requester         = request.auth.credentials.user
 
-    if team.hasMember(user)
+    if team.hasLeader(user)
       return reply @response(team)
 
-    command = new AddMemberToTeamCommand(requester, team, user)
+    command = new AddLeaderToTeamCommand(requester, team, user)
     @processor.execute command, (err, team) =>
       return reply err if err?
       return reply @response(team)
 
-module.exports = AddMemberToTeamHandler
+module.exports = AddLeaderToTeamHandler
