@@ -7,7 +7,7 @@ class ChangeCardSummaryHandler extends Handler
 
   @ensure
     payload:
-      summary: @mustBe.string().allow(null).required()
+      summary: @mustBe.string().allow(null, '').required()
   
   @before [
     'resolve org'

@@ -7,7 +7,7 @@ class ChangeCardTitleHandler extends Handler
 
   @ensure
     payload:
-      title: @mustBe.string().allow(null).required()
+      title: @mustBe.string().allow(null, '').required()
 
   @before [
     'resolve org'

@@ -11,7 +11,7 @@ class CreateSessionHandler extends Handler
 
   @ensure
     payload:
-      login: @mustBe.string().required()
+      login:    @mustBe.string().required()
       password: @mustBe.string().required()
 
   constructor: (@database, @processor, @passwordHasher) ->
