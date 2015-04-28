@@ -80,7 +80,7 @@ Tables.tokens = [
 
 Tables.users = [
   r.tableCreate('users')
-  r.table('users').indexCreate('emails', {multi: true})
+  r.table('users').indexCreate('email')
   r.table('users').indexCreate('username')
 ]
 

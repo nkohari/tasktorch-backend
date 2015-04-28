@@ -7,8 +7,7 @@ class UserModel extends Model
     super(user)
     @username  = user.username
     @name      = user.name
-    # TODO: Make this configurable instead of always being the first email address
-    @avatarUrl = @getAvatarUrl(user.emails[0])
+    @avatarUrl = @getAvatarUrl(user.email)
 
   getAvatarUrl: (email) ->
     hash = crypto.createHash('md5').update(email).digest('hex')

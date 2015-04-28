@@ -548,7 +548,7 @@ TestData.users = table [
     id:       'user-charlie'
     name:     'Charlie Kelly'
     username: 'dayman'
-    emails:   ['charlie.kelly@paddyspub.com']
+    email :   'charlie.kelly@paddyspub.com'
     # waitress
     password: 'c2NyeXB0AA4AAAAIAAAAAaF626neJ1gQrqKS+qkxcpMNQd76mLpkXQhjyZEAKhJjAstfoKlh4dnncpN4Oaurq6ebVGo6n9sEK/Z4gVMI6eqPsYt3NEZBcwfnU4Ud/QxZ'
   }
@@ -556,7 +556,7 @@ TestData.users = table [
     id:       'user-mac'
     name:     'Mac'
     username: 'mac'
-    emails:   ['ronald.mcdonald@paddyspub.com']
+    email:    'ronald.mcdonald@paddyspub.com'
     # badass
     password: 'c2NyeXB0AA4AAAAIAAAAAY6zpclMXNqwYpx5vlyOJIy4k4bMFIcZbEOKjyTorYSJeFtAgK0mYiehWJxY/5AtWdcxudDB7TJELSueYwl9Ky03mdTWyHC5c+tmxsEU3xSc'
   }
@@ -564,7 +564,7 @@ TestData.users = table [
     id:       'user-dee'
     name:     'Dee Reynolds'
     username: 'sweetdee'
-    emails:   ['dee.reynolds@paddyspub.com']
+    email:    'dee.reynolds@paddyspub.com'
     # joshgroban
     password: 'c2NyeXB0AA4AAAAIAAAAAUydbuvH6huaxIkHP7IHtDpPhU2qUdUEivMAd37WoQn2ad2txXL/364gi0YpWPCU5hSMukKyT7jDTZHkVSIu4ezWfVrTH2+6fGm2eEGCfmbU'
   }
@@ -572,7 +572,7 @@ TestData.users = table [
     id:       'user-dennis'
     name:     'Dennis Reynolds'
     username: '80srockgod'
-    emails:   ['dennis.reynolds@paddyspub.com']
+    email:    'dennis.reynolds@paddyspub.com'
     # dennis
     password: 'c2NyeXB0AA4AAAAIAAAAAQ4/0t2PcxibqPK17NrzpZ6bX2Get+e0XVZNTn23M/L51pufBCroXLQfXhjjCdaU4zvvDqBap6/+8sQWT7jLTrzkLnwDYbBUCbzzWZ4zPuOd'
   }
@@ -580,7 +580,7 @@ TestData.users = table [
     id:       'user-frank'
     name:     'Frank Reynolds'
     username: 'mantis'
-    emails:   ['frank.reynolds@paddyspub.com']
+    email:    'frank.reynolds@paddyspub.com'
     # egg
     password: 'c2NyeXB0AA4AAAAIAAAAATBPGguuUu+9+SPHFnUREJBwzVMxP1rVV3kePeHwLvpZq9urXoQtdsRft4bGugZV/6lgNBlDHjrpjHo52MD7XjiujEnfYNv5lgspeH9ptIyj'
   }
@@ -588,7 +588,7 @@ TestData.users = table [
     id:       'user-greg'
     name:     'Greg'
     username: 'greg'
-    emails:   ['greg@sudz.com']
+    email:    'greg@sudz.com'
     # maxwell
     password: 'c2NyeXB0AA4AAAAIAAAAAWvXMRsISN9AyD9y/vLE9MVZvCn0KDUlbr3wBg8FrFHQoMSSO2G3Updhru9hD+cyyGmH69idaSeXJu49x06t55YJeANMFbdOaCMQwRuf+Vkd'
   }

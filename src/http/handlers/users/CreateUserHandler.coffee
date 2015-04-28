@@ -33,7 +33,7 @@ class CreateUserHandler extends Handler
       name:     name
       username: username
       password: @passwordHasher.hash(password)
-      emails:   [email]
+      email:    email
     }
 
     command = new CreateUserCommand(user, token)

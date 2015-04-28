@@ -12,6 +12,6 @@ class User extends Document
   @field  'username'
   @field  'password'
   @field  'name'
-  @field  'emails'
+  @field  'email'
 
 module.exports = User
