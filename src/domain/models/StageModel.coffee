@@ -4,7 +4,8 @@ class StageModel extends Model
 
   constructor: (stage) ->
     super(stage)
-    @name = stage.name
-    @kind = stage.kind
+    @name           = stage.name
+    @defaultActions = stage.defaultActions
+    @kind           = stage.kind
 
 module.exports = StageModel

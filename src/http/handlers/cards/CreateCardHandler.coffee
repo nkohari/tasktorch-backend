@@ -3,6 +3,7 @@ Handler                    = require 'http/framework/Handler'
 Card                       = require 'data/documents/Card'
 StackType                  = require 'data/enums/StackType'
 GetSpecialStackByUserQuery = require 'data/queries/stacks/GetSpecialStackByUserQuery'
+GetAllStagesByKindQuery    = require 'data/queries/stages/GetAllStagesByKindQuery'
 CreateCardCommand          = require 'domain/commands/cards/CreateCardCommand'
 
 class CreateCardHandler extends Handler
@@ -33,23 +34,27 @@ class CreateCardHandler extends Handler
     query = new GetSpecialStackByUserQuery(org.id, user.id, StackType.Drafts)
     @database.execute query, (err, result) =>
       return reply err if err?
-
       {stack} = result
-      
-      card = new Card {
-        org:       org.id
-        creator:   user.id
-        user:      user.id
-        kind:      kind.id
-        stack:     stack.id
-        title:     title
-        summary:   summary
-        followers: [user.id]
-      }
 
-      command = new CreateCardCommand(user, card, kind)
-      @processor.execute command, (err, card) =>
+      query = new GetAllStagesByKindQuery(kind.id)
+      @database.execute query, (err, result) =>
         return reply err if err?
-        reply @response(card)
+        {stages} = result
+        
+        card = new Card {
+          org:       org.id
+          creator:   user.id
+          user:      user.id
+          kind:      kind.id
+          stack:     stack.id
+          title:     title
+          summary:   summary
+          followers: [user.id]
+        }
+
+        command = new CreateCardCommand(user, card, kind, stages)
+        @processor.execute command, (err, card) =>
+          return reply err if err?
+          reply @response(card)
 
 module.exports = CreateCardHandler

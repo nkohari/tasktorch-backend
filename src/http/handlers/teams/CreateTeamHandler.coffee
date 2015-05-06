@@ -11,8 +11,8 @@ class CreateTeamHandler extends Handler
     payload:
       name:    @mustBe.string().required()
       purpose: @mustBe.string()
-      leaders: @mustBe.array().includes(@mustBe.string())
-      members: @mustBe.array().includes(@mustBe.string())
+      leaders: @mustBe.array().items(@mustBe.string())
+      members: @mustBe.array().items(@mustBe.string())
 
   @before [
     'resolve org'

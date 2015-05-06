@@ -23,7 +23,7 @@
     "humanize": "0.0.9",
     "immutable": "2.0.17",
     "int-encoder": "0.1.4",
-    "joi": "5.1.0",
+    "joi": "6.4.1",
     "lodash": "2.4.1",
     "node-uuid": "1.4.1",
     "pusher": "1.0.1",

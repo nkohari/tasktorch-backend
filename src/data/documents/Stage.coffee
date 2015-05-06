@@ -10,6 +10,7 @@ class Stage extends Document
   @field  'version'
   @field  'status', {default: DocumentStatus.Normal}
   @field  'name'
+  @field  'defaultActions', {default: []}
 
   @hasOne 'org',    {type: 'Org'}
   @hasOne 'kind',   {type: 'Kind'}
