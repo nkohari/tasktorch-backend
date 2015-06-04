@@ -3,7 +3,7 @@ Handler            = require 'http/framework/Handler'
 Token              = require 'data/documents/Token'
 CreateTokenCommand = require 'domain/commands/tokens/CreateTokenCommand'
 
-class CreateTokenHandler extends Handler
+class CreateOrgTokenHandler extends Handler
 
   @route 'post /api/{orgid}/tokens'
   
@@ -35,4 +35,4 @@ class CreateTokenHandler extends Handler
       return reply err if err?
       return reply @response(token)
 
-module.exports = CreateTokenHandler
+module.exports = CreateOrgTokenHandler
