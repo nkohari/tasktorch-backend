@@ -10,8 +10,8 @@ class Goal extends Document
   @field  'version'
   @field  'status',  {default: DocumentStatus.Normal}
   @field  'name'
-  @field  'deadline'
 
-  @hasOne 'org',     {type: 'Org'}
+  @hasOne  'org',   {type: 'Org'}
+  @hasMany 'cards', {type: 'Card', default: []}
 
 module.exports = Goal

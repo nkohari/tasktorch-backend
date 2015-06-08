@@ -29,6 +29,7 @@ Tables.checklists = [
 Tables.goals = [
   r.tableCreate('goals')
   r.table('goals').indexCreate('org')
+  r.table('goals').indexCreate('cards', {multi: true})
 ]
 
 Tables.kinds = [

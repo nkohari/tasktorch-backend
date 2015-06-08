@@ -16,7 +16,6 @@ class Card extends Document
 
   @hasOne  'creator',   {type: 'User'}
   @hasMany 'followers', {type: 'User',  default: []}
-  @hasOne  'goal',      {type: 'Goal',  default: null}
   @hasOne  'kind',      {type: 'Kind'}
   @hasOne  'org',       {type: 'Org'}
   @hasOne  'user',      {type: 'User',  default: null}
@@ -24,6 +23,7 @@ class Card extends Document
   @hasOne  'stack',     {type: 'Stack', default: null}
 
   @hasManyForeign 'actions',    {type: 'Action',    index: 'card'}
+  @hasManyForeign 'goals',      {type: 'Goal',      index: 'cards'}
   @hasManyForeign 'checklists', {type: 'Checklist', index: 'card'}
   @hasManyForeign 'notes',      {type: 'Note',      index: 'card', order: {field: 'time'}}
 

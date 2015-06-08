@@ -3,6 +3,7 @@ Card                          = require 'data/documents/Card'
 CardDeletedNote               = require 'data/documents/notes/CardDeletedNote'
 CardStatus                    = require 'data/enums/CardStatus'
 CreateStatement               = require 'data/statements/CreateStatement'
+RemoveCardFromGoalsStatement  = require 'data/statements/RemoveCardFromGoalsStatement'
 RemoveCardFromStacksStatement = require 'data/statements/RemoveCardFromStacksStatement'
 UpdateStatement               = require 'data/statements/UpdateStatement'
 
@@ -14,19 +15,22 @@ class DeleteCardCommand extends Command
     statement = new RemoveCardFromStacksStatement(@card.id)
     conn.execute statement, (err, stacks) =>
       return callback(err) if err?
-      statement = new UpdateStatement(Card, @card.id, {
-        user:      null
-        team:      null
-        stack:     null
-        status:    CardStatus.Deleted
-        followers: []
-      })
-      conn.execute statement, (err, card, previous) =>
+      statement = new RemoveCardFromGoalsStatement(@card.id)
+      conn.execute statement, (err, goals) =>
         return callback(err) if err?
-        note = CardDeletedNote.create(@user, card, previous)
-        statement = new CreateStatement(note)
-        conn.execute statement, (err) =>
+        statement = new UpdateStatement(Card, @card.id, {
+          user:      null
+          team:      null
+          stack:     null
+          status:    CardStatus.Deleted
+          followers: []
+        })
+        conn.execute statement, (err, card, previous) =>
           return callback(err) if err?
-          callback(null, card)
+          note = CardDeletedNote.create(@user, card, previous)
+          statement = new CreateStatement(note)
+          conn.execute statement, (err) =>
+            return callback(err) if err?
+            callback(null, card)
 
 module.exports = DeleteCardCommand
