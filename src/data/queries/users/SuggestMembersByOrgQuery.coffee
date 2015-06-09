@@ -7,7 +7,7 @@ class SuggestMembersByOrgQuery extends Query
 
   constructor: (orgid, phrase, options) ->
     super(User, options)
-    expression = "(?i)^#{phrase}"
+    expression = "(?i)#{phrase}"
     @rql = r.table(@schema.table).getAll(
       r.args(r.table(Org.getSchema().table).get(orgid)('members'))
     )

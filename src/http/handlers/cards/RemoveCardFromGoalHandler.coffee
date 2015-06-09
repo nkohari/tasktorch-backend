@@ -3,7 +3,7 @@ RemoveCardFromGoalCommand = require 'domain/commands/cards/RemoveCardFromGoalCom
 
 class RemoveCardFromGoalHandler extends Handler
 
-  @route 'delete /api/{orgid}/goals/{goalid}/cards/{cardid}'
+  @route 'delete /api/{orgid}/cards/{cardid}/goals/{goalid}'
 
   @before [
     'resolve org'
@@ -22,8 +22,8 @@ class RemoveCardFromGoalHandler extends Handler
     {user}            = request.auth.credentials
 
     command = new RemoveCardFromGoalCommand(user, goal, card)
-    @processor.execute command, (err, goal) =>
+    @processor.execute command, (err, card) =>
       return reply err if err?
-      reply @response(goal)
+      reply @response(card)
 
 module.exports = RemoveCardFromGoalHandler

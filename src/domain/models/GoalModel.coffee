@@ -6,6 +6,5 @@ class GoalModel extends Model
     super(goal)
     @name  = goal.name
     @org   = goal.org
-    @cards = goal.cards
 
 module.exports = GoalModel

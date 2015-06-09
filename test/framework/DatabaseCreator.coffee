@@ -14,6 +14,7 @@ Tables.actions = [
 Tables.cards = [
   r.tableCreate('cards')
   r.table('cards').indexCreate('followers', {multi: true})
+  r.table('cards').indexCreate('goals', {multi: true})
   r.table('cards').indexCreate('kind')
   r.table('cards').indexCreate('org')
   r.table('cards').indexCreate('stack')
@@ -29,7 +30,6 @@ Tables.checklists = [
 Tables.goals = [
   r.tableCreate('goals')
   r.table('goals').indexCreate('org')
-  r.table('goals').indexCreate('cards', {multi: true})
 ]
 
 Tables.kinds = [

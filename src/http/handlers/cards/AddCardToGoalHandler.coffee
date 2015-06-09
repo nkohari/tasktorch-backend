@@ -3,16 +3,16 @@ AddCardToGoalCommand = require 'domain/commands/cards/AddCardToGoalCommand'
 
 class AddCardToGoalHandler extends Handler
 
-  @route 'post /api/{orgid}/goals/{goalid}/cards'
+  @route 'post /api/{orgid}/cards/{cardid}/goals'
 
   @ensure
     payload:
-      card: @mustBe.string().required()
+      goal: @mustBe.string().required()
 
   @before [
     'resolve org'
-    'resolve goal'
-    'resolve card argument'
+    'resolve card'
+    'resolve goal argument'
     'ensure card belongs to org'
     'ensure goal belongs to org'
     'ensure requester can access goal'
@@ -26,8 +26,8 @@ class AddCardToGoalHandler extends Handler
     {user}            = request.auth.credentials
 
     command = new AddCardToGoalCommand(user, goal, card)
-    @processor.execute command, (err, goal) =>
+    @processor.execute command, (err, card) =>
       return reply err if err?
-      reply @response(goal)
+      reply @response(card)
 
 module.exports = AddCardToGoalHandler

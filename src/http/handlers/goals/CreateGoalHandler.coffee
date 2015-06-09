@@ -8,7 +8,7 @@ class CreateGoalHandler extends Handler
 
   @ensure
     payload:
-      name: @mustBe.string().required()
+      name:  @mustBe.string().required()
 
   @before [
     'resolve org'

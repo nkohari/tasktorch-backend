@@ -1,9 +1,11 @@
-GetAllByIndexQuery = require 'data/framework/queries/GetAllByIndexQuery'
-Goal               = require 'data/documents/Goal'
+r                 = require 'rethinkdb'
+GetAllByListQuery = require 'data/framework/queries/GetAllByListQuery'
+Goal              = require 'data/documents/Goal'
+Card              = require 'data/documents/Card'
 
-class GetAllGoalsByCardQuery extends GetAllByIndexQuery
+class GetAllGoalsByCardQuery extends GetAllByListQuery
 
   constructor: (cardid, options) ->
-    super(Goal, {cards: cardid}, options)
+    super(Goal, Card, cardid, 'goals', options)
 
 module.exports = GetAllGoalsByCardQuery
