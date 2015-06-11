@@ -18,7 +18,7 @@ class GetAllCardsByStageQuery extends Query
     emptyLookup = _.object _.map ActionStatus, (value) -> [value, []]
 
     @rql = r.table(Card.getSchema().table).getAll(kindid, {index: 'kind'})
-      .filter((card) -> card('status').eq(CardStatus.Normal))
+      .filter((card) -> r.not(r.or(card('status').eq(CardStatus.Complete), card('status').eq(CardStatus.Deleted))))
       .filter((card) ->
         r.table(Action.getSchema().table).getAll(card('id'), {index: 'card'}).coerceTo('array')
         .do (actions) ->

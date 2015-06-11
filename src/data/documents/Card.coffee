@@ -8,7 +8,7 @@ class Card extends Document
 
   @field   'id'
   @field   'version'
-  @field   'status',    {default: CardStatus.Normal}
+  @field   'status',    {default: CardStatus.NotStarted}
   @field   'title',     {default: null}
   @field   'summary',   {default: null}
   @field   'number'
