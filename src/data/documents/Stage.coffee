@@ -8,6 +8,8 @@ class Stage extends Document
 
   @field  'id'
   @field  'version'
+  @field  'created'
+  @field  'updated'  
   @field  'status', {default: DocumentStatus.Normal}
   @field  'name'
   @field  'defaultActions', {default: []}

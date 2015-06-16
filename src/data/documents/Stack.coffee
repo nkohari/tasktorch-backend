@@ -8,6 +8,8 @@ class Stack extends Document
 
   @field   'id'
   @field   'version'
+  @field   'created'
+  @field   'updated'
   @field   'status', {default: DocumentStatus.Normal}
   @field   'name',   {default: null}
   @field   'type'

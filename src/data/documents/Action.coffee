@@ -8,6 +8,8 @@ class Action extends Document
 
   @field   'id'
   @field   'version'
+  @field   'created'
+  @field   'updated'
   @field   'status',    {default: ActionStatus.NotStarted}
   @field   'text',      {default: null}
   @field   'completed', {default: null}

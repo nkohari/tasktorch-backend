@@ -8,6 +8,8 @@ class Session extends Document
 
   @field  'id'
   @field  'version'
+  @field  'created'
+  @field  'updated'  
   @field  'status', {default: DocumentStatus.Normal}
   @field  'isActive' # TODO: Move to status
 

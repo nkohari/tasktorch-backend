@@ -46,7 +46,7 @@ describe 'ListTeamsByOrgHandler', ->
 
   describe 'when called with a suggest parameter', ->
     it 'returns an array of teams whose names begin with the specified value', (done) ->
-      @tester.request {orgid: 'org-paddys', query: {suggest: 'g'}, credentials}, (res) =>
+      @tester.request {orgid: 'org-paddys', query: {suggest: 'gru'}, credentials}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {teams} = res.result

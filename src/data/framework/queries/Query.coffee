@@ -7,7 +7,7 @@ ExpansionTreeBuilder = require 'data/framework/ExpansionTreeBuilder'
 
 class Query
 
-  @requiredFields: ['id', 'status', 'version']
+  @requiredFields: ['id', 'status', 'version', 'created', 'updated']
 
   constructor: (@doctype, @options = {}) ->
     @expansions = []

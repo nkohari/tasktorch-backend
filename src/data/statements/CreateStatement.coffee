@@ -9,9 +9,13 @@ class CreateStatement extends Statement
   constructor: (document) ->
     super(document.constructor)
 
+    timestamp = new Date()
+
     document.id      ?= uuid()
     document.version ?= 0
     document.status  ?= DocumentStatus.Normal
+    document.created ?= timestamp
+    document.updated ?= timestamp
 
     @rql = r.table(@schema.table).insert(document, {returnChanges: true})
 

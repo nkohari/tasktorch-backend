@@ -21,5 +21,7 @@ class Model
     @id      = document.id
     @status  = document.status
     @version = document.version
+    @created = document.created
+    @updated = document.updated
 
 module.exports = Model

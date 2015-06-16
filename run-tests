@@ -6,4 +6,4 @@ NODE_ENV=test mocha $1 $2 $3 $4 $5 \
 	--ui bdd \
 	--reporter spec \
 	--recursive \
-	--timeout 1000
+	--timeout 3000

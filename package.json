@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "async": "0.9.0",
+    "aws-sdk": "2.1.34",
     "boom": "2.6.1",
     "coffee-script": "1.9.1",
     "elasticsearch": "^3.0.0",

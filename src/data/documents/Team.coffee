@@ -7,11 +7,13 @@ class Team extends Document
   @table  'teams'
   @naming {singular: 'team', plural: 'teams'}
 
-  @field  'id'
-  @field  'version'
-  @field  'status',   {default: DocumentStatus.Normal}
-  @field  'name'
-  @field  'purpose',  {default: null}
+  @field   'id'
+  @field   'version'
+  @field   'created'
+  @field   'updated'  
+  @field   'status',   {default: DocumentStatus.Normal}
+  @field   'name'
+  @field   'purpose',  {default: null}
 
   @hasOne  'org',     {type: 'Org'}
   @hasMany 'leaders', {type: 'User', default: []}

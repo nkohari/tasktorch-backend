@@ -1,18 +1,18 @@
-_                  = require 'lodash'
-expect             = require('chai').expect
-TestData           = require 'test/framework/TestData'
-TestHarness        = require 'test/framework/TestHarness'
-CommonBehaviors    = require 'test/framework/CommonBehaviors'
-CreateTokenHandler = require 'http/handlers/tokens/CreateTokenHandler'
+_                     = require 'lodash'
+expect                = require('chai').expect
+TestData              = require 'test/framework/TestData'
+TestHarness           = require 'test/framework/TestHarness'
+CommonBehaviors       = require 'test/framework/CommonBehaviors'
+CreateOrgTokenHandler = require 'http/handlers/tokens/CreateOrgTokenHandler'
 
-describe 'CreateTokenHandler', ->
+describe 'CreateOrgTokenHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(CreateTokenHandler)
+      @tester = TestHarness.createTester(CreateOrgTokenHandler)
       ready()
 
   reset = (callback) ->

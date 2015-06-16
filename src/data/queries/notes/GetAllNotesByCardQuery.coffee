@@ -6,6 +6,6 @@ class GetAllNotesByCardQuery extends Query
 
   constructor: (cardid, options) ->
     super(Note, options)
-    @rql = r.table(@schema.table).getAll(cardid, {index: 'card'}).orderBy('time').default([]).coerceTo('array')
+    @rql = r.table(@schema.table).getAll(cardid, {index: 'card'}).orderBy('created').default([]).coerceTo('array')
 
 module.exports = GetAllNotesByCardQuery

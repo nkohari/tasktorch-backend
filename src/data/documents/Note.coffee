@@ -8,8 +8,9 @@ class Note extends Document
 
   @field  'id'
   @field  'version'
+  @field  'created'
+  @field  'updated'
   @field  'status', {default: DocumentStatus.Normal}
-  @field  'time',   {default: -> new Date()}
   @field  'type'
   @field  'content'
 

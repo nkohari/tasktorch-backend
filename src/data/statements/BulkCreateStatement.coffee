@@ -9,10 +9,14 @@ class BulkCreateStatement extends Statement
   constructor: (doctype, documents) ->
     super(doctype)
 
+    timestamp = new Date()
+
     for document in documents
       document.id      ?= uuid()
       document.version ?= 0
       document.status  ?= DocumentStatus.Normal
+      document.created ?= timestamp
+      document.updated ?= timestamp
 
     @rql = r.table(@schema.table).insert(documents, {returnChanges: true})
 

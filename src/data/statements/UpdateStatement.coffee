@@ -10,7 +10,10 @@ class UpdateStatement extends Statement
     options = _.extend options, {returnChanges: true}
 
     unless _.isFunction(patch)
-      patch = _.extend patch, {version: r.row('version').add(1)}
+      patch = _.extend patch, {
+        version: r.row('version').add(1)
+        updated: new Date()
+      }
 
     if options.expectedVersion?
       patch = (row) =>

@@ -7,7 +7,10 @@ class BulkUpdateStatement extends Statement
 
   constructor: (doctype, match, patch) ->
     super(doctype)
-    patch = _.extend patch, {version: r.row('version').add(1)}
+    patch = _.extend patch, {
+      version: r.row('version').add(1)
+      updated: new Date()
+    }
     @rql = match.update(patch, {returnChanges: true})
 
   run: (conn, callback) ->

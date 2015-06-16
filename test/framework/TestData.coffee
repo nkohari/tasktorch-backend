@@ -6,7 +6,7 @@ table = (records) ->
   _.object _.map records, (r) -> [r.id, r]
 
 record = (data) ->
-  _.extend {status: 'Normal', version: 0}, data
+  _.extend {status: 'Normal', version: 0, created: new Date(), updated: new Date()}, data
 
 TestData = {dbname: 'torchtest'}
 
@@ -76,7 +76,7 @@ TestData.cards = table [
     followers:  ['user-dennis', 'user-mac']
     kind:       'kind-scheme'
     number:     2
-    goal:       'goal-gascrisis'
+    goals:      ['goal-gascrisis']
     title:      'Buy a shitload of gas'
     summary:    'We need to buy a shitload of gasoline'
     user:       'user-mac'
@@ -245,7 +245,7 @@ TestData.notes = table [
     org:     'org-paddys'
     card:    'card-takedbaby'
     type:    'CardCreated'
-    time:    Date.UTC(2015, 1, 15)
+    created: Date.UTC(2015, 1, 15)
     user:    'user-charlie'
   }
   record {
@@ -253,7 +253,7 @@ TestData.notes = table [
     org:     'org-paddys'
     card:    'card-takedbaby'
     type:    'CardPassed'
-    time:    Date.UTC(2015, 1, 15)
+    created: Date.UTC(2015, 1, 15)
     user:    'user-charlie'
     content:
       from: {user: 'user-charlie', stack: 'stack-charlie-drafts'}

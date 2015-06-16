@@ -8,6 +8,8 @@ class Card extends Document
 
   @field   'id'
   @field   'version'
+  @field   'created'
+  @field   'updated'
   @field   'status',    {default: CardStatus.NotStarted}
   @field   'title',     {default: null}
   @field   'summary',   {default: null}
@@ -25,6 +27,6 @@ class Card extends Document
 
   @hasManyForeign 'actions',    {type: 'Action',    index: 'card'}
   @hasManyForeign 'checklists', {type: 'Checklist', index: 'card'}
-  @hasManyForeign 'notes',      {type: 'Note',      index: 'card', order: {field: 'time'}}
+  @hasManyForeign 'notes',      {type: 'Note',      index: 'card', order: {field: 'created'}}
 
 module.exports = Card

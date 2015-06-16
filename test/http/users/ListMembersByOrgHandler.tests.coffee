@@ -51,8 +51,8 @@ describe 'ListMembersByOrgHandler', ->
         expect(res.result).to.exist()
         {users} = res.result
         expect(users).to.exist()
-        expect(users).to.have.length(2)
-        expect(_.pluck(users, 'id')).to.have.members ['user-mac', 'user-frank']
+        expect(users).to.have.length(3)
+        expect(_.pluck(users, 'id')).to.have.members ['user-charlie', 'user-mac', 'user-frank']
         done()
 
 #---------------------------------------------------------------------------------------------------

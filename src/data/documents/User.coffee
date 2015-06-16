@@ -8,6 +8,8 @@ class User extends Document
 
   @field  'id'
   @field  'version'
+  @field  'created'
+  @field  'updated'  
   @field  'status',  {default: DocumentStatus.Normal}
   @field  'username'
   @field  'password'
