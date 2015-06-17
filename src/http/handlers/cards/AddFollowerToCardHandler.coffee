@@ -4,7 +4,7 @@ AddFollowerToCardCommand = require 'domain/commands/cards/AddFollowerToCardComma
 
 class AddFollowerToCardHandler extends Handler
 
-  @route 'post /api/{orgid}/cards/{cardid}/followers'
+  @route 'post /{orgid}/cards/{cardid}/followers'
 
   @ensure
     payload:

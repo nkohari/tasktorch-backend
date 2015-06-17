@@ -3,7 +3,7 @@ GetCardQuery = require 'data/queries/cards/GetCardQuery'
 
 class GetCardHandler extends Handler
 
-  @route 'get /api/{orgid}/cards/{cardid}'
+  @route 'get /{orgid}/cards/{cardid}'
 
   @before [
     'resolve org'

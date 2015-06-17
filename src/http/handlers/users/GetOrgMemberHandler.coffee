@@ -4,7 +4,7 @@ GetUserQuery = require 'data/queries/users/GetUserQuery'
 
 class GetOrgMemberHandler extends Handler
 
-  @route 'get /api/{orgid}/members/{userid}'
+  @route 'get /{orgid}/members/{userid}'
 
   @before [
     'resolve org'

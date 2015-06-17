@@ -6,7 +6,7 @@ PassCardCommand            = require 'domain/commands/cards/PassCardCommand'
 
 class PassCardHandler extends Handler
 
-  @route 'put /api/{orgid}/cards/{cardid}/pass'
+  @route 'put /{orgid}/cards/{cardid}/pass'
 
   @ensure
     payload:

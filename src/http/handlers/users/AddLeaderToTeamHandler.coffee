@@ -3,7 +3,7 @@ AddLeaderToTeamCommand = require 'domain/commands/users/AddLeaderToTeamCommand'
 
 class AddLeaderToTeamHandler extends Handler
 
-  @route 'post /api/{orgid}/teams/{teamid}/leaders'
+  @route 'post /{orgid}/teams/{teamid}/leaders'
 
   @ensure
     payload:

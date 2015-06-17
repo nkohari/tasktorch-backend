@@ -5,7 +5,7 @@ CreateTokenCommand = require 'domain/commands/tokens/CreateTokenCommand'
 
 class CreateOrgTokenHandler extends Handler
 
-  @route 'post /api/{orgid}/tokens'
+  @route 'post /{orgid}/tokens'
   
   @ensure
     payload:

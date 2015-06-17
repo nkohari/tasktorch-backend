@@ -3,7 +3,7 @@ Handler                     = require 'http/framework/Handler'
 
 class RemoveMemberFromTeamHandler extends Handler
 
-  @route 'delete /api/{orgid}/teams/{teamid}/members/{userid}'
+  @route 'delete /{orgid}/teams/{teamid}/members/{userid}'
 
   @before [
     'resolve org'

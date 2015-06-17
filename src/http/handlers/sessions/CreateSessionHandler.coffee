@@ -6,7 +6,7 @@ GetUserByEmailQuery    = require 'data/queries/users/GetUserByEmailQuery'
 
 class CreateSessionHandler extends Handler
 
-  @route 'post /api/sessions'
+  @route 'post /sessions'
   @auth  {mode: 'try'}
 
   @ensure

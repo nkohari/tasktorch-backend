@@ -3,7 +3,7 @@ GetGoalQuery = require 'data/queries/goals/GetGoalQuery'
 
 class GetGoalHandler extends Handler
 
-  @route 'get /api/{orgid}/goals/{goalid}'
+  @route 'get /{orgid}/goals/{goalid}'
 
   @before [
     'resolve org'

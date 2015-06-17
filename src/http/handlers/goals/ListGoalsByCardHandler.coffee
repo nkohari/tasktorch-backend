@@ -3,7 +3,7 @@ GetAllGoalsByCardQuery = require 'data/queries/goals/GetAllGoalsByCardQuery'
 
 class ListGoalsByCardHandler extends Handler
 
-  @route 'get /api/{orgid}/cards/{cardid}/goals'
+  @route 'get /{orgid}/cards/{cardid}/goals'
 
   @before [
     'resolve org'

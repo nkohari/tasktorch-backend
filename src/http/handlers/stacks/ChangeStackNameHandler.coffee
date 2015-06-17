@@ -4,7 +4,7 @@ ChangeStackNameCommand = require 'domain/commands/stacks/ChangeStackNameCommand'
 
 class ChangeStackNameHandler extends Handler
 
-  @route 'post /api/{orgid}/stacks/{stackid}/name'
+  @route 'post /{orgid}/stacks/{stackid}/name'
 
   @ensure
     payload:

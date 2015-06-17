@@ -3,7 +3,7 @@ GetUserQuery = require 'data/queries/users/GetUserQuery'
 
 class GetMeHandler extends Handler
 
-  @route 'get /api/me'
+  @route 'get /me'
 
   constructor: (@log, @database) ->
 

@@ -3,7 +3,7 @@ GetAllStagesByKindQuery = require 'data/queries/stages/GetAllStagesByKindQuery'
 
 class ListStagesByKindHandler extends Handler
 
-  @route 'get /api/{orgid}/kinds/{kindid}/stages'
+  @route 'get /{orgid}/kinds/{kindid}/stages'
 
   @before [
     'resolve org'

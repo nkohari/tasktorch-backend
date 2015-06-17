@@ -6,7 +6,7 @@ UserModel    = require 'domain/models/UserModel'
 
 class PusherAuthHandler extends Handler
 
-  @route 'post /api/_wsauth'
+  @route 'post /_wsauth'
 
   @ensure
     payload:

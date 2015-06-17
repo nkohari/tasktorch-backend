@@ -12,7 +12,7 @@ CreateStageCommand = require 'domain/commands/stages/CreateStageCommand'
 
 class CreateOrgHandler extends Handler
 
-  @route 'post /api/orgs'
+  @route 'post /orgs'
 
   @ensure
     payload:

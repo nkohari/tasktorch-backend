@@ -3,7 +3,7 @@ RemoveCardFromGoalCommand = require 'domain/commands/cards/RemoveCardFromGoalCom
 
 class RemoveCardFromGoalHandler extends Handler
 
-  @route 'delete /api/{orgid}/cards/{cardid}/goals/{goalid}'
+  @route 'delete /{orgid}/cards/{cardid}/goals/{goalid}'
 
   @before [
     'resolve org'

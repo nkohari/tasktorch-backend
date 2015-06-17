@@ -3,7 +3,7 @@ ChangeCardTitleCommand = require 'domain/commands/cards/ChangeCardTitleCommand'
 
 class ChangeCardTitleHandler extends Handler
 
-  @route 'post /api/{orgid}/cards/{cardid}/title'
+  @route 'post /{orgid}/cards/{cardid}/title'
 
   @ensure
     payload:

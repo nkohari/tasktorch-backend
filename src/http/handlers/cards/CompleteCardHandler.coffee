@@ -3,7 +3,7 @@ CompleteCardCommand = require 'domain/commands/cards/CompleteCardCommand'
 
 class ArchiveCardHandler extends Handler
 
-  @route 'post /api/{orgid}/cards/{cardid}/complete'
+  @route 'post /{orgid}/cards/{cardid}/complete'
   
   @before [
     'resolve org'

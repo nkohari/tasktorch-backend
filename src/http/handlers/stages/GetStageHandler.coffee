@@ -3,7 +3,7 @@ GetStageQuery = require 'data/queries/stages/GetStageQuery'
 
 class GetStageHandler extends Handler
 
-  @route 'get /api/{orgid}/stages/{stageid}'
+  @route 'get /{orgid}/stages/{stageid}'
 
   @before [
     'resolve org'

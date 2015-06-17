@@ -4,7 +4,7 @@ GetAllMembersByOrgQuery  = require 'data/queries/users/GetAllMembersByOrgQuery'
 
 class ListMembersByOrgHandler extends Handler
 
-  @route 'get /api/{orgid}/members'
+  @route 'get /{orgid}/members'
 
   @before [
     'resolve org'

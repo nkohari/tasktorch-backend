@@ -3,7 +3,7 @@ DeleteCardCommand = require 'domain/commands/cards/DeleteCardCommand'
 
 class DeleteCardHandler extends Handler
 
-  @route 'delete /api/{orgid}/cards/{cardid}'
+  @route 'delete /{orgid}/cards/{cardid}'
 
   @before [
     'resolve org'

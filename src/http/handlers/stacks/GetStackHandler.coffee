@@ -3,7 +3,7 @@ GetStackQuery = require 'data/queries/stacks/GetStackQuery'
 
 class GetStackHandler extends Handler
 
-  @route 'get /api/{orgid}/stacks/{stackid}'
+  @route 'get /{orgid}/stacks/{stackid}'
 
   @before [
     'resolve org'

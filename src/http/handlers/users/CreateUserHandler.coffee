@@ -7,7 +7,7 @@ AddMemberToOrgCommand = require 'domain/commands/users/AddMemberToOrgCommand'
 
 class CreateUserHandler extends Handler
 
-  @route 'post /api/users'
+  @route 'post /users'
   @auth  {mode: 'try'}
   
   @ensure

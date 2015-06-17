@@ -3,7 +3,7 @@ ChangeActionTextCommand = require 'domain/commands/actions/ChangeActionTextComma
 
 class ChangeActionTextHandler extends Handler
 
-  @route 'post /api/{orgid}/actions/{actionid}/text'
+  @route 'post /{orgid}/actions/{actionid}/text'
 
   @ensure
     payload:

@@ -3,7 +3,7 @@ GetAllActionsByChecklistQuery = require 'data/queries/actions/GetAllActionsByChe
 
 class ListActionsByChecklistHandler extends Handler
 
-  @route 'get /api/{orgid}/checklists/{checklistid}/actions'
+  @route 'get /{orgid}/checklists/{checklistid}/actions'
 
   @before [
     'resolve org'

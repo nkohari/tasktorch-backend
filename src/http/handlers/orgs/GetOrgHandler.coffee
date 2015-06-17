@@ -4,7 +4,7 @@ GetOrgQuery = require 'data/queries/orgs/GetOrgQuery'
 
 class GetOrgHandler extends Handler
 
-  @route 'get /api/{orgid}'
+  @route 'get /{orgid}'
 
   @before [
     'resolve query options'

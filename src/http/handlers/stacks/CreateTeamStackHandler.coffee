@@ -5,7 +5,7 @@ CreateStackCommand = require 'domain/commands/stacks/CreateStackCommand'
 
 class CreateTeamStackHandler extends Handler
 
-  @route 'post /api/{orgid}/teams/{teamid}/stacks'
+  @route 'post /{orgid}/teams/{teamid}/stacks'
 
   @ensure
     payload:

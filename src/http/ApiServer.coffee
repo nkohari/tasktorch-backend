@@ -49,18 +49,12 @@ class ApiServer
     @log.debug "[http] Mounted #{name} at #{verb} #{path}"
 
   setupAuthStrategy: ->
-    sessionConfig = @config.security.session
 
-    options =
-      cookie:       sessionConfig.cookie
-      domain:       sessionConfig.domain
-      ttl:          sessionConfig.ttl
-      password:     sessionConfig.secret
-      isSecure:     sessionConfig.secure
+    options = _.extend {}, @config.security.session,
       clearInvalid: true
-      validateFunc: (state, callback) =>
-        return callback(null, false) unless state?
-        {sessionid, userid} = state
+      validateFunc: (req, session, callback) =>
+        return callback(null, false) unless session?
+        {sessionid, userid} = session
         @keymaster.validateSession(sessionid, userid, callback)
 
     @server.register require('hapi-auth-cookie'), (err) =>

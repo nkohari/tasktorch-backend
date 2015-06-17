@@ -3,7 +3,7 @@ GetAllKindsByOrgQuery = require 'data/queries/kinds/GetAllKindsByOrgQuery'
 
 class ListKindsByOrgHandler extends Handler
 
-  @route 'get /api/{orgid}/kinds'
+  @route 'get /{orgid}/kinds'
 
   @before [
     'resolve org'

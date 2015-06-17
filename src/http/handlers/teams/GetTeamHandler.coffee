@@ -3,7 +3,7 @@ GetTeamQuery = require 'data/queries/teams/GetTeamQuery'
 
 class GetTeamHandler extends Handler
 
-  @route 'get /api/{orgid}/teams/{teamid}'
+  @route 'get /{orgid}/teams/{teamid}'
 
   @before [
     'resolve org'

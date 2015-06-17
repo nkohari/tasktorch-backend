@@ -3,7 +3,7 @@ GetAllFollowersByCardQuery = require 'data/queries/users/GetAllFollowersByCardQu
 
 class ListFollowersByCardHandler extends Handler
 
-  @route 'get /api/{orgid}/cards/{cardid}/followers'
+  @route 'get /{orgid}/cards/{cardid}/followers'
 
   @before [
     'resolve org'

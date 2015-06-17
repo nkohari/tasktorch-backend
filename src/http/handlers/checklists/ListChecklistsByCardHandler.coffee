@@ -3,7 +3,7 @@ GetAllChecklistsByCardQuery = require 'data/queries/checklists/GetAllChecklistsB
 
 class ListChecklistsByCardHandler extends Handler
 
-  @route 'get /api/{orgid}/cards/{cardid}/checklists'
+  @route 'get /{orgid}/cards/{cardid}/checklists'
 
   @before [
     'resolve org'

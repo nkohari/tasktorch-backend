@@ -3,7 +3,7 @@ GetAllStacksByOrgAndUserQuery = require 'data/queries/stacks/GetAllStacksByOrgAn
 
 class ListMyStacksHandler extends Handler
 
-  @route 'get /api/{orgid}/me/stacks'
+  @route 'get /{orgid}/me/stacks'
 
   @before [
     'resolve org'

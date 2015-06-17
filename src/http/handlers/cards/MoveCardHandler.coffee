@@ -5,7 +5,7 @@ RepositionCardInStackCommand = require 'domain/commands/cards/RepositionCardInSt
 
 class MoveCardHandler extends Handler
 
-  @route 'post /api/{orgid}/cards/{cardid}/move'
+  @route 'post /{orgid}/cards/{cardid}/move'
 
   @ensure
     payload:

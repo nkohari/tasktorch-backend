@@ -4,7 +4,7 @@ CreateGoalCommand = require 'domain/commands/goals/CreateGoalCommand'
 
 class CreateGoalHandler extends Handler
 
-  @route 'post /api/{orgid}/goals'
+  @route 'post /{orgid}/goals'
 
   @ensure
     payload:

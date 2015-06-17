@@ -3,7 +3,7 @@ GetAllGoalsByOrgQuery = require 'data/queries/goals/GetAllGoalsByOrgQuery'
 
 class ListGoalsByOrgHandler extends Handler
 
-  @route 'get /api/{orgid}/goals'
+  @route 'get /{orgid}/goals'
 
   @before [
     'resolve org'

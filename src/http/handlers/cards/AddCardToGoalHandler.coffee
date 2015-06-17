@@ -3,7 +3,7 @@ AddCardToGoalCommand = require 'domain/commands/cards/AddCardToGoalCommand'
 
 class AddCardToGoalHandler extends Handler
 
-  @route 'post /api/{orgid}/cards/{cardid}/goals'
+  @route 'post /{orgid}/cards/{cardid}/goals'
 
   @ensure
     payload:

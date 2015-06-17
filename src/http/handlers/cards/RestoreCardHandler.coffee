@@ -5,7 +5,7 @@ RestoreCardCommand          = require 'domain/commands/cards/RestoreCardCommand'
 
 class RestoreCardHandler extends Handler
 
-  @route 'post /api/{orgid}/cards/{cardid}/restore'
+  @route 'post /{orgid}/cards/{cardid}/restore'
 
   @before [
     'resolve org'

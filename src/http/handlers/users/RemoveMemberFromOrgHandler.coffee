@@ -4,7 +4,7 @@ RemoveMemberFromOrgCommand = require 'domain/commands/users/RemoveMemberFromOrgC
 
 class RemoveMemberFromOrgHandler extends Handler
 
-  @route 'delete /api/{orgid}/members/{userid}'
+  @route 'delete /{orgid}/members/{userid}'
 
   @before [
     'resolve org'

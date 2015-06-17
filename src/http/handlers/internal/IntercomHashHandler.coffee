@@ -4,7 +4,7 @@ GetUserQuery = require 'data/queries/users/GetUserQuery'
 
 class IntercomHashHandler extends Handler
 
-  @route 'get /api/_intercom'
+  @route 'get /_intercom'
 
   constructor: (@config) ->
 

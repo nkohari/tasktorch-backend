@@ -5,7 +5,7 @@ ActionStatus              = require 'data/enums/ActionStatus'
 
 class ChangeActionStatusHandler extends Handler
 
-  @route 'post /api/{orgid}/actions/{actionid}/status'
+  @route 'post /{orgid}/actions/{actionid}/status'
 
   @ensure
     payload:

@@ -3,7 +3,7 @@ ChangeCardSummaryCommand = require 'domain/commands/cards/ChangeCardSummaryComma
 
 class ChangeCardSummaryHandler extends Handler
 
-  @route 'post /api/{orgid}/cards/{cardid}/summary'
+  @route 'post /{orgid}/cards/{cardid}/summary'
 
   @ensure
     payload:

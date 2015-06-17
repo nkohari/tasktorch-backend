@@ -3,7 +3,7 @@ ChangeUserEmailCommand = require 'domain/commands/users/ChangeUserEmailCommand'
 
 class ChangeMyEmailHandler extends Handler
 
-  @route 'post /api/me/email'
+  @route 'post /me/email'
 
   @ensure
     payload:

@@ -4,7 +4,7 @@ CreateNoteCommand = require 'domain/commands/notes/CreateNoteCommand'
 
 class CreateNoteHandler extends Handler
 
-  @route 'post /api/{orgid}/cards/{cardid}/notes'
+  @route 'post /{orgid}/cards/{cardid}/notes'
 
   @ensure
     payload:

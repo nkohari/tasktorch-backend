@@ -4,7 +4,7 @@ DeleteStackCommand = require 'domain/commands/stacks/DeleteStackCommand'
 
 class DeleteStackHandler extends Handler
 
-  @route 'delete /api/{orgid}/stacks/{stackid}'
+  @route 'delete /{orgid}/stacks/{stackid}'
 
   @before [
     'resolve org'

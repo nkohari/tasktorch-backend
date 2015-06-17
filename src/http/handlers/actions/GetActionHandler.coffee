@@ -3,7 +3,7 @@ GetActionQuery = require 'data/queries/actions/GetActionQuery'
 
 class GetActionHandler extends Handler
 
-  @route 'get /api/{orgid}/actions/{actionid}'
+  @route 'get /{orgid}/actions/{actionid}'
 
   @before [
     'resolve org'

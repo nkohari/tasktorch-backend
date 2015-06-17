@@ -3,7 +3,7 @@ DeleteTeamCommand = require 'domain/commands/teams/DeleteTeamCommand'
 
 class DeleteTeamHandler extends Handler
 
-  @route 'delete /api/{orgid}/teams/{teamid}'
+  @route 'delete /{orgid}/teams/{teamid}'
 
   @before [
     'resolve org'

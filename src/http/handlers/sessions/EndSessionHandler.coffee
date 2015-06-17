@@ -3,7 +3,7 @@ EndSessionCommand = require 'domain/commands/sessions/EndSessionCommand'
 
 class EndSessionHandler extends Handler
 
-  @route 'post /api/sessions/logout'
+  @route 'post /sessions/logout'
 
   constructor: (@processor) ->
 

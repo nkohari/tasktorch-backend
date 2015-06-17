@@ -3,7 +3,7 @@ ChangeTeamNameCommand = require 'domain/commands/teams/ChangeTeamNameCommand'
 
 class ChangeTeamNameHandler extends Handler
 
-  @route 'post /api/{orgid}/teams/{teamid}/name'
+  @route 'post /{orgid}/teams/{teamid}/name'
 
   @ensure
     payload:

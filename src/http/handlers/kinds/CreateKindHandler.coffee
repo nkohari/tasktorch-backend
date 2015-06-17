@@ -10,7 +10,7 @@ CreateStageCommand = require 'domain/commands/stages/CreateStageCommand'
 
 class CreateKindHandler extends Handler
 
-  @route 'post /api/{orgid}/kinds'
+  @route 'post /{orgid}/kinds'
 
   @ensure
     payload:

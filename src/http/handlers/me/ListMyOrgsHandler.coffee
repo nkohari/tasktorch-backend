@@ -3,7 +3,7 @@ GetAllOrgsByMemberQuery = require 'data/queries/orgs/GetAllOrgsByMemberQuery'
 
 class ListMyOrgsHandler extends Handler
 
-  @route 'get /api/me/orgs'
+  @route 'get /me/orgs'
 
   @before [
     'resolve query options'

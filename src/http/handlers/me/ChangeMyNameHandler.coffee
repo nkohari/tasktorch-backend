@@ -3,7 +3,7 @@ ChangeUserNameCommand = require 'domain/commands/users/ChangeUserNameCommand'
 
 class ChangeMyNameHandler extends Handler
 
-  @route 'post /api/me/name'
+  @route 'post /me/name'
 
   @ensure
     payload:

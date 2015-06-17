@@ -4,7 +4,7 @@ GetSpecialStackByUserQuery = require 'data/queries/stacks/GetSpecialStackByUserQ
 
 class GetQueueByUserHandler extends Handler
 
-  @route 'get /api/{orgid}/members/{userid}/queue'
+  @route 'get /{orgid}/members/{userid}/queue'
 
   @before [
     'resolve org'

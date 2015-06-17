@@ -3,7 +3,7 @@ AddMemberToOrgCommand = require 'domain/commands/users/AddMemberToOrgCommand'
 
 class AddMemberToOrgHandler extends Handler
 
-  @route 'post /api/{orgid}/members'
+  @route 'post /{orgid}/members'
 
   @ensure
     payload:

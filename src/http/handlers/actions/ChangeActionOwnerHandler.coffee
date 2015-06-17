@@ -3,7 +3,7 @@ ChangeActionOwnerCommand = require 'domain/commands/actions/ChangeActionOwnerCom
 
 class ChangeActionOwnerHandler extends Handler
 
-  @route 'post /api/{orgid}/actions/{actionid}/user'
+  @route 'post /{orgid}/actions/{actionid}/user'
 
   @ensure
     payload:

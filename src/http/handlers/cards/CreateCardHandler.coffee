@@ -8,7 +8,7 @@ CreateCardCommand          = require 'domain/commands/cards/CreateCardCommand'
 
 class CreateCardHandler extends Handler
 
-  @route 'post /api/{orgid}/cards'
+  @route 'post /{orgid}/cards'
 
   @ensure
     payload:

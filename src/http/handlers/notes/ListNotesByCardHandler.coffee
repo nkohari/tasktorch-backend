@@ -3,7 +3,7 @@ GetAllNotesByCardQuery = require 'data/queries/notes/GetAllNotesByCardQuery'
 
 class ListNotesByCardHandler extends Handler
 
-  @route 'get /api/{orgid}/cards/{cardid}/notes'
+  @route 'get /{orgid}/cards/{cardid}/notes'
 
   @before [
     'resolve org'

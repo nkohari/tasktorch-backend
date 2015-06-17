@@ -3,7 +3,7 @@ ChangeGoalNameCommand = require 'domain/commands/goals/ChangeGoalNameCommand'
 
 class ChangeGoalNameHandler extends Handler
 
-  @route 'post /api/{orgid}/goals/{goalid}/name'
+  @route 'post /{orgid}/goals/{goalid}/name'
 
   @ensure
     payload:

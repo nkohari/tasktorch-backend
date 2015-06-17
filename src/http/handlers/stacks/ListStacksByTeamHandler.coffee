@@ -3,7 +3,7 @@ GetAllStacksByTeamQuery = require 'data/queries/stacks/GetAllStacksByTeamQuery'
 
 class ListStacksByTeamHandler extends Handler
 
-  @route 'get /api/{orgid}/teams/{teamid}/stacks'
+  @route 'get /{orgid}/teams/{teamid}/stacks'
 
   @before [
     'resolve org'

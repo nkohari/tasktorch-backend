@@ -3,7 +3,7 @@ AddMemberToTeamCommand = require 'domain/commands/users/AddMemberToTeamCommand'
 
 class AddMemberToTeamHandler extends Handler
 
-  @route 'post /api/{orgid}/teams/{teamid}/members'
+  @route 'post /{orgid}/teams/{teamid}/members'
 
   @ensure
     payload:

@@ -4,7 +4,7 @@ Handler                 = require 'http/framework/Handler'
 
 class ListCardsByStageHandler extends Handler
 
-  @route 'get /api/{orgid}/stages/{stageid}/cards'
+  @route 'get /{orgid}/stages/{stageid}/cards'
 
   @before [
     'resolve org'

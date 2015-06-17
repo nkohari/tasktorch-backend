@@ -3,7 +3,7 @@ GetChecklistQuery = require 'data/queries/checklists/GetChecklistQuery'
 
 class GetChecklistHandler extends Handler
 
-  @route 'get /api/{orgid}/checklists/{checklistid}'
+  @route 'get /{orgid}/checklists/{checklistid}'
 
   @before [
     'resolve org'

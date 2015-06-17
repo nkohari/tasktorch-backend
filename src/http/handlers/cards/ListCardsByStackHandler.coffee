@@ -3,7 +3,7 @@ GetAllCardsByStackQuery = require 'data/queries/cards/GetAllCardsByStackQuery'
 
 class ListCardsByStackHandler extends Handler
 
-  @route 'get /api/{orgid}/stacks/{stackid}/cards'
+  @route 'get /{orgid}/stacks/{stackid}/cards'
 
   @before [
     'resolve org'

@@ -5,7 +5,7 @@ AcceptCardCommand          = require 'domain/commands/cards/AcceptCardCommand'
 
 class AcceptCardHandler extends Handler
 
-  @route 'post /api/{orgid}/cards/{cardid}/accept'
+  @route 'post /{orgid}/cards/{cardid}/accept'
 
   @ensure
     payload:

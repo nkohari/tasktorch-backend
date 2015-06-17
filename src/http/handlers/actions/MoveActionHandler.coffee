@@ -6,7 +6,7 @@ RepositionActionInChecklistCommand = require 'domain/commands/actions/Reposition
 
 class MoveActionHandler extends Handler
 
-  @route 'post /api/{orgid}/actions/{actionid}/move'
+  @route 'post /{orgid}/actions/{actionid}/move'
 
   @ensure
     payload:

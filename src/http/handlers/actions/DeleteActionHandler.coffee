@@ -3,7 +3,7 @@ DeleteActionCommand = require 'domain/commands/actions/DeleteActionCommand'
 
 class DeleteActionHandler extends Handler
 
-  @route 'delete /api/{orgid}/actions/{actionid}'
+  @route 'delete /{orgid}/actions/{actionid}'
 
   @before [
     'resolve org'

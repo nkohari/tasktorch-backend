@@ -5,7 +5,7 @@ CreateTeamCommand = require 'domain/commands/teams/CreateTeamCommand'
 
 class CreateTeamHandler extends Handler
 
-  @route 'post /api/{orgid}/teams'
+  @route 'post /{orgid}/teams'
 
   @ensure
     payload:

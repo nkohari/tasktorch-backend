@@ -5,7 +5,7 @@ CreateActionCommand = require 'domain/commands/actions/CreateActionCommand'
 
 class CreateActionHandler extends Handler
 
-  @route 'post /api/{orgid}/checklists/{checklistid}/actions'
+  @route 'post /{orgid}/checklists/{checklistid}/actions'
 
   @ensure
     payload:
