@@ -1,6 +1,5 @@
-#!/usr/bin/env node
+#!/usr/bin/env NODE_PATH=./src node
 
-require('app-module-path').addPath(__dirname + '/src');
 require('coffee-script/register');
 
 var ApiApplication = require('./src/ApiApplication');
