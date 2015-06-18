@@ -30,7 +30,7 @@
     "node-uuid": "1.4.1",
     "pusher": "1.0.1",
     "rethinkdb": "2.0.0",
-    "scrypt": "3.0.1",
+    "scrypt": "^4.0.7",
     "winston": "0.8.0"
   },
   "devDependencies": {
@@ -42,6 +42,7 @@
     "test": "mocha"
   },
   "engines": {
-    "node": "0.10.33"
+    "node": "0.12.4",
+    "npm": "2.10.1"
   }
 }
