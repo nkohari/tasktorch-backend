@@ -1,6 +1,6 @@
 #!/bin/sh
 
-NODE_ENV=test mocha $1 $2 $3 $4 $5 \
+NODE_PATH=src:test NODE_ENV=test mocha $1 $2 $3 $4 $5 \
 	--compilers coffee:coffee-script/register \
   --bail \
 	--ui bdd \
