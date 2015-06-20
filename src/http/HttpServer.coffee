@@ -5,7 +5,6 @@ class HttpServer
 
   constructor: (@forge, @config, @log) ->
     @server = new Hapi.Server()
-    @server.on 'request-error', @onError.bind(this)
     @server.connection {
       port: @config.http.port
       tls: @config.http.tls
@@ -13,6 +12,8 @@ class HttpServer
         cors:
           credentials: true
     }
+    @server.ext 'onRequest',     @onRequest.bind(this)
+    @server.on  'request-error', @onError.bind(this)
 
   start: (callback = (->)) ->
     @log.info '[http] Starting server'
@@ -30,6 +31,11 @@ class HttpServer
       @server.start =>
         @log.info '[http] Server listening'
         callback()
+
+  onRequest: (request, reply) ->
+    if request.server.info.protocol isnt 'https'
+      return reply.redirect("https://#{request.headers.host}#{request.path}")
+    reply.continue()
 
   onError: (request, err) ->
     @log.error "Request failed with error: #{err}"
