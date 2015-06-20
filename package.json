@@ -30,7 +30,7 @@
     "node-uuid": "1.4.1",
     "pusher": "1.0.1",
     "rethinkdb": "2.0.0",
-    "scrypt": "^4.0.7",
+    "scrypt": "4.0.7",
     "winston": "0.8.0"
   },
   "devDependencies": {
