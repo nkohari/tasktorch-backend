@@ -8,8 +8,6 @@ DatabaseWatcher = require 'data/DatabaseWatcher'
 ConnectionPool  = require 'data/framework/ConnectionPool'
 Processor       = require 'domain/Processor'
 HttpServer      = require 'http/HttpServer'
-ApiSite         = require 'http/sites/ApiSite'
-AppSite         = require 'http/sites/AppSite'
 PusherClient    = require 'messaging/PusherClient'
 MessageBus      = require 'messaging/MessageBus'
 Gatekeeper      = require 'security/Gatekeeper'
@@ -34,8 +32,6 @@ class ProductionEnvironment
     forge.bind('processor').to.type(Processor)
 
     forge.bind('server').to.type(HttpServer)
-    forge.bind('site').to.type(ApiSite)
-    forge.bind('site').to.type(AppSite)
 
     forge.bind('pusher').to.type(PusherClient)
     forge.bind('messageBus').to.type(MessageBus)
