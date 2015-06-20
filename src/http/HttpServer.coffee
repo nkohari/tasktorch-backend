@@ -33,7 +33,8 @@ class HttpServer
         callback()
 
   onRequest: (request, reply) ->
-    if request.server.info.protocol isnt 'https'
+    request.secure = request.server.info.protocol == 'https' or request.headers['x-forwarded-proto'] == 'https'
+    unless request.secure
       return reply.redirect("https://#{request.headers.host}#{request.path}")
     reply.continue()
 
