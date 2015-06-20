@@ -8,9 +8,7 @@ class HttpServer
     @server.on 'request-error', @onError.bind(this)
     @server.connection {
       port: @config.http.port
-      tls:
-        key: @config.http.tls.key
-        cert: @config.http.tls.cert
+      tls: @config.http.tls
       routes:
         cors:
           credentials: true
