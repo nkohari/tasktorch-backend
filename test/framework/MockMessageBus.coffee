@@ -1,16 +1,16 @@
 {EventEmitter} = require 'events'
 _              = require 'lodash'
-Activity       = require 'apps/watcher/messaging/Activity'
-Message        = require 'apps/watcher/messaging/Message'
+Activity       = require 'apps/watcher/Activity'
+Message        = require 'apps/watcher/Message'
 
 class MockMessageBus extends EventEmitter
 
-  constructor: (@log, @databaseWatcher, @gatekeeper) ->
+  constructor: (@log, @watcher, @gatekeeper) ->
 
   start: (callback = (->)) ->
-    @databaseWatcher.on('create', @onCreate)
-    @databaseWatcher.on('update', @onUpdate)
-    @databaseWatcher.on('delete', @onDelete)
+    @watcher.on('create', @onCreate)
+    @watcher.on('update', @onUpdate)
+    @watcher.on('delete', @onDelete)
     callback()
 
   onCreate: (event) =>

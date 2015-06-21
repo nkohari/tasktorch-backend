@@ -1,8 +1,8 @@
 EventEmitter = require 'events'
 async        = require 'async'
-DocTypes     = require 'apps/watcher/DocTypes'
 Schema       = require 'data/framework/Schema'
 Subscription = require 'data/framework/Subscription'
+DocTypes     = require './DocTypes'
 
 class Watcher extends EventEmitter
 

@@ -1,6 +1,6 @@
 _        = require 'lodash'
-Activity = require 'apps/watcher/messaging/Activity'
-Message  = require 'apps/watcher/messaging/Message'
+Activity = require './Activity'
+Message  = require './Message'
 
 class MessageBus
 

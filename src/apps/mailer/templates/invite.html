@@ -1,0 +1,57 @@
+subject: {{ sender.name }} has invited you to join TaskTorch
+from:    TaskTorch <invites@mail.tasktorch.com>
+replyTo: {{ sender.email }}
+---
+
+{% extends '_action.html' %}
+
+{% block body %}
+<meta itemprop="name" content="You're Invited"/>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="content-block">
+      <h1>You're Invited!</h1>
+      <p>
+        <strong>{{ org.name }}</strong> is using TaskTorch to organize work, and
+        <strong>{{ sender.name }}</strong> has invited you to participate.
+      </p>
+      <p>
+        Click the link below to join the organization. If you don't already have
+        an account, you'll be able to sign up.
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
+      <a href="https://alpha.tasktorch.com/invite/{{ token }}" class="btn-primary" itemprop="url">Accept invitation</a>
+    </td>
+  </tr>
+  <tr>
+    <td class="content-block">
+      <p>
+        TaskTorch is a work management system that puts you in charge of your own work,
+        and helps you work more effectively with your teammates.
+      </p>
+      <p>
+        You can define tasks that you need to work on together, and then pass them around
+        to the people who need to be involved at that moment. It's kind of like a mashup
+        of project management and email.
+      </p>
+      <p>
+        Once you're signed up, check out the <a href="http://support.tasktorch.com/" itemprop="url">TaskTorch Guide</a>
+        for more information to get you acquainted.
+      </p>
+      <p>
+        If you have any questions, we can help! Just send an email to <a href="mailto:help@tasktorch.com">help@tasktorch.com</a>.
+        Also, send us your feedback! Good, bad, or in between, we want to know what you think.
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td class="content-block">
+      <p>Thanks!</p>
+      <p>&mdash; Nate &amp; Niki, The TaskTorch Team</p>
+    </td>
+  </tr>
+</table>
+{% endblock %}
