@@ -26,7 +26,7 @@ class ConnectionPool
     }
 
     operation.attempt (attempt) =>
-      @log.debug "[db:#{id}] Opening connection to #{host}:#{port}/#{db} (attempt #{attempt}/#{retries})"
+      @log.debug "[db:#{id}] Opening connection to #{host}:#{port}/#{db} (attempt #{attempt}/#{maxRetries})"
       rethinkdb.connect {host, port, db}, (err, conn) =>
         # Retry the connection a number of times before giving up.
         return if operation.retry(err)
