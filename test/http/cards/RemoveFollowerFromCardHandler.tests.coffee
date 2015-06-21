@@ -3,7 +3,7 @@ expect                        = require('chai').expect
 TestData                      = require 'test/framework/TestData'
 TestHarness                   = require 'test/framework/TestHarness'
 CommonBehaviors               = require 'test/framework/CommonBehaviors'
-RemoveFollowerFromCardHandler = require 'http/handlers/cards/RemoveFollowerFromCardHandler'
+RemoveFollowerFromCardHandler = require 'apps/api/handlers/cards/RemoveFollowerFromCardHandler'
 
 describe 'RemoveFollowerFromCardHandler', ->
 

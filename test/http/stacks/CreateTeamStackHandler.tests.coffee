@@ -3,7 +3,7 @@ expect                 = require('chai').expect
 TestData               = require 'test/framework/TestData'
 TestHarness            = require 'test/framework/TestHarness'
 CommonBehaviors        = require 'test/framework/CommonBehaviors'
-CreateTeamStackHandler = require 'http/handlers/stacks/CreateTeamStackHandler'
+CreateTeamStackHandler = require 'apps/api/handlers/stacks/CreateTeamStackHandler'
 
 describe 'CreateTeamStackHandler', ->
 

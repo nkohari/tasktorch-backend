@@ -3,7 +3,7 @@ expect                     = require('chai').expect
 TestData                   = require 'test/framework/TestData'
 TestHarness                = require 'test/framework/TestHarness'
 CommonBehaviors            = require 'test/framework/CommonBehaviors'
-RemoveMemberFromOrgHandler = require 'http/handlers/users/RemoveMemberFromOrgHandler'
+RemoveMemberFromOrgHandler = require 'apps/api/handlers/users/RemoveMemberFromOrgHandler'
 
 describe 'RemoveMemberFromOrgHandler', ->
 

@@ -1,7 +1,7 @@
 {EventEmitter} = require 'events'
 _              = require 'lodash'
-Activity       = require 'messaging/Activity'
-Message        = require 'messaging/Message'
+Activity       = require 'apps/watcher/messaging/Activity'
+Message        = require 'apps/watcher/messaging/Message'
 
 class MockMessageBus extends EventEmitter
 

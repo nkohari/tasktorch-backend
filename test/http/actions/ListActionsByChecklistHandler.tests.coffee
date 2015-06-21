@@ -2,7 +2,7 @@ _                             = require 'lodash'
 expect                        = require('chai').expect
 TestHarness                   = require 'test/framework/TestHarness'
 CommonBehaviors               = require 'test/framework/CommonBehaviors'
-ListActionsByChecklistHandler = require 'http/handlers/actions/ListActionsByChecklistHandler'
+ListActionsByChecklistHandler = require 'apps/api/handlers/actions/ListActionsByChecklistHandler'
 
 describe 'ListActionsByChecklistHandler', ->
 

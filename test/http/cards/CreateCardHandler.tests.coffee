@@ -3,7 +3,7 @@ expect            = require('chai').expect
 TestData          = require 'test/framework/TestData'
 TestHarness       = require 'test/framework/TestHarness'
 CommonBehaviors   = require 'test/framework/CommonBehaviors'
-CreateCardHandler = require 'http/handlers/cards/CreateCardHandler'
+CreateCardHandler = require 'apps/api/handlers/cards/CreateCardHandler'
 GetStackQuery     = require 'data/queries/stacks/GetStackQuery'
 
 describe 'CreateCardHandler', ->

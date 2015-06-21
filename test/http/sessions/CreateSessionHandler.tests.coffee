@@ -4,7 +4,7 @@ expect               = require('chai').expect
 TestData             = require 'test/framework/TestData'
 TestHarness          = require 'test/framework/TestHarness'
 CommonBehaviors      = require 'test/framework/CommonBehaviors'
-CreateSessionHandler = require 'http/handlers/sessions/CreateSessionHandler'
+CreateSessionHandler = require 'apps/api/handlers/sessions/CreateSessionHandler'
 
 describe 'CreateSessionHandler', ->
 

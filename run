@@ -1,0 +1,15 @@
+#!/usr/bin/env NODE_PATH=src node
+
+var path = require('path');
+
+require('coffee-script/register');
+
+if (process.argv.length < 3) {
+  console.log('Usage: ' + path.basename(__filename) + ' <app>');
+  process.exit(1);
+}
+
+var Application = require('./src/apps/' + process.argv[2]);
+app = new Application();
+
+app.start();

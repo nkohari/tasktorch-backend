@@ -2,7 +2,7 @@ expect            = require('chai').expect
 TestData          = require 'test/framework/TestData'
 TestHarness       = require 'test/framework/TestHarness'
 CommonBehaviors   = require 'test/framework/CommonBehaviors'
-CreateNoteHandler = require 'http/handlers/notes/CreateNoteHandler'
+CreateNoteHandler = require 'apps/api/handlers/notes/CreateNoteHandler'
 
 describe 'CreateNoteHandler', ->
 

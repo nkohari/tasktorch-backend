@@ -2,7 +2,7 @@ expect                   = require('chai').expect
 TestData                 = require 'test/framework/TestData'
 TestHarness              = require 'test/framework/TestHarness'
 CommonBehaviors          = require 'test/framework/CommonBehaviors'
-ChangeActionOwnerHandler = require 'http/handlers/actions/ChangeActionOwnerHandler'
+ChangeActionOwnerHandler = require 'apps/api/handlers/actions/ChangeActionOwnerHandler'
 GetCardQuery             = require 'data/queries/cards/GetCardQuery'
 
 describe 'ChangeActionOwnerHandler', ->

@@ -2,7 +2,7 @@ expect              = require('chai').expect
 TestData            = require 'test/framework/TestData'
 TestHarness         = require 'test/framework/TestHarness'
 CommonBehaviors     = require 'test/framework/CommonBehaviors'
-CreateActionHandler = require 'http/handlers/actions/CreateActionHandler'
+CreateActionHandler = require 'apps/api/handlers/actions/CreateActionHandler'
 
 describe 'CreateActionHandler', ->
 

@@ -3,7 +3,7 @@ expect                = require('chai').expect
 StackType             = require 'data/enums/StackType'
 TestHarness           = require 'test/framework/TestHarness'
 CommonBehaviors       = require 'test/framework/CommonBehaviors'
-GetQueueByUserHandler = require 'http/handlers/stacks/GetQueueByUserHandler'
+GetQueueByUserHandler = require 'apps/api/handlers/stacks/GetQueueByUserHandler'
 
 describe 'GetQueueByUserHandler', ->
 

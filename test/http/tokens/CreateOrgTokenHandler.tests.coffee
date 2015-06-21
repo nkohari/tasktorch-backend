@@ -3,7 +3,7 @@ expect                = require('chai').expect
 TestData              = require 'test/framework/TestData'
 TestHarness           = require 'test/framework/TestHarness'
 CommonBehaviors       = require 'test/framework/CommonBehaviors'
-CreateOrgTokenHandler = require 'http/handlers/tokens/CreateOrgTokenHandler'
+CreateOrgTokenHandler = require 'apps/api/handlers/tokens/CreateOrgTokenHandler'
 
 describe 'CreateOrgTokenHandler', ->
 

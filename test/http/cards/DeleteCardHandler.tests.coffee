@@ -3,7 +3,7 @@ expect            = require('chai').expect
 TestData          = require 'test/framework/TestData'
 TestHarness       = require 'test/framework/TestHarness'
 CommonBehaviors   = require 'test/framework/CommonBehaviors'
-DeleteCardHandler = require 'http/handlers/cards/DeleteCardHandler'
+DeleteCardHandler = require 'apps/api/handlers/cards/DeleteCardHandler'
 CardStatus        = require 'data/enums/CardStatus'
 
 describe 'DeleteCardHandler', ->

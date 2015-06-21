@@ -1,4 +1,4 @@
-{EventEmitter}   = require 'events'
+EventEmitter     = require 'events'
 ChangesStatement = require 'data/statements/ChangesStatement'
 
 class Subscription extends EventEmitter
@@ -8,14 +8,25 @@ class Subscription extends EventEmitter
   start: (callback) ->
     @connectionPool.acquire (err, conn) =>
       return callback(err) if err?
-      statement = new ChangesStatement(@doctype)
-      conn.execute statement, (err, cursor) =>
+      @connection = conn
+      statement   = new ChangesStatement(@doctype)
+      @connection.execute statement, (err, cursor) =>
         return callback(err) if err?
-        cursor.each(@onChange)
+        cursor.each(@onChange, @onClosed)
         callback()
 
+  restart: (callback = (->)) ->
+    @connectionPool.release(@connection)
+    @start(callback)
+
+  onClosed: ->
+    @restart()
+
   onChange: (err, change) =>
+
+    return @restart() if err?
     [previous, current] = [change.old_val, change.new_val]
+
     if previous? and current?
       @emit('update', {
         type:     @doctype.name

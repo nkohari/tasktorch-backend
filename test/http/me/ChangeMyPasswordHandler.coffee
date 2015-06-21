@@ -2,7 +2,7 @@ expect                  = require('chai').expect
 TestData                = require 'test/framework/TestData'
 TestHarness             = require 'test/framework/TestHarness'
 CommonBehaviors         = require 'test/framework/CommonBehaviors'
-ChangeMyPasswordHandler = require 'http/handlers/me/ChangeMyPasswordHandler'
+ChangeMyPasswordHandler = require 'apps/api/handlers/me/ChangeMyPasswordHandler'
 
 describe 'ChangeMyPasswordHandler', ->
 

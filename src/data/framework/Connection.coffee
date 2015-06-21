@@ -1,5 +1,8 @@
 class Connection
 
+  Object.defineProperty @prototype, 'isOpen',    {get: -> @conn.open}
+  Object.defineProperty @prototype, 'isClosing', {get: -> @conn.closing}
+
   constructor: (@id, @log, @conn) ->
 
   execute: (runnable, callback) ->

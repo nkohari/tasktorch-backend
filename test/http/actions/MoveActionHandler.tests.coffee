@@ -3,7 +3,7 @@ expect            = require('chai').expect
 TestData          = require 'test/framework/TestData'
 TestHarness       = require 'test/framework/TestHarness'
 CommonBehaviors   = require 'test/framework/CommonBehaviors'
-MoveActionHandler = require 'http/handlers/actions/MoveActionHandler'
+MoveActionHandler = require 'apps/api/handlers/actions/MoveActionHandler'
 GetChecklistQuery = require 'data/queries/checklists/GetChecklistQuery'
 
 describe 'MoveActionHandler', ->

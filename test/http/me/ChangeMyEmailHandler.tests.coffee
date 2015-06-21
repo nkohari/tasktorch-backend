@@ -2,7 +2,7 @@ expect               = require('chai').expect
 TestData             = require 'test/framework/TestData'
 TestHarness          = require 'test/framework/TestHarness'
 CommonBehaviors      = require 'test/framework/CommonBehaviors'
-ChangeMyEmailHandler = require 'http/handlers/me/ChangeMyEmailHandler'
+ChangeMyEmailHandler = require 'apps/api/handlers/me/ChangeMyEmailHandler'
 
 describe 'ChangeMyEmailHandler', ->
 

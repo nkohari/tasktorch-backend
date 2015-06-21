@@ -3,7 +3,7 @@ expect            = require('chai').expect
 TestData          = require 'test/framework/TestData'
 TestHarness       = require 'test/framework/TestHarness'
 CommonBehaviors   = require 'test/framework/CommonBehaviors'
-PusherAuthHandler = require 'http/handlers/internal/PusherAuthHandler'
+PusherAuthHandler = require 'apps/api/handlers/internal/PusherAuthHandler'
 
 describe 'PusherAuthHandler', ->
 

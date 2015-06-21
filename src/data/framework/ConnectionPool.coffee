@@ -1,28 +1,45 @@
 genpool    = require 'generic-pool'
 rethinkdb  = require 'rethinkdb'
+retry      = require 'retry'
 Connection = require './Connection'
 
 class ConnectionPool
 
   constructor: (@app, @config, @log) ->
+    @count = 0
     @pool = genpool.Pool
-      name:    @name
-      max:     @config.rethinkdb.maxConnections
-      create:  @create.bind(this)
-      destroy: @destroy.bind(this)
+      name:     @name
+      max:      @config.rethinkdb.maxConnections
+      create:   @create.bind(this)
+      destroy:  @destroy.bind(this)
+      validate: @validate.bind(this)
     @app.on 'stop', => @shutdown()
 
   create: (callback) ->
-    {host, port, db} = @config.rethinkdb
-    id = @pool.getPoolSize()
-    @log.debug "[db:#{id}] Opening connection to #{host}:#{port}/#{db}"
-    rethinkdb.connect {host, port, db}, (err, conn) =>
-      return callback(err) if err?
-      callback null, new Connection(id, @log, conn)
+
+    id = ++@count
+    {host, port, db, maxRetries, backoffFactor} = @config.rethinkdb
+
+    operation = retry.operation {
+      retries: maxRetries
+      factor:  backoffFactor
+    }
+
+    operation.attempt (attempt) =>
+      @log.debug "[db:#{id}] Opening connection to #{host}:#{port}/#{db} (attempt #{attempt}/#{retries})"
+      rethinkdb.connect {host, port, db}, (err, conn) =>
+        # Retry the connection a number of times before giving up.
+        return if operation.retry(err)
+        return callback(operation.mainError()) if err?
+        @log.debug "[db:#{id}] Connection established, pool size = #{@pool.getPoolSize()}"
+        callback null, new Connection(id, @log, conn)
 
   destroy: (conn) ->
-    @log.debug "[db:#{conn.id}] Closing connection"
+    @log.debug "[db:#{conn.id}] Closing connection, pool size = #{@pool.getPoolSize()}"
     conn.close()
+
+  validate: (conn) ->
+    conn.isOpen and not conn.isClosing
 
   acquire: (callback) ->
     @pool.acquire(callback)
@@ -31,7 +48,7 @@ class ConnectionPool
     @pool.release(callback)
 
   shutdown: ->
-    @log.info 'Flushing RethinkDB connection pool'
+    @log.info 'Flushing connection pool'
     @pool.drain =>
       @pool.destroyAllNow()
 

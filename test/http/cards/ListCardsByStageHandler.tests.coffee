@@ -2,7 +2,7 @@ _                       = require 'lodash'
 expect                  = require('chai').expect
 TestHarness             = require 'test/framework/TestHarness'
 CommonBehaviors         = require 'test/framework/CommonBehaviors'
-ListCardsByStageHandler = require 'http/handlers/cards/ListCardsByStageHandler'
+ListCardsByStageHandler = require 'apps/api/handlers/cards/ListCardsByStageHandler'
 
 describe 'ListCardsByStageHandler', ->
 

@@ -2,7 +2,7 @@ _               = require 'lodash'
 expect          = require('chai').expect
 TestHarness     = require 'test/framework/TestHarness'
 CommonBehaviors = require 'test/framework/CommonBehaviors'
-GetCardHandler  = require 'http/handlers/cards/GetCardHandler'
+GetCardHandler  = require 'apps/api/handlers/cards/GetCardHandler'
 
 describe 'GetCardHandler', ->
 

@@ -2,7 +2,7 @@ _                   = require 'lodash'
 expect              = require('chai').expect
 TestHarness         = require 'test/framework/TestHarness'
 CommonBehaviors     = require 'test/framework/CommonBehaviors'
-GetOrgMemberHandler = require 'http/handlers/users/GetOrgMemberHandler'
+GetOrgMemberHandler = require 'apps/api/handlers/users/GetOrgMemberHandler'
 
 describe 'GetOrgMemberHandler', ->
 

@@ -2,7 +2,7 @@ _               = require 'lodash'
 expect          = require('chai').expect
 TestHarness     = require 'test/framework/TestHarness'
 CommonBehaviors = require 'test/framework/CommonBehaviors'
-GetStackHandler = require 'http/handlers/stacks/GetStackHandler'
+GetStackHandler = require 'apps/api/handlers/stacks/GetStackHandler'
 
 describe 'GetStackHandler', ->
 

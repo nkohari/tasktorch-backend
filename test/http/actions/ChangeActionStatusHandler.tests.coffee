@@ -2,7 +2,7 @@ expect                    = require('chai').expect
 TestData                  = require 'test/framework/TestData'
 TestHarness               = require 'test/framework/TestHarness'
 CommonBehaviors           = require 'test/framework/CommonBehaviors'
-ChangeActionStatusHandler = require 'http/handlers/actions/ChangeActionStatusHandler'
+ChangeActionStatusHandler = require 'apps/api/handlers/actions/ChangeActionStatusHandler'
 
 describe 'ChangeActionStatusHandler', ->
 

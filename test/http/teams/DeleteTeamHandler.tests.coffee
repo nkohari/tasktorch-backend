@@ -3,7 +3,7 @@ expect            = require('chai').expect
 TestData          = require 'test/framework/TestData'
 TestHarness       = require 'test/framework/TestHarness'
 CommonBehaviors   = require 'test/framework/CommonBehaviors'
-DeleteTeamHandler = require 'http/handlers/teams/DeleteTeamHandler'
+DeleteTeamHandler = require 'apps/api/handlers/teams/DeleteTeamHandler'
 
 describe 'DeleteTeamHandler', ->
 

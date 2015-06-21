@@ -1,7 +1,7 @@
 expect            = require('chai').expect
 TestHarness       = require 'test/framework/TestHarness'
 CommonBehaviors   = require 'test/framework/CommonBehaviors'
-ListMyOrgsHandler = require 'http/handlers/me/ListMyOrgsHandler'
+ListMyOrgsHandler = require 'apps/api/handlers/me/ListMyOrgsHandler'
 
 describe 'ListMyOrgsHandler', ->
 

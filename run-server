@@ -1,2 +1,0 @@
-#!/usr/bin/env NODE_PATH=./src node
-require('./server');
