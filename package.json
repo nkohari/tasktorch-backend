@@ -29,6 +29,7 @@
     "joi": "6.4.1",
     "juice": "1.2.0",
     "lodash": "2.4.1",
+    "newrelic": "^1.20.1",
     "node-uuid": "1.4.1",
     "pusher": "1.0.1",
     "rethinkdb": "2.0.0",

@@ -2,6 +2,7 @@
 
 var path = require('path');
 
+require('newrelic');
 require('coffee-script/register');
 
 if (process.argv.length < 3) {
