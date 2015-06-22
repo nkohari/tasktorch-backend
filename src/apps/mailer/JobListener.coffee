@@ -1,17 +1,13 @@
 _     = require 'lodash'
 async = require 'async'
-aws   = require 'aws-sdk'
 
-class Listener
+class JobListener
 
-  constructor: (@log, @config, @processor) ->
-    @sqs = new aws.SQS {
-      region:     @config.aws.region
-      apiVersion: @config.aws.apiVersion
-    }
+  constructor: (@log, @aws, @config, @processor) ->
+    @sqs = @aws.createSQSClient()
 
   start: ->
-    @log.debug "Polling #{@config.mailer.queueUrl} every #{@config.mailer.waitTimeSeconds} seconds"
+    @log.debug "Polling #{@config.jobs.queueUrl} every #{@config.jobs.waitTimeSeconds} seconds"
     poll = () =>
       @receive =>
         setImmediate(poll) unless @stopRequested
@@ -23,13 +19,13 @@ class Listener
   receive: (callback) ->
 
     @sqs.receiveMessage {
-      QueueUrl:            @config.mailer.queueUrl
-      WaitTimeSeconds:     @config.mailer.waitTimeSeconds
-      MaxNumberOfMessages: @config.mailer.maxNumberOfMessages
+      QueueUrl:            @config.jobs.queueUrl
+      WaitTimeSeconds:     @config.jobs.waitTimeSeconds
+      MaxNumberOfMessages: @config.jobs.maxNumberOfMessages
     }, (err, result) =>
 
       if err?
-        # TODO: Stop polling after a certain number of failures?
+        # TODO: Use node-retry to stop polling after a certain number of failures?
         @log.error "Error receiving messages from SQS: #{err}"
         return callback()
 
@@ -37,11 +33,11 @@ class Listener
         @log.debug "No messages available from SQS"
         return callback()
 
-      jobs = _.map result.Messages, (msg) -> {
-        id:      msg.MessageId
-        handle:  msg.ReceiptHandle
-        request: JSON.parse(msg.Body)
-      }
+      jobs = _.map result.Messages, (message) =>
+        _.extend(JSON.parse(message.Body), {
+          id:     message.MessageId
+          handle: message.ReceiptHandle
+        })
 
       @log.debug "Received #{jobs.length} jobs from SQS"
 
@@ -49,18 +45,16 @@ class Listener
 
   handle: (job, callback) ->
 
-    @log.debug "Processing job #{job.id}"
-
-    @processor.process job.request, (err) =>
+    @processor.process job, (err) =>
 
       if err?
         @log.error "Error while processing job #{job.id}: #{err.stack ? err}"
         return callback()
 
-      @log.debug "Job #{job.id} processed successfully, removing it from SQS"
+      @log.debug "Job #{job.id} processed successfully, removing from SQS"
 
       @sqs.deleteMessage {
-        QueueUrl:      @config.mailer.queueUrl
+        QueueUrl:      @config.jobs.queueUrl
         ReceiptHandle: job.handle
       }, (err) =>
         if err?
@@ -69,4 +63,4 @@ class Listener
           @log.debug "Job #{job.id} successfully deleted from SQS"
         callback()
 
-module.exports = Listener
+module.exports = JobListener

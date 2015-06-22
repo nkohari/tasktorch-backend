@@ -32,6 +32,11 @@ Tables.goals = [
   r.table('goals').indexCreate('org')
 ]
 
+Tables.invites = [
+  r.tableCreate('invites')
+  r.table('invites').indexCreate('org')
+]
+
 Tables.kinds = [
   r.tableCreate('kinds')
   r.table('kinds').indexCreate('org')
@@ -76,7 +81,6 @@ Tables.teams = [
 
 Tables.tokens = [
   r.tableCreate('tokens')
-  r.table('tokens').indexCreate('org')
 ]
 
 Tables.users = [

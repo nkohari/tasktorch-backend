@@ -1,0 +1,4 @@
+#!/usr/bin/env NODE_PATH=src ./node_modules/coffee-script/bin/coffee
+
+uuid = require 'common/util/uuid'
+console.log(uuid())

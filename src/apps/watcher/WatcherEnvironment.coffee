@@ -1,14 +1,14 @@
-path           = require 'path'
-_              = require 'lodash'
-loadFiles      = require 'common/util/loadFiles'
-Watcher        = require 'apps/watcher/Watcher'
-MessageBus     = require 'apps/watcher/MessageBus'
-Config         = require 'common/Config'
-Log            = require 'common/Log'
-PusherClient   = require 'common/PusherClient'
-Database       = require 'data/Database'
-ConnectionPool = require 'data/framework/ConnectionPool'
-Gatekeeper     = require 'security/Gatekeeper'
+path             = require 'path'
+_                = require 'lodash'
+loadFiles        = require 'common/util/loadFiles'
+ChangeWatcher    = require 'apps/watcher/ChangeWatcher'
+AWSClientFactory = require 'common/AWSClientFactory'
+Config           = require 'common/Config'
+Log              = require 'common/Log'
+PusherClient     = require 'common/PusherClient'
+Database         = require 'data/Database'
+ConnectionPool   = require 'data/framework/ConnectionPool'
+Gatekeeper       = require 'security/Gatekeeper'
 
 class WatcherEnvironment
 
@@ -21,9 +21,12 @@ class WatcherEnvironment
     forge.bind('connectionPool').to.type(ConnectionPool)
     forge.bind('database').to.type(Database)
     forge.bind('gatekeeper').to.type(Gatekeeper)
+    forge.bind('aws').to.type(AWSClientFactory)
     forge.bind('pusher').to.type(PusherClient)
-    forge.bind('messageBus').to.type(MessageBus)
-    forge.bind('watcher').to.type(Watcher)
+    forge.bind('watcher').to.type(ChangeWatcher)
+
+    for name, type of loadFiles('rules', __dirname)
+      forge.bind('rule').to.type(type).when(name)
 
     for name, type of loadFiles('security/gates', path.resolve(__dirname, '../..'))
       forge.bind('gate').to.type(type).when(name)

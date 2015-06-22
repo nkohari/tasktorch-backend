@@ -1,17 +1,17 @@
-path            = require 'path'
-_               = require 'lodash'
-ApiServer       = require 'apps/api/ApiServer'
-loadFiles       = require 'common/util/loadFiles'
-humanize        = require 'common/util/humanize'
-Config          = require 'common/Config'
-Log             = require 'common/Log'
-PusherClient    = require 'common/PusherClient'
-Database        = require 'data/Database'
-ConnectionPool  = require 'data/framework/ConnectionPool'
-Processor       = require 'domain/Processor'
-Gatekeeper      = require 'security/Gatekeeper'
-Keymaster       = require 'security/Keymaster'
-PasswordHasher  = require 'security/PasswordHasher'
+path             = require 'path'
+_                = require 'lodash'
+ApiServer        = require 'apps/api/ApiServer'
+loadFiles        = require 'common/util/loadFiles'
+humanize         = require 'common/util/humanize'
+Config           = require 'common/Config'
+Log              = require 'common/Log'
+PusherClient     = require 'common/PusherClient'
+Database         = require 'data/Database'
+ConnectionPool   = require 'data/framework/ConnectionPool'
+CommandProcessor = require 'domain/CommandProcessor'
+Gatekeeper       = require 'security/Gatekeeper'
+Keymaster        = require 'security/Keymaster'
+PasswordHasher   = require 'security/PasswordHasher'
 
 class ApiEnvironment
 
@@ -28,7 +28,7 @@ class ApiEnvironment
 
     forge.bind('connectionPool').to.type(ConnectionPool)
     forge.bind('database').to.type(Database)
-    forge.bind('processor').to.type(Processor)
+    forge.bind('processor').to.type(CommandProcessor)
     forge.bind('server').to.type(ApiServer)
 
     for name, type of loadFiles('handlers', __dirname)

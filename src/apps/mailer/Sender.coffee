@@ -1,12 +1,7 @@
-aws = require 'aws-sdk'
-
 class Sender
 
-  constructor: (@log, @config) ->
-    @ses = new aws.SES {
-      region:     @config.aws.region
-      apiVersion: @config.aws.apiVersion
-    }
+  constructor: (@log, @aws) ->
+    @ses = @aws.createSESClient()
 
   send: (email, callback) ->
 

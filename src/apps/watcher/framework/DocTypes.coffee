@@ -3,6 +3,7 @@ module.exports = DocTypes = [
   require 'data/documents/Card'
   require 'data/documents/Checklist'
   require 'data/documents/Goal'
+  require 'data/documents/Invite'
   require 'data/documents/Kind'
   require 'data/documents/Note'
   require 'data/documents/Org'

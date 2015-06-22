@@ -17,27 +17,27 @@ class Renderer
     @templates = @compileTemplates(root)
     @log.debug "Compiled #{_.size(@templates)} templates"
 
-  render: (request) ->
+  render: (job) ->
 
-    template = @templates[request.type]
+    template = @templates[job.template]
     unless template?
-      throw new Error("Don't know how to render an email of type #{request.type}")
+      throw new Error("Don't know how to render an email with template #{job.template}")
 
-    vars = template.renderVars(request.params)
-    html = template.renderBody(request.params)
+    vars = template.renderVars(job.params)
+    html = template.renderBody(job.params)
     text = html2text.fromString(html)
 
     email =
-      type:    request.type
-      params:  request.params
-      from:    vars.from
-      subject: vars.subject
-      to:      _.flatten [request.to]
-      cc:      _.flatten [request.cc]   if request.cc?
-      bcc:     _.flatten [request.bcc]  if request.bcc?
-      replyTo: _.flatten [vars.replyTo] if vars.replyTo?
-      html:    html
-      text:    text
+      template: job.template
+      params:   job.params
+      from:     vars.from
+      subject:  vars.subject
+      to:       _.flatten [job.to]
+      cc:       _.flatten [job.cc]       if job.cc?
+      bcc:      _.flatten [job.bcc]      if job.bcc?
+      replyTo:  _.flatten [vars.replyTo] if vars.replyTo?
+      html:     html
+      text:     text
 
     return email
 

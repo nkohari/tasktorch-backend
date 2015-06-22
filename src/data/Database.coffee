@@ -1,3 +1,5 @@
+Subscription = require 'data/framework/Subscription'
+
 class Database
 
   constructor: (@connectionPool) ->
@@ -9,5 +11,11 @@ class Database
         return callback(err) if err?
         @connectionPool.release(conn)
         callback(null, result)
+
+  subscribe: (doctype, callback) ->
+    subscription = new Subscription(@connectionPool, doctype)
+    subscription.start (err) =>
+      return callback(err) if err?
+      callback(null, subscription)
 
 module.exports = Database
