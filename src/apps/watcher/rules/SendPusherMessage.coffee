@@ -6,8 +6,8 @@ class SendPusherMessage extends Rule
 
   constructor: (@log, @gatekeeper, @pusher) ->
 
-  supports: (activity, event) ->
-    true
+  offer: (activity, event) ->
+    true # handle everything
 
   handle: (activity, event, callback) ->
     {document, previous} = event

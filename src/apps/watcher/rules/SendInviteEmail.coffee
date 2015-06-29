@@ -8,7 +8,7 @@ class SendInviteEmail extends Rule
   constructor: (@log, @config, @aws, @database) ->
     @sqs = @aws.createSQSClient()
 
-  supports: (activity, event) ->
+  offer: (activity, event) ->
     activity == Activity.Created and event.type == 'Invite'
 
   handle: (activity, event, callback) ->

@@ -33,9 +33,15 @@ class ChangeWatcher extends EventEmitter
   handleEvent: (activity, event, callback) ->
     @log.debug("#{activity}: #{event.type} #{event.document.id}")
     delegate = (rule, next) =>
-      if rule.supports(activity, event)
+      @log.debug "Offering change to #{rule.constructor.name}"
+      if rule.offer(activity, event)
+        @log.debug "#{rule.constructor.name} accepted, dispatching event to rule"
         rule.handle(activity, event, next)
+      else
+        @log.debug "#{rule.constructor.name} declined"
+      next()
     async.eachSeries @rules, delegate, (err) =>
       @log.error("Error handling event: #{err.stack ? err}") if err?
+      @log.debug("Done handling event")
 
 module.exports = ChangeWatcher

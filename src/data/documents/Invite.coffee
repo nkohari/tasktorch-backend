@@ -13,6 +13,7 @@ class Invite extends Document
   @field  'updated'
   @field  'status',  {default: InviteStatus.Pending}
   @field  'email'
+  @field  'leader'
 
   @hasOne 'creator', {type: 'User'}
   @hasOne 'org',     {type: 'Org'}

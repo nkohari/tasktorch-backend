@@ -7,5 +7,6 @@ class InviteModel extends Model
     @creator = invite.creator
     @org     = invite.org
     @email   = invite.email
+    @leader  = invite.leader
 
 module.exports = InviteModel

@@ -12,6 +12,6 @@ class UserModel extends Model
 
   getAvatarUrl: (email) ->
     hash = crypto.createHash('md5').update(email).digest('hex')
-    return "https://www.gravatar.com/avatar/#{hash}"
+    return "https://www.gravatar.com/avatar/#{hash}?rating=g&d=identicon"
 
 module.exports = UserModel
