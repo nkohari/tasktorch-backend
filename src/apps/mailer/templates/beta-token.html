@@ -1,0 +1,66 @@
+subject: Welcome to the TaskTorch private beta!
+from:    TaskTorch <invites@mail.tasktorch.com>
+replyTo: help@tasktorch.com
+---
+
+{% extends '_action.html' %}
+
+{% block body %}
+<meta itemprop="name" content="You're Invited!"/>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="aligncenter content-block">
+      <h1>You're in!</h1>
+    </td>
+  </tr>
+  <tr>
+    <td class="content-block">
+      <p>
+        Thanks for your interest in TaskTorch, our task management and collaboration platform!
+        We’re excited to help you more effectively coordinate your work with others.
+      </p>
+      <p>
+        We'd love for you to join our invite-only beta. Just click the button below and we'll
+        walk you through creating your account.
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td class="aligncenter content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
+      <a href="https://app.tasktorch.com/x/signup/{{ token.id }}" class="btn-primary" itemprop="url">Create my account</a>
+      <div class="link-help">
+        Or, copy and paste this link into your browser:<br/>
+        https://app.tasktorch.com/x/signup/{{ token.id }}
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td class="content-block">
+      <p>
+        Once you create your account and organization, you can invite as many people as you want,
+        create teams, and customize TaskTorch to manage practically any kind of work.
+      </p>
+      <p>
+        We’re not the same old project management tool that you’ve seen over and over again.
+        We think it's time for something different!
+      </p>
+      <p>
+        If you're interested, we’d love to give you more information about our philosophy and
+        approach with a quick demo. Feel free to contact us at <a href="mailto:help@tasktorch.com">help@tasktorch.com</a>
+        and we can get something scheduled.
+      </p>
+      <p>
+        If you’d prefer to just try out the product for yourself, the <a href="http://support.tasktorch.com">TaskTorch guide</a>
+        has a great overview of our features. Please don’t hesitate to reach out via email
+        or by starting a support conversation in the app itself with any questions, issues, or feedback.
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td class="content-block">
+      <p>Thanks!</p>
+      <p>&mdash; Niki &amp; Nate, The TaskTorch Team</p>
+    </td>
+  </tr>
+</table>
+{% endblock %}

@@ -7,6 +7,8 @@ class AddMemberToOrgCommand extends Command
   constructor: (@requester, @user, @org) ->
 
   execute: (conn, callback) ->
+    # TODO: Should check to see if stacks already exist? Not sure what will happen
+    # in case where user is removed and re-added.
     statement = new CreateDefaultUserStacksStatement(@user.id, @org.id)
     conn.execute statement, (err) =>
       return callback(err) if err?

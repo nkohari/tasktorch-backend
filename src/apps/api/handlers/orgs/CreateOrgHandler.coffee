@@ -17,16 +17,18 @@ class CreateOrgHandler extends Handler
   @ensure
     payload:
       name: @mustBe.string().required()
+      survey: @mustBe.object()
   
   constructor: (@processor) ->
 
   handle: (request, reply) ->
 
-    {name} = request.payload
-    {user} = request.auth.credentials
+    {name, survey} = request.payload
+    {user}         = request.auth.credentials
 
     org = new Org {
       name:    name
+      survey:  survey
       leaders: [user.id]
       members: [user.id]
     }

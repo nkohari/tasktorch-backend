@@ -11,8 +11,11 @@ class CreateInvitesHandler extends Handler
   @ensure
     payload:
       invites: @mustBe.array().items(
-         @mustBe.object().keys {email: @mustBe.string(), leader: @mustBe.boolean()}
-       )
+        @mustBe.object().keys {
+          email:  @mustBe.string().required()
+          leader: @mustBe.boolean()
+        }
+      )
 
   @before [
     'resolve org'
@@ -30,6 +33,7 @@ class CreateInvitesHandler extends Handler
     invites = _.map invites, (invite) =>
       new Invite {
         org:     org.id
+        orgName: org.name
         creator: user.id
         email:   invite.email
         leader:  invite.leader

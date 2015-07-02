@@ -13,6 +13,7 @@ class Org extends Document
   @field   'updated'
   @field   'status',  {default: DocumentStatus.Normal}
   @field   'name'
+  @field   'survey'
 
   @hasMany 'members', {type: 'User', default: []}
   @hasMany 'leaders', {type: 'User', default: []}

@@ -26,6 +26,8 @@
     "humanize": "0.0.9",
     "immutable": "2.0.17",
     "int-encoder": "0.1.4",
+    "intercom": "^0.5.1",
+    "intercom.io": "^1.0.10",
     "joi": "6.4.1",
     "juice": "1.2.0",
     "lodash": "2.4.1",

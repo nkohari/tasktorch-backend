@@ -20,21 +20,25 @@ replyTo: {{ sender.email }}
         <strong>{{ sender.name }}</strong> has invited you to participate.
       </p>
       <p>
-        Click the link below to join the organization. If you don't already have
+        Click the button below to join the organization. If you don't already have
         an account, you'll be able to sign up.
       </p>
     </td>
   </tr>
   <tr>
     <td class="aligncenter content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
-      <a href="https://app.tasktorch.com/invite/{{ invite.id }}" class="btn-primary" itemprop="url">Accept invitation</a>
+      <a href="https://app.tasktorch.com/x/invite/{{ invite.id }}" class="btn-primary" itemprop="url">Accept invitation</a>
+      <div class="link-help">
+        Or, copy and paste this link into your browser:<br/>
+        https://app.tasktorch.com/x/invite/{{ invite.id }}
+      </div>
     </td>
   </tr>
   <tr>
     <td class="content-block">
       <p>
-        TaskTorch is a work management system that puts you in charge of your own work
-        and helps you work more effectively with your teammates.
+        TaskTorch is a task management and collaboration platform that puts you in control
+        of your own work and helps you work more effectively with your teammates.
       </p>
       <p>
         You can define tasks that you need to work on together, and then pass them around

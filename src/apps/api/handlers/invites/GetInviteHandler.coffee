@@ -4,19 +4,15 @@ GetInviteQuery = require 'data/queries/invites/GetInviteQuery'
 class GetInviteHandler extends Handler
 
   @route 'get /invites/{inviteid}'
-
-  @before [
-    'resolve query options'
-  ]
+  @auth {mode: 'try'}
 
   constructor: (@database) ->
 
   handle: (request, reply) ->
 
-    {options}  = request.pre
     {inviteid} = request.params
 
-    query = new GetInviteQuery(inviteid, options)
+    query = new GetInviteQuery(inviteid)
     @database.execute query, (err, result) =>
       return reply err if err?
       return reply @error.notFound() unless result.invite?

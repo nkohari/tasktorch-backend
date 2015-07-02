@@ -1,9 +1,10 @@
-_                     = require 'lodash'
-Handler               = require 'apps/api/framework/Handler'
-User                  = require 'data/documents/User'
-GetOrgQuery           = require 'data/queries/orgs/GetOrgQuery'
-CreateUserCommand     = require 'domain/commands/users/CreateUserCommand'
-AddMemberToOrgCommand = require 'domain/commands/users/AddMemberToOrgCommand'
+_                   = require 'lodash'
+Handler             = require 'apps/api/framework/Handler'
+User                = require 'data/documents/User'
+GetOrgQuery         = require 'data/queries/orgs/GetOrgQuery'
+AcceptInviteCommand = require 'domain/commands/invites/AcceptInviteCommand'
+AcceptTokenCommand  = require 'domain/commands/tokens/AcceptTokenCommand'
+CreateUserCommand   = require 'domain/commands/users/CreateUserCommand'
 
 class CreateUserHandler extends Handler
 
@@ -16,18 +17,25 @@ class CreateUserHandler extends Handler
       username: @mustBe.string().required()
       password: @mustBe.string().required()
       email:    @mustBe.string().required()
-      token:    @mustBe.string().required()
+      token:    @mustBe.string()
+      invite:   @mustBe.string()
 
   @before [
-    'resolve token argument'
+    'resolve optional token argument'
+    'resolve optional invite argument'
+    'ensure token is pending'
+    'ensure invite is pending'
   ]
 
   constructor: (@database, @processor, @passwordHasher) ->
 
   handle: (request, reply) ->
 
-    {token} = request.pre
+    {token, invite} = request.pre
     {name, username, password, email} = request.payload
+
+    if not token? and not invite?
+      return reply @error.badRequest("Either an invite or a token must be provided")
 
     user = new User {
       name:     name
@@ -36,20 +44,24 @@ class CreateUserHandler extends Handler
       email:    email
     }
 
-    command = new CreateUserCommand(user, token)
+    command = new CreateUserCommand(user)
     @processor.execute command, (err, user) =>
       return reply err if err?
-      @addOrgMembership user, token, (err) =>
+      @acceptTokenIfProvided user, token, (err) =>
         return reply err if err?
         return reply @response(user)
+        @acceptInviteIfProvided user, invite, (err) =>
+          return reply err if err?
+          return reply @response(user)
 
-  addOrgMembership: (user, token, callback) ->
-    return callback() unless token.org?
-    query = new GetOrgQuery(token.org)
-    @database.execute query, (err, result) =>
-      return callback(err) if err?
-      return callback @error.badRequest() unless result.org?
-      command = new AddMemberToOrgCommand(user, user, result.org)
-      @processor.execute(command, callback)
+  acceptTokenIfProvided: (user, token, callback) ->
+    return callback() unless token?
+    command = new AcceptTokenCommand(user, user, token)
+    @processor.execute(command, callback)
+
+  acceptInviteIfProvided: (user, invite, callback) ->
+    return callback() unless invite?
+    command = new AcceptInviteCommand(user, user, invite)
+    @processor.execute(command, callback)
 
 module.exports = CreateUserHandler

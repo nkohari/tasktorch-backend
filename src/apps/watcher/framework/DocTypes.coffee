@@ -10,5 +10,6 @@ module.exports = DocTypes = [
   require 'data/documents/Stack'
   require 'data/documents/Stage'
   require 'data/documents/Team'
+  require 'data/documents/Token'
   require 'data/documents/User'
 ]
