@@ -49,7 +49,6 @@ class CreateUserHandler extends Handler
       return reply err if err?
       @acceptTokenIfProvided user, token, (err) =>
         return reply err if err?
-        return reply @response(user)
         @acceptInviteIfProvided user, invite, (err) =>
           return reply err if err?
           return reply @response(user)
