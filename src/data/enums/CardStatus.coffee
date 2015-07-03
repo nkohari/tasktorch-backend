@@ -4,6 +4,7 @@ module.exports = arrayEnum [
   'NotStarted'
   'InProgress'
   'Warning'
+  'Idle'
   'Complete'
   'Deleted'
 ]

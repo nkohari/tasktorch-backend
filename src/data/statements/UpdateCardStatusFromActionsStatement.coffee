@@ -20,9 +20,13 @@ class UpdateCardStatusFromActionsStatement extends UpdateStatement
           statuses.contains(ActionStatus.Warning),
           CardStatus.Warning,
           r.branch(
-            r.or(statuses.contains(ActionStatus.InProgress), statuses.contains(ActionStatus.Complete)),
+            statuses.contains(ActionStatus.InProgress),
             CardStatus.InProgress,
-            CardStatus.NotStarted
+            r.branch(
+              statuses.contains(ActionStatus.Complete),
+              CardStatus.Idle,
+              CardStatus.NotStarted
+            )
           )
         )
       )
