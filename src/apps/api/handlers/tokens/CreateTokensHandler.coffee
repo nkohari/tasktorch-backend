@@ -18,7 +18,7 @@ class CreateTokensHandler extends Handler
       )
 
   @before [
-    'ensure requester is admin'
+    'ensure requester can give tokens'
   ]
 
   constructor: (@processor) ->

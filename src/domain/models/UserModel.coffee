@@ -8,6 +8,7 @@ class UserModel extends Model
     @username  = user.username
     @name      = user.name
     @email     = user.email
+    @grants    = user.grants if user.grants?
     @avatarUrl = @getAvatarUrl(user.email)
 
   getAvatarUrl: (email) ->

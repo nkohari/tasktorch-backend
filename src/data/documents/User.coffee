@@ -1,6 +1,5 @@
 Document       = require 'data/framework/Document'
 DocumentStatus = require 'data/enums/DocumentStatus'
-UserLevel      = require 'data/enums/UserLevel'
 
 class User extends Document
 
@@ -16,6 +15,6 @@ class User extends Document
   @field  'password'
   @field  'name'
   @field  'email'
-  @field  'level',   {default: UserLevel.Normal}
+  @field  'grants'
 
 module.exports = User
