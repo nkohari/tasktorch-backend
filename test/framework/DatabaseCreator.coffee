@@ -47,6 +47,9 @@ Tables.notes = [
   r.table('notes').indexCreate('card')
   r.table('notes').indexCreate('org')
   r.table('notes').indexCreate('user')
+  r.table('notes').indexCreate('actions', (note) -> 
+    r.branch(note.hasFields({content: {action: true}}), note('content')('action'), null)
+  )
 ]
 
 Tables.orgs = [
