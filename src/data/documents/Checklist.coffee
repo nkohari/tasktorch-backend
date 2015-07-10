@@ -7,10 +7,10 @@ class Checklist extends Document
   @naming {singular: 'checklist', plural: 'checklists'}
 
   @field   'id'
-  @field   'version'
+  @field   'version', {default: 0}
+  @field   'status',  {default: DocumentStatus.Normal}
   @field   'created'
   @field   'updated'
-  @field   'status',  {default: DocumentStatus.Normal}
 
   @hasOne  'org',     {type: 'Org'}
   @hasOne  'card',    {type: 'Card'}

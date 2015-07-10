@@ -1,12 +1,12 @@
-_                  = require 'lodash'
-async              = require 'async'
-uuid               = require 'common/util/uuid'
-Handler            = require 'apps/api/framework/Handler'
-Kind               = require 'data/documents/Kind'
-Stage              = require 'data/documents/Stage'
-KindColor          = require 'data/enums/KindColor'
-CreateKindCommand  = require 'domain/commands/kinds/CreateKindCommand'
-CreateStageCommand = require 'domain/commands/stages/CreateStageCommand'
+_                         = require 'lodash'
+async                     = require 'async'
+uuid                      = require 'common/util/uuid'
+Handler                   = require 'apps/api/framework/Handler'
+Kind                      = require 'data/documents/Kind'
+Stage                     = require 'data/documents/Stage'
+KindColor                 = require 'data/enums/KindColor'
+CreateKindCommand         = require 'domain/commands/kinds/CreateKindCommand'
+CreateInitialStageCommand = require 'domain/commands/stages/CreateInitialStageCommand'
 
 class CreateKindHandler extends Handler
 
@@ -65,7 +65,7 @@ class CreateKindHandler extends Handler
       defaultActions: data.defaultActions ? []
     }
 
-    command = new CreateStageCommand(user, stage)
+    command = new CreateInitialStageCommand(user, stage)
     @processor.execute(command, callback)
 
 module.exports = CreateKindHandler

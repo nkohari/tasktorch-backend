@@ -9,6 +9,7 @@ Tables.actions = [
   r.table('actions').indexCreate('card')
   r.table('actions').indexCreate('org')
   r.table('actions').indexCreate('checklist')
+  r.table('actions').indexCreate('stage')
 ]
 
 Tables.cards = [
