@@ -1,14 +1,14 @@
-_                  = require 'lodash'
-async              = require 'async'
-uuid               = require 'common/util/uuid'
-Handler            = require 'apps/api/framework/Handler'
-Org                = require 'data/documents/Org'
-Kind               = require 'data/documents/Kind'
-Stage              = require 'data/documents/Stage'
-KindColor          = require 'data/enums/KindColor'
-CreateOrgCommand   = require 'domain/commands/orgs/CreateOrgCommand'
-CreateKindCommand  = require 'domain/commands/kinds/CreateKindCommand'
-CreateStageCommand = require 'domain/commands/stages/CreateStageCommand'
+_                         = require 'lodash'
+async                     = require 'async'
+uuid                      = require 'common/util/uuid'
+Handler                   = require 'apps/api/framework/Handler'
+Org                       = require 'data/documents/Org'
+Kind                      = require 'data/documents/Kind'
+Stage                     = require 'data/documents/Stage'
+KindColor                 = require 'data/enums/KindColor'
+CreateOrgCommand          = require 'domain/commands/orgs/CreateOrgCommand'
+CreateKindCommand         = require 'domain/commands/kinds/CreateKindCommand'
+CreateInitialStageCommand = require 'domain/commands/stages/CreateInitialStageCommand'
 
 class CreateOrgHandler extends Handler
 
@@ -59,7 +59,7 @@ class CreateOrgHandler extends Handler
     kind.stages = _.pluck(stages, 'id')
 
     createStage = (stage, next) =>
-      command = new CreateStageCommand(user, stage)
+      command = new CreateInitialStageCommand(user, stage)
       @processor.execute(command, next)
 
     async.eachSeries stages, createStage, (err) =>

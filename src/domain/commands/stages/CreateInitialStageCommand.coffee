@@ -3,7 +3,7 @@ Command         = require 'domain/framework/Command'
 
 class CreateInitialStageCommand extends Command
 
-  constructor: (@user, @stage, @position = 'append') ->
+  constructor: (@user, @stage) ->
 
   execute: (conn, callback) ->
     statement = new CreateStatement(@stage)

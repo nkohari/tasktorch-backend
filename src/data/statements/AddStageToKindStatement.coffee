@@ -4,7 +4,7 @@ UpdateStatement = require 'data/statements/UpdateStatement'
 
 class AddStageToKindStatement extends UpdateStatement
 
-  constructor: (kindid, stageid, position) ->
+  constructor: (kindid, stageid, position = 'append') ->
 
     if position is 'prepend'
       arg = r.row('stages').prepend(stageid)
