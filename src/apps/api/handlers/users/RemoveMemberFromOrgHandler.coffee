@@ -19,6 +19,9 @@ class RemoveMemberFromOrgHandler extends Handler
     {org, user} = request.pre
     requester   = request.auth.credentials.user
 
+    if requester.id == user.id
+      return reply @error.badRequest("You can't remove yourself as an org member")
+
     unless org.hasMember(user.id)
       return reply @error.badRequest("The user #{user.id} is not a member of the org #{org.id}")
 
