@@ -13,6 +13,7 @@ class ChangeActionStatusCommand extends Command
   execute: (conn, callback) ->
     statement = new UpdateStatement(Action, @action.id, {
       status:    @status
+      user:      @user.id
       completed: if @status == ActionStatus.Complete then new Date() else null
     })
     conn.execute statement, (err, action, previous) =>
