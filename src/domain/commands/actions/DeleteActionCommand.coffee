@@ -1,6 +1,7 @@
 Command                             = require 'domain/framework/Command'
 DeleteStatement                     = require 'data/statements/DeleteStatement'
 RemoveActionFromChecklistsStatement = require 'data/statements/RemoveActionFromChecklistsStatement'
+UpdateCardStagesAndStatusStatement  = require 'data/statements/UpdateCardStagesAndStatusStatement'
 DeleteAllNotesByActionStatement     = require 'data/statements/DeleteAllNotesByActionStatement'
 
 class DeleteActionCommand extends Command
@@ -12,11 +13,14 @@ class DeleteActionCommand extends Command
     conn.execute statement, (err, action) =>
       return callback(err) if err?
       statement = new RemoveActionFromChecklistsStatement(@action.id)
-      conn.execute statement, (err, card) =>
+      conn.execute statement, (err) =>
         return callback(err) if err?
-        statement = new DeleteAllNotesByActionStatement(@action.id)
+        statement = new UpdateCardStagesAndStatusStatement(@action.card)
         conn.execute statement, (err) =>
           return callback(err) if err?
-          callback(null, action)
+          statement = new DeleteAllNotesByActionStatement(@action.id)
+          conn.execute statement, (err) =>
+            return callback(err) if err?
+            callback(null, action)
 
 module.exports = DeleteActionCommand

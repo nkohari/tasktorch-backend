@@ -20,6 +20,7 @@ class DeleteCardCommand extends Command
         stack:     null
         status:    CardStatus.Deleted
         followers: []
+        stages:    []
       })
       conn.execute statement, (err, card, previous) =>
         return callback(err) if err?

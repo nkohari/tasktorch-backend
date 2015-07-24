@@ -12,7 +12,7 @@ class UpdateStatement extends Statement
     unless _.isFunction(patch)
       patch = _.extend patch, {
         version: r.row('version').add(1)
-        updated: new Date()
+        updated: r.now()
       }
 
     if options.expectedVersion?

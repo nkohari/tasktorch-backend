@@ -6,32 +6,42 @@ ActionMovedNote                     = require 'data/documents/notes/ActionMovedN
 AddActionToChecklistStatement       = require 'data/statements/AddActionToChecklistStatement'
 CreateStatement                     = require 'data/statements/CreateStatement'
 RemoveActionFromChecklistsStatement = require 'data/statements/RemoveActionFromChecklistsStatement'
+UpdateCardStagesAndStatusStatement  = require 'data/statements/UpdateCardStagesAndStatusStatement'
 UpdateStatement                     = require 'data/statements/UpdateStatement'
 
 class MoveActionCommand extends Command
 
-  constructor: (@user, @actionid, @checklistid, @cardid, @stageid, @position = 'append') ->
+  constructor: (@user, @action, @checklistid, @cardid, @stageid, @position = 'append') ->
     super()
 
   execute: (conn, callback) ->
-    statement = new RemoveActionFromChecklistsStatement(@actionid)
+    statement = new RemoveActionFromChecklistsStatement(@action.id)
     conn.execute statement, (err) =>
       return callback(err) if err?
-      statement = new AddActionToChecklistStatement(@checklistid, @actionid, @position)
+      statement = new AddActionToChecklistStatement(@checklistid, @action.id, @position)
       conn.execute statement, (err) =>
         return callback(err) if err?
-        statement = new UpdateStatement(Action, @actionid, {
+        statement = new UpdateStatement(Action, @action.id, {
           card:      @cardid
           checklist: @checklistid
           stage:     @stageid
         })
         conn.execute statement, (err, action, previous) =>
           return callback(err) if err?
-          note = ActionMovedNote.create(@user, action, previous)
-          statement = new CreateStatement(note)
-          conn.execute statement, (err) =>
+          @updateCardStatus conn, action.card, previous.card, (err) =>
             return callback(err) if err?
-            callback(null, action)
+            note = ActionMovedNote.create(@user, action, previous)
+            statement = new CreateStatement(note)
+            conn.execute statement, (err) =>
+              return callback(err) if err?
+              callback(null, action)
 
+  updateCardStatus: (conn, currentid, previousid, callback) ->
+    statement = new UpdateCardStagesAndStatusStatement(currentid)
+    conn.execute statement, (err) =>
+      return callback(err) if err?
+      return callback() if currentid == previousid
+      statement = new UpdateCardStagesAndStatusStatement(previousid)
+      conn.execute statement, callback
 
 module.exports = MoveActionCommand

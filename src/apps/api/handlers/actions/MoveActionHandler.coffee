@@ -37,7 +37,7 @@ class MoveActionHandler extends Handler
         return reply err if err?
         reply @response(action)
     else
-      command = new MoveActionCommand(user, action.id, checklist.id, checklist.card, checklist.stage, position)
+      command = new MoveActionCommand(user, action, checklist.id, checklist.card, checklist.stage, position)
       @processor.execute command, (err, action) =>
         return reply err if err?
         reply @response(action)

@@ -23,6 +23,7 @@ class CompleteCardCommand extends Command
           user:   null
           team:   null
           stack:  null
+          stages: []
         })
         conn.execute statement, (err, card, previous) =>
           return callback(err) if err?

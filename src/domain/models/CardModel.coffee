@@ -15,6 +15,7 @@ class CardModel extends Model
     @followers = card.followers
     @stack     = card.stack
     @goals     = card.goals
+    @stages    = card.stages
     @moves     = card.moves
 
 module.exports = CardModel

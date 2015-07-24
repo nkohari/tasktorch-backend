@@ -5,6 +5,7 @@ DocumentStatus                           = require 'data/enums/DocumentStatus'
 MoveAllActionsBetweenChecklistsStatement = require 'data/statements/MoveAllActionsBetweenChecklistsStatement'
 MoveAllActionsToAnotherStageStatement    = require 'data/statements/MoveAllActionsToAnotherStageStatement'
 DeleteAllChecklistsByStageStatement      = require 'data/statements/DeleteAllChecklistsByStageStatement'
+RemoveAllCardsFromStageStatement         = require 'data/statements/RemoveAllCardsFromStageStatement'
 RemoveStageFromKindStatement             = require 'data/statements/RemoveStageFromKindStatement'
 UpdateStatement                          = require 'data/statements/UpdateStatement'
 
@@ -19,15 +20,18 @@ class DeleteStageCommand extends Command
       statement = new MoveAllActionsToAnotherStageStatement(@stage.id, @inheritorStage.id)
       conn.execute statement, (err) =>
         return callback(err) if err?
-        statement = new DeleteAllChecklistsByStageStatement(@stage.id)
+        statement = new RemoveAllCardsFromStageStatement(@stage.id)
         conn.execute statement, (err) =>
           return callback(err) if err?
-          statement = new RemoveStageFromKindStatement(@stage.kind, @stage.id)
+          statement = new DeleteAllChecklistsByStageStatement(@stage.id)
           conn.execute statement, (err) =>
             return callback(err) if err?
-            statement = new UpdateStatement(Stage, @stage.id, {status: DocumentStatus.Deleted})
-            conn.execute statement, (err, stage) =>
+            statement = new RemoveStageFromKindStatement(@stage.kind, @stage.id)
+            conn.execute statement, (err) =>
               return callback(err) if err?
-              callback(null, stage)
+              statement = new UpdateStatement(Stage, @stage.id, {status: DocumentStatus.Deleted})
+              conn.execute statement, (err, stage) =>
+                return callback(err) if err?
+                callback(null, stage)
 
 module.exports = DeleteStageCommand

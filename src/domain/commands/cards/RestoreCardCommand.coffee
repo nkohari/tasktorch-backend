@@ -1,12 +1,12 @@
-r                                    = require 'rethinkdb'
-Command                              = require 'domain/framework/Command'
-Card                                 = require 'data/documents/Card'
-CardRestoredNote                     = require 'data/documents/notes/CardRestoredNote'
-CardStatus                           = require 'data/enums/CardStatus'
-AddCardToStackStatement              = require 'data/statements/AddCardToStackStatement'
-CreateStatement                      = require 'data/statements/CreateStatement'
-UpdateStatement                      = require 'data/statements/UpdateStatement'
-UpdateCardStatusFromActionsStatement = require 'data/statements/UpdateCardStatusFromActionsStatement'
+r                                  = require 'rethinkdb'
+Command                            = require 'domain/framework/Command'
+Card                               = require 'data/documents/Card'
+CardRestoredNote                   = require 'data/documents/notes/CardRestoredNote'
+CardStatus                         = require 'data/enums/CardStatus'
+AddCardToStackStatement            = require 'data/statements/AddCardToStackStatement'
+CreateStatement                    = require 'data/statements/CreateStatement'
+UpdateStatement                    = require 'data/statements/UpdateStatement'
+UpdateCardStagesAndStatusStatement = require 'data/statements/UpdateCardStagesAndStatusStatement'
 
 class RestoreCardCommand extends Command
 
@@ -27,7 +27,7 @@ class RestoreCardCommand extends Command
       statement = new UpdateStatement(Card, @cardid, patch)
       conn.execute statement, (err, card, previous) =>
         return callback(err) if err?
-        statement = new UpdateCardStatusFromActionsStatement(@cardid)
+        statement = new UpdateCardStagesAndStatusStatement(@cardid)
         conn.execute statement, (err, card) =>
           return callback(err) if err?
           note = CardRestoredNote.create(@user, card, previous)
