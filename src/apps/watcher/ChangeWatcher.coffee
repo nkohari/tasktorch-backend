@@ -17,7 +17,9 @@ class ChangeWatcher extends EventEmitter
 
     createSubscription = (doctype, next) =>
       @database.subscribe doctype, (err, subscription) =>
-        return next(err) if err?
+        if err?
+          @log.error "Error subscribing to changes for doctype #{doctype.name}: #{err}"
+          return next(err)
         @log.debug "Subscribed to changes for doctype #{doctype.name} (table #{doctype.getSchema().table})"
         subscription.on 'create', @handleEvent.bind(this, Activity.Created)
         subscription.on 'update', @handleEvent.bind(this, Activity.Changed)

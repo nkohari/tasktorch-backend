@@ -22,7 +22,7 @@ class Subscription extends EventEmitter
       @connection.on('close',   @onClosed)
       @connection.on('timeout', @onTimeout)
       @connection.on('error',   @onError)
-      statement   = new ChangesStatement(@doctype)
+      statement = new ChangesStatement(@doctype)
       @connection.execute statement, (err, cursor) =>
         return callback(err) if err?
         @setState(State.Started)
