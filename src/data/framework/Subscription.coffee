@@ -1,26 +1,41 @@
 EventEmitter     = require 'events'
+arrayEnum        = require 'common/util/arrayEnum'
 ChangesStatement = require 'data/statements/ChangesStatement'
+
+State = arrayEnum [
+  'Stopped'
+  'Starting'
+  'Started'
+]
 
 class Subscription extends EventEmitter
 
-  constructor: (@connectionPool, @doctype) ->
+  constructor: (@log, @connectionPool, @doctype) ->
+    @state = State.Stopped
 
   start: (callback) ->
+    return callback() unless @state is State.Stopped
+    @setState(State.Starting)
     @connectionPool.acquire (err, conn) =>
       return callback(err) if err?
       @connection = conn
+      @connection.on('close',   @onClosed)
+      @connection.on('timeout', @onTimeout)
+      @connection.on('error',   @onError)
       statement   = new ChangesStatement(@doctype)
       @connection.execute statement, (err, cursor) =>
         return callback(err) if err?
-        cursor.each(@onChange, @onClosed)
+        @setState(State.Started)
+        cursor.each(@onChange)
         callback()
 
   restart: (callback = (->)) ->
+    @connection.removeListener('close',   @onClosed)
+    @connection.removeListener('timeout', @onTimeout)
+    @connection.removeListener('error',   @onError)
     @connectionPool.release(@connection)
+    @setState(State.Stopped)
     @start(callback)
-
-  onClosed: ->
-    @restart()
 
   onChange: (err, change) =>
 
@@ -43,5 +58,23 @@ class Subscription extends EventEmitter
         type:     @doctype.name
         document: new @doctype(previous)
       })
+
+    return
+
+  onClosed: =>
+    @log.debug "Subscription for #{@doctype.name}: Connection closed"
+    @restart()
+
+  onTimeout: =>
+    @log.debug "Subscription for #{@doctype.name}: Connection timed out"
+    @restart()
+
+  onError: =>
+    @log.debug "Subscription for #{@doctype.name}: Connection error: #{err}"
+    @restart()
+
+  setState: (state) ->
+    @log.debug("Subscription for #{@doctype.name}: #{@state} -> #{state}")
+    @state = state
 
 module.exports = Subscription

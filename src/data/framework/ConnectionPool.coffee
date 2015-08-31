@@ -18,15 +18,15 @@ class ConnectionPool
   create: (callback) ->
 
     id = ++@count
-    {host, port, db, maxRetries, backoffFactor} = @config.rethinkdb
+    {host, port, db, maxAttempts, backoffFactor} = @config.rethinkdb
 
     operation = retry.operation {
-      retries: maxRetries
+      retries: (maxAttempts - 1) if maxAttempts?
       factor:  backoffFactor
     }
 
     operation.attempt (attempt) =>
-      @log.debug "[db:#{id}] Opening connection to #{host}:#{port}/#{db} (attempt #{attempt}/#{maxRetries})"
+      @log.debug "[db:#{id}] Opening connection to #{host}:#{port}/#{db} (attempt #{attempt}/#{maxAttempts})"
       rethinkdb.connect {host, port, db}, (err, conn) =>
         # Retry the connection a number of times before giving up.
         return if operation.retry(err)

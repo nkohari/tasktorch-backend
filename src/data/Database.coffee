@@ -2,7 +2,7 @@ Subscription = require 'data/framework/Subscription'
 
 class Database
 
-  constructor: (@connectionPool) ->
+  constructor: (@log, @connectionPool) ->
 
   execute: (query, callback) ->
     @connectionPool.acquire (err, conn) =>
@@ -13,7 +13,7 @@ class Database
         callback(null, result)
 
   subscribe: (doctype, callback) ->
-    subscription = new Subscription(@connectionPool, doctype)
+    subscription = new Subscription(@log, @connectionPool, doctype)
     subscription.start (err) =>
       return callback(err) if err?
       callback(null, subscription)
