@@ -11,7 +11,7 @@ class Log
 
     transport = new winston.transports.Console
       level: @config.log.level
-      timestamp: => "#{@app.name} #{process.pid} - [#{humanize.date('Y-m-d h:m:s')}]"
+      timestamp: => "#{@app.name} #{process.pid} - [#{humanize.date('Y-m-d h:i:s')}]"
 
     @logger = new winston.Logger
       transports: [transport]
