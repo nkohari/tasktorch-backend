@@ -8,8 +8,8 @@ class ChecklistGate extends Gate
 
   constructor: (@database) ->
 
-  getAccessList: (stage, callback) ->
-    query = new GetOrgQuery(stage.org)
+  getAccessList: (checklist, callback) ->
+    query = new GetOrgQuery(checklist.org)
     @database.execute query, (err, result) =>
       return callback(err) if err?
       return callback null, _.clone(result.org.members)

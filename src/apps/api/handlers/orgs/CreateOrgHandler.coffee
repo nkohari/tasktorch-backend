@@ -19,7 +19,7 @@ class CreateOrgHandler extends Handler
       name: @mustBe.string().required()
       survey: @mustBe.object()
   
-  constructor: (@processor) ->
+  constructor: (@processor, @onboarder) ->
 
   handle: (request, reply) ->
 
@@ -38,7 +38,9 @@ class CreateOrgHandler extends Handler
       return reply err if err?
       @createDefaultKind user, org, (err) =>
         return reply err if err?
-        return reply @response(org)
+        @onboarder.createSampleCardIfNecessary user, org, (err) =>
+          return reply err if err?
+          return reply @response(org)
 
   createDefaultKind: (user, org, callback) ->
 

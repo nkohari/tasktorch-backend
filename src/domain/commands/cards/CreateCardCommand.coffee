@@ -14,10 +14,9 @@ class CreateCardCommand extends Command
   constructor: (@user, @card, @kind, @stages) ->
 
   execute: (conn, callback) ->
-    statement = new IncrementKindNumberStatement(@kind.id)
-    conn.execute statement, (err, kind) =>
+    @getCardNumber conn, @card, (err, number) =>
       return callback(err) if err?
-      @card.number = kind.nextNumber
+      @card.number = number
       statement = new CreateStatement(@card)
       conn.execute statement, (err, card) =>
         return callback(err) if err?
@@ -36,6 +35,13 @@ class CreateCardCommand extends Command
               conn.execute statement, (err) =>
                 return callback(err) if err?
                 callback(null, card)
+
+  getCardNumber: (conn, card, callback) ->
+    return callback(null, card.number) if card.number?
+    statement = new IncrementKindNumberStatement(@kind.id)
+    conn.execute statement, (err, kind) =>
+      return callback(err) if err?
+      callback null, kind.nextNumber
 
   buildChecklists: (card) ->
 

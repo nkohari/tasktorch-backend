@@ -1,4 +1,5 @@
-_ = require 'lodash'
+_        = require 'lodash'
+UserFlag = require 'data/enums/UserFlag'
 
 class Gatekeeper
 
@@ -15,5 +16,11 @@ class Gatekeeper
     unless gate?
       return callback new Error("Don't know how to resolve access for a document of type #{document.constructor.name}")
     gate.getAccessList(document, callback)
+
+  canUserSetFlag: (granter, grantee, flag, value, callback) ->
+    # TODO: Right now, this only allows granting of the WalkthroughComplete flag
+    # to yourself. This should be expanded if flags continue to be useful.
+    allowed = (granter.id == grantee.id) and (flag == UserFlag.HasCompletedWalkthrough) and (value == true)
+    callback(null, allowed)
 
 module.exports = Gatekeeper

@@ -8,6 +8,7 @@ Log              = require 'common/Log'
 PusherClient     = require 'common/PusherClient'
 Database         = require 'data/Database'
 ConnectionPool   = require 'data/framework/ConnectionPool'
+Onboarder        = require 'data/framework/Onboarder'
 CommandProcessor = require 'domain/CommandProcessor'
 Gatekeeper       = require 'security/Gatekeeper'
 Keymaster        = require 'security/Keymaster'
@@ -29,6 +30,7 @@ class ApiEnvironment
     forge.bind('connectionPool').to.type(ConnectionPool)
     forge.bind('database').to.type(Database)
     forge.bind('processor').to.type(CommandProcessor)
+    forge.bind('onboarder').to.type(Onboarder)
     forge.bind('server').to.type(ApiServer)
 
     for name, type of loadFiles('handlers', __dirname)

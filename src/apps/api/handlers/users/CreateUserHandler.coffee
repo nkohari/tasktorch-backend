@@ -1,10 +1,11 @@
-_                   = require 'lodash'
-Handler             = require 'apps/api/framework/Handler'
-User                = require 'data/documents/User'
-GetOrgQuery         = require 'data/queries/orgs/GetOrgQuery'
-AcceptInviteCommand = require 'domain/commands/invites/AcceptInviteCommand'
-AcceptTokenCommand  = require 'domain/commands/tokens/AcceptTokenCommand'
-CreateUserCommand   = require 'domain/commands/users/CreateUserCommand'
+_                       = require 'lodash'
+Handler                 = require 'apps/api/framework/Handler'
+User                    = require 'data/documents/User'
+GetOrgQuery             = require 'data/queries/orgs/GetOrgQuery'
+GetAllOrgsByMemberQuery = require 'data/queries/orgs/GetAllOrgsByMemberQuery'
+AcceptInviteCommand     = require 'domain/commands/invites/AcceptInviteCommand'
+AcceptTokenCommand      = require 'domain/commands/tokens/AcceptTokenCommand'
+CreateUserCommand       = require 'domain/commands/users/CreateUserCommand'
 
 class CreateUserHandler extends Handler
 
@@ -27,7 +28,7 @@ class CreateUserHandler extends Handler
     'ensure invite is pending'
   ]
 
-  constructor: (@database, @processor, @passwordHasher) ->
+  constructor: (@database, @processor, @passwordHasher, @onboarder) ->
 
   handle: (request, reply) ->
 
@@ -61,6 +62,8 @@ class CreateUserHandler extends Handler
   acceptInviteIfProvided: (user, invite, callback) ->
     return callback() unless invite?
     command = new AcceptInviteCommand(user, user, invite)
-    @processor.execute(command, callback)
+    @processor.execute command, (err) =>
+      return callback(err) if err?
+      @onboarder.createSampleCardIfNecessary(user, invite.org, callback)
 
 module.exports = CreateUserHandler

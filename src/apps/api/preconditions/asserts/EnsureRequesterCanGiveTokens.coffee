@@ -1,6 +1,6 @@
 _            = require 'lodash'
 Precondition = require 'apps/api/framework/Precondition'
-GrantType    = require 'data/enums/GrantType'
+UserFlag     = require 'data/enums/UserFlag'
 
 class EnsureRequesterCanGiveTokens extends Precondition
 
@@ -9,7 +9,7 @@ class EnsureRequesterCanGiveTokens extends Precondition
   execute: (request, reply) ->
     {user} = request.auth.credentials
 
-    unless _.contains(user.grants, GrantType.GiveTokens)
+    unless _.contains(user.flags, UserFlag.CanGiveTokens)
       return reply @error.forbidden("You do not have permission to do that.")
 
     return reply()

@@ -9,6 +9,7 @@ class StageGate extends Gate
   constructor: (@database) ->
 
   getAccessList: (stage, callback) ->
+    return callback(null, []) unless stage.org?
     query = new GetOrgQuery(stage.org)
     @database.execute query, (err, result) =>
       return callback(err) if err?
