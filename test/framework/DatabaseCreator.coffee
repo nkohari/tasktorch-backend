@@ -59,6 +59,11 @@ Tables.orgs = [
   r.table('orgs').indexCreate('members', {multi: true})
 ]
 
+Tables.profiles = [
+  r.tableCreate('profiles')
+  r.table('profiles').indexCreate('user-org', [r.row('user'), r.row('org')])
+]
+
 Tables.sessions = [
   r.tableCreate('sessions')
   r.table('sessions').indexCreate('user')

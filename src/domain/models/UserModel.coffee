@@ -8,6 +8,7 @@ class UserModel extends Model
     @username  = user.username
     @name      = user.name
     @email     = user.email
+    @timezone  = user.timezone
     @flags     = user.flags
     @avatarUrl = @getAvatarUrl(user.email)
 

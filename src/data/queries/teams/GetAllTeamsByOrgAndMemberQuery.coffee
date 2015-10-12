@@ -2,7 +2,7 @@ r     = require 'rethinkdb'
 Team  = require 'data/documents/Team'
 Query = require 'data/framework/queries/Query'
 
-class GetAllTeamsByOrgAndOwnerQuery extends Query
+class GetAllTeamsByOrgAndMemberQuery extends Query
 
   constructor: (orgid, userid, options) ->
     super(Team, options)
@@ -10,4 +10,4 @@ class GetAllTeamsByOrgAndOwnerQuery extends Query
       .filter({org: orgid})
       .coerceTo('array')
 
-module.exports = GetAllTeamsByOrgAndOwnerQuery
+module.exports = GetAllTeamsByOrgAndMemberQuery

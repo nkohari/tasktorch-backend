@@ -15,6 +15,8 @@ class User extends Document
   @field  'password'
   @field  'name'
   @field  'email'
+  @field  'timezone'
+  @field  'profile', {default: {}}
   @field  'flags',   {default: []}
 
 module.exports = User

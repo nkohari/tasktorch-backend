@@ -7,6 +7,7 @@ module.exports = DocTypes = [
   require 'data/documents/Kind'
   require 'data/documents/Note'
   require 'data/documents/Org'
+  require 'data/documents/Profile'
   require 'data/documents/Stack'
   require 'data/documents/Stage'
   require 'data/documents/Team'

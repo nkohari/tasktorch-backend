@@ -1,9 +1,10 @@
-Handler                = require 'apps/api/framework/Handler'
-AcceptInviteCommand    = require 'domain/commands/invites/AcceptInviteCommand'
-CreateSessionCommand   = require 'domain/commands/sessions/CreateSessionCommand'
-Session                = require 'data/documents/Session'
-GetUserByUsernameQuery = require 'data/queries/users/GetUserByUsernameQuery'
-GetUserByEmailQuery    = require 'data/queries/users/GetUserByEmailQuery'
+Handler                   = require 'apps/api/framework/Handler'
+AcceptInviteCommand       = require 'domain/commands/invites/AcceptInviteCommand'
+CreateSessionCommand      = require 'domain/commands/sessions/CreateSessionCommand'
+ChangeUserTimezoneCommand = require 'domain/commands/users/ChangeUserTimezoneCommand'
+Session                   = require 'data/documents/Session'
+GetUserByUsernameQuery    = require 'data/queries/users/GetUserByUsernameQuery'
+GetUserByEmailQuery       = require 'data/queries/users/GetUserByEmailQuery'
 
 class CreateSessionHandler extends Handler
 
@@ -14,6 +15,7 @@ class CreateSessionHandler extends Handler
     payload:
       login:    @mustBe.string().required()
       password: @mustBe.string().required()
+      timezone: @mustBe.string().required()
       invite:   @mustBe.string()
 
   @before [
@@ -24,23 +26,23 @@ class CreateSessionHandler extends Handler
 
   handle: (request, reply) ->
 
-    {login, password} = request.payload
-    {invite}          = request.pre
-
-    @log.inspect(invite)
+    {login, password, timezone} = request.payload
+    {invite} = request.pre
 
     @resolveUser login, (err, user) =>
       return reply err if err?
       return reply @error.forbidden() unless user? and @passwordHasher.verify(user.password, password)
-      @acceptInviteIfProvided user, invite, (err) =>
+      @updateTimezoneIfNecessary user, timezone, (err) =>
         return reply err if err?
-        session = new Session {user: user.id, isActive: true}
-        command = new CreateSessionCommand(user, session)
-        @processor.execute command, (err, session) =>
+        @acceptInviteIfProvided user, invite, (err) =>
           return reply err if err?
-          request.auth.session.set {userid: user.id, sessionid: session.id}
-          reply.state('tt-userid', user.id)
-          reply @response(session)
+          session = new Session {user: user.id, isActive: true}
+          command = new CreateSessionCommand(user, session)
+          @processor.execute command, (err, session) =>
+            return reply err if err?
+            request.auth.session.set {userid: user.id, sessionid: session.id}
+            reply.state('tt-userid', user.id)
+            reply @response(session)
 
   resolveUser: (login, callback) ->
     query = new GetUserByUsernameQuery(login)
@@ -51,6 +53,11 @@ class CreateSessionHandler extends Handler
       @database.execute query, (err, result) =>
         return callback(err) if err?
         callback(null, result.user)
+
+  updateTimezoneIfNecessary: (user, timezone, callback) ->
+    return callback() if user.timezone == timezone
+    command = new ChangeUserTimezoneCommand(user, timezone)
+    @processor.execute(command, callback)
 
   acceptInviteIfProvided: (user, invite, callback) ->
     return callback() unless invite?
