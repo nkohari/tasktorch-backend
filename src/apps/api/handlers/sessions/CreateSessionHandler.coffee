@@ -15,7 +15,7 @@ class CreateSessionHandler extends Handler
     payload:
       login:    @mustBe.string().required()
       password: @mustBe.string().required()
-      timezone: @mustBe.string().required()
+      timezone: @mustBe.string()
       invite:   @mustBe.string()
 
   @before [
@@ -55,7 +55,7 @@ class CreateSessionHandler extends Handler
         callback(null, result.user)
 
   updateTimezoneIfNecessary: (user, timezone, callback) ->
-    return callback() if user.timezone == timezone
+    return callback() if not timezone? or user.timezone == timezone
     command = new ChangeUserTimezoneCommand(user, timezone)
     @processor.execute(command, callback)
 

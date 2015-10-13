@@ -4,7 +4,7 @@ sudo ifconfig lo0 alias 127.0.0.2 up
 sudo ifconfig lo0 alias 127.0.0.3 up
 sudo ifconfig lo0 alias 127.0.0.4 up
 
-ssh -N compose@aws-us-east-1-portal.8.dblayer.com -p 10332 \
+ssh -N compose@aws-us-east-1-portal.8.dblayer.com -p 10335 \
   -L 127.0.0.2:8080:10.4.64.34:8080 \
   -L 127.0.0.3:8080:10.4.64.35:8080 \
   -L 127.0.0.4:8080:10.4.64.36:8080 \
