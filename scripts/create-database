@@ -1,18 +1,43 @@
-#!/usr/bin/env ./node_modules/coffee-script/bin/coffee
+#!/usr/bin/env NODE_PATH=src:test node
 
-DatabaseCreator = require 'test/framework/DatabaseCreator'
+require('coffee-script/register');
 
-unless process.argv.length == 4
-  console.error "Usage: create-database <host> <dbname>"
-  process.exit(1)
+var fs = require('fs');
+var path = require('path');
+var DatabaseCreator = require('../test/framework/DatabaseCreator');
 
-host   = process.argv[2]
-dbname = process.argv[3]
+if (process.argv.length <= 4) {
+  console.error("Usage: create-database <dbname> <host:port> [<authkey> <pubkey>]");
+  process.exit(1);
+}
 
-console.log "Creating database #{dbname}"
-DatabaseCreator.create dbname, {host}, (err) ->
-  if err?
-    console.error "Error creating database: #{err}"
-    process.exit(1)
-  console.log "Database created successfully"
-  process.exit(0)
+var dbname = process.argv[2];
+var tokens = process.argv[3].split(':');
+var host   = tokens[0];
+var port   = tokens[1];
+
+var authKey = undefined;
+var ssl = undefined;
+if (process.argv.length > 4) {
+  authKey = process.argv[4];
+  ssl = {ca: fs.readFileSync(process.argv[5])}
+}
+
+var options = {
+  host: host,
+  port: port,
+  authKey: authKey,
+  ssl: ssl
+};
+
+console.log(options);
+
+console.log("Creating database " + dbname);
+DatabaseCreator.create(dbname, options, function(err) {
+  if (err) {
+    console.error("Error creating database: " + err.stack);
+    process.exit(1);
+  }
+  console.log("Database created successfully")
+  process.exit(0);
+});
