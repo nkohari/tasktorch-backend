@@ -10,13 +10,13 @@ class User extends Document
   @field  'version'
   @field  'created'
   @field  'updated'  
-  @field  'status',  {default: DocumentStatus.Normal}
+  @field  'status',   {default: DocumentStatus.Normal}
   @field  'username'
   @field  'password'
   @field  'name'
   @field  'email'
-  @field  'timezone'
-  @field  'profile', {default: {}}
-  @field  'flags',   {default: []}
+  @field  'timezone', {default: null}
+  @field  'profile',  {default: {}}
+  @field  'flags',    {default: []}
 
 module.exports = User
