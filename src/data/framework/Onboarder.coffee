@@ -9,7 +9,7 @@ GetKindQuery                = require 'data/queries/kinds/GetKindQuery'
 GetAllOrgsByMemberQuery     = require 'data/queries/orgs/GetAllOrgsByMemberQuery'
 GetSpecialStackByUserQuery  = require 'data/queries/stacks/GetSpecialStackByUserQuery'
 GetAllStagesByKindQuery     = require 'data/queries/stages/GetAllStagesByKindQuery'
-CreateActionCommand         = require 'domain/commands/actions/CreateActionCommand'
+BulkCreateActionsCommand    = require 'domain/commands/actions/BulkCreateActionsCommand'
 CreateCardCommand           = require 'domain/commands/cards/CreateCardCommand'
 
 SAMPLE_CARD =
@@ -77,10 +77,9 @@ class Onboarder
               return callback err if err?
 
               checklists = _.object _.map result.checklists, (checklist) -> [checklist.stage, checklist]
-              @log.inspect checklists
 
-              createAction = (data, next) =>
-                action = new Action {
+              actions = _.map SAMPLE_CARD.actions, (data) =>
+                new Action {
                   org:       org.id
                   card:      card.id
                   checklist: checklists[data.stage].id
@@ -89,9 +88,8 @@ class Onboarder
                   status:    data.status
                   user:      user.id
                 }
-                command = new CreateActionCommand(user, action)
-                @processor.execute(command, next)
 
-              async.each(SAMPLE_CARD.actions, createAction, callback)
+              command = new BulkCreateActionsCommand(user, card, actions)
+              @processor.execute(command, callback)
 
 module.exports = Onboarder
