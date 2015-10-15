@@ -69,7 +69,7 @@ class Subscription extends EventEmitter
     @log.debug "Subscription for #{@doctype.name}: Connection timed out"
     @restart()
 
-  onError: =>
+  onError: (err) =>
     @log.debug "Subscription for #{@doctype.name}: Connection error: #{err}"
     @restart()
 
