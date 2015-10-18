@@ -30,12 +30,14 @@ class Subscription extends EventEmitter
         callback()
 
   restart: (callback = (->)) ->
+    @setState(State.Stopped)
     @connection.removeListener('close',   @onClosed)
     @connection.removeListener('timeout', @onTimeout)
     @connection.removeListener('error',   @onError)
-    @connectionPool.release(@connection)
-    @setState(State.Stopped)
-    @start(callback)
+    @connectionPool.release @connection, (err) =>
+      if err?
+        @log.warn "Subscription for #{@doctype.name}: Error releasing connection: #{err}"
+      @start(callback)
 
   onChange: (err, change) =>
 
