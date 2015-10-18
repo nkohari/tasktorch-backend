@@ -47,8 +47,8 @@ class ConnectionPool
   acquire: (callback) ->
     @pool.acquire(callback)
 
-  release: (callback) ->
-    @pool.release(callback)
+  release: (conn) ->
+    @pool.release(conn)
 
   shutdown: ->
     @log.info 'Flushing connection pool'
