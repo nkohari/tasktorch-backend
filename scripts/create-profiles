@@ -1,0 +1,53 @@
+#!/usr/bin/env NODE_PATH=src ./node_modules/coffee-script/bin/coffee
+
+fs    = require 'fs'
+path  = require 'path'
+_     = require 'lodash'
+async = require 'async'
+r     = require 'rethinkdb'
+uuid  = require 'common/util/uuid'
+
+[host, port, authKey, cert] = process.argv.slice(2)
+
+if cert?
+  ssl = {ca: fs.readFileSync(path.resolve(process.cwd(), cert))}
+
+options = {
+  host
+  port
+  authKey
+  ssl
+}
+
+handleOrg = (conn, org, callback) ->
+  async.map 
+
+
+r.connect options, (err, conn) ->
+  if err?
+    console.log(err)
+    process.exit(1)
+  conn.use('tasktorch')
+
+  r.table('orgs').coerceTo('array').run conn, (err, orgs) ->
+
+    profiles = _.flatten _.map orgs, (org) ->
+      _.map org.members, (userid) -> {
+        id:       uuid()
+        version:  0
+        created:  r.now()
+        updated:  r.now()
+        status:   'Normal'
+        org:      org.id
+        user:     userid
+        contacts: []
+      }
+
+    console.log("Creating #{profiles.length} profiles for #{orgs.length} orgs")
+    r.table('profiles').insert(profiles).run conn, (err) ->
+      if err?
+        console.log("Error: #{err}")
+        process.exit(1)
+      else
+        console.log("Complete")
+        process.exit(0)
