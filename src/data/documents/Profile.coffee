@@ -11,8 +11,8 @@ class Profile extends Document
   @field  'created'
   @field  'updated'
   @field  'status',   {default: DocumentStatus.Normal}
-  @field  'title'
-  @field  'bio'
+  @field  'title',    {default: null}
+  @field  'bio',      {default: null}
   @field  'contacts', {default: []}
 
   @hasOne 'user',     {type: 'User'}

@@ -1,4 +1,5 @@
 Command                          = require 'domain/framework/Command'
+CreateUserProfileStatement       = require 'data/statements/CreateUserProfileStatement'
 CreateDefaultUserStacksStatement = require 'data/statements/CreateDefaultUserStacksStatement'
 AddMemberToOrgStatement          = require 'data/statements/AddMemberToOrgStatement'
 
@@ -12,9 +13,12 @@ class AddMemberToOrgCommand extends Command
     statement = new CreateDefaultUserStacksStatement(@user.id, @org.id)
     conn.execute statement, (err) =>
       return callback(err) if err?
-      statement = new AddMemberToOrgStatement(@org.id, @user.id)
-      conn.execute statement, (err, org) =>
+      statement = new CreateUserProfileStatement(@user.id, @org.id)
+      conn.execute statement, (err, profile) =>
         return callback(err) if err?
-        callback(null, org)
+        statement = new AddMemberToOrgStatement(@org.id, @user.id)
+        conn.execute statement, (err, org) =>
+          return callback(err) if err?
+          callback(null, org)
 
 module.exports = AddMemberToOrgCommand
