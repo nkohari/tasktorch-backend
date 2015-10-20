@@ -19,10 +19,6 @@ options = {
   ssl
 }
 
-handleOrg = (conn, org, callback) ->
-  async.map 
-
-
 r.connect options, (err, conn) ->
   if err?
     console.log(err)
@@ -44,6 +40,7 @@ r.connect options, (err, conn) ->
       }
 
     console.log("Creating #{profiles.length} profiles for #{orgs.length} orgs")
+
     r.table('profiles').insert(profiles).run conn, (err) ->
       if err?
         console.log("Error: #{err}")
