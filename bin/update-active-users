@@ -1,0 +1,63 @@
+#!/usr/bin/env NODE_PATH=src ./node_modules/coffee-script/bin/coffee
+
+_                       = require 'lodash'
+r                       = require 'rethinkdb'
+Forge                   = require 'forge-di'
+Application             = require 'common/Application'
+AWSClientFactory        = require 'common/AWSClientFactory'
+Config                  = require 'common/Config'
+JobQueue                = require 'common/JobQueue'
+Log                     = require 'common/Log'
+OrgStatus               = require 'data/enums/OrgStatus'
+ConnectionPool          = require 'data/framework/ConnectionPool'
+DocTypes                = require 'data/framework/DocTypes'
+Database                = require 'data/Database'
+GetAllOrgsByStatusQuery = require 'data/queries/orgs/GetAllOrgsByStatusQuery'
+UpdateActiveUsersJob    = require 'domain/jobs/UpdateActiveUsersJob'
+
+class UpdaterEnvironment
+
+  setup: (app, forge) ->
+    forge.bind('app').to.instance(app)
+    forge.bind('config').to.type(Config)
+    forge.bind('log').to.type(Log)
+    forge.bind('aws').to.type(AWSClientFactory)
+    forge.bind('jobQueue').to.type(JobQueue)
+    forge.bind('connectionPool').to.type(ConnectionPool)
+    forge.bind('database').to.type(Database)
+
+class UpdaterApplication extends Application
+
+  name: 'update-active-users'
+
+  constructor: ->
+    super(new UpdaterEnvironment())
+
+  start: ->
+
+    log      = @forge.get('log')
+    jobQueue = @forge.get('jobQueue')
+    database = @forge.get('database')
+
+    log.info("Getting list of active orgs")
+
+    query = new GetAllOrgsByStatusQuery(OrgStatus.Normal)
+    database.execute query, (err, result) =>
+
+      if err?
+        log.error("Error retrieving orgs: #{err}")
+        @stop(1)
+
+      {orgs} = result
+      log.info("Creating UpdateActiveUsersJobs for #{orgs.length} active orgs")
+      jobs = _.map orgs, (org) => new UpdateActiveUsersJob(org.id)
+
+      jobQueue.enqueueBatch jobs, (err) =>
+        if err?
+          log.error("Couldn't enqueue jobs: #{err.stack ? err}")
+          @stop(1)
+        log.info("Process completed successfully")
+        @stop()
+
+app = new UpdaterApplication()
+app.start()

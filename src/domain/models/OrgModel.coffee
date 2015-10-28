@@ -7,5 +7,6 @@ class OrgModel extends Model
     @name    = org.name
     @leaders = org.leaders
     @members = org.members
+    @email   = org.email
 
 module.exports = OrgModel

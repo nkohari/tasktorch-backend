@@ -1,29 +1,28 @@
-Intercom       = require 'intercom.io'
-Activity       = require 'apps/watcher/framework/Activity'
-Rule           = require 'apps/watcher/framework/Rule'
-GetInviteQuery = require 'data/queries/invites/GetInviteQuery'
+JobHandler               = require 'apps/worker/framework/JobHandler'
+GetInviteQuery           = require 'data/queries/invites/GetInviteQuery'
+CreateIntercomCompanyJob = require 'domain/jobs/CreateIntercomCompanyJob'
 
-class SendOrgToIntercom extends Rule
+class CreateIntercomCompanyHandler extends JobHandler
+
+  handles: CreateIntercomCompanyJob
 
   constructor: (@log, intercom) ->
+    super()
     @intercom = intercom.createClient()
 
-  offer: (activity, event) ->
-    activity == Activity.Created and event.type == 'Org'
+  handle: (job, callback) ->
 
-  handle: (activity, event, callback) ->
-
-    org = event.document
+    {org, survey} = job
 
     params =
       name:              org.name
       company_id:        org.id
       remote_created_at: org.created
       custom_attributes:
-        'Expected Seats': @formatSize(org.survey.size)
-        'Company Size':   @formatSize(org.survey.tsp)
-        'Creator Role':   @formatRole(org.survey.role)
-        'Expected Kinds': org.survey.kinds.join(', ')
+        'Expected Seats': @formatSize(survey.size)
+        'Company Size':   @formatSize(survey.tsp)
+        'Creator Role':   @formatRole(survey.role)
+        'Expected Kinds': survey.kinds.join(', ')
 
     @log.debug "[intercom] Sending org #{org.id} (#{org.name}) to Intercom"
     @intercom.createCompany(params, callback)
@@ -44,4 +43,4 @@ class SendOrgToIntercom extends Rule
       when 'exec'     then 'Executive leader'
       else 'Unknown'
 
-module.exports = SendOrgToIntercom
+module.exports = CreateIntercomCompanyHandler

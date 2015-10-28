@@ -1,6 +1,6 @@
-_              = require 'lodash'
-Document       = require 'data/framework/Document'
-DocumentStatus = require 'data/enums/DocumentStatus'
+_         = require 'lodash'
+Document  = require 'data/framework/Document'
+OrgStatus = require 'data/enums/OrgStatus'
 
 class Org extends Document
 
@@ -11,9 +11,11 @@ class Org extends Document
   @field   'version'
   @field   'created'
   @field   'updated'
-  @field   'status',  {default: DocumentStatus.Normal}
+  @field   'status',  {default: OrgStatus.Normal}
   @field   'name'
+  @field   'email'
   @field   'survey'
+  @field   'billing', {default: null}
 
   @hasMany 'members', {type: 'User', default: []}
   @hasMany 'leaders', {type: 'User', default: []}

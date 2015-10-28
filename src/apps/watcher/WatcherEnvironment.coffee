@@ -1,15 +1,15 @@
-path                  = require 'path'
-_                     = require 'lodash'
-loadFiles             = require 'common/util/loadFiles'
-ChangeWatcher         = require 'apps/watcher/ChangeWatcher'
-AWSClientFactory      = require 'common/AWSClientFactory'
-IntercomClientFactory = require 'common/IntercomClientFactory'
-Config                = require 'common/Config'
-Log                   = require 'common/Log'
-PusherClient          = require 'common/PusherClient'
-Database              = require 'data/Database'
-ConnectionPool        = require 'data/framework/ConnectionPool'
-Gatekeeper            = require 'security/Gatekeeper'
+path             = require 'path'
+_                = require 'lodash'
+loadFiles        = require 'common/util/loadFiles'
+ChangeWatcher    = require 'apps/watcher/ChangeWatcher'
+AWSClientFactory = require 'common/AWSClientFactory'
+Config           = require 'common/Config'
+JobQueue         = require 'common/JobQueue'
+Log              = require 'common/Log'
+PusherClient     = require 'common/PusherClient'
+Database         = require 'data/Database'
+ConnectionPool   = require 'data/framework/ConnectionPool'
+Gatekeeper       = require 'security/Gatekeeper'
 
 class WatcherEnvironment
 
@@ -23,7 +23,7 @@ class WatcherEnvironment
     forge.bind('database').to.type(Database)
     forge.bind('gatekeeper').to.type(Gatekeeper)
     forge.bind('aws').to.type(AWSClientFactory)
-    forge.bind('intercom').to.type(IntercomClientFactory)
+    forge.bind('jobQueue').to.type(JobQueue)
     forge.bind('pusher').to.type(PusherClient)
     forge.bind('watcher').to.type(ChangeWatcher)
 

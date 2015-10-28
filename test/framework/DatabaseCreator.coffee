@@ -57,6 +57,7 @@ Tables.orgs = [
   r.tableCreate('orgs')
   r.table('orgs').indexCreate('leaders', {multi: true})
   r.table('orgs').indexCreate('members', {multi: true})
+  r.table('orgs').indexCreate('customer', r.row('billing')('id'))
 ]
 
 Tables.profiles = [

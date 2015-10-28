@@ -9,13 +9,13 @@ stylus    = require 'stylus'
 yaml      = require 'yamljs'
 Email     = require './Email'
 
-class Renderer
+class EmailRenderer
 
   constructor: (@log, @config) ->
     root = path.resolve(__dirname, 'templates')
     @styles = @loadStyles(root)
     @templates = @compileTemplates(root)
-    @log.debug "Compiled #{_.size(@templates)} templates"
+    @log.debug "Compiled #{_.size(@templates)} email templates"
 
   render: (job) ->
 
@@ -76,4 +76,4 @@ class Renderer
       renderVars: (params) -> yaml.parse(varsFunc(params))
     }
 
-module.exports = Renderer
+module.exports = EmailRenderer

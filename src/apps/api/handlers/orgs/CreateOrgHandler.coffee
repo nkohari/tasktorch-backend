@@ -28,6 +28,7 @@ class CreateOrgHandler extends Handler
 
     org = new Org {
       name:    name
+      email:   user.email
       survey:  survey
       leaders: [user.id]
       members: [user.id]

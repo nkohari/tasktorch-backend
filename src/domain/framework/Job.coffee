@@ -1,19 +1,35 @@
-_ = require 'lodash'
+path      = require 'path'
+_         = require 'lodash'
+loadFiles = require 'common/util/loadFiles'
+
+CLASSES = undefined
+getClassHash = ->
+  unless CLASSES?
+    files   = loadFiles('jobs', path.resolve(__dirname, '..'))
+    CLASSES = _.indexBy files, (t) -> t.name.replace(/Job$/, '')
+  return CLASSES
 
 class Job
 
   @fromSQSMessage: (message) ->
-    job = new this()
 
-    job.id     = message.Id
+    data  = JSON.parse(message.Body)
+    klass = getClassHash()[data.type]
+
+    unless klass?
+      throw new Error("Don't know how to create a job of type #{data.type}")
+
+    job = new klass()
+
+    job.id     = message.MessageId
     job.handle = message.ReceiptHandle
 
-    for key, value of JSON.parse(message.Body)
+    for key, value of data
       job[key] = value
 
     return job
 
   constructor: ->
-    @type = @constructor.name.replace(/Job/, '')
+    @type = @constructor.name.replace(/Job$/, '')
 
 module.exports = Job

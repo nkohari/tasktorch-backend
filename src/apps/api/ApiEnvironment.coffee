@@ -1,18 +1,21 @@
-path             = require 'path'
-_                = require 'lodash'
-ApiServer        = require 'apps/api/ApiServer'
-loadFiles        = require 'common/util/loadFiles'
-humanize         = require 'common/util/humanize'
-Config           = require 'common/Config'
-Log              = require 'common/Log'
-PusherClient     = require 'common/PusherClient'
-Database         = require 'data/Database'
-ConnectionPool   = require 'data/framework/ConnectionPool'
-Onboarder        = require 'data/framework/Onboarder'
-CommandProcessor = require 'domain/CommandProcessor'
-Gatekeeper       = require 'security/Gatekeeper'
-Keymaster        = require 'security/Keymaster'
-PasswordHasher   = require 'security/PasswordHasher'
+path                = require 'path'
+_                   = require 'lodash'
+ApiServer           = require 'apps/api/ApiServer'
+loadFiles           = require 'common/util/loadFiles'
+humanize            = require 'common/util/humanize'
+AWSClientFactory    = require 'common/AWSClientFactory'
+Config              = require 'common/Config'
+JobQueue            = require 'common/JobQueue'
+Log                 = require 'common/Log'
+PusherClient        = require 'common/PusherClient'
+StripeClientFactory = require 'common/StripeClientFactory'
+Database            = require 'data/Database'
+ConnectionPool      = require 'data/framework/ConnectionPool'
+Onboarder           = require 'data/framework/Onboarder'
+CommandProcessor    = require 'domain/CommandProcessor'
+Gatekeeper          = require 'security/Gatekeeper'
+Keymaster           = require 'security/Keymaster'
+PasswordHasher      = require 'security/PasswordHasher'
 
 class ApiEnvironment
 
@@ -25,11 +28,14 @@ class ApiEnvironment
     forge.bind('gatekeeper').to.type(Gatekeeper)
     forge.bind('keymaster').to.type(Keymaster)
     forge.bind('passwordHasher').to.type(PasswordHasher)
+    forge.bind('aws').to.type(AWSClientFactory)
     forge.bind('pusher').to.type(PusherClient)
+    forge.bind('stripe').to.type(StripeClientFactory)
 
     forge.bind('connectionPool').to.type(ConnectionPool)
     forge.bind('database').to.type(Database)
     forge.bind('processor').to.type(CommandProcessor)
+    forge.bind('jobQueue').to.type(JobQueue)
     forge.bind('onboarder').to.type(Onboarder)
     forge.bind('server').to.type(ApiServer)
 

@@ -1,9 +1,9 @@
 EventEmitter = require 'events'
 async        = require 'async'
+DocTypes     = require 'data/framework/DocTypes'
 Schema       = require 'data/framework/Schema'
 Subscription = require 'data/framework/Subscription'
 Activity     = require './framework/Activity'
-DocTypes     = require './framework/DocTypes'
 
 class ChangeWatcher extends EventEmitter
 
@@ -33,14 +33,10 @@ class ChangeWatcher extends EventEmitter
       callback()
 
   handleEvent: (activity, event, callback) ->
-    @log.debug("#{activity}: #{event.type} #{event.document.id}")
+    @log.debug("[change] #{activity}: #{event.type} #{event.document.id}")
     delegate = (rule, next) =>
-      @log.debug "Offering change to #{rule.constructor.name}"
       if rule.offer(activity, event)
-        @log.debug "#{rule.constructor.name} accepted, dispatching event to rule"
         rule.handle(activity, event, next)
-      else
-        @log.debug "#{rule.constructor.name} declined"
       next()
     async.eachSeries @rules, delegate, (err) =>
       @log.error("Error handling event: #{err.stack ? err}") if err?
