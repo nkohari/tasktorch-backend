@@ -13,7 +13,7 @@ ConnectionPool          = require 'data/framework/ConnectionPool'
 DocTypes                = require 'data/framework/DocTypes'
 Database                = require 'data/Database'
 GetAllOrgsByStatusQuery = require 'data/queries/orgs/GetAllOrgsByStatusQuery'
-UpdateActiveUsersJob    = require 'domain/jobs/UpdateActiveUsersJob'
+UpdateActiveMembersJob  = require 'domain/jobs/UpdateActiveMembersJob'
 
 class UpdaterEnvironment
 
@@ -49,8 +49,8 @@ class UpdaterApplication extends Application
         @stop(1)
 
       {orgs} = result
-      log.info("Creating UpdateActiveUsersJobs for #{orgs.length} active orgs")
-      jobs = _.map orgs, (org) => new UpdateActiveUsersJob(org.id)
+      log.info("Creating UpdateActiveMembersJobs for #{orgs.length} active orgs")
+      jobs = _.map orgs, (org) => new UpdateActiveMembersJob(org.id)
 
       jobQueue.enqueueBatch jobs, (err) =>
         if err?

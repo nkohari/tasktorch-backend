@@ -24,7 +24,7 @@ class Query
   prepare: (conn, callback) ->
     @_addExpansionClause()    if @expansions?
     @_addPluckClause()        if @fields?
-    @_addStatusFilterClause() unless @options.allowDeleted
+    @_addStatusFilterClause() unless @options.allowDeleted or !@schema.hasProperty('status')
     callback()
 
   run: (conn, callback) ->

@@ -32,14 +32,14 @@ class ChangeWatcher extends EventEmitter
       @log.debug "Subscribed to changes on #{@subscriptions.length} tables"
       callback()
 
-  handleEvent: (activity, event, callback) ->
+  handleEvent: (activity, event) ->
     @log.debug("[change] #{activity}: #{event.type} #{event.document.id}")
     delegate = (rule, next) =>
       if rule.offer(activity, event)
         rule.handle(activity, event, next)
       next()
     async.eachSeries @rules, delegate, (err) =>
-      @log.error("Error handling event: #{err.stack ? err}") if err?
-      @log.debug("Done handling event")
+      if err?
+        @log.error("Error handling event: #{err.stack ? err}")
 
 module.exports = ChangeWatcher

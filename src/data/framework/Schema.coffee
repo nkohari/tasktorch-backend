@@ -47,7 +47,7 @@ class Schema
     @properties
 
   getProperty: (name) ->
-    unless @properties[name]?
+    unless @hasProperty(name)
       throw new Error("Schema #{@name} does not have a property named #{name}")
     @properties[name]
     
@@ -56,5 +56,8 @@ class Schema
 
   getPlural: ->
     @naming.plural
+
+  hasProperty: (name) ->
+    @properties[name]?
 
 module.exports = Schema

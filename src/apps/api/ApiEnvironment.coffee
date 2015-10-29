@@ -13,6 +13,7 @@ Database            = require 'data/Database'
 ConnectionPool      = require 'data/framework/ConnectionPool'
 Onboarder           = require 'data/framework/Onboarder'
 CommandProcessor    = require 'domain/CommandProcessor'
+EventSpool          = require 'domain/EventSpool'
 Gatekeeper          = require 'security/Gatekeeper'
 Keymaster           = require 'security/Keymaster'
 PasswordHasher      = require 'security/PasswordHasher'
@@ -35,6 +36,7 @@ class ApiEnvironment
     forge.bind('connectionPool').to.type(ConnectionPool)
     forge.bind('database').to.type(Database)
     forge.bind('processor').to.type(CommandProcessor)
+    forge.bind('spool').to.type(EventSpool)
     forge.bind('jobQueue').to.type(JobQueue)
     forge.bind('onboarder').to.type(Onboarder)
     forge.bind('server').to.type(ApiServer)

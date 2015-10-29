@@ -28,6 +28,12 @@ Tables.checklists = [
   r.table('checklists').indexCreate('stage')
 ]
 
+Tables.events = [
+  r.tableCreate('events')
+  r.table('events').indexCreate('user')
+  r.table('events').indexCreate('org')
+]
+
 Tables.goals = [
   r.tableCreate('goals')
   r.table('goals').indexCreate('org')

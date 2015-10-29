@@ -1,6 +1,7 @@
 _           = require 'lodash'
 Handler     = require 'apps/api/framework/Handler'
 GetOrgQuery = require 'data/queries/orgs/GetOrgQuery'
+GetOrgEvent = require 'domain/events/GetOrgEvent'
 
 class GetOrgHandler extends Handler
 
@@ -10,13 +11,15 @@ class GetOrgHandler extends Handler
     'resolve query options'
   ]
 
-  constructor: (@database) ->
+  constructor: (@database, @spool) ->
 
   handle: (request, reply) ->
 
     {options} = request.pre
     {orgid}   = request.params
     {user}    = request.auth.credentials
+
+    @spool.write new GetOrgEvent(user.id, orgid)
 
     query = new GetOrgQuery(orgid, options)
     @database.execute query, (err, result) =>

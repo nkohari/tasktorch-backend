@@ -17,8 +17,9 @@ class Org extends Document
   @field   'survey'
   @field   'billing', {default: null}
 
-  @hasMany 'members', {type: 'User', default: []}
-  @hasMany 'leaders', {type: 'User', default: []}
+  @hasMany 'members',       {type: 'User', default: []}
+  @hasMany 'leaders',       {type: 'User', default: []}
+  @hasMany 'activeMembers', {type: 'User', default: []}
 
   hasLeader: (userid) ->
     _.contains(@leaders, userid)

@@ -12,10 +12,10 @@ class CreateStatement extends Statement
     timestamp = new Date()
 
     document.id      ?= uuid()
-    document.version ?= 0
-    document.status  ?= DocumentStatus.Normal
-    document.created ?= timestamp
-    document.updated ?= timestamp
+    document.version ?= 0                     if @schema.hasProperty('version')
+    document.status  ?= DocumentStatus.Normal if @schema.hasProperty('status')
+    document.created ?= timestamp             if @schema.hasProperty('created')
+    document.updated ?= timestamp             if @schema.hasProperty('updated')
 
     @rql = r.table(@schema.table).insert(document, {returnChanges: true})
 
