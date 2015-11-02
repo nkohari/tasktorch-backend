@@ -15,7 +15,7 @@ class Org extends Document
   @field   'name'
   @field   'email'
   @field   'survey'
-  @field   'billing', {default: null}
+  @field   'account', {default: null}
 
   @hasMany 'members',       {type: 'User', default: []}
   @hasMany 'leaders',       {type: 'User', default: []}

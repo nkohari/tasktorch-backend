@@ -1,9 +1,9 @@
 _ = require 'lodash'
 
-class BillingInfo
+class AccountInfo
 
   constructor: (data) ->
     @id      = data.id
     @balance = data.account_balance
 
-module.exports = BillingInfo
+module.exports = AccountInfo

@@ -1,7 +1,7 @@
 _                         = require 'lodash'
-BillingSubscriptionStatus = require 'data/enums/BillingSubscriptionStatus'
+AccountSubscriptionStatus = require 'data/enums/AccountSubscriptionStatus'
 
-class BillingSubscription
+class AccountSubscription
 
   constructor: (data) ->
     @id          = data.id
@@ -17,11 +17,11 @@ class BillingSubscription
 
   convertStatus: (str) ->
     switch str
-      when 'trialing'  then BillingSubscriptionStatus.Trial
-      when 'active'    then BillingSubscriptionStatus.Active
-      when 'past_due'  then BillingSubscriptionStatus.PastDue
-      when 'canceled'  then BillingSubscriptionStatus.Canceled
+      when 'trialing'  then AccountSubscriptionStatus.Trial
+      when 'active'    then AccountSubscriptionStatus.Active
+      when 'past_due'  then AccountSubscriptionStatus.PastDue
+      when 'canceled'  then AccountSubscriptionStatus.Canceled
       else
         throw new Error("Unknown subscription status #{str}")
 
-module.exports = BillingSubscription
+module.exports = AccountSubscription

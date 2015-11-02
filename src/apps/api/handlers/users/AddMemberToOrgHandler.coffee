@@ -1,5 +1,6 @@
-Handler               = require 'apps/api/framework/Handler'
-AddMemberToOrgCommand = require 'domain/commands/users/AddMemberToOrgCommand'
+Handler                = require 'apps/api/framework/Handler'
+AddMemberToOrgCommand  = require 'domain/commands/users/AddMemberToOrgCommand'
+UpdateActiveMembersJob = require 'domain/jobs/UpdateActiveMembersJob'
 
 class AddMemberToOrgHandler extends Handler
 
@@ -15,7 +16,7 @@ class AddMemberToOrgHandler extends Handler
     'ensure requester can access org'
   ]
 
-  constructor: (@processor) ->
+  constructor: (@processor, @jobQueue) ->
 
   handle: (request, reply) ->
 
@@ -28,6 +29,8 @@ class AddMemberToOrgHandler extends Handler
     command = new AddMemberToOrgCommand(requester, user, org)
     @processor.execute command, (err, org) =>
       return reply err if err?
-      return reply @response(org)
+      job = new UpdateActiveMembersJob(org.id)
+      @jobQueue.enqueue job, (err) =>
+        return reply @response(org)
 
 module.exports = AddMemberToOrgHandler

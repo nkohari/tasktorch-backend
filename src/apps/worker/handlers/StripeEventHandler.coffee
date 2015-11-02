@@ -1,13 +1,13 @@
 JobHandler                       = require 'apps/worker/framework/JobHandler'
-BillingInfo                      = require 'data/structs/BillingInfo'
-BillingInvoice                   = require 'data/structs/BillingInvoice'
-BillingSource                    = require 'data/structs/BillingSource'
-BillingSubscription              = require 'data/structs/BillingSubscription'
+AccountInfo                      = require 'data/structs/AccountInfo'
+AccountInvoice                   = require 'data/structs/AccountInvoice'
+AccountSource                    = require 'data/structs/AccountSource'
+AccountSubscription              = require 'data/structs/AccountSubscription'
 StripeEventJob                   = require 'domain/jobs/StripeEventJob'
-AddOrChangeBillingInvoiceCommand = require 'domain/commands/billing/AddOrChangeBillingInvoiceCommand'
-ChangeBillingInfoCommand         = require 'domain/commands/billing/ChangeBillingInfoCommand'
-ChangeBillingSubscriptionCommand = require 'domain/commands/billing/ChangeBillingSubscriptionCommand'
-ChangeBillingSourceCommand       = require 'domain/commands/billing/ChangeBillingSourceCommand'
+AddOrChangeAccountInvoiceCommand = require 'domain/commands/accounts/AddOrChangeAccountInvoiceCommand'
+ChangeAccountInfoCommand         = require 'domain/commands/accounts/ChangeAccountInfoCommand'
+ChangeAccountSubscriptionCommand = require 'domain/commands/accounts/ChangeAccountSubscriptionCommand'
+ChangeAccountSourceCommand       = require 'domain/commands/accounts/ChangeAccountSourceCommand'
 
 class StripeEventHandler extends JobHandler
 
@@ -37,19 +37,19 @@ class StripeEventHandler extends JobHandler
 
       when 'customer.created', 'customer.updated'
         customer = event.data.object
-        return new ChangeBillingInfoCommand(customer.metadata.org, new BillingInfo(customer))
+        return new ChangeAccountInfoCommand(customer.metadata.org, new AccountInfo(customer))
 
       when 'customer.subscription.created', 'customer.subscription.updated'
         subscription = event.data.object
-        return new ChangeBillingSubscriptionCommand(subscription.customer, new BillingSubscription(subscription))
+        return new ChangeAccountSubscriptionCommand(subscription.customer, new AccountSubscription(subscription))
 
       when 'customer.source.created', 'customer.source.updated'
         source = event.data.object
-        return new ChangeBillingSourceCommand(source.customer, new BillingSource(source))
+        return new ChangeAccountSourceCommand(source.customer, new AccountSource(source))
 
       when 'invoice.created', 'invoice.updated', 'invoice.payment_succeeded', 'invoice.payment_failed'
         invoice = event.data.object
-        return new AddOrChangeBillingInvoiceCommand(invoice.customer, new BillingInvoice(invoice))
+        return new AddOrChangeAccountInvoiceCommand(invoice.customer, new AccountInvoice(invoice))
 
     return null
 

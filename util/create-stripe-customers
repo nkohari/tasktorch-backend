@@ -1,0 +1,48 @@
+#!/usr/bin/env NODE_PATH=src ./node_modules/coffee-script/bin/coffee
+
+fs                      = require 'fs'
+path                    = require 'path'
+_                       = require 'lodash'
+r                       = require 'rethinkdb'
+Forge                   = require 'forge-di'
+Application             = require 'common/Application'
+AWSClientFactory        = require 'common/AWSClientFactory'
+Config                  = require 'common/Config'
+JobQueue                = require 'common/JobQueue'
+Log                     = require 'common/Log'
+CreateStripeCustomerJob = require 'domain/jobs/CreateStripeCustomerJob'
+
+[host, port, authKey, cert] = process.argv.slice(2)
+
+if cert?
+  ssl = {ca: fs.readFileSync(path.resolve(process.cwd(), cert))}
+
+forge = new Forge()
+forge.bind('app').to.instance({name: 'create-stripe-customers'})
+forge.bind('config').to.type(Config)
+forge.bind('log').to.type(Log)
+forge.bind('aws').to.type(AWSClientFactory)
+forge.bind('jobQueue').to.type(JobQueue)
+
+jobQueue = forge.get('jobQueue')
+r.connect {host, port, authKey, ssl}, (err, conn) ->
+
+  if err?
+    console.log(err)
+    process.exit(1)
+
+  conn.use('tasktorch')
+  r.table('orgs').getAll('2q282YJqyVn8ofpJyFqxni').coerceTo('array').run conn, (err, orgs) ->
+  #r.table('orgs').filter(r.row.hasFields('account').not()).coerceTo('array').run conn, (err, orgs) ->
+
+    console.log("Creating #{orgs.length} CreateStripeCustomerJobs")
+    jobs = _.map orgs, (org) -> new CreateStripeCustomerJob(org)
+
+    jobQueue.enqueueBatch jobs, (err) =>
+
+      if err?
+        console.log("Error: #{err.stack ? err}")
+        process.exit(1)
+
+      console.log("Complete")
+      process.exit(0)

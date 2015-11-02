@@ -1,6 +1,6 @@
 _ = require 'lodash'
 
-class BillingInvoice
+class AccountInvoice
 
   constructor: (data) ->
     @id              = data.id
@@ -18,4 +18,4 @@ class BillingInvoice
     @periodStart     = new Date(data.period_start * 1000)
     @periodEnd       = new Date(data.period_end * 1000)
 
-module.exports = BillingInvoice
+module.exports = AccountInvoice

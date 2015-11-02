@@ -2,14 +2,14 @@ Command                = require 'domain/framework/Command'
 Org                    = require 'data/documents/Org'
 UpdateByIndexStatement = require 'data/statements/UpdateByIndexStatement'
 
-class ChangeBillingSubscriptionCommand extends Command
+class ChangeAccountSourceCommand extends Command
 
-  constructor: (@customerid, @subscription) ->
+  constructor: (@accountid, @source) ->
 
   execute: (conn, callback) ->
-    statement = new UpdateByIndexStatement(Org, {customer: @customerid}, {billing: {@subscription}})
+    statement = new UpdateByIndexStatement(Org, {account: @accountid}, {account: {@source}})
     conn.execute statement, (err, org) =>
       return callback(err) if err?
       callback(null, org)
 
-module.exports = ChangeBillingSubscriptionCommand
+module.exports = ChangeAccountSourceCommand

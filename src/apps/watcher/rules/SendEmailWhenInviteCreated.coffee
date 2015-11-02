@@ -6,7 +6,7 @@ SendEmailJob   = require 'domain/jobs/SendEmailJob'
 
 class SendEmailWhenInviteCreated extends Rule
 
-  constructor: (@log, @aws, @jobQueue) ->
+  constructor: (@log, @database, @jobQueue) ->
 
   offer: (activity, event) ->
     activity == Activity.Created and event.type == 'Invite'

@@ -1,6 +1,7 @@
 _                          = require 'lodash'
 Handler                    = require 'apps/api/framework/Handler'
 RemoveMemberFromOrgCommand = require 'domain/commands/users/RemoveMemberFromOrgCommand'
+UpdateActiveMembersJob     = require 'domain/jobs/UpdateActiveMembersJob'
 
 class RemoveMemberFromOrgHandler extends Handler
 
@@ -12,7 +13,7 @@ class RemoveMemberFromOrgHandler extends Handler
     'ensure requester can access org'
   ]
 
-  constructor: (@processor) ->
+  constructor: (@processor, @jobQueue) ->
 
   handle: (request, reply) ->
 
@@ -28,6 +29,8 @@ class RemoveMemberFromOrgHandler extends Handler
     command = new RemoveMemberFromOrgCommand(requester, org, user)
     @processor.execute command, (err, org) =>
       return reply err if err?
-      return reply @response(org)
+      job = new UpdateActiveMembersJob(org.id)
+      @jobQueue.enqueue job, (err) =>
+        return reply @response(org)
 
 module.exports = RemoveMemberFromOrgHandler

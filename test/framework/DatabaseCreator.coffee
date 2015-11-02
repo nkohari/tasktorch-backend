@@ -49,6 +49,12 @@ Tables.kinds = [
   r.table('kinds').indexCreate('org')
 ]
 
+Table.memberships = [
+  r.tableCreate('memberships')
+  r.table('memberships').indexCreate('org')
+  r.table('memberships').indexCreate('user')
+]
+
 Tables.notes = [
   r.tableCreate('notes')
   r.table('notes').indexCreate('card')
@@ -63,7 +69,7 @@ Tables.orgs = [
   r.tableCreate('orgs')
   r.table('orgs').indexCreate('leaders', {multi: true})
   r.table('orgs').indexCreate('members', {multi: true})
-  r.table('orgs').indexCreate('customer', r.row('billing')('id'))
+  r.table('orgs').indexCreate('account', r.row('account')('id'))
 ]
 
 Tables.profiles = [

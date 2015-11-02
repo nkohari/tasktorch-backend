@@ -20,6 +20,8 @@ class CreateStripeCustomerHandler extends JobHandler
     @stripe.customers.create {
       email:       org.email
       description: org.name
+      plan:        PLAN_ID
+      quantity:    org.members.length
       metadata:    {org: org.id}
     }, (err, customer) =>
 
@@ -28,18 +30,6 @@ class CreateStripeCustomerHandler extends JobHandler
         return callback(err)
 
       @log.debug "[stripe] Customer #{customer.id} created for org #{org.id}"
-      @log.debug "[stripe] Creating Stripe subscription for org #{org.id} (customer #{customer.id})"
-
-      @stripe.customers.createSubscription customer.id, {
-        plan:     PLAN_ID
-        quantity: org.members.length
-        metadata: {org: org.id}
-      }, (err, subscription) =>
-
-        if err?
-          @log.error "[stripe] Error creating Stripe subscription: #{err.stack ? err}"
-          return callback(err)
-
-        callback()
+      callback()
 
 module.exports = CreateStripeCustomerHandler
