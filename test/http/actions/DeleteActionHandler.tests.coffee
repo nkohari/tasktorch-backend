@@ -1,7 +1,6 @@
 expect              = require('chai').expect
 TestData            = require 'test/framework/TestData'
 TestHarness         = require 'test/framework/TestHarness'
-CommonBehaviors     = require 'test/framework/CommonBehaviors'
 DeleteActionHandler = require 'apps/api/handlers/actions/DeleteActionHandler'
 
 describe 'DeleteActionHandler', ->
@@ -12,59 +11,85 @@ describe 'DeleteActionHandler', ->
     TestHarness.start (err) =>
       return ready(err) if err?
       @tester = TestHarness.createTester(DeleteActionHandler)
+      @tester.impersonate('user-charlie')
       ready()
 
-  reset = (callback) ->
-    TestData.reset ['actions', 'checklists', 'notes'], callback
-
-  credentials =
-    user: {id: 'user-charlie'}
+  afterEach (done) ->
+    TestData.reset ['actions', 'checklists', 'notes'], done
 
 #---------------------------------------------------------------------------------------------------
 
-  CommonBehaviors.requiresAuthentication {orgid: 'org-paddys', actionid: 'action-takedbaby'}
+  describe 'when called without credentials', ->
+
+    orgid    = 'org-paddys'
+    actionid = 'action-takedbaby'
+
+    it 'returns 401 unauthorized', (done) ->
+      @tester.request {orgid, actionid, credentials: false}, (res) ->
+        expect(res.statusCode).to.equal(401)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent org', ->
+
+    orgid    = 'doesnotexist'
+    actionid = 'action-takedbaby'
+
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'doesnotexist', actionid: 'action-takedbaby', credentials}, (res) =>
+      @tester.request {orgid, actionid}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent action', ->
+
+    orgid    = 'org-paddys'
+    actionid = 'doesnotexist'
+
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'org-paddys', actionid: 'doesnotexist', credentials}, (res) =>
+      @tester.request {orgid, actionid}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a valid action in an org of which the requester is a member', ->
+
+    orgid    = 'org-paddys'
+    actionid = 'action-takedbaby'
+
     it 'deletes the action', (done) ->
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials}, (res) =>
+      @tester.request {orgid, actionid}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {action} = res.result
-        expect(action.id).to.equal('action-takedbaby')
+        expect(action.id).to.equal(actionid)
         expect(action.status).to.equal('Deleted')
-        reset(done)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for an org of which the requester is not a member', ->
+
+    orgid    = 'org-sudz'
+    actionid = 'action-ringbell'
+
     it 'returns 403 forbidden', (done) ->
-      @tester.request {orgid: 'org-sudz', actionid: 'action-ringbell', credentials}, (res) =>
+      @tester.request {orgid, actionid}, (res) =>
         expect(res.statusCode).to.equal(403)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a mismatched orgid and actionid', ->
+
+    orgid    = 'org-paddys'
+    actionid = 'action-ringbell'
+
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'org-paddys', actionid: 'action-ringbell', credentials}, (res) =>
+      @tester.request {orgid, actionid}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 

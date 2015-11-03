@@ -1,7 +1,9 @@
 Handler                   = require 'apps/api/framework/Handler'
 AcceptInviteCommand       = require 'domain/commands/invites/AcceptInviteCommand'
+CreateMembershipCommand   = require 'domain/commands/memberships/CreateMembershipCommand'
 CreateSessionCommand      = require 'domain/commands/sessions/CreateSessionCommand'
 ChangeUserTimezoneCommand = require 'domain/commands/users/ChangeUserTimezoneCommand'
+Membership                = require 'data/documents/Membership'
 Session                   = require 'data/documents/Session'
 GetUserByUsernameQuery    = require 'data/queries/users/GetUserByUsernameQuery'
 GetUserByEmailQuery       = require 'data/queries/users/GetUserByEmailQuery'
@@ -61,7 +63,15 @@ class CreateSessionHandler extends Handler
 
   acceptInviteIfProvided: (user, invite, callback) ->
     return callback() unless invite?
-    command = new AcceptInviteCommand(user, user, invite)
-    @processor.execute(command, callback)
+    membership = new Membership {
+      user:  user.id
+      org:   invite.org
+      level: invite.level
+    }
+    command = new CreateMembershipCommand(user, membership)
+    @processor.execute command, (err) =>
+      return callback(err) if err?
+      command = new AcceptInviteCommand(user, user, invite)
+      @processor.execute(command, callback)
 
 module.exports = CreateSessionHandler

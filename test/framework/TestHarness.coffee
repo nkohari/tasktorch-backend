@@ -1,4 +1,4 @@
-ApiApplication  = require '../../src/ApiApplication'
+ApiApplication  = require '../../src/apps/api/ApiApplication'
 TestEnvironment = require './TestEnvironment'
 HandlerTester   = require './HandlerTester'
 

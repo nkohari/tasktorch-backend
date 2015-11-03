@@ -3,7 +3,7 @@ GetAllTeamsByOrgAndMemberQuery = require 'data/queries/teams/GetAllTeamsByOrgAnd
 
 class ListTeamsByOrgAndMemberHandler extends Handler
 
-  @route 'get /{orgid}/members/{userid}/teams'
+  @route 'get /{orgid}/users/{userid}/teams'
 
   @before [
     'resolve org'

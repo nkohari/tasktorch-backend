@@ -1,29 +1,30 @@
-_                     = require 'lodash'
-expect                = require('chai').expect
-TestData              = require 'test/framework/TestData'
-TestHarness           = require 'test/framework/TestHarness'
-CommonBehaviors       = require 'test/framework/CommonBehaviors'
-AddMemberToOrgHandler = require 'apps/api/handlers/users/AddMemberToOrgHandler'
+_                       = require 'lodash'
+expect                  = require('chai').expect
+TestData                = require 'test/framework/TestData'
+TestHarness             = require 'test/framework/TestHarness'
+CreateMembershipHandler = require 'apps/api/handlers/memberships/CreateMembershipHandler'
 
-describe 'AddMemberToOrgHandler', ->
+describe 'CreateMembershipHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(AddMemberToOrgHandler)
+      @tester = TestHarness.createTester(CreateMembershipHandler)
+      @tester.impersonate('user-frank')
       ready()
 
-  reset = (callback) ->
-    TestData.reset ['orgs'], callback
-
-  credentials =
-    user: {id: 'user-charlie'}
+  afterEach (done) ->
+    TestData.reset ['memberships'], done
 
 #---------------------------------------------------------------------------------------------------
 
-  CommonBehaviors.requiresAuthentication {orgid: 'org-paddys'}
+  describe 'when called without credentials', ->
+    it 'returns 401 unauthorized', (done) ->
+      @tester.request {orgid: 'org-paddys', credentials: false}, (res) ->
+        expect(res.statusCode).to.equal(401)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
@@ -31,7 +32,7 @@ describe 'AddMemberToOrgHandler', ->
     orgid   = 'doesnotexist'
     payload = {user: 'user-greg'}
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid, credentials, payload}, (res) =>
+      @tester.request {orgid, payload}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
@@ -41,7 +42,7 @@ describe 'AddMemberToOrgHandler', ->
     orgid   = 'org-paddys'
     payload = {}
     it 'returns 400 bad request', (done) ->
-      @tester.request {orgid, credentials, payload}, (res) =>
+      @tester.request {orgid, payload}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
@@ -50,25 +51,34 @@ describe 'AddMemberToOrgHandler', ->
   describe 'when called with a user argument who is not a member of the org', ->
     orgid   = 'org-paddys'
     payload = {user: 'user-greg'}
-    it 'adds the user as a member of the org and returns the org', (done) ->
-      @tester.request {orgid, credentials, payload}, (res) =>
+    it 'creates and returns a new membership for the user', (done) ->
+      @tester.request {orgid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
-        {org} = res.result
-        expect(org.members).to.contain('user-greg')
-        reset(done)
+        {membership} = res.result
+        expect(membership.user).to.equal(payload.user)
+        expect(membership.org).to.equal(orgid)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a user argument who is already a member of the org', ->
     orgid   = 'org-paddys'
     payload = {user: 'user-dee'}
-    it 'returns the org without modification', (done) ->
+    it 'returns 400 bad request', (done) ->
+      @tester.request {orgid, payload}, (res) =>
+        expect(res.statusCode).to.equal(400)
+        done()
+
+#---------------------------------------------------------------------------------------------------
+
+  describe 'when called for an org of which the requester is not a leader', ->
+    orgid       = 'org-paddys'
+    payload     = {user: 'user-greg'}
+    credentials = {user: {id: 'user-charlie'}}
+    it 'returns 403 forbidden', (done) ->
       @tester.request {orgid, credentials, payload}, (res) =>
-        expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
-        {org} = res.result
-        expect(org.id).to.equal(orgid)
+        expect(res.statusCode).to.equal(403)
         done()
 
 #---------------------------------------------------------------------------------------------------
@@ -77,7 +87,7 @@ describe 'AddMemberToOrgHandler', ->
     orgid   = 'org-sudz'
     payload = {user: 'user-charlie'}
     it 'returns 403 forbidden', (done) ->
-      @tester.request {orgid, credentials, payload}, (res) =>
+      @tester.request {orgid, payload}, (res) =>
         expect(res.statusCode).to.equal(403)
         done()
 

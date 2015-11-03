@@ -1,7 +1,6 @@
 expect              = require('chai').expect
 TestData            = require 'test/framework/TestData'
 TestHarness         = require 'test/framework/TestHarness'
-CommonBehaviors     = require 'test/framework/CommonBehaviors'
 CreateActionHandler = require 'apps/api/handlers/actions/CreateActionHandler'
 
 describe 'CreateActionHandler', ->
@@ -12,28 +11,34 @@ describe 'CreateActionHandler', ->
     TestHarness.start (err) =>
       return ready(err) if err?
       @tester = TestHarness.createTester(CreateActionHandler)
+      @tester.impersonate('user-charlie')
       ready()
 
-  reset = (callback) ->
-    TestData.reset ['actions', 'checklists', 'notes'], callback
-
-  credentials =
-    user: {id: 'user-charlie'}
+  afterEach (done) ->
+    TestData.reset ['actions', 'checklists', 'notes'], done
 
 #---------------------------------------------------------------------------------------------------
 
-  CommonBehaviors.requiresAuthentication {orgid: 'org-paddys', checklistid: 'checklist-takedbaby-do'}
+  describe 'when called without credentials', ->
+
+    orgid       = 'org-paddys'
+    checklistid = 'checklist-takedbaby-plan'
+
+    it 'returns 401 unauthorized', (done) ->
+      @tester.request {orgid, checklistid, credentials: false}, (res) ->
+        expect(res.statusCode).to.equal(401)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent org', ->
 
-    checklistid = 'checklist-takedbaby-plan'
     orgid       = 'doesnotexist'
+    checklistid = 'checklist-takedbaby-plan'
+    payload     = {text: 'Test'}
 
     it 'returns 404 not found', (done) ->
-      payload = {text: 'Test'}
-      @tester.request {orgid, checklistid, credentials, payload}, (res) =>
+      @tester.request {orgid, checklistid, payload}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
@@ -41,12 +46,12 @@ describe 'CreateActionHandler', ->
 
   describe 'when called for a non-existent checklist', ->
 
-    checklistid = 'doesnotexist'
     orgid       = 'org-paddys'
+    checklistid = 'doesnotexist'
+    payload     = {text: 'Test'}
 
     it 'returns 404 not found', (done) ->
-      payload = {text: 'Test'}
-      @tester.request {orgid, checklistid, credentials, payload}, (res) =>
+      @tester.request {orgid, checklistid, payload}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
@@ -54,12 +59,12 @@ describe 'CreateActionHandler', ->
 
   describe 'when called without a text argument', ->
 
-    checklistid = 'checklist-takedbaby-plan'
     orgid       = 'org-paddys'
+    checklistid = 'checklist-takedbaby-plan'
+    payload     = {}
 
     it 'returns 400 bad request', (done) ->
-      payload = {}
-      @tester.request {orgid, checklistid, credentials, payload}, (res) =>
+      @tester.request {orgid, checklistid, payload}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
@@ -67,14 +72,14 @@ describe 'CreateActionHandler', ->
 
   describe 'when called with a null text argument', ->
 
+    orgid       = 'org-paddys'
     cardid      = 'card-takedbaby'
     checklistid = 'checklist-takedbaby-plan'
-    orgid       = 'org-paddys'
     stageid     = 'stage-scheme-plan'
+    payload     = {text: null}
 
     it 'creates an action with null text in the specified checklist of the specified card', (done) ->
-      payload = {text: null}
-      @tester.request {orgid, checklistid, credentials, payload}, (res) =>
+      @tester.request {orgid, checklistid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {action} = res.result
@@ -82,20 +87,20 @@ describe 'CreateActionHandler', ->
         expect(action.checklist).to.equal(checklistid)
         expect(action.stage).to.equal(stageid)
         expect(action.text).to.equal(null)
-        reset(done)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a valid text argument', ->
-
+    
+    orgid       = 'org-paddys'
     cardid      = 'card-takedbaby'
     checklistid = 'checklist-takedbaby-plan'
-    orgid       = 'org-paddys'
     stageid     = 'stage-scheme-plan'
+    payload     = {text: new Date().valueOf().toString()}
 
     it 'creates an action with the specified text in the specified checklist of the specified card', (done) ->
-      payload = {text: new Date().valueOf().toString()}
-      @tester.request {orgid, checklistid, credentials, payload}, (res) =>
+      @tester.request {orgid, checklistid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {action} = res.result
@@ -103,18 +108,18 @@ describe 'CreateActionHandler', ->
         expect(action.checklist).to.equal(checklistid)
         expect(action.stage).to.equal(stageid)
         expect(action.text).to.equal(payload.text)
-        reset(done)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for an org of which the requester is not a member', ->
 
-    checklistid = 'checklist-ringbell-do'
     orgid       = 'org-sudz'
+    checklistid = 'checklist-ringbell-do'
+    payload     = {text: 'Test'}
 
     it 'returns 403 forbidden', (done) ->
-      payload = {text: 'Test'}
-      @tester.request {orgid, checklistid, credentials, payload}, (res) =>
+      @tester.request {orgid, checklistid, payload}, (res) =>
         expect(res.statusCode).to.equal(403)
         done()
 
@@ -122,12 +127,12 @@ describe 'CreateActionHandler', ->
 
   describe 'when called with a mismatched orgid and checklistid', ->
 
-    checklistid = 'checklist-ringbell-do'
     orgid       = 'org-paddys'
+    checklistid = 'checklist-ringbell-do'
+    payload     = {text: 'Test'}
 
     it 'returns 404 not found', (done) ->
-      payload = {text: 'Test'}
-      @tester.request {orgid, checklistid, credentials, payload}, (res) =>
+      @tester.request {orgid, checklistid, payload}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
         

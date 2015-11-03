@@ -12,6 +12,6 @@ class ApiApplication extends Application
   start: (callback = (->)) ->
     super()
     server = @forge.get('server')
-    server.start()
+    server.start(callback)
 
 module.exports = ApiApplication

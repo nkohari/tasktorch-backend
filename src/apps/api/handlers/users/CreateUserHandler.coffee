@@ -1,9 +1,10 @@
 _                       = require 'lodash'
 Handler                 = require 'apps/api/framework/Handler'
+Membership              = require 'data/documents/Membership'
 User                    = require 'data/documents/User'
 GetOrgQuery             = require 'data/queries/orgs/GetOrgQuery'
-GetAllOrgsByMemberQuery = require 'data/queries/orgs/GetAllOrgsByMemberQuery'
 AcceptInviteCommand     = require 'domain/commands/invites/AcceptInviteCommand'
+CreateMembershipCommand = require 'domain/commands/memberships/CreateMembershipCommand'
 AcceptTokenCommand      = require 'domain/commands/tokens/AcceptTokenCommand'
 CreateUserCommand       = require 'domain/commands/users/CreateUserCommand'
 
@@ -61,9 +62,17 @@ class CreateUserHandler extends Handler
 
   acceptInviteIfProvided: (user, invite, callback) ->
     return callback() unless invite?
-    command = new AcceptInviteCommand(user, user, invite)
+    membership = new Membership {
+      user:  user.id
+      org:   invite.org
+      level: invite.level
+    }
+    command = new CreateMembershipCommand(user, membership)
     @processor.execute command, (err) =>
       return callback(err) if err?
-      @onboarder.createSampleCardIfNecessary(user, invite.org, callback)
+      command = new AcceptInviteCommand(user, user, invite)
+      @processor.execute command, (err) =>
+        return callback(err) if err?
+        @onboarder.createSampleCardIfNecessary(user, invite.org, callback)
 
 module.exports = CreateUserHandler

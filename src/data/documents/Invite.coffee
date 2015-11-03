@@ -1,6 +1,7 @@
-_            = require 'lodash'
-Document     = require 'data/framework/Document'
-InviteStatus = require 'data/enums/InviteStatus'
+_               = require 'lodash'
+Document        = require 'data/framework/Document'
+InviteStatus    = require 'data/enums/InviteStatus'
+MembershipLevel = require 'data/enums/MembershipLevel'
 
 class Invite extends Document
 
@@ -13,7 +14,7 @@ class Invite extends Document
   @field  'updated'
   @field  'status',  {default: InviteStatus.Pending}
   @field  'email'
-  @field  'leader'
+  @field  'level',   {default: MembershipLevel.Member}
   @field  'orgName'
 
   @hasOne 'creator', {type: 'User'}

@@ -12,24 +12,26 @@ describe 'ChangeActionTextHandler', ->
     TestHarness.start (err) =>
       return ready(err) if err?
       @tester = TestHarness.createTester(ChangeActionTextHandler)
+      @tester.impersonate('user-charlie')
       ready()
 
-  reset = (callback) ->
-    TestData.reset ['actions', 'notes'], callback
-
-  credentials =
-    user: {id: 'user-charlie'}
+  afterEach (done) ->
+    TestData.reset ['actions', 'notes'], done
 
 #---------------------------------------------------------------------------------------------------
 
-  CommonBehaviors.requiresAuthentication {orgid: 'org-paddys', actionid: 'action-takedbaby'}
+  describe 'when called without credentials', ->
+    it 'returns 401 unauthorized', (done) ->
+      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials: false}, (res) ->
+        expect(res.statusCode).to.equal(401)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent org', ->
     it 'returns 404 not found', (done) ->
       payload = {text: 'Test'}
-      @tester.request {orgid: 'doesnotexist', actionid: 'action-takedbaby', credentials, payload}, (res) =>
+      @tester.request {orgid: 'doesnotexist', actionid: 'action-takedbaby', payload}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
@@ -38,7 +40,7 @@ describe 'ChangeActionTextHandler', ->
   describe 'when called for a non-existent action', ->
     it 'returns 404 not found', (done) ->
       payload = {text: 'Test'}
-      @tester.request {orgid: 'org-paddys', actionid: 'doesnotexist', credentials, payload}, (res) =>
+      @tester.request {orgid: 'org-paddys', actionid: 'doesnotexist', payload}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
@@ -47,7 +49,7 @@ describe 'ChangeActionTextHandler', ->
   describe 'when called without a text argument', ->
     it 'returns 400 bad request', (done) ->
       payload = {}
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials, payload}, (res) =>
+      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', payload}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
@@ -56,25 +58,25 @@ describe 'ChangeActionTextHandler', ->
   describe 'when called with a null text argument', ->
     it 'changes the text to null', (done) ->
       payload = {text: null}
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials, payload}, (res) =>
+      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {action} = res.result
         expect(action.id).to.equal('action-takedbaby')
         expect(action.text).to.equal(null)
-        reset(done)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a valid text argument', ->
     it 'changes the text to the specified text', (done) ->
       payload = {text: 'Test'}
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials, payload}, (res) =>
+      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {action} = res.result
         expect(action.id).to.equal('action-takedbaby')
         expect(action.text).to.equal('Test')
-        reset(done)
+        done()
 
 #---------------------------------------------------------------------------------------------------

@@ -4,7 +4,7 @@ GetProfileByUserAndOrgQuery = require 'data/queries/profiles/GetProfileByUserAnd
 
 class GetUserProfileHandler extends Handler
 
-  @route 'get /{orgid}/members/{userid}/profile'
+  @route 'get /{orgid}/users/{userid}/profile'
 
   @before [
     'resolve org'

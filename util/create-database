@@ -30,8 +30,6 @@ var options = {
   ssl: ssl
 };
 
-console.log(options);
-
 console.log("Creating database " + dbname);
 DatabaseCreator.create(dbname, options, function(err) {
   if (err) {

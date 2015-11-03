@@ -5,10 +5,12 @@ class Application extends EventEmitter
 
   constructor: (environment) ->
     @forge = new Forge()
+    console.log("→ Starting #{@constructor.name} in #{environment.constructor.name}...")
     environment.setup(this, @forge)
     @log = @forge.get('log')
     process.title = "torch: #{@name}"
     @setupEvents()
+    console.log("→ Ready.")
 
   setupEvents: ->
     process.on 'SIGINT', =>

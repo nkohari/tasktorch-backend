@@ -1,17 +1,17 @@
-_                       = require 'lodash'
-expect                  = require('chai').expect
-TestHarness             = require 'test/framework/TestHarness'
-CommonBehaviors         = require 'test/framework/CommonBehaviors'
-ListMembersByOrgHandler = require 'apps/api/handlers/users/ListMembersByOrgHandler'
+_                     = require 'lodash'
+expect                = require('chai').expect
+TestHarness           = require 'test/framework/TestHarness'
+CommonBehaviors       = require 'test/framework/CommonBehaviors'
+ListUsersByOrgHandler = require 'apps/api/handlers/users/ListUsersByOrgHandler'
 
-describe 'ListMembersByOrgHandler', ->
+describe 'ListUsersByOrgHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(ListMembersByOrgHandler)
+      @tester = TestHarness.createTester(ListUsersByOrgHandler)
       ready()
 
   credentials =

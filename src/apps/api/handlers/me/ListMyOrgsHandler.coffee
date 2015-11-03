@@ -1,5 +1,5 @@
-Handler                 = require 'apps/api/framework/Handler'
-GetAllOrgsByMemberQuery = require 'data/queries/orgs/GetAllOrgsByMemberQuery'
+Handler               = require 'apps/api/framework/Handler'
+GetAllOrgsByUserQuery = require 'data/queries/orgs/GetAllOrgsByUserQuery'
 
 class ListMyOrgsHandler extends Handler
 
@@ -16,7 +16,7 @@ class ListMyOrgsHandler extends Handler
     {options} = request.pre
     {user}    = request.auth.credentials
 
-    query = new GetAllOrgsByMemberQuery(user.id, options)
+    query = new GetAllOrgsByUserQuery(user.id, options)
     @database.execute query, (err, result) =>
       return reply err if err?
       reply @response(result)

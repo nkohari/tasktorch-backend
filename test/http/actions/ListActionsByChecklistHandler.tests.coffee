@@ -1,7 +1,6 @@
 _                             = require 'lodash'
 expect                        = require('chai').expect
 TestHarness                   = require 'test/framework/TestHarness'
-CommonBehaviors               = require 'test/framework/CommonBehaviors'
 ListActionsByChecklistHandler = require 'apps/api/handlers/actions/ListActionsByChecklistHandler'
 
 describe 'ListActionsByChecklistHandler', ->
@@ -12,36 +11,54 @@ describe 'ListActionsByChecklistHandler', ->
     TestHarness.start (err) =>
       return ready(err) if err?
       @tester = TestHarness.createTester(ListActionsByChecklistHandler)
+      @tester.impersonate('user-charlie')
       ready()
-
-  credentials =
-    user: {id: 'user-charlie'}
 
 #---------------------------------------------------------------------------------------------------
 
-  CommonBehaviors.requiresAuthentication {orgid: 'org-paddys', checklistid: 'checklist-takedbaby-do'}
+  describe 'when called without credentials', ->
+
+    orgid       = 'org-paddys'
+    checklistid = 'checklist-takedbaby-do'
+
+    it 'returns 401 unauthorized', (done) ->
+      @tester.request {orgid, checklistid, credentials: false}, (res) ->
+        expect(res.statusCode).to.equal(401)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent org', ->
+
+    orgid       = 'doesnotexist'
+    checklistid = 'checklist-takedbaby-do'
+
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'doesnotexist', checklistid: 'checklist-takedbaby-do', credentials}, (res) =>
+      @tester.request {orgid, checklistid}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent card', ->
+
+    orgid       = 'org-paddys'
+    checklistid = 'doesnotexist'
+
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'org-paddys', checklistid: 'doesnotexist', credentials}, (res) =>
+      @tester.request {orgid, checklistid}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a valid checklist in an org of which the requester is a member', ->
+
+    orgid       = 'org-paddys'
+    checklistid = 'checklist-takedbaby-do'
+
     it 'returns an array of actions in the checklist', (done) ->
-      @tester.request {orgid: 'org-paddys', checklistid: 'checklist-takedbaby-do', credentials}, (res) =>
+      @tester.request {orgid, checklistid}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {actions} = res.result
@@ -53,16 +70,24 @@ describe 'ListActionsByChecklistHandler', ->
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for an org of which the requester is not a member', ->
+
+    orgid       = 'org-sudz'
+    checklistid = 'checklist-ringbell-do'
+
     it 'returns 403 forbidden', (done) ->
-      @tester.request {orgid: 'org-sudz', checklistid: 'checklist-ringbell-do', credentials}, (res) =>
+      @tester.request {orgid, checklistid}, (res) =>
         expect(res.statusCode).to.equal(403)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a mismatched orgid and checklistid', ->
+
+    orgid       = 'org-paddys'
+    checklistid = 'checklist-ringbell-do'
+
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'org-paddys', checklistid: 'checklist-ringbell-do', credentials}, (res) =>
+      @tester.request {orgid, checklistid}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 

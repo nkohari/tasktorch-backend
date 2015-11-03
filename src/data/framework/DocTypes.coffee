@@ -5,6 +5,7 @@ module.exports = DocTypes = [
   require 'data/documents/Goal'
   require 'data/documents/Invite'
   require 'data/documents/Kind'
+  require 'data/documents/Membership'
   require 'data/documents/Note'
   require 'data/documents/Org'
   require 'data/documents/Profile'

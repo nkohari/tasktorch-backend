@@ -1,6 +1,7 @@
-_                       = require 'lodash'
-Gate                    = require 'security/framework/Gate'
-GetAllOrgsByMemberQuery = require 'data/queries/orgs/GetAllOrgsByMemberQuery'
+_                                  = require 'lodash'
+Gate                               = require 'security/framework/Gate'
+GetAllActiveMembershipsByUserQuery = require 'data/queries/memberships/GetAllActiveMembershipsByUserQuery'
+GetAllActiveMembershipsByOrgQuery  = require 'data/queries/memberships/GetAllActiveMembershipsByOrgQuery'
 
 class UserGate extends Gate
 
@@ -9,10 +10,14 @@ class UserGate extends Gate
   constructor: (@database) ->
 
   getAccessList: (user, callback) ->
-    query = new GetAllOrgsByMemberQuery(user.id)
+    query = new GetAllActiveMembershipsByUserQuery(user.id)
     @database.execute query, (err, result) =>
       return callback(err) if err?
-      userids = _.uniq _.flatten _.pluck(result.orgs, 'members')
-      return callback null, userids
+      orgids = _.pluck(result.memberships, 'org')
+      query  = new GetAllActiveMembershipsByOrgQuery(orgids)
+      @database.execute query, (err, result) =>
+        return callback(err) if err?
+        userids = _.uniq _.flatten _.pluck(result.memberships, 'user')
+        return callback null, userids
 
 module.exports = UserGate

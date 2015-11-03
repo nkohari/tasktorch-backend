@@ -1,16 +1,16 @@
-_                           = require 'lodash'
-async                       = require 'async'
-Action                      = require 'data/documents/Action'
-Card                        = require 'data/documents/Card'
-ActionStatus                = require 'data/enums/ActionStatus'
-StackType                   = require 'data/enums/StackType'
-GetAllChecklistsByCardQuery = require 'data/queries/checklists/GetAllChecklistsByCardQuery'
-GetKindQuery                = require 'data/queries/kinds/GetKindQuery'
-GetAllOrgsByMemberQuery     = require 'data/queries/orgs/GetAllOrgsByMemberQuery'
-GetSpecialStackByUserQuery  = require 'data/queries/stacks/GetSpecialStackByUserQuery'
-GetAllStagesByKindQuery     = require 'data/queries/stages/GetAllStagesByKindQuery'
-BulkCreateActionsCommand    = require 'domain/commands/actions/BulkCreateActionsCommand'
-CreateCardCommand           = require 'domain/commands/cards/CreateCardCommand'
+_                                  = require 'lodash'
+async                              = require 'async'
+Action                             = require 'data/documents/Action'
+Card                               = require 'data/documents/Card'
+ActionStatus                       = require 'data/enums/ActionStatus'
+StackType                          = require 'data/enums/StackType'
+GetAllChecklistsByCardQuery        = require 'data/queries/checklists/GetAllChecklistsByCardQuery'
+GetKindQuery                       = require 'data/queries/kinds/GetKindQuery'
+GetAllActiveMembershipsByUserQuery = require 'data/queries/memberships/GetAllActiveMembershipsByUserQuery'
+GetSpecialStackByUserQuery         = require 'data/queries/stacks/GetSpecialStackByUserQuery'
+GetAllStagesByKindQuery            = require 'data/queries/stages/GetAllStagesByKindQuery'
+BulkCreateActionsCommand           = require 'domain/commands/actions/BulkCreateActionsCommand'
+CreateCardCommand                  = require 'domain/commands/cards/CreateCardCommand'
 
 SAMPLE_CARD =
   kind: 'onboarding-kind'
@@ -30,16 +30,16 @@ class Onboarder
   constructor: (@log, @database, @processor) ->
 
   createSampleCardIfNecessary: (user, org, callback) ->
-    query = new GetAllOrgsByMemberQuery(user.id)
+    query = new GetAllActiveMembershipsByUserQuery(user.id)
     @database.execute query, (err, result) =>
       return callback err if err?
-      {orgs} = result
+      {memberships} = result
       # If the user is a member of more than one organization, we should assume they've
       # already seen the walkthrough and don't need to be onboarded.
-      if orgs.length > 1
+      if memberships.length > 1
         return callback()
       else
-        @createSampleCard(user, orgs[0], callback)
+        @createSampleCard(user, org, callback)
 
   createSampleCard: (user, org, callback) ->
 

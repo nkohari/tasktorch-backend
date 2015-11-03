@@ -265,18 +265,54 @@ TestData.notes = table [
 
 TestData.orgs = table [
   record {
-    id:      'org-paddys'
-    name:    "Paddy's Pub"
-    members: ['user-charlie', 'user-mac', 'user-dee', 'user-dennis', 'user-frank']
-    leaders: ['user-mac', 'user-dennis', 'user-frank']
+    id:   'org-paddys'
+    name: "Paddy's Pub"
   }
   record {
-    id:      'org-sudz'
-    name:    'Sudz'
-    members: ['user-greg']
-    leaders: []
+    id:   'org-sudz'
+    name: 'Sudz'
   }
 ]
+
+TestData.memberships = table [
+  record {
+    id:    'membership-paddys-charlie'
+    user:  'user-charlie'
+    org:   'org-paddys'
+    level: 'Member'
+  }
+  record {
+    id:    'membership-paddys-mac'
+    user:  'user-mac'
+    org:   'org-paddys'
+    level: 'Leader'
+  }
+  record {
+    id:    'membership-paddys-dee'
+    user:  'user-dee'
+    org:   'org-paddys'
+    level: 'Member'
+  }
+  record {
+    id:    'membership-paddys-dennis'
+    user:  'user-dennis'
+    org:   'org-paddys'
+    level: 'Leader'
+  }
+  record {
+    id:    'membership-paddys-frank'
+    user:  'user-frank'
+    org:   'org-paddys'
+    level: 'Leader'
+  }
+  record {
+    id:    'membership-sudz-greg'
+    user:  'user-greg'
+    org:   'org-sudz'
+    level: 'Leader'
+  }
+]
+
 
 #---------------------------------------------------------------------------------------------------
 
@@ -603,6 +639,7 @@ TestData.tables = [
   'goals'
   'kinds'
   'notes'
+  'memberships'
   'orgs'
   'sessions'
   'stacks'

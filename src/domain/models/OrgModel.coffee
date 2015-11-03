@@ -4,10 +4,7 @@ class OrgModel extends Model
 
   constructor: (org) ->
     super(org)
-    @name          = org.name
-    @leaders       = org.leaders
-    @members       = org.members
-    @activeMembers = org.activeMembers
-    @email         = org.email
+    @name  = org.name
+    @email = org.email
 
 module.exports = OrgModel

@@ -1,6 +1,6 @@
-_           = require 'lodash'
-Gate        = require 'security/framework/Gate'
-GetOrgQuery = require 'data/queries/orgs/GetOrgQuery'
+_                                 = require 'lodash'
+Gate                              = require 'security/framework/Gate'
+GetAllActiveMembershipsByOrgQuery = require 'data/queries/memberships/GetAllActiveMembershipsByOrgQuery'
 
 class ActionGate extends Gate
 
@@ -9,9 +9,9 @@ class ActionGate extends Gate
   constructor: (@database) ->
 
   getAccessList: (action, callback) ->
-    query = new GetOrgQuery(action.org)
+    query = new GetAllActiveMembershipsByOrgQuery(action.org)
     @database.execute query, (err, result) =>
       return callback(err) if err?
-      return callback null, _.clone(result.org.members)
+      return callback null, _.pluck(result.memberships, 'user')
 
 module.exports = ActionGate

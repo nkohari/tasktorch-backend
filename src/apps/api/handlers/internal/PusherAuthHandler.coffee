@@ -13,7 +13,7 @@ class PusherAuthHandler extends Handler
       socket_id:    @mustBe.string().required()
       channel_name: @mustBe.string().required()
 
-  constructor: (@database, @pusher) ->
+  constructor: (@database, @gatekeeper, @pusher) ->
 
   handle: (request, reply) ->
 
@@ -34,11 +34,14 @@ class PusherAuthHandler extends Handler
     @database.execute query, (err, result) =>
       return reply err if err?
       return reply @error.badRequest("No such org #{orgid}") unless result.org?
-      return reply @error.forbidden() unless result.org.hasMember(user.id)
-      presenceInfo =
-        user_id:   user.id
-        user_info: new UserModel(user)
-      reply @pusher.getAuthToken(socket, channel, presenceInfo)
+      {org} = result
+      @gatekeeper.canUserAccess org, user, (err, canAccess) =>
+        return reply err if err?
+        return reply @error.forbidden() unless canAccess
+        presenceInfo =
+          user_id:   user.id
+          user_info: new UserModel(user)
+        reply @pusher.getAuthToken(socket, channel, presenceInfo)
 
   getAuthTokenForUserChannel: (user, socket, channel, reply) =>
     userid = channel.replace('private-user-', '')
@@ -46,7 +49,7 @@ class PusherAuthHandler extends Handler
     @database.execute query, (err, result) =>
       return reply err if err?
       return reply @error.badRequest("No such user #{userid}") unless result.user?
-      return reply @error.forbidden()  unless result.user.id == user.id
+      return reply @error.forbidden() unless result.user.id == user.id
       reply @pusher.getAuthToken(socket, channel)
 
 module.exports = PusherAuthHandler

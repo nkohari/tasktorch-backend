@@ -36,8 +36,8 @@ class ApiEnvironment
     forge.bind('connectionPool').to.type(ConnectionPool)
     forge.bind('database').to.type(Database)
     forge.bind('processor').to.type(CommandProcessor)
-    forge.bind('spool').to.type(EventSpool)
     forge.bind('jobQueue').to.type(JobQueue)
+    forge.bind('spool').to.type(EventSpool)
     forge.bind('onboarder').to.type(Onboarder)
     forge.bind('server').to.type(ApiServer)
 

@@ -1,7 +1,6 @@
 expect                   = require('chai').expect
 TestData                 = require 'test/framework/TestData'
 TestHarness              = require 'test/framework/TestHarness'
-CommonBehaviors          = require 'test/framework/CommonBehaviors'
 ChangeActionOwnerHandler = require 'apps/api/handlers/actions/ChangeActionOwnerHandler'
 GetCardQuery             = require 'data/queries/cards/GetCardQuery'
 
@@ -13,25 +12,27 @@ describe 'ChangeActionOwnerHandler', ->
     TestHarness.start (err) =>
       return ready(err) if err?
       @tester = TestHarness.createTester(ChangeActionOwnerHandler)
+      @tester.impersonate('user-charlie')
       @database = TestHarness.getDatabase()
       ready()
 
-  reset = (callback) ->
-    TestData.reset ['actions', 'cards', 'notes'], callback
-
-  credentials =
-    user: {id: 'user-charlie'}
+  afterEach (done) ->
+    TestData.reset ['actions', 'cards', 'notes'], done
 
 #---------------------------------------------------------------------------------------------------
 
-  CommonBehaviors.requiresAuthentication {orgid: 'org-paddys', actionid: 'action-takedbaby'}
+  describe 'when called without credentials', ->
+    it 'returns 401 unauthorized', (done) ->
+      @tester.request {orgid: 'org-paddys', credentials: false}, (res) ->
+        expect(res.statusCode).to.equal(401)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent org', ->
     it 'returns 404 not found', (done) ->
       payload = {user: 'user-dee'}
-      @tester.request {orgid: 'doesnotexist', actionid: 'action-takedbaby', credentials, payload}, (res) =>
+      @tester.request {orgid: 'doesnotexist', actionid: 'action-takedbaby', payload}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
@@ -40,7 +41,7 @@ describe 'ChangeActionOwnerHandler', ->
   describe 'when called for a non-existent action', ->
     it 'returns 404 not found', (done) ->
       payload = {user: 'user-dee'}
-      @tester.request {orgid: 'org-paddys', actionid: 'doesnotexist', credentials, payload}, (res) =>
+      @tester.request {orgid: 'org-paddys', actionid: 'doesnotexist', payload}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
@@ -49,7 +50,7 @@ describe 'ChangeActionOwnerHandler', ->
   describe 'when called with an invalid user argument', ->
     it 'returns 400 bad request', (done) ->
       payload = {user: 'doesnotexist'}
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials, payload}, (res) =>
+      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', payload}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
@@ -58,13 +59,13 @@ describe 'ChangeActionOwnerHandler', ->
   describe 'when called with a null user argument', ->
     it 'assigns the action to no one', (done) ->
       payload = {user: null}
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials, payload}, (res) =>
+      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {action} = res.result
         expect(action.id).to.equal('action-takedbaby')
         expect(action.user).to.equal(null)
-        reset(done)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
@@ -76,17 +77,17 @@ describe 'ChangeActionOwnerHandler', ->
 
     it 'assigns the action to the specified user', (done) ->
       payload = {user: userid}
-      @tester.request {orgid, actionid, credentials, payload}, (res) =>
+      @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {action} = res.result
         expect(action.id).to.equal(actionid)
         expect(action.user).to.equal(userid)
-        reset(done)
+        done()
 
     it 'adds the specified user as a follower of the card', (done) ->
       payload = {user: userid}
-      @tester.request {orgid, actionid, credentials, payload}, (res) =>
+      @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {action} = res.result
@@ -98,6 +99,6 @@ describe 'ChangeActionOwnerHandler', ->
           expect(card).to.exist()
           expect(card.followers).to.be.an('array')
           expect(card.followers).to.contain(userid)
-          reset(done)
+          done()
 
 #---------------------------------------------------------------------------------------------------

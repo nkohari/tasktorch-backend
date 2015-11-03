@@ -11,7 +11,7 @@ class GetOrgHandler extends Handler
     'resolve query options'
   ]
 
-  constructor: (@database, @spool) ->
+  constructor: (@database, @gatekeeper, @spool) ->
 
   handle: (request, reply) ->
 
@@ -24,8 +24,10 @@ class GetOrgHandler extends Handler
     query = new GetOrgQuery(orgid, options)
     @database.execute query, (err, result) =>
       return reply err if err?
-      return reply @error.notFound()  unless result.org?
-      return reply @error.forbidden() unless result.org.hasMember(user.id)
-      reply @response(result)
+      return reply @error.notFound() unless result.org?
+      @gatekeeper.canUserAccess result.org, user, (err, canAccess) =>
+        return reply err if err?
+        return reply @error.forbidden() unless canAccess
+        reply @response(result)
 
 module.exports = GetOrgHandler

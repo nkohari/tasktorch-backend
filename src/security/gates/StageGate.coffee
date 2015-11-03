@@ -1,6 +1,6 @@
-_           = require 'lodash'
-Gate        = require 'security/framework/Gate'
-GetOrgQuery = require 'data/queries/orgs/GetOrgQuery'
+_                                 = require 'lodash'
+Gate                              = require 'security/framework/Gate'
+GetAllActiveMembershipsByOrgQuery = require 'data/queries/memberships/GetAllActiveMembershipsByOrgQuery'
 
 class StageGate extends Gate
 
@@ -10,9 +10,9 @@ class StageGate extends Gate
 
   getAccessList: (stage, callback) ->
     return callback(null, []) unless stage.org?
-    query = new GetOrgQuery(stage.org)
+    query = new GetAllActiveMembershipsByOrgQuery(stage.org)
     @database.execute query, (err, result) =>
       return callback(err) if err?
-      return callback null, _.clone(result.org.members)
+      return callback null, _.pluck(result.memberships, 'user')
 
 module.exports = StageGate

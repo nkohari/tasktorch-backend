@@ -17,14 +17,4 @@ class Org extends Document
   @field   'survey'
   @field   'account', {default: null}
 
-  @hasMany 'members',       {type: 'User', default: []}
-  @hasMany 'leaders',       {type: 'User', default: []}
-  @hasMany 'activeMembers', {type: 'User', default: []}
-
-  hasLeader: (userid) ->
-    _.contains(@leaders, userid)
-
-  hasMember: (userid) ->
-    _.contains(@members, userid)
-
 module.exports = Org

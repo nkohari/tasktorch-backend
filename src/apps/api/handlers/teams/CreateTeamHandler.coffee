@@ -1,7 +1,8 @@
-_                 = require 'lodash'
-Handler           = require 'apps/api/framework/Handler'
-Team              = require 'data/documents/Team'
-CreateTeamCommand = require 'domain/commands/teams/CreateTeamCommand'
+_                           = require 'lodash'
+Handler                     = require 'apps/api/framework/Handler'
+Team                        = require 'data/documents/Team'
+CreateTeamCommand           = require 'domain/commands/teams/CreateTeamCommand'
+GetAllMembershipsByOrgQuery = require 'data/queries/memberships/GetAllMembershipsByOrgQuery'
 
 class CreateTeamHandler extends Handler
 
@@ -21,7 +22,7 @@ class CreateTeamHandler extends Handler
     'ensure requester can access org'
   ]
 
-  constructor: (@log, @processor) ->
+  constructor: (@log, @database, @processor) ->
 
   handle: (request, reply) ->
 
@@ -29,33 +30,35 @@ class CreateTeamHandler extends Handler
     {user}                  = request.auth.credentials
     {name, purpose}         = request.payload
 
-    if members.length == 0
-      members = [user]
-    else if not _.every(members, (u) -> org.hasMember(u.id))
-      return reply @error.badRequest("All users in the members list must be members of the org")
+    members = [user.id] unless members?.length > 0
+    leaders = [user.id] unless leaders?.length > 0
 
-    if leaders.length == 0
-      leaders = [user]
-    else if not _.every(leaders, (u) -> org.hasMember(u.id))
-      return reply @error.badRequest("All users in the leaders list must be members of the org")
-
-    memberids = _.pluck(members, 'id')
-    leaderids = _.pluck(leaders, 'id')
-
-    if _.difference(leaderids, memberids).length > 0
-      return reply @error.badRequest("The leaders list must be a proper subset of the members list")
-
-    team = new Team {
-      org:     org.id
-      name:    name
-      purpose: purpose
-      members: memberids
-      leaders: leaderids
-    }
-
-    command = new CreateTeamCommand(user, team)
-    @processor.execute command, (err, team) =>
+    query = new GetAllMembershipsByOrgQuery(org.id)
+    @database.execute query, (err, result) =>
       return reply err if err?
-      return reply @response(team)
+
+      userids = _.pluck(result.memberships, 'user')
+
+      unless _.every(members, (u) -> _.contains(userids))
+        return reply @error.badRequest("All users in the members list must be members of the org")
+
+      unless _.every(leaders, (u) -> _.contains(userids))
+        return reply @error.badRequest("All users in the leaders list must be members of the org")
+
+      if _.difference(leaders, members).length > 0
+        return reply @error.badRequest("The leaders list must be a proper subset of the members list")
+
+      team = new Team {
+        org:     org.id
+        name:    name
+        purpose: purpose
+        members: members
+        leaders: leaders
+      }
+
+      command = new CreateTeamCommand(user, team)
+      @processor.execute command, (err, team) =>
+        return reply err if err?
+        return reply @response(team)
 
 module.exports = CreateTeamHandler

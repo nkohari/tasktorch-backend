@@ -49,7 +49,7 @@ Tables.kinds = [
   r.table('kinds').indexCreate('org')
 ]
 
-Table.memberships = [
+Tables.memberships = [
   r.tableCreate('memberships')
   r.table('memberships').indexCreate('org')
   r.table('memberships').indexCreate('user')
@@ -60,15 +60,13 @@ Tables.notes = [
   r.table('notes').indexCreate('card')
   r.table('notes').indexCreate('org')
   r.table('notes').indexCreate('user')
-  r.table('notes').indexCreate('actions', (note) -> 
+  r.table('notes').indexCreate('action', (note) -> 
     r.branch(note.hasFields({content: {action: true}}), note('content')('action'), null)
   )
 ]
 
 Tables.orgs = [
   r.tableCreate('orgs')
-  r.table('orgs').indexCreate('leaders', {multi: true})
-  r.table('orgs').indexCreate('members', {multi: true})
   r.table('orgs').indexCreate('account', r.row('account')('id'))
 ]
 

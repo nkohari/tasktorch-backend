@@ -79,6 +79,6 @@ class ApiServer
     reply.continue()
 
   onError: (request, err) ->
-    @log.error "Request failed with error: #{err}"
+    @log.error "Request failed with error: #{err.stack ? err}"
 
 module.exports = ApiServer
