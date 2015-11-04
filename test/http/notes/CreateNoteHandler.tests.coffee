@@ -1,105 +1,138 @@
 expect            = require('chai').expect
-TestData          = require 'test/framework/TestData'
 TestHarness       = require 'test/framework/TestHarness'
-CommonBehaviors   = require 'test/framework/CommonBehaviors'
 CreateNoteHandler = require 'apps/api/handlers/notes/CreateNoteHandler'
 
-describe 'CreateNoteHandler', ->
+describe 'notes:CreateNoteHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(CreateNoteHandler)
+      @tester = TestHarness.createTester(CreateNoteHandler, 'user-charlie')
       ready()
 
-  reset = (callback) ->
-    TestData.reset ['cards', 'notes'], callback
-
-  credentials =
-    user: {id: 'user-charlie'}
+  afterEach (done) ->
+    TestHarness.reset ['cards', 'notes'], done
 
 #---------------------------------------------------------------------------------------------------
 
-  CommonBehaviors.requiresAuthentication {orgid: 'org-paddys', cardid: 'card-takedbaby'}
+  describe 'when called without credentials', ->
+
+    orgid  = 'org-paddys'
+    cardid = 'card-takedbaby'
+
+    it 'returns 401 unauthorized', (done) ->
+      @tester.request {orgid, cardid, credentials: false}, (res) ->
+        expect(res.statusCode).to.equal(401)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent org', ->
+
+    orgid   = 'doesnotexist'
+    cardid  = 'card-takedbaby'
+    payload = {type: 'Comment', content: 'Test'}
+
     it 'returns 404 not found', (done) ->
-      payload = {type: 'Comment', content: 'Test'}
-      @tester.request {orgid: 'doesnotexist', cardid: 'card-takedbaby', credentials, payload}, (res) =>
+      @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent card', ->
+
+    orgid   = 'org-paddys'
+    cardid  = 'doesnotexist'
+    payload = {type: 'Comment', content: 'Test'}
+
     it 'returns 404 not found', (done) ->
-      payload = {type: 'Comment', content: 'Test'}
-      @tester.request {orgid: 'org-paddys', cardid: 'doesnotexist', credentials, payload}, (res) =>
+      @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called without a type argument', ->
+
+    orgid   = 'org-paddys'
+    cardid  = 'card-takedbaby'
+    payload = {content: 'Test'}
+
     it 'returns 400 bad request', (done) ->
-      payload = {content: 'Test'}
-      @tester.request {orgid: 'org-paddys', cardid: 'card-takedbaby', credentials, payload}, (res) =>
+      @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with an invalid type argument', ->
+
+    orgid   = 'org-paddys'
+    cardid  = 'card-takedbaby'
+    payload = {type: 'doesnotexist', content: 'Test'}
+
     it 'returns 400 bad request', (done) ->
-      payload = {type: 'doesnotexist', content: 'Test'}
-      @tester.request {orgid: 'org-paddys', cardid: 'card-takedbaby', credentials, payload}, (res) =>
+      @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called without a content argument', ->
+
+    orgid   = 'org-paddys'
+    cardid  = 'card-takedbaby'
+    payload = {type: 'Comment'}
+
     it 'returns 400 bad request', (done) ->
-      payload = {type: 'Comment'}
-      @tester.request {orgid: 'org-paddys', cardid: 'card-takedbaby', credentials, payload}, (res) =>
+      @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with type Comment and a valid content argument', ->
-    type    = 'Comment'
-    content = new Date().valueOf().toString()
+
+    orgid   = 'org-paddys'
+    cardid  = 'card-takedbaby'
+    payload = {type: 'Comment', content: new Date().valueOf().toString()}
+
     it 'creates a comment note on the specified card with the specified content', (done) ->
-      payload = {type, content}
-      @tester.request {orgid: 'org-paddys', cardid: 'card-takedbaby', credentials, payload}, (res) =>
+      @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {note} = res.result
-        expect(note.card).to.equal('card-takedbaby')
-        expect(note.type).to.equal(type)
-        expect(note.content).to.equal(content)
-        reset(done)
+        expect(note.card).to.equal(cardid)
+        expect(note.type).to.equal(payload.type)
+        expect(note.content).to.equal(payload.content)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for an org of which the requester is not a member', ->
+
+    orgid   = 'org-sudz'
+    cardid  = 'card-ringbell'
+    payload = {type: 'Comment', content: 'Test'}
+
     it 'returns 403 forbidden', (done) ->
-      payload = {type: 'Comment', content: 'Test'}
-      @tester.request {orgid: 'org-sudz', cardid: 'card-ringbell', credentials, payload}, (res) =>
+      @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(403)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a mismatched orgid and cardid', ->
+
+    orgid   = 'org-paddys'
+    cardid  = 'card-ringbell'
+    payload = {type: 'Comment', content: 'Test'}
+
     it 'returns 404 not found', (done) ->
-      payload = {type: 'Comment', content: 'Test'}
-      @tester.request {orgid: 'org-paddys', cardid: 'card-ringbell', credentials, payload}, (res) =>
+      @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
         

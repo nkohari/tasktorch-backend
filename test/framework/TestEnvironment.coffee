@@ -31,7 +31,7 @@ class TestEnvironment
     forge.bind('passwordHasher').to.type(PasswordHasher)
     forge.bind('aws').to.type(AWSClientFactory)
     forge.bind('pusher').to.type(PusherClient)
-    forge.bind('stripe').to.type(StripeClientFactory)    
+    forge.bind('stripe').to.type(StripeClientFactory)
 
     forge.bind('connectionPool').to.type(ConnectionPool)
     forge.bind('database').to.type(Database)
@@ -40,7 +40,6 @@ class TestEnvironment
     forge.bind('spool').to.type(EventSpool)
     forge.bind('onboarder').to.type(Onboarder)
     forge.bind('server').to.type(ApiServer)
-    forge.bind('pusher').to.type(PusherClient)
 
     for name, type of loadFiles('handlers', path.resolve(__dirname, '../../src/apps/api'))
       forge.bind('handler').to.type(type).when(name)

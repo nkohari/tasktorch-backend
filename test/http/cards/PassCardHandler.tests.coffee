@@ -1,101 +1,136 @@
 _               = require 'lodash'
 expect          = require('chai').expect
-TestData        = require 'test/framework/TestData'
 TestHarness     = require 'test/framework/TestHarness'
-CommonBehaviors = require 'test/framework/CommonBehaviors'
 PassCardHandler = require 'apps/api/handlers/cards/PassCardHandler'
 GetStackQuery   = require 'data/queries/stacks/GetStackQuery'
 
-describe 'PassCardHandler', ->
+describe 'cards:PassCardHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(PassCardHandler)
+      @tester = TestHarness.createTester(PassCardHandler, 'user-charlie')
       @database = TestHarness.getDatabase()
       ready()
 
-  reset = (callback) ->
-    TestData.reset ['cards', 'notes', 'stacks'], callback
-
-  credentials =
-    user: {id: 'user-charlie'}
+  afterEach (done) ->
+    TestHarness.reset ['cards', 'notes', 'stacks'], done
 
 #---------------------------------------------------------------------------------------------------
 
-  CommonBehaviors.requiresAuthentication {orgid: 'org-paddys', cardid: 'card-takedbaby'}
+  describe 'when called without credentials', ->
+
+    orgid  = 'org-paddys'
+    cardid = 'card-takedbaby'
+
+    it 'returns 401 unauthorized', (done) ->
+      @tester.request {orgid, cardid, credentials: false}, (res) ->
+        expect(res.statusCode).to.equal(401)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent org', ->
+
+    orgid   = 'doesnotexist'
+    cardid  = 'card-takedbaby'
+    payload = {user: 'user-dee'}
+
     it 'returns 404 not found', (done) ->
-      payload = {user: 'user-dee'}
-      @tester.request {orgid: 'doesnotexist', cardid: 'card-takedbaby', credentials, payload}, (res) =>
+      @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent card', ->
+
+    orgid   = 'org-paddys'
+    cardid  = 'doesnotexist'
+    payload = {user: 'user-dee'}
+
     it 'returns 404 not found', (done) ->
-      payload = {user: 'user-dee'}
-      @tester.request {orgid: 'org-paddys', cardid: 'doesnotexist', credentials, payload}, (res) =>
+      @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called without a team or user argument', ->
+
+    orgid   = 'org-paddys'
+    cardid  = 'card-takedbaby'
+    payload = {}
+
     it 'returns 400 bad request', (done) ->
-      payload = {}
-      @tester.request {orgid: 'org-paddys', cardid: 'card-takedbaby', credentials, payload}, (res) =>
+      @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with both a team and a user argument', ->
+
+    orgid   = 'org-paddys'
+    cardid  = 'card-takedbaby'
+    payload = {user: 'user-dee', team: 'team-dynamicduo'}
+
     it 'returns 400 bad request', (done) ->
-      payload = {}
-      @tester.request {orgid: 'org-paddys', cardid: 'card-takedbaby', credentials, payload}, (res) =>
+      @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a non-existent user argument', ->
+
+    orgid   = 'org-paddys'
+    cardid  = 'card-takedbaby'
+    payload = {user: 'doesnotexist'}
+
     it 'returns 400 bad request', (done) ->
-      payload = {user: 'doesnotexist'}
-      @tester.request {orgid: 'org-paddys', cardid: 'card-takedbaby', credentials, payload}, (res) =>
+      @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a user argument who is not a member of the org', ->
+
+    orgid   = 'org-paddys'
+    cardid  = 'card-takedbaby'
+    payload = {user: 'user-greg'}
+
     it 'returns 400 bad request', (done) ->
-      payload = {user: 'user-greg'}
-      @tester.request {orgid: 'org-paddys', cardid: 'card-takedbaby', credentials, payload}, (res) =>
+      @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a non-existent team argument', ->
+
+    orgid   = 'org-paddys'
+    cardid  = 'card-takedbaby'
+    payload = {team: 'doesnotexist'}
+
     it 'returns 400 bad request', (done) ->
-      payload = {team: 'doesnotexist'}
-      @tester.request {orgid: 'org-paddys', cardid: 'card-takedbaby', credentials, payload}, (res) =>
+      @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a team argument that does not belong to the org', ->
+
+    orgid   = 'org-paddys'
+    cardid  = 'card-takedbaby'
+    payload = {team: 'team-sudz'}
+
     it 'returns 400 bad request', (done) ->
-      payload = {team: 'team-sudz'}
-      @tester.request {orgid: 'org-paddys', cardid: 'card-takedbaby', credentials, payload}, (res) =>
+      @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
@@ -103,17 +138,16 @@ describe 'PassCardHandler', ->
 
   describe 'when called with a valid user argument', ->
 
-    orgid  = 'org-paddys'
-    cardid = 'card-takedbaby'
-    userid = 'user-dee'
+    orgid   = 'org-paddys'
+    cardid  = 'card-takedbaby'
+    payload = {user: 'user-dee'}
 
     it "sets the card's user to the specified user and moves the card to the end of the user's inbox stack", (done) ->
-      payload = {user: userid}
-      @tester.request {orgid, cardid, credentials, payload}, (res) =>
+      @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {card} = res.result
-        expect(card.user).to.equal(userid)
+        expect(card.user).to.equal(payload.user)
         expect(card.stack).to.equal('stack-dee-inbox')
         query = new GetStackQuery(card.stack)
         @database.execute query, (err, result) =>
@@ -122,23 +156,22 @@ describe 'PassCardHandler', ->
           expect(result.stack).to.exist()
           expect(result.stack.cards).to.be.an('array')
           expect(_.last(result.stack.cards)).to.equal(cardid)
-          reset(done)
+          done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a valid team argument', ->
 
-    orgid  = 'org-paddys'
-    cardid = 'card-takedbaby'
-    teamid = 'team-dynamicduo'
+    orgid   = 'org-paddys'
+    cardid  = 'card-takedbaby'
+    payload = {team: 'team-dynamicduo'}
 
     it "sets the card's team to the specified team and moves the card to the end of the team's inbox stack", (done) ->
-      payload = {team: teamid}
-      @tester.request {orgid, cardid, credentials, payload}, (res) =>
+      @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {card} = res.result
-        expect(card.team).to.equal(teamid)
+        expect(card.team).to.equal(payload.team)
         expect(card.stack).to.equal('stack-dynamicduo-inbox')
         query = new GetStackQuery(card.stack)
         @database.execute query, (err, result) =>
@@ -147,6 +180,6 @@ describe 'PassCardHandler', ->
           expect(result.stack).to.exist()
           expect(result.stack.cards).to.be.an('array')
           expect(_.last(result.stack.cards)).to.equal(cardid)
-          reset(done)
+          done()
 
 #---------------------------------------------------------------------------------------------------

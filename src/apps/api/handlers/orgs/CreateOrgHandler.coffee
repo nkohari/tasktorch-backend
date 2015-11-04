@@ -21,7 +21,7 @@ class CreateOrgHandler extends Handler
     payload:
       name:   @mustBe.string().required()
       email:  @mustBe.string()
-      survey: @mustBe.object()
+      survey: @mustBe.object().required()
   
   constructor: (@processor, @onboarder) ->
 

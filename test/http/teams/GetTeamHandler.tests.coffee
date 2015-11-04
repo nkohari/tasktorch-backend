@@ -1,67 +1,91 @@
 _               = require 'lodash'
 expect          = require('chai').expect
 TestHarness     = require 'test/framework/TestHarness'
-CommonBehaviors = require 'test/framework/CommonBehaviors'
 GetTeamHandler  = require 'apps/api/handlers/teams/GetTeamHandler'
 
-describe 'GetTeamHandler', ->
+describe 'teams:GetTeamHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(GetTeamHandler)
+      @tester = TestHarness.createTester(GetTeamHandler, 'user-charlie')
       ready()
-
-  credentials =
-    user: {id: 'user-charlie'}
 
 #---------------------------------------------------------------------------------------------------
 
-  CommonBehaviors.requiresAuthentication {orgid: 'org-paddys', teamid: 'team-thegang'}
+  describe 'when called without credentials', ->
+
+    orgid  = 'org-paddys'
+    teamid = 'team-thegang'
+
+    it 'returns 401 unauthorized', (done) ->
+      @tester.request {orgid, teamid, credentials: false}, (res) ->
+        expect(res.statusCode).to.equal(401)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent org', ->
+
+    orgid  = 'doesnotexist'
+    teamid = 'team-thegang'
+
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'doesnotexist', teamid: 'team-thegang', credentials}, (res) =>
+      @tester.request {orgid, teamid}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent team', ->
+
+    orgid  = 'org-paddys'
+    teamid = 'doesnotexist'
+
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'org-paddys', teamid: 'doesnotexist', credentials}, (res) =>
+      @tester.request {orgid, teamid}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a valid team in an org of which the requester is a member', ->
+
+    orgid  = 'org-paddys'
+    teamid = 'team-thegang'
+
     it 'returns the team', (done) ->
-      @tester.request {orgid: 'org-paddys', teamid: 'team-thegang', credentials}, (res) =>
+      @tester.request {orgid, teamid}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {team} = res.result
         expect(team).to.exist()
-        expect(team.id).to.equal('team-thegang')
+        expect(team.id).to.equal(teamid)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for an org of which the requester is not a member', ->
+
+    orgid  = 'org-sudz'
+    teamid = 'team-sudz'
+
     it 'returns 403 forbidden', (done) ->
-      @tester.request {orgid: 'org-sudz', teamid: 'team-sudz', credentials}, (res) =>
+      @tester.request {orgid, teamid}, (res) =>
         expect(res.statusCode).to.equal(403)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a mismatched orgid and teamid', ->
+
+    orgid  = 'org-paddys'
+    teamid = 'team-sudz'
+
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'org-paddys', teamid: 'team-sudz', credentials}, (res) =>
+      @tester.request {orgid, teamid}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 

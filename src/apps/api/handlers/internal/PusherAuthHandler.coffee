@@ -22,13 +22,11 @@ class PusherAuthHandler extends Handler
     channel = request.payload.channel_name
 
     if channel.indexOf('presence-') == 0
-      getAuthToken = @getAuthTokenForPresenceChannel
+      @getAuthTokenForPresenceChannel(user, socket, channel, reply)
     else
-      getAuthToken = @getAuthTokenForUserChannel
+      @getAuthTokenForUserChannel(user, socket, channel, reply)
 
-    getAuthToken(user, socket, channel, reply)
-
-  getAuthTokenForPresenceChannel: (user, socket, channel, reply) =>
+  getAuthTokenForPresenceChannel: (user, socket, channel, reply) ->
     orgid = channel.replace('presence-org-', '')
     query = new GetOrgQuery(orgid)
     @database.execute query, (err, result) =>
@@ -43,7 +41,7 @@ class PusherAuthHandler extends Handler
           user_info: new UserModel(user)
         reply @pusher.getAuthToken(socket, channel, presenceInfo)
 
-  getAuthTokenForUserChannel: (user, socket, channel, reply) =>
+  getAuthTokenForUserChannel: (user, socket, channel, reply) ->
     userid = channel.replace('private-user-', '')
     query  = new GetUserQuery(userid)
     @database.execute query, (err, result) =>

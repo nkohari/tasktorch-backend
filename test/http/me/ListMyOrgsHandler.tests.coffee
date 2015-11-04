@@ -1,30 +1,32 @@
 expect            = require('chai').expect
 TestHarness       = require 'test/framework/TestHarness'
-CommonBehaviors   = require 'test/framework/CommonBehaviors'
 ListMyOrgsHandler = require 'apps/api/handlers/me/ListMyOrgsHandler'
 
-describe 'ListMyOrgsHandler', ->
+describe 'me:ListMyOrgsHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(ListMyOrgsHandler)
+      @tester = TestHarness.createTester(ListMyOrgsHandler, 'user-charlie')
       ready()
-
-  credentials =
-    user: {id: 'user-charlie'}
 
 #---------------------------------------------------------------------------------------------------
 
-  CommonBehaviors.requiresAuthentication()
+  describe 'when called without credentials', ->
+
+    it 'returns 401 unauthorized', (done) ->
+      @tester.request {credentials: false}, (res) ->
+        expect(res.statusCode).to.equal(401)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with credentials', ->
+    
     it 'returns an array of orgs of which requester is a member', (done) ->
-      @tester.request {credentials}, (res) =>
+      @tester.request {}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {orgs} = res.result

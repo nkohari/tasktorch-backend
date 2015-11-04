@@ -1,11 +1,14 @@
 #!/usr/bin/env NODE_PATH=src:. ./node_modules/coffee-script/bin/coffee
 
+r        = require 'rethinkdb'
 TestData = require 'test/framework/TestData'
 
 console.log "Resetting test data in database #{TestData.dbname}"
-TestData.reset TestData.tables, (err) ->
-  if err?
-    console.error "Error deleting data: #{err}"
-    process.exit(1)
-  console.log "Test data reset successfully"
-  process.exit(0)
+r.connect {host: '127.0.0.1', port: 28015}, (err, conn) ->
+  conn.use('torchtest')
+  TestData.reset conn, TestData.tables, (err) ->
+    if err?
+      console.error "Error deleting data: #{err}"
+      process.exit(1)
+    console.log "Test data reset successfully"
+    process.exit(0)

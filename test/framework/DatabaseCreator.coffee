@@ -19,6 +19,7 @@ Tables.cards = [
   r.table('cards').indexCreate('kind')
   r.table('cards').indexCreate('org')
   r.table('cards').indexCreate('stack')
+  r.table('cards').indexCreate('stages', {multi: true})
 ]
 
 Tables.checklists = [
@@ -111,15 +112,13 @@ Tables.users = [
 
 DatabaseCreator = {}
 
-DatabaseCreator.create = (dbname, options = {}, callback) ->
-  r.connect options, (err, conn) ->
+DatabaseCreator.create = (conn, dbname, callback) ->
+  r.dbCreate(dbname).run conn, (err) ->
     return callback(err) if err?
-    r.dbCreate(dbname).run conn, (err) ->
+    conn.use(dbname)
+    statements = _.flatten _.values(Tables)
+    async.eachSeries statements, ((statement, next) -> statement.run(conn, next)), (err) ->
       return callback(err) if err?
-      conn.use(dbname)
-      statements = _.flatten _.values(Tables)
-      async.eachSeries statements, ((statement, next) -> statement.run(conn, next)), (err) ->
-        return callback(err) if err?
-        callback()
+      callback()
 
 module.exports = DatabaseCreator

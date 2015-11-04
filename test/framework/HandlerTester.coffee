@@ -3,13 +3,10 @@ template = require 'url-template'
 
 class HandlerTester
 
-  constructor: (@server, @handler) ->
+  constructor: (@server, @handler, @credentials) ->
     {route} = @handler.options
     @verb = route.verb
     @template = template.parse(route.path)
-
-  impersonate: (userid) ->
-    @credentials = {user: {id: userid}}
 
   request: (args...) ->
 

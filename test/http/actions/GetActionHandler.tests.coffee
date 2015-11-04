@@ -3,15 +3,14 @@ expect           = require('chai').expect
 TestHarness      = require 'test/framework/TestHarness'
 GetActionHandler = require 'apps/api/handlers/actions/GetActionHandler'
 
-describe 'GetActionHandler', ->
+describe 'actions:GetActionHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(GetActionHandler)
-      @tester.impersonate('user-charlie')
+      @tester = TestHarness.createTester(GetActionHandler, 'user-charlie')
       ready()
 
 #---------------------------------------------------------------------------------------------------

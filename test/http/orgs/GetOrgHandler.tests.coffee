@@ -1,79 +1,63 @@
-_               = require 'lodash'
-expect          = require('chai').expect
-TestHarness     = require 'test/framework/TestHarness'
-CommonBehaviors = require 'test/framework/CommonBehaviors'
-GetOrgHandler   = require 'apps/api/handlers/orgs/GetOrgHandler'
+_             = require 'lodash'
+expect        = require('chai').expect
+TestHarness   = require 'test/framework/TestHarness'
+GetOrgHandler = require 'apps/api/handlers/orgs/GetOrgHandler'
 
-describe 'GetOrgHandler', ->
+describe 'orgs:GetOrgHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(GetOrgHandler)
+      @tester = TestHarness.createTester(GetOrgHandler, 'user-charlie')
       ready()
-
-  credentials =
-    user: {id: 'user-charlie'}
 
 #---------------------------------------------------------------------------------------------------
 
-  CommonBehaviors.requiresAuthentication {orgid: 'org-paddys'}
+  describe 'when called without credentials', ->
+
+    orgid = 'org-paddys'
+
+    it 'returns 401 unauthorized', (done) ->
+      @tester.request {orgid, credentials: false}, (res) ->
+        expect(res.statusCode).to.equal(401)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent org', ->
+
+    orgid = 'doesnotexist'
+
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'doesnotexist', credentials}, (res) =>
+      @tester.request {orgid}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with an org of which the requester is a member', ->
+
+    orgid = 'org-paddys'
+
     it 'returns the org', (done) ->
-      @tester.request {orgid: 'org-paddys', credentials}, (res) =>
+      @tester.request {orgid}, (res) =>
         expect(res.statusCode).to.equal(200)
         {org} = res.result
         expect(org).to.exist()
-        expect(org.id).to.equal('org-paddys')
+        expect(org.id).to.equal(orgid)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with an org of which the requester is not a member', ->
+
+    orgid = 'org-sudz'
+
     it 'returns 403 forbidden', (done) ->
-      @tester.request {orgid: 'org-sudz', credentials}, (res) =>
+      @tester.request {orgid}, (res) =>
         expect(res.statusCode).to.equal(403)
-        done()
-
-#---------------------------------------------------------------------------------------------------
-
-  describe 'when called with expand=members', ->
-    it 'returns the org and the users in the members list', (done) ->
-      @tester.request {orgid: 'org-paddys', query: {expand: 'members'}, credentials}, (res) =>
-        expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
-        expect(res.result.related).to.exist()
-        {org}   = res.result
-        {users} = res.result.related
-        missing = _.difference(org.members, _.keys(users))
-        expect(missing).to.be.empty()
-        done()
-
-#---------------------------------------------------------------------------------------------------
-
-  describe 'when called with expand=leaders', ->
-    it 'returns the org and the users in the leaders list', (done) ->
-      @tester.request {orgid: 'org-paddys', query: {expand: 'leaders'}, credentials}, (res) =>
-        expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
-        expect(res.result.related).to.exist()
-        {org}   = res.result
-        {users} = res.result.related
-        missing = _.difference(org.leaders, _.keys(users))
-        expect(missing).to.be.empty()
         done()
 
 #---------------------------------------------------------------------------------------------------

@@ -2,8 +2,9 @@
 
 require('coffee-script/register');
 
-var fs = require('fs');
+var fs   = require('fs');
 var path = require('path');
+var r    = require('rethinkdb');
 var DatabaseCreator = require('../test/framework/DatabaseCreator');
 
 if (process.argv.length < 4) {
@@ -31,11 +32,13 @@ var options = {
 };
 
 console.log("Creating database " + dbname);
-DatabaseCreator.create(dbname, options, function(err) {
-  if (err) {
-    console.error("Error creating database: " + err.stack);
-    process.exit(1);
-  }
-  console.log("Database created successfully")
-  process.exit(0);
+r.connect(options, function(err, conn) {
+  DatabaseCreator.create(conn, dbname, function(err) {
+    if (err) {
+      console.error("Error creating database: " + err.stack);
+      process.exit(1);
+    }
+    console.log("Database created successfully")
+    process.exit(0);
+  });  
 });

@@ -4,19 +4,18 @@ TestHarness             = require 'test/framework/TestHarness'
 CommonBehaviors         = require 'test/framework/CommonBehaviors'
 ChangeActionTextHandler = require 'apps/api/handlers/actions/ChangeActionTextHandler'
 
-describe 'ChangeActionTextHandler', ->
+describe 'actions:ChangeActionTextHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(ChangeActionTextHandler)
-      @tester.impersonate('user-charlie')
+      @tester = TestHarness.createTester(ChangeActionTextHandler, 'user-charlie')
       ready()
 
   afterEach (done) ->
-    TestData.reset ['actions', 'notes'], done
+    TestHarness.reset ['actions', 'notes'], done
 
 #---------------------------------------------------------------------------------------------------
 

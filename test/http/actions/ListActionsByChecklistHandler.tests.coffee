@@ -3,15 +3,14 @@ expect                        = require('chai').expect
 TestHarness                   = require 'test/framework/TestHarness'
 ListActionsByChecklistHandler = require 'apps/api/handlers/actions/ListActionsByChecklistHandler'
 
-describe 'ListActionsByChecklistHandler', ->
+describe 'actions:ListActionsByChecklistHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(ListActionsByChecklistHandler)
-      @tester.impersonate('user-charlie')
+      @tester = TestHarness.createTester(ListActionsByChecklistHandler, 'user-charlie')
       ready()
 
 #---------------------------------------------------------------------------------------------------

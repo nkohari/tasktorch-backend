@@ -1,34 +1,34 @@
 expect               = require('chai').expect
-TestData             = require 'test/framework/TestData'
 TestHarness          = require 'test/framework/TestHarness'
-CommonBehaviors      = require 'test/framework/CommonBehaviors'
 ChangeMyEmailHandler = require 'apps/api/handlers/me/ChangeMyEmailHandler'
 
-describe 'ChangeMyEmailHandler', ->
+describe 'me:ChangeMyEmailHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(ChangeMyEmailHandler)
+      @tester = TestHarness.createTester(ChangeMyEmailHandler, 'user-charlie')
       ready()
 
-  reset = (callback) ->
-    TestData.reset ['users'], callback
-
-  credentials =
-    user: {id: 'user-charlie'}
+  afterEach (done) ->
+    TestHarness.reset ['users'], done
 
 #---------------------------------------------------------------------------------------------------
 
-  CommonBehaviors.requiresAuthentication()
+  describe 'when called without credentials', ->
+
+    it 'returns 401 unauthorized', (done) ->
+      @tester.request {credentials: false}, (res) ->
+        expect(res.statusCode).to.equal(401)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called without an email argument', ->
     it 'returns 400 bad request', (done) ->
-      @tester.request {credentials}, (res) =>
+      @tester.request {}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
@@ -36,14 +36,15 @@ describe 'ChangeMyEmailHandler', ->
 
   describe 'when called with an email argument', ->
 
+    payload = {email: 'kitten.mittons@charliekelly.com'}
+
     it 'changes the email address for the user', (done) ->
-      payload = {email: 'kitten.mittons@charliekelly.com'}
-      @tester.request {credentials, payload}, (res) =>
+      @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {user} = res.result
         expect(user).to.exist()
         expect(user.email).to.equal(payload.email)
-        reset(done)
+        done()
 
 #---------------------------------------------------------------------------------------------------

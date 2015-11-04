@@ -12,7 +12,9 @@ class SuggestUsersByOrgQuery extends Query
     expression = "(?i)#{phrase}"
     userids = r.table(Membership.getSchema().table)
       .getAll(orgid, {index: 'org'})
-      .filter({status: MembershipStatus.Normal})('user')
+      .filter({status: MembershipStatus.Normal})
+      .default([])
+      .coerceTo('array')('user')
 
     @rql = r.table(@schema.table).getAll(r.args(userids))
     .filter (user) -> r.or(user('username').match(expression), user('name').match(expression))

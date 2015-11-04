@@ -5,20 +5,19 @@ TestHarness       = require 'test/framework/TestHarness'
 MoveActionHandler = require 'apps/api/handlers/actions/MoveActionHandler'
 GetChecklistQuery = require 'data/queries/checklists/GetChecklistQuery'
 
-describe 'MoveActionHandler', ->
+describe 'actions:MoveActionHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(MoveActionHandler)
-      @tester.impersonate('user-charlie')
+      @tester = TestHarness.createTester(MoveActionHandler, 'user-charlie')
       @database = TestHarness.getDatabase()
       ready()
 
   afterEach (done) ->
-    TestData.reset ['actions', 'checklists', 'notes'], done
+    TestHarness.reset ['actions', 'checklists', 'notes'], done
 
 #---------------------------------------------------------------------------------------------------
 

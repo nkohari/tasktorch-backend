@@ -4,44 +4,61 @@ TestHarness             = require 'test/framework/TestHarness'
 CommonBehaviors         = require 'test/framework/CommonBehaviors'
 ListStacksByTeamHandler = require 'apps/api/handlers/stacks/ListStacksByTeamHandler'
 
-describe 'ListStacksByTeamHandler', ->
+describe 'stacks:ListStacksByTeamHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(ListStacksByTeamHandler)
+      @tester = TestHarness.createTester(ListStacksByTeamHandler, 'user-charlie')
       ready()
-
-  credentials =
-    user: {id: 'user-charlie'}
 
 #---------------------------------------------------------------------------------------------------
 
-  CommonBehaviors.requiresAuthentication {orgid: 'org-paddys', teamid: 'team-gruesometwosome'}
+  describe 'when called without credentials', ->
+
+    orgid  = 'org-paddys'
+    teamid = 'team-gruesometwosome'
+
+    it 'returns 401 unauthorized', (done) ->
+      @tester.request {orgid, teamid, credentials: false}, (res) ->
+        expect(res.statusCode).to.equal(401)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent org', ->
+
+    orgid  = 'doesnotexist'
+    teamid = 'team-gruesometwosome'
+
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'doesnotexist', teamid: 'team-gruesometwosome', credentials}, (res) =>
+      @tester.request {orgid, teamid}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent team', ->
+
+    orgid  = 'org-paddys'
+    teamid = 'doesnotexist'
+
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'org-paddys', teamid: 'doesnotexist', credentials}, (res) =>
+      @tester.request {orgid, teamid}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a valid team in an org of which the requester is a member', ->
+
+    orgid  = 'org-paddys'
+    teamid = 'team-gruesometwosome'
+
     it 'returns an array of stacks belonging to the team', (done) ->
-      @tester.request {orgid: 'org-paddys', teamid: 'team-gruesometwosome', credentials}, (res) =>
+      @tester.request {orgid, teamid}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {stacks} = res.result
@@ -53,16 +70,24 @@ describe 'ListStacksByTeamHandler', ->
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for an org of which the requester is not a member', ->
+
+    orgid  = 'org-sudz'
+    teamid = 'team-sudz'
+
     it 'returns 403 forbidden', (done) ->
-      @tester.request {orgid: 'org-sudz', teamid: 'team-sudz', credentials}, (res) =>
+      @tester.request {orgid, teamid}, (res) =>
         expect(res.statusCode).to.equal(403)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a mismatched orgid and teamid', ->
+
+    orgid  = 'org-paddys'
+    teamid = 'team-sudz'
+
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'org-paddys', teamid: 'team-sudz', credentials}, (res) =>
+      @tester.request {orgid, teamid}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 

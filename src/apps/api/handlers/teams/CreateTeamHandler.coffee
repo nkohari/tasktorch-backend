@@ -30,8 +30,15 @@ class CreateTeamHandler extends Handler
     {user}                  = request.auth.credentials
     {name, purpose}         = request.payload
 
-    members = [user.id] unless members?.length > 0
-    leaders = [user.id] unless leaders?.length > 0
+    if members?.length > 0
+      members = _.pluck(members, 'id')
+    else
+      members = [user.id]
+
+    if leaders?.length > 0
+      leaders = _.pluck(leaders, 'id')
+    else
+      leaders = [user.id]
 
     query = new GetAllMembershipsByOrgQuery(org.id)
     @database.execute query, (err, result) =>
@@ -39,10 +46,10 @@ class CreateTeamHandler extends Handler
 
       userids = _.pluck(result.memberships, 'user')
 
-      unless _.every(members, (u) -> _.contains(userids))
+      unless _.every(members, (id) -> _.contains(userids, id))
         return reply @error.badRequest("All users in the members list must be members of the org")
 
-      unless _.every(leaders, (u) -> _.contains(userids))
+      unless _.every(leaders, (id) -> _.contains(userids, id))
         return reply @error.badRequest("All users in the leaders list must be members of the org")
 
       if _.difference(leaders, members).length > 0

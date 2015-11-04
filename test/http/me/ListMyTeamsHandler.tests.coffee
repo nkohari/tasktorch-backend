@@ -1,31 +1,37 @@
 _                  = require 'lodash'
 expect             = require('chai').expect
 TestHarness        = require 'test/framework/TestHarness'
-CommonBehaviors    = require 'test/framework/CommonBehaviors'
 ListMyTeamsHandler = require 'apps/api/handlers/me/ListMyTeamsHandler'
 
-describe 'ListMyTeamsHandler', ->
+describe 'me:ListMyTeamsHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(ListMyTeamsHandler)
+      @tester = TestHarness.createTester(ListMyTeamsHandler, 'user-charlie')
       ready()
-
-  credentials =
-    user: {id: 'user-charlie'}
 
 #---------------------------------------------------------------------------------------------------
 
-  CommonBehaviors.requiresAuthentication {orgid: 'org-paddys'}
+  describe 'when called without credentials', ->
+
+    orgid = 'org-paddys'
+
+    it 'returns 401 unauthorized', (done) ->
+      @tester.request {orgid, credentials: false}, (res) ->
+        expect(res.statusCode).to.equal(401)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for an org of which the requester is a member', ->
+
+    orgid = 'org-paddys'
+
     it 'returns an array of teams owned by the requester in that org', (done) ->
-      @tester.request {orgid: 'org-paddys', credentials}, (res) =>
+      @tester.request {orgid}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {teams} = res.result
@@ -37,8 +43,11 @@ describe 'ListMyTeamsHandler', ->
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for an org of which the requester is not a member', ->
+
+    orgid = 'org-sudz'
+
     it 'returns 403 forbidden', (done) ->
-      @tester.request {orgid: 'org-sudz', credentials}, (res) =>
+      @tester.request {orgid}, (res) =>
         expect(res.statusCode).to.equal(403)
         done()
 

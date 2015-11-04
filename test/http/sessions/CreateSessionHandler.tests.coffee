@@ -6,7 +6,7 @@ TestHarness          = require 'test/framework/TestHarness'
 CommonBehaviors      = require 'test/framework/CommonBehaviors'
 CreateSessionHandler = require 'apps/api/handlers/sessions/CreateSessionHandler'
 
-describe 'CreateSessionHandler', ->
+describe 'sessions:CreateSessionHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
@@ -16,13 +16,15 @@ describe 'CreateSessionHandler', ->
       @tester = TestHarness.createTester(CreateSessionHandler)
       ready()
 
-  reset = (callback) ->
-    TestData.reset ['sessions'], callback
+  afterEach (done) ->
+    TestHarness.reset ['sessions'], done
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called without a login argument', ->
+
     payload = {password: 'waitress'}
+
     it 'returns 400 bad request', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(400)
@@ -40,7 +42,9 @@ describe 'CreateSessionHandler', ->
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a valid username but an incorrect password', ->
+
     payload = {login: 'dayman', password: 'hunter2'}
+
     it 'returns 403 forbidden', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(403)
@@ -49,7 +53,9 @@ describe 'CreateSessionHandler', ->
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a valid email but an incorrect password', ->
+
     payload = {login: 'charlie.kelly@paddyspub.com', password: 'hunter2'}
+
     it 'returns 403 forbidden', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(403)
@@ -58,7 +64,9 @@ describe 'CreateSessionHandler', ->
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a valid username and a valid password', ->
+
     payload = {login: 'dayman', password: 'waitress'}
+
     it 'returns the created session', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(200)
@@ -66,7 +74,8 @@ describe 'CreateSessionHandler', ->
         {session} = res.result
         expect(session).to.exist()
         expect(session.user).to.equal('user-charlie')
-        reset(done)
+        done()
+
     it 'sets the value of the tt-session and tt-userid cookies', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(200)
@@ -75,12 +84,14 @@ describe 'CreateSessionHandler', ->
         expect(cookies).to.have.length(2)
         expect(cookies[0]).to.match(/^tt-session/)
         expect(cookies[1]).to.match(/^tt-userid/)
-        reset(done)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a valid email and a valid password', ->
+
     payload = {login: 'charlie.kelly@paddyspub.com', password: 'waitress'}
+
     it 'returns the created session', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(200)
@@ -88,7 +99,8 @@ describe 'CreateSessionHandler', ->
         {session} = res.result
         expect(session).to.exist()
         expect(session.user).to.equal('user-charlie')
-        reset(done)
+        done()
+
     it 'sets the value of the tt-session and tt-userid cookies', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(200)
@@ -97,6 +109,6 @@ describe 'CreateSessionHandler', ->
         expect(cookies).to.have.length(2)
         expect(cookies[0]).to.match(/^tt-session/)
         expect(cookies[1]).to.match(/^tt-userid/)
-        reset(done)
+        done()
 
 #---------------------------------------------------------------------------------------------------

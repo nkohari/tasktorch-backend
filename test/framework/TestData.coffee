@@ -66,6 +66,7 @@ TestData.cards = table [
     user:       null
     team:       'team-thegang'
     stack:      'stack-thegang-inbox'
+    stages:     ['stage-scheme-do', 'stage-scheme-drink']
     moves:      []
     checklists: ['checklist-takedbaby-plan', 'checklist-takedbaby-do', 'checklist-takedbaby-drink']
   }
@@ -82,6 +83,7 @@ TestData.cards = table [
     user:       'user-mac'
     team:       null
     stack:      'user-mac-queue'
+    stages:     []
     moves:      []
     checklists: ['checklist-buygas-plan', 'checklist-buygas-do', 'checklist-buygas-drink']
   }
@@ -97,6 +99,7 @@ TestData.cards = table [
     user:       null
     team:       'team-gruesometwosome'
     stack:      'stack-gruesometwosome-plans'
+    stages:     []
     moves:      []
     checklists: ['checklist-boildenim-plan', 'checklist-boildenim-do', 'checklist-boildenim-drink']
   }
@@ -112,6 +115,7 @@ TestData.cards = table [
     user:       'user-greg'
     team:       null
     stack:      'user-greg-queue'
+    stages:     ['stage-task-do']
     moves:      []
     checklists: ['checklist-ringbell-do']
   }
@@ -218,6 +222,20 @@ TestData.goals = table [
 
 #---------------------------------------------------------------------------------------------------
 
+TestData.invites = table [
+  record {
+    id:      'invite-waitress'
+    org:     'org-paddys'
+    creator: 'user-charlie'
+    orgName: "Paddy's Pub"
+    email:   'waitress@coffeeshop.com'
+    level:   'Member'
+    status:  'Pending'
+  }
+]
+
+#---------------------------------------------------------------------------------------------------
+
 TestData.kinds = table [
   record {
     id:         'kind-scheme'
@@ -263,17 +281,6 @@ TestData.notes = table [
 
 #---------------------------------------------------------------------------------------------------
 
-TestData.orgs = table [
-  record {
-    id:   'org-paddys'
-    name: "Paddy's Pub"
-  }
-  record {
-    id:   'org-sudz'
-    name: 'Sudz'
-  }
-]
-
 TestData.memberships = table [
   record {
     id:    'membership-paddys-charlie'
@@ -313,7 +320,18 @@ TestData.memberships = table [
   }
 ]
 
+#---------------------------------------------------------------------------------------------------
 
+TestData.orgs = table [
+  record {
+    id:   'org-paddys'
+    name: "Paddy's Pub"
+  }
+  record {
+    id:   'org-sudz'
+    name: 'Sudz'
+  }
+]
 #---------------------------------------------------------------------------------------------------
 
 TestData.stacks = table [
@@ -565,15 +583,10 @@ TestData.teams = table [
 
 TestData.tokens = table [
   record {
-    id:      'token-waitress'
-    org:     'org-paddys'
-    creator: 'user-charlie'
-    comment: 'waitress@coffeeshop.com'
-  }
-  record {
     id:      'token-ricketycricket'
     creator: 'user-dennis'
     comment: 'rickety.cricket@underthebridge.com'
+    status:  'Pending'
   }
 ]
 
@@ -637,6 +650,7 @@ TestData.tables = [
   'cards'
   'checklists'
   'goals'
+  'invites'
   'kinds'
   'notes'
   'memberships'
@@ -651,23 +665,23 @@ TestData.tables = [
 
 #---------------------------------------------------------------------------------------------------
 
-runBatch = (statements, callback) ->
-  r.connect {db: TestData.dbname}, (err, conn) ->
-    return callback(err) if err?
-    async.eachSeries statements, ((statement, next) -> statement.run(conn, next)), callback
+runBatch = (conn, statements, callback) ->
+  runStatement = (statement, next) ->
+    statement.run(conn, next)
+  async.eachSeries(statements, runStatement, callback)
 
-TestData.clear = (tables, callback) ->
+TestData.clear = (conn, tables, callback) ->
   statements = _.map tables, (name) -> r.table(name).delete()
-  runBatch(statements, callback)
+  runBatch(conn, statements, callback)
 
-TestData.populate = (tables, callback) ->
+TestData.populate = (conn, tables, callback) ->
   statements = _.map tables, (name) -> r.table(name).insert _.values(TestData[name])
-  runBatch(statements, callback)
+  runBatch(conn, statements, callback)
 
-TestData.reset = (tables, callback) ->
-  TestData.clear tables, (err) ->
+TestData.reset = (conn, tables, callback) ->
+  TestData.clear conn, tables, (err) ->
     return callback(err) if err?
-    TestData.populate tables, (err) ->
+    TestData.populate conn, tables, (err) ->
       return callback(err) if err?
       callback()
 

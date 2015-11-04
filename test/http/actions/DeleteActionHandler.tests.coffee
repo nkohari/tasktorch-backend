@@ -3,19 +3,18 @@ TestData            = require 'test/framework/TestData'
 TestHarness         = require 'test/framework/TestHarness'
 DeleteActionHandler = require 'apps/api/handlers/actions/DeleteActionHandler'
 
-describe 'DeleteActionHandler', ->
+describe 'actions:DeleteActionHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(DeleteActionHandler)
-      @tester.impersonate('user-charlie')
+      @tester = TestHarness.createTester(DeleteActionHandler, 'user-charlie')
       ready()
 
   afterEach (done) ->
-    TestData.reset ['actions', 'checklists', 'notes'], done
+    TestHarness.reset ['actions', 'checklists', 'notes'], done
 
 #---------------------------------------------------------------------------------------------------
 

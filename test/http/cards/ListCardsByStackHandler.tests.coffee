@@ -1,47 +1,63 @@
 _                       = require 'lodash'
 expect                  = require('chai').expect
 TestHarness             = require 'test/framework/TestHarness'
-CommonBehaviors         = require 'test/framework/CommonBehaviors'
 ListCardsByStackHandler = require 'apps/api/handlers/cards/ListCardsByStackHandler'
 
-describe 'ListCardsByStackHandler', ->
+describe 'cards:ListCardsByStackHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(ListCardsByStackHandler)
+      @tester = TestHarness.createTester(ListCardsByStackHandler, 'user-charlie')
       ready()
-
-  credentials =
-    user: {id: 'user-charlie'}
 
 #---------------------------------------------------------------------------------------------------
 
-  CommonBehaviors.requiresAuthentication {orgid: 'org-paddys', stackid: 'stack-mac-queue'}
+  describe 'when called without credentials', ->
+
+    orgid   = 'org-paddys'
+    stackid = 'stack-mac-queue'
+
+    it 'returns 401 unauthorized', (done) ->
+      @tester.request {orgid, stackid, credentials: false}, (res) ->
+        expect(res.statusCode).to.equal(401)
+        done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent org', ->
+
+    orgid   = 'doesnotexist'
+    stackid = 'stack-mac-queue'
+
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'doesnotexist', stackid: 'stack-mac-queue', credentials}, (res) =>
+      @tester.request {orgid, stackid}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent stack', ->
+
+    orgid   = 'org-paddys'
+    stackid = 'doesnotexist'
+
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'org-paddys', stackid: 'doesnotexist', credentials}, (res) =>
+      @tester.request {orgid, stackid}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a valid stack in an org of which the requester is a member', ->
+
+    orgid   = 'org-paddys'
+    stackid = 'stack-mac-queue'
+
     it 'returns an array of cards currently in the stack', (done) ->
-      @tester.request {orgid: 'org-paddys', stackid: 'stack-mac-queue', credentials}, (res) =>
+      @tester.request {orgid, stackid}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist()
         {cards} = res.result
@@ -53,16 +69,24 @@ describe 'ListCardsByStackHandler', ->
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for an org of which the requester is not a member', ->
+
+    orgid   = 'org-sudz'
+    stackid = 'stack-sudz-inbox'
+
     it 'returns 403 forbidden', (done) ->
-      @tester.request {orgid: 'org-sudz', stackid: 'stack-sudz-inbox', credentials}, (res) =>
+      @tester.request {orgid, stackid}, (res) =>
         expect(res.statusCode).to.equal(403)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a mismatched orgid and stackid', ->
+
+    orgid   = 'org-paddys'
+    stackid = 'stack-sudz-inbox'
+
     it 'returns 404 not found', (done) ->
-      @tester.request {orgid: 'org-paddys', stackid: 'stack-sudz-inbox', credentials}, (res) =>
+      @tester.request {orgid, stackid}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 

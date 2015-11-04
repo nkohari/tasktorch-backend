@@ -11,7 +11,9 @@ class GetAllUsersByOrgQuery extends Query
 
     userids = r.table(Membership.getSchema().table)
       .getAll(orgid, {index: 'org'})
-      .filter({status: MembershipStatus.Normal})('user')
+      .filter({status: MembershipStatus.Normal})
+      .default([])
+      .coerceTo('array')('user')
 
     @rql = r.table(@schema.table).getAll(r.args(userids)).coerceTo('array')
 

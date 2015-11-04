@@ -3,19 +3,18 @@ TestData            = require 'test/framework/TestData'
 TestHarness         = require 'test/framework/TestHarness'
 CreateActionHandler = require 'apps/api/handlers/actions/CreateActionHandler'
 
-describe 'CreateActionHandler', ->
+describe 'actions:CreateActionHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(CreateActionHandler)
-      @tester.impersonate('user-charlie')
+      @tester = TestHarness.createTester(CreateActionHandler, 'user-charlie')
       ready()
 
   afterEach (done) ->
-    TestData.reset ['actions', 'checklists', 'notes'], done
+    TestHarness.reset ['actions', 'checklists', 'notes'], done
 
 #---------------------------------------------------------------------------------------------------
 
