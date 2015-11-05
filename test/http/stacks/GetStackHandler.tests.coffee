@@ -59,9 +59,9 @@ describe 'stacks:GetStackHandler', ->
     it 'returns the stack', (done) ->
       @tester.request {orgid, stackid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {stack} = res.result
-        expect(stack).to.exist()
+        expect(stack).to.exist
         expect(stack.id).to.equal(stackid)
         done()
 

@@ -62,16 +62,16 @@ describe 'cards:AcceptCardHandler', ->
     it "moves the card to the bottom of the requester's queue and assigns it to the requester", (done) ->
       @tester.request {orgid, cardid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
-        expect(card).to.exist()
+        expect(card).to.exist
         expect(card.id).to.equal(cardid)
         expect(card.user).to.equal('user-charlie')
         expect(card.stack).to.equal('stack-charlie-queue')
         query = new GetStackQuery(card.stack)
         @database.execute query, (err, result) =>
-          expect(err).to.not.exist()
-          expect(result.stack).to.exist()
+          expect(err).to.not.exist
+          expect(result.stack).to.exist
           expect(_.last(result.stack.cards)).to.equal(cardid)
           done()
 

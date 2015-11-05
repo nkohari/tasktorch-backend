@@ -63,9 +63,9 @@ describe 'cards:DeleteCardHandler', ->
     it 'removes the card from all stacks', (done) ->
       @tester.request {orgid, cardid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
-        expect(card).to.exist()
+        expect(card).to.exist
         expect(card.id).to.equal(cardid)
         expect(card.stack).to.equal(null)
         done()
@@ -73,9 +73,9 @@ describe 'cards:DeleteCardHandler', ->
     it 'removes all followers from the card', (done) ->
       @tester.request {orgid, cardid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
-        expect(card).to.exist()
+        expect(card).to.exist
         expect(card.id).to.equal(cardid)
         expect(card.followers).to.have.length(0)
         done()
@@ -83,9 +83,9 @@ describe 'cards:DeleteCardHandler', ->
     it 'sets its user and team to null', (done) ->
       @tester.request {orgid, cardid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
-        expect(card).to.exist()
+        expect(card).to.exist
         expect(card.user).to.equal(null)
         expect(card.team).to.equal(null)
         done()
@@ -93,9 +93,9 @@ describe 'cards:DeleteCardHandler', ->
     it 'sets its status to Deleted', (done) ->
       @tester.request {orgid, cardid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
-        expect(card).to.exist()
+        expect(card).to.exist
         expect(card.status).to.equal(CardStatus.Deleted)
         done()
 

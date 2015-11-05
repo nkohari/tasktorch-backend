@@ -1,8 +1,7 @@
-_               = require 'lodash'
-expect          = require('chai').expect
-TestHarness     = require 'test/framework/TestHarness'
-CommonBehaviors = require 'test/framework/CommonBehaviors'
-GetUserHandler  = require 'apps/api/handlers/users/GetUserHandler'
+_              = require 'lodash'
+expect         = require('chai').expect
+TestHarness    = require 'test/framework/TestHarness'
+GetUserHandler = require 'apps/api/handlers/users/GetUserHandler'
 
 describe 'users:GetUserHandler', ->
 
@@ -45,9 +44,9 @@ describe 'users:GetUserHandler', ->
     it 'returns the user', (done) ->
       @tester.request {userid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {user} = res.result
-        expect(user).to.exist()
+        expect(user).to.exist
         expect(user.id).to.equal(userid)
         done()
 

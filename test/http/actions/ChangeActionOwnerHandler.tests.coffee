@@ -1,5 +1,4 @@
 expect                   = require('chai').expect
-TestData                 = require 'test/framework/TestData'
 TestHarness              = require 'test/framework/TestHarness'
 ChangeActionOwnerHandler = require 'apps/api/handlers/actions/ChangeActionOwnerHandler'
 GetCardQuery             = require 'data/queries/cards/GetCardQuery'
@@ -79,7 +78,7 @@ describe 'actions:ChangeActionOwnerHandler', ->
     it 'assigns the action to no one', (done) ->
       @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {action} = res.result
         expect(action.id).to.equal(actionid)
         expect(action.user).to.equal(null)
@@ -96,7 +95,7 @@ describe 'actions:ChangeActionOwnerHandler', ->
     it 'assigns the action to the specified user', (done) ->
       @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {action} = res.result
         expect(action.id).to.equal(actionid)
         expect(action.user).to.equal(payload.user)
@@ -105,14 +104,14 @@ describe 'actions:ChangeActionOwnerHandler', ->
     it 'adds the specified user as a follower of the card', (done) ->
       @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {action} = res.result
         query = new GetCardQuery(action.card)
         @database.execute query, (err, result) =>
-          expect(err).not.to.exist()
-          expect(result).to.exist()
+          expect(err).not.to.exist
+          expect(result).to.exist
           {card} = result
-          expect(card).to.exist()
+          expect(card).to.exist
           expect(card.followers).to.be.an('array')
           expect(card.followers).to.contain(payload.user)
           done()

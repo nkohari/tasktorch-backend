@@ -1,7 +1,5 @@
 expect                  = require('chai').expect
-TestData                = require 'test/framework/TestData'
 TestHarness             = require 'test/framework/TestHarness'
-CommonBehaviors         = require 'test/framework/CommonBehaviors'
 ChangeActionTextHandler = require 'apps/api/handlers/actions/ChangeActionTextHandler'
 
 describe 'actions:ChangeActionTextHandler', ->
@@ -59,7 +57,7 @@ describe 'actions:ChangeActionTextHandler', ->
       payload = {text: null}
       @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {action} = res.result
         expect(action.id).to.equal('action-takedbaby')
         expect(action.text).to.equal(null)
@@ -72,7 +70,7 @@ describe 'actions:ChangeActionTextHandler', ->
       payload = {text: 'Test'}
       @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {action} = res.result
         expect(action.id).to.equal('action-takedbaby')
         expect(action.text).to.equal('Test')

@@ -59,9 +59,9 @@ describe 'actions:GetActionHandler', ->
     it 'returns the action', (done) ->
       @tester.request {orgid, actionid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {action} = res.result
-        expect(action).to.exist()
+        expect(action).to.exist
         expect(action.id).to.equal(actionid)
         done()
 

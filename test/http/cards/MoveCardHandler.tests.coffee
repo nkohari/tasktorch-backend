@@ -145,14 +145,14 @@ describe 'cards:MoveCardHandler', ->
     it 'moves the card to the end of the specified stack', (done) ->
       @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
         expect(card.stack).to.equal(payload.stack)
         query = new GetStackQuery(payload.stack)
         @database.execute query, (err, result) =>
-          expect(err).not.to.exist()
-          expect(result).to.exist()
-          expect(result.stack).to.exist()
+          expect(err).not.to.exist
+          expect(result).to.exist
+          expect(result.stack).to.exist
           expect(result.stack.cards).to.be.an('array')
           expect(_.last(result.stack.cards)).to.equal(cardid)
           done()
@@ -168,14 +168,14 @@ describe 'cards:MoveCardHandler', ->
     it 'moves the card to the beginning of the specified stack', (done) ->
       @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
         expect(card.stack).to.equal(payload.stack)
         query = new GetStackQuery(payload.stack)
         @database.execute query, (err, result) =>
-          expect(err).not.to.exist()
-          expect(result).to.exist()
-          expect(result.stack).to.exist()
+          expect(err).not.to.exist
+          expect(result).to.exist
+          expect(result.stack).to.exist
           expect(result.stack.cards).to.be.an('array')
           expect(_.first(result.stack.cards)).to.equal(cardid)
           done()
@@ -191,14 +191,14 @@ describe 'cards:MoveCardHandler', ->
     it 'moves the card to the specified position in the specified stack', (done) ->
       @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
         expect(card.stack).to.equal(payload.stack)
         query = new GetStackQuery(payload.stack)
         @database.execute query, (err, result) =>
-          expect(err).not.to.exist()
-          expect(result).to.exist()
-          expect(result.stack).to.exist()
+          expect(err).not.to.exist
+          expect(result).to.exist
+          expect(result.stack).to.exist
           expect(result.stack.cards).to.be.an('array')
           expect(result.stack.cards[payload.position]).to.equal(cardid)
           done()
@@ -214,14 +214,14 @@ describe 'cards:MoveCardHandler', ->
     it 'moves the card to the end of the specified stack', (done) ->
       @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
         expect(card.stack).to.equal(payload.stack)
         query = new GetStackQuery(payload.stack)
         @database.execute query, (err, result) =>
-          expect(err).not.to.exist()
-          expect(result).to.exist()
-          expect(result.stack).to.exist()
+          expect(err).not.to.exist
+          expect(result).to.exist
+          expect(result.stack).to.exist
           expect(result.stack.cards).to.be.an('array')
           expect(_.last(result.stack.cards)).to.equal(cardid)
           done()
@@ -237,14 +237,14 @@ describe 'cards:MoveCardHandler', ->
     it 'moves the card to the beginning of the specified stack', (done) ->
       @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
         expect(card.stack).to.equal(payload.stack)
         query = new GetStackQuery(payload.stack)
         @database.execute query, (err, result) =>
-          expect(err).not.to.exist()
-          expect(result).to.exist()
-          expect(result.stack).to.exist()
+          expect(err).not.to.exist
+          expect(result).to.exist
+          expect(result.stack).to.exist
           expect(result.stack.cards).to.be.an('array')
           expect(_.first(result.stack.cards)).to.equal(cardid)
           done()
@@ -260,14 +260,14 @@ describe 'cards:MoveCardHandler', ->
     it 'moves the card to the specified position in the specified stack', (done) ->
       @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
         expect(card.stack).to.equal(payload.stack)
         query = new GetStackQuery(payload.stack)
         @database.execute query, (err, result) =>
-          expect(err).not.to.exist()
-          expect(result).to.exist()
-          expect(result.stack).to.exist()
+          expect(err).not.to.exist
+          expect(result).to.exist
+          expect(result.stack).to.exist
           expect(result.stack.cards).to.be.an('array')
           expect(result.stack.cards[payload.position]).to.equal(cardid)
           done()

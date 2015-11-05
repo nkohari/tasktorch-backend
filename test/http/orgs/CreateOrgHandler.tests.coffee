@@ -62,21 +62,21 @@ describe 'orgs:CreateOrgHandler', ->
     it 'creates and returns the org', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {org} = res.result
-        expect(org).to.exist()
+        expect(org).to.exist
         expect(org.name).to.equal(payload.name)
         done()
 
     it 'creates a default kind for the org', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {org} = res.result
         query = new GetAllKindsByOrgQuery(org.id)
         @database.execute query, (err, result) =>
-          expect(err).not.to.exist()
-          expect(result).to.exist()
+          expect(err).not.to.exist
+          expect(result).to.exist
           {kinds} = result
           expect(kinds).to.have.length(1)
           expect(_.first(kinds).name).to.equal('Task')
@@ -85,12 +85,12 @@ describe 'orgs:CreateOrgHandler', ->
     it 'creates default stacks for the requester', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {org} = res.result
         query = new GetAllStacksByOrgAndUserQuery(org.id, 'user-charlie')
         @database.execute query, (err, result) =>
-          expect(err).not.to.exist()
-          expect(result).to.exist()
+          expect(err).not.to.exist
+          expect(result).to.exist
           {stacks} = result
           expect(stacks).to.have.length(3)
           expect(_.any(stacks, (s) -> s.type == 'Inbox'))
@@ -101,12 +101,12 @@ describe 'orgs:CreateOrgHandler', ->
     it 'adds the requester as a member', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {org} = res.result
         query = new GetAllMembershipsByOrgQuery(org.id)
         @database.execute query, (err, result) =>
-          expect(err).not.to.exist()
-          expect(result).to.exist()
+          expect(err).not.to.exist
+          expect(result).to.exist
           {memberships} = result
           expect(memberships).to.have.length(1)
           expect(_.first(memberships).user).to.equal('user-charlie')
@@ -121,9 +121,9 @@ describe 'orgs:CreateOrgHandler', ->
     it 'sets the org email to the specified email', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {org} = res.result
-        expect(org).to.exist()
+        expect(org).to.exist
         expect(org.email).to.equal(payload.email)
         done()
 
@@ -136,9 +136,9 @@ describe 'orgs:CreateOrgHandler', ->
     it 'sets the org email to the email of the requester', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {org} = res.result
-        expect(org).to.exist()
+        expect(org).to.exist
         expect(org.email).to.equal(@tester.credentials.user.email)
         done()
 

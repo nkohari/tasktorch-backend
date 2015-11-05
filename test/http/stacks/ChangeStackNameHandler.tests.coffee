@@ -104,9 +104,9 @@ describe 'stacks:ChangeStackNameHandler', ->
     it 'changes the name of the stack', (done) ->
       @tester.request {orgid, stackid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {stack} = res.result
-        expect(stack).to.exist()
+        expect(stack).to.exist
         expect(stack.id).to.equal(stackid)
         expect(stack.name).to.equal(payload.name)
         done()

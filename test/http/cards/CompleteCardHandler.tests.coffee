@@ -63,9 +63,9 @@ describe 'cards:CompleteCardHandler', ->
     it 'removes the card from all stacks, sets its user and team to null, and sets its status to Complete', (done) ->
       @tester.request {orgid, cardid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
-        expect(card).to.exist()
+        expect(card).to.exist
         expect(card.id).to.equal(cardid)
         expect(card.user).to.equal(null)
         expect(card.team).to.equal(null)

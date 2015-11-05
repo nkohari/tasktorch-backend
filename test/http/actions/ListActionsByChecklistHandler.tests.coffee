@@ -59,9 +59,9 @@ describe 'actions:ListActionsByChecklistHandler', ->
     it 'returns an array of actions in the checklist', (done) ->
       @tester.request {orgid, checklistid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {actions} = res.result
-        expect(actions).to.exist()
+        expect(actions).to.exist
         expect(actions).to.have.length(2)
         expect(_.pluck(actions, 'id')).to.have.members ['action-takedbaby', 'action-meetwaitress']
         done()

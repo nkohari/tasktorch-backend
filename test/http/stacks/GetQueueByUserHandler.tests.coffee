@@ -60,9 +60,9 @@ describe 'stacks:GetQueueByUserHandler', ->
     it "returns the user's queue stack for that org", (done) ->
       @tester.request {orgid, userid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {stack} = res.result
-        expect(stack).to.exist()
+        expect(stack).to.exist
         expect(stack.type).to.equal(StackType.Queue)
         expect(stack.org).to.equal(orgid)
         expect(stack.user).to.equal(userid)

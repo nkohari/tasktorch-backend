@@ -1,7 +1,5 @@
 expect                    = require('chai').expect
-TestData                  = require 'test/framework/TestData'
 TestHarness               = require 'test/framework/TestHarness'
-CommonBehaviors           = require 'test/framework/CommonBehaviors'
 ChangeActionStatusHandler = require 'apps/api/handlers/actions/ChangeActionStatusHandler'
 
 describe 'actions:ChangeActionStatusHandler', ->
@@ -68,7 +66,7 @@ describe 'actions:ChangeActionStatusHandler', ->
       payload = {status: 'InProgress'}
       @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {action} = res.result
         expect(action.id).to.equal('action-takedbaby')
         expect(action.status).to.equal('InProgress')

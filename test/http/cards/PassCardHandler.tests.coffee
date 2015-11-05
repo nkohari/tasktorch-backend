@@ -145,15 +145,15 @@ describe 'cards:PassCardHandler', ->
     it "sets the card's user to the specified user and moves the card to the end of the user's inbox stack", (done) ->
       @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
         expect(card.user).to.equal(payload.user)
         expect(card.stack).to.equal('stack-dee-inbox')
         query = new GetStackQuery(card.stack)
         @database.execute query, (err, result) =>
-          expect(err).not.to.exist()
-          expect(result).to.exist()
-          expect(result.stack).to.exist()
+          expect(err).not.to.exist
+          expect(result).to.exist
+          expect(result.stack).to.exist
           expect(result.stack.cards).to.be.an('array')
           expect(_.last(result.stack.cards)).to.equal(cardid)
           done()
@@ -169,15 +169,15 @@ describe 'cards:PassCardHandler', ->
     it "sets the card's team to the specified team and moves the card to the end of the team's inbox stack", (done) ->
       @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
         expect(card.team).to.equal(payload.team)
         expect(card.stack).to.equal('stack-dynamicduo-inbox')
         query = new GetStackQuery(card.stack)
         @database.execute query, (err, result) =>
-          expect(err).not.to.exist()
-          expect(result).to.exist()
-          expect(result.stack).to.exist()
+          expect(err).not.to.exist
+          expect(result).to.exist
+          expect(result.stack).to.exist
           expect(result.stack.cards).to.be.an('array')
           expect(_.last(result.stack.cards)).to.equal(cardid)
           done()

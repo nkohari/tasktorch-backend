@@ -59,9 +59,9 @@ describe 'checklists:GetChecklistHandler', ->
     it 'returns the checklist', (done) ->
       @tester.request {orgid, checklistid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {checklist} = res.result
-        expect(checklist).to.exist()
+        expect(checklist).to.exist
         expect(checklist.id).to.equal(checklistid)
         done()
 

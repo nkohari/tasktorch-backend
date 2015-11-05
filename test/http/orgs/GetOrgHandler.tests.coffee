@@ -45,7 +45,7 @@ describe 'orgs:GetOrgHandler', ->
       @tester.request {orgid}, (res) =>
         expect(res.statusCode).to.equal(200)
         {org} = res.result
-        expect(org).to.exist()
+        expect(org).to.exist
         expect(org.id).to.equal(orgid)
         done()
 

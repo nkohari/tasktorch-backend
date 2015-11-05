@@ -41,7 +41,7 @@ describe 'me:ChangeMyNameHandler', ->
     it 'returns the updated user', (done) ->
       @tester.request {payload}, (res) ->
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {user} = res.result
         expect(user.id).to.equal('user-charlie')
         expect(user.version).to.equal(1)

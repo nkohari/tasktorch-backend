@@ -44,7 +44,7 @@
     "yamljs": "0.2.3"
   },
   "devDependencies": {
-    "chai": "1.10.0",
+    "chai": "3.4.0",
     "cookie": "0.2.3",
     "mocha": "2.3.3",
     "reqlite": "2.1.1",

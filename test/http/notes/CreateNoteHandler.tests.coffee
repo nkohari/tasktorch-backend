@@ -103,7 +103,7 @@ describe 'notes:CreateNoteHandler', ->
     it 'creates a comment note on the specified card with the specified content', (done) ->
       @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {note} = res.result
         expect(note.card).to.equal(cardid)
         expect(note.type).to.equal(payload.type)

@@ -59,9 +59,9 @@ describe 'goals:GetGoalHandler', ->
     it 'returns the goal', (done) ->
       @tester.request {orgid, goalid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {goal} = res.result
-        expect(goal).to.exist()
+        expect(goal).to.exist
         expect(goal.id).to.equal(goalid)
         done()
 

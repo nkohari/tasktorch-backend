@@ -28,9 +28,9 @@ describe 'me:ListMyOrgsHandler', ->
     it 'returns an array of orgs of which requester is a member', (done) ->
       @tester.request {}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {orgs} = res.result
-        expect(orgs).to.exist()
+        expect(orgs).to.exist
         expect(orgs).to.have.length(1)
         expect(orgs[0].id).to.equal('org-paddys')
         done()

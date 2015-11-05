@@ -66,7 +66,7 @@ describe 'users:RemoveMemberFromTeamHandler', ->
     it 'removes the user as a member', (done) ->
       @tester.request {orgid, teamid, userid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {team} = res.result
         expect(team.id).to.equal(teamid)
         expect(team.members).to.be.an('array')
@@ -84,7 +84,7 @@ describe 'users:RemoveMemberFromTeamHandler', ->
     it 'removes the user as a member and a leader', (done) ->
       @tester.request {orgid, teamid, userid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {team} = res.result
         expect(team.id).to.equal(teamid)
         expect(team.leaders).to.be.an('array')

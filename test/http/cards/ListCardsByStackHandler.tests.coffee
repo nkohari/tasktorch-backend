@@ -59,9 +59,9 @@ describe 'cards:ListCardsByStackHandler', ->
     it 'returns an array of cards currently in the stack', (done) ->
       @tester.request {orgid, stackid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {cards} = res.result
-        expect(cards).to.exist()
+        expect(cards).to.exist
         expect(cards).to.have.length(1)
         expect(_.pluck(cards, 'id')).to.have.members ['card-buygas']
         done()

@@ -5,4 +5,4 @@ NODE_PATH=src:. NODE_ENV=test mocha $1 $2 $3 $4 $5 \
 	--ui bdd \
 	--reporter spec \
 	--recursive \
-	--timeout 10000
+	--timeout 1000

@@ -61,7 +61,7 @@ describe 'memberships:CreateMembershipHandler', ->
     it 'creates and returns a new membership for the user', (done) ->
       @tester.request {orgid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {membership} = res.result
         expect(membership.user).to.equal(payload.user)
         expect(membership.org).to.equal(orgid)

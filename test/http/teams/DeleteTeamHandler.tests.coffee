@@ -62,9 +62,9 @@ describe 'teams:DeleteTeamHandler', ->
     it "sets the team's status to Deleted", (done) ->
       @tester.request {orgid, teamid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {team} = res.result
-        expect(team).to.exist()
+        expect(team).to.exist
         expect(team.id).to.equal(teamid)
         expect(team.status).to.equal('Deleted')
         done()

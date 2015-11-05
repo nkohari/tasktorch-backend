@@ -1,6 +1,5 @@
 _                 = require 'lodash'
 expect            = require('chai').expect
-TestData          = require 'test/framework/TestData'
 TestHarness       = require 'test/framework/TestHarness'
 MoveActionHandler = require 'apps/api/handlers/actions/MoveActionHandler'
 GetChecklistQuery = require 'data/queries/checklists/GetChecklistQuery'
@@ -122,9 +121,9 @@ describe 'actions:MoveActionHandler', ->
     it 'sets the card, checklist, and stage correctly on the action', (done) ->
       @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {action} = res.result
-        expect(action).to.exist()
+        expect(action).to.exist
         expect(action.id).to.equal(actionid)
         expect(action.card).to.equal(cardid)
         expect(action.checklist).to.equal(payload.checklist)
@@ -134,13 +133,13 @@ describe 'actions:MoveActionHandler', ->
     it 'moves the action to the end of the checklist', (done) ->
       @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         query = new GetChecklistQuery(payload.checklist)
         @database.execute query, (err, result) =>
-          expect(err).not.to.exist()
-          expect(result).to.exist()
+          expect(err).not.to.exist
+          expect(result).to.exist
           {checklist} = result
-          expect(checklist).to.exist()
+          expect(checklist).to.exist
           expect(checklist.actions).to.be.an('array')
           expect(_.last(checklist.actions)).to.equal(actionid)
           done()
@@ -158,9 +157,9 @@ describe 'actions:MoveActionHandler', ->
     it 'sets the card, checklist, and stage correctly on the action', (done) ->
       @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {action} = res.result
-        expect(action).to.exist()
+        expect(action).to.exist
         expect(action.id).to.equal(actionid)
         expect(action.card).to.equal(cardid)
         expect(action.checklist).to.equal(payload.checklist)
@@ -170,13 +169,13 @@ describe 'actions:MoveActionHandler', ->
     it 'moves the action to the beginning of the specified checklist on the same card', (done) ->
       @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         query = new GetChecklistQuery(payload.checklist)
         @database.execute query, (err, result) =>
-          expect(err).not.to.exist()
-          expect(result).to.exist()
+          expect(err).not.to.exist
+          expect(result).to.exist
           {checklist} = result
-          expect(checklist).to.exist()
+          expect(checklist).to.exist
           expect(checklist.actions).to.be.an('array')
           expect(_.first(checklist.actions)).to.equal(actionid)
           done()
@@ -194,9 +193,9 @@ describe 'actions:MoveActionHandler', ->
     it 'sets the card, checklist, and stage correctly on the action', (done) ->
       @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {action} = res.result
-        expect(action).to.exist()
+        expect(action).to.exist
         expect(action.id).to.equal(actionid)
         expect(action.card).to.equal(cardid)
         expect(action.checklist).to.equal(payload.checklist)
@@ -206,13 +205,13 @@ describe 'actions:MoveActionHandler', ->
     it 'moves the action to the specified position in the checklist', (done) ->
       @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         query = new GetChecklistQuery(payload.checklist)
         @database.execute query, (err, result) =>
-          expect(err).not.to.exist()
-          expect(result).to.exist()
+          expect(err).not.to.exist
+          expect(result).to.exist
           {checklist} = result
-          expect(checklist).to.exist()
+          expect(checklist).to.exist
           expect(checklist.actions).to.be.an('array')
           expect(checklist.actions[payload.position]).to.equal(actionid)
           done()
@@ -230,9 +229,9 @@ describe 'actions:MoveActionHandler', ->
     it 'sets the card, checklist, and stage correctly on the action', (done) ->
       @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {action} = res.result
-        expect(action).to.exist()
+        expect(action).to.exist
         expect(action.id).to.equal(actionid)
         expect(action.card).to.equal(cardid)
         expect(action.checklist).to.equal(payload.checklist)
@@ -242,13 +241,13 @@ describe 'actions:MoveActionHandler', ->
     it 'moves the action to the end of the checklist', (done) ->
       @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         query = new GetChecklistQuery(payload.checklist)
         @database.execute query, (err, result) =>
-          expect(err).not.to.exist()
-          expect(result).to.exist()
+          expect(err).not.to.exist
+          expect(result).to.exist
           {checklist} = result
-          expect(checklist).to.exist()
+          expect(checklist).to.exist
           expect(checklist.actions).to.be.an('array')
           expect(_.last(checklist.actions)).to.equal(actionid)
           done()
@@ -266,9 +265,9 @@ describe 'actions:MoveActionHandler', ->
     it 'sets the card, checklist, and stage correctly on the action', (done) ->
       @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {action} = res.result
-        expect(action).to.exist()
+        expect(action).to.exist
         expect(action.id).to.equal(actionid)
         expect(action.card).to.equal(cardid)
         expect(action.checklist).to.equal(payload.checklist)
@@ -278,13 +277,13 @@ describe 'actions:MoveActionHandler', ->
     it 'moves the action to the beginning of specified checklist', (done) ->
       @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         query = new GetChecklistQuery(payload.checklist)
         @database.execute query, (err, result) =>
-          expect(err).not.to.exist()
-          expect(result).to.exist()
+          expect(err).not.to.exist
+          expect(result).to.exist
           {checklist} = result
-          expect(checklist).to.exist()
+          expect(checklist).to.exist
           expect(checklist.actions).to.be.an('array')
           expect(_.first(checklist.actions)).to.equal(actionid)
           done()

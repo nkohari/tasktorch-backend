@@ -59,9 +59,9 @@ describe 'users:ListMembersByTeamHandler', ->
     it 'returns an array of users that are members of the team', (done) ->
       @tester.request {orgid, teamid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {users} = res.result
-        expect(users).to.exist()
+        expect(users).to.exist
         expect(users).to.have.length(5)
         expect(_.pluck(users, 'id')).to.have.members ['user-charlie', 'user-dee', 'user-dennis', 'user-frank', 'user-mac']
         done()

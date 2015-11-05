@@ -59,9 +59,9 @@ describe 'notes:ListNotesByCardHandler', ->
     it 'returns an array of notes on the card', (done) ->
       @tester.request {orgid, cardid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {notes} = res.result
-        expect(notes).to.exist()
+        expect(notes).to.exist
         expect(notes).to.have.length(2)
         expect(_.pluck(notes, 'id')).to.have.members ['note-1', 'note-2']
         done()

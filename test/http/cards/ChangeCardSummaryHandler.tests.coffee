@@ -78,9 +78,9 @@ describe 'cards:ChangeCardSummaryHandler', ->
     it 'changes the summary of the card to null', (done) ->
       @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
-        expect(card).to.exist()
+        expect(card).to.exist
         expect(card.id).to.equal(cardid)
         expect(card.summary).to.equal(payload.summary)
         done()
@@ -96,9 +96,9 @@ describe 'cards:ChangeCardSummaryHandler', ->
     it 'changes the summary of the card', (done) ->
       @tester.request {orgid, cardid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
-        expect(card).to.exist()
+        expect(card).to.exist
         expect(card.id).to.equal(cardid)
         expect(card.summary).to.equal(payload.summary)
         done()

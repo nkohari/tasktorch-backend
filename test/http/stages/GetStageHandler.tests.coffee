@@ -59,9 +59,9 @@ describe 'stages:GetStageHandler', ->
     it 'returns the stage', (done) ->
       @tester.request {orgid, stageid}, (res) ->
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {stage} = res.result
-        expect(stage).to.exist()
+        expect(stage).to.exist
         expect(stage.id).to.equal(stageid)
         done()
 

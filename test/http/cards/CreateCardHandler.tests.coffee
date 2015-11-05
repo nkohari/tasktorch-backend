@@ -1,8 +1,6 @@
 _                 = require 'lodash'
 expect            = require('chai').expect
-TestData          = require 'test/framework/TestData'
 TestHarness       = require 'test/framework/TestHarness'
-CommonBehaviors   = require 'test/framework/CommonBehaviors'
 CreateCardHandler = require 'apps/api/handlers/cards/CreateCardHandler'
 GetStackQuery     = require 'data/queries/stacks/GetStackQuery'
 
@@ -78,16 +76,16 @@ describe 'cards:CreateCardHandler', ->
     it "creates the card and adds it to end of the requester's drafts stack", (done) ->
       @tester.request {orgid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
-        expect(card).to.exist()
+        expect(card).to.exist
         expect(card.org).to.equal(orgid)
         expect(card.user).to.equal('user-charlie')
         expect(card.stack).to.equal('stack-charlie-drafts')
         query = new GetStackQuery(card.stack)
         @database.execute query, (err, result) =>
-          expect(err).to.not.exist()
-          expect(result.stack).to.exist()
+          expect(err).to.not.exist
+          expect(result.stack).to.exist
           expect(_.last(result.stack.cards)).to.equal(card.id)
           done()
 
@@ -101,9 +99,9 @@ describe 'cards:CreateCardHandler', ->
     it 'creates the card and sets its title to the specified value', (done) ->
       @tester.request {orgid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
-        expect(card).to.exist()
+        expect(card).to.exist
         expect(card.title).to.equal(payload.title)
         done()
 
@@ -117,9 +115,9 @@ describe 'cards:CreateCardHandler', ->
     it 'creates the card and sets its summary to the specified value', (done) ->
       @tester.request {orgid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
-        expect(card).to.exist()
+        expect(card).to.exist
         expect(card.summary).to.equal(payload.summary)
         done()
 

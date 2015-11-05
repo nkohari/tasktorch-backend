@@ -59,9 +59,9 @@ describe 'checklists:ListChecklistsByCardHandler', ->
     it 'returns an array of checklists in the card', (done) ->
       @tester.request {orgid, cardid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {checklists} = res.result
-        expect(checklists).to.exist()
+        expect(checklists).to.exist
         expect(checklists).to.have.length(3)
         expect(_.pluck(checklists, 'id')).to.have.members ['checklist-takedbaby-plan', 'checklist-takedbaby-do', 'checklist-takedbaby-drink']
         done()

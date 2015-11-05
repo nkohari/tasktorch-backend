@@ -79,9 +79,9 @@ describe 'cards:RemoveFollowerFromCardHandler', ->
     it 'removes the user as a follower', (done) ->
       @tester.request {orgid, cardid, userid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {card} = res.result
-        expect(card).to.exist()
+        expect(card).to.exist
         expect(card.id).to.equal(cardid)
         expect(card.followers).not.to.contain(userid)
         done()

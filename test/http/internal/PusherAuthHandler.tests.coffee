@@ -55,9 +55,9 @@ describe 'internal:PusherAuthHandler', ->
       it 'returns a valid pusher token with presence data', (done) ->
         @tester.request {payload}, (res) =>
           expect(res.statusCode).to.equal(200)
-          expect(res.result).to.exist()
-          expect(res.result.auth).to.exist()
-          expect(res.result.channel_data).to.exist()
+          expect(res.result).to.exist
+          expect(res.result.auth).to.exist
+          expect(res.result.channel_data).to.exist
           done()
 
 #---------------------------------------------------------------------------------------------------
@@ -91,8 +91,8 @@ describe 'internal:PusherAuthHandler', ->
       it 'returns a valid pusher token', (done) ->
         @tester.request {payload}, (res) =>
           expect(res.statusCode).to.equal(200)
-          expect(res.result).to.exist()
-          expect(res.result.auth).to.exist()
+          expect(res.result).to.exist
+          expect(res.result.auth).to.exist
           done()
 
 #---------------------------------------------------------------------------------------------------

@@ -78,7 +78,7 @@ describe 'users:AddMemberToTeamHandler', ->
     it 'adds the user as a member of the team', (done) ->
       @tester.request {orgid, teamid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {team} = res.result
         expect(team.id).to.equal(teamid)
         expect(team.members).to.contain('user-mac')
@@ -95,7 +95,7 @@ describe 'users:AddMemberToTeamHandler', ->
     it 'returns the team without modification', (done) ->
       @tester.request {orgid, teamid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {team} = res.result
         expect(team.id).to.equal(teamid)
         done()

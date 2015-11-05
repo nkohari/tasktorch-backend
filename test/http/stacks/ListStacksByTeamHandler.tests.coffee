@@ -1,7 +1,6 @@
 _                       = require 'lodash'
 expect                  = require('chai').expect
 TestHarness             = require 'test/framework/TestHarness'
-CommonBehaviors         = require 'test/framework/CommonBehaviors'
 ListStacksByTeamHandler = require 'apps/api/handlers/stacks/ListStacksByTeamHandler'
 
 describe 'stacks:ListStacksByTeamHandler', ->
@@ -60,9 +59,9 @@ describe 'stacks:ListStacksByTeamHandler', ->
     it 'returns an array of stacks belonging to the team', (done) ->
       @tester.request {orgid, teamid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {stacks} = res.result
-        expect(stacks).to.exist()
+        expect(stacks).to.exist
         expect(stacks).to.have.length(2)
         expect(_.pluck(stacks, 'id')).to.have.members ['stack-gruesometwosome-inbox', 'stack-gruesometwosome-plans']
         done()

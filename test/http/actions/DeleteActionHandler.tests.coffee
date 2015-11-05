@@ -1,5 +1,4 @@
 expect              = require('chai').expect
-TestData            = require 'test/framework/TestData'
 TestHarness         = require 'test/framework/TestHarness'
 DeleteActionHandler = require 'apps/api/handlers/actions/DeleteActionHandler'
 
@@ -62,7 +61,7 @@ describe 'actions:DeleteActionHandler', ->
     it 'deletes the action', (done) ->
       @tester.request {orgid, actionid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {action} = res.result
         expect(action.id).to.equal(actionid)
         expect(action.status).to.equal('Deleted')

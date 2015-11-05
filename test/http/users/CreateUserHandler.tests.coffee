@@ -115,9 +115,9 @@ describe 'users:CreateUserHandler', ->
     it 'creates and returns the user', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {user} = res.result
-        expect(user).to.exist()
+        expect(user).to.exist
         expect(user.name).to.equal(payload.name)
         expect(user.username).to.equal(payload.username)
         done()
@@ -125,11 +125,11 @@ describe 'users:CreateUserHandler', ->
     it 'marks the token as accepted', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         query = new GetTokenQuery(payload.token)
         @database.execute query, (err, result) =>
-          expect(err).to.not.exist()
-          expect(result.token).to.exist()
+          expect(err).to.not.exist
+          expect(result.token).to.exist
           expect(result.token.status).to.equal('Accepted')
           done()
 
@@ -148,9 +148,9 @@ describe 'users:CreateUserHandler', ->
     it 'creates and returns the user', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {user} = res.result
-        expect(user).to.exist()
+        expect(user).to.exist
         expect(user.name).to.equal(payload.name)
         expect(user.username).to.equal(payload.username)
         done()
@@ -158,25 +158,25 @@ describe 'users:CreateUserHandler', ->
     it 'marks the invite as accepted', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         query = new GetInviteQuery(payload.invite)
         @database.execute query, (err, result) =>
-          expect(err).to.not.exist()
-          expect(result.invite).to.exist()
+          expect(err).to.not.exist
+          expect(result.invite).to.exist
           expect(result.invite.status).to.equal('Accepted')
           done()
 
     it 'adds the user to the org associated with the token', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {user} = res.result
         query = new GetMembershipByOrgAndUserQuery('org-paddys', user.id)
         @database.execute query, (err, result) =>
-          expect(err).to.not.exist()
-          expect(result).to.exist()
+          expect(err).to.not.exist
+          expect(result).to.exist
           {membership} = result
-          expect(membership).to.exist()
+          expect(membership).to.exist
           expect(membership.org).to.equal('org-paddys')
           expect(membership.user).to.equal(user.id)
           done()

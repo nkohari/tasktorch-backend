@@ -41,9 +41,9 @@ describe 'me:ChangeMyEmailHandler', ->
     it 'changes the email address for the user', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {user} = res.result
-        expect(user).to.exist()
+        expect(user).to.exist
         expect(user.email).to.equal(payload.email)
         done()
 

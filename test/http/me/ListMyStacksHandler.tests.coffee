@@ -33,7 +33,7 @@ describe 'me:ListMyStacksHandler', ->
     it 'returns an array of stacks owned by the requester in that org', (done) ->
       @tester.request {orgid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {stacks} = res.result
         expect(stacks).to.be.an('array')
         expect(stacks).to.have.length(4)

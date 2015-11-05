@@ -59,9 +59,9 @@ describe 'users:ListFollowersByCardHandler', ->
     it 'returns an array of users currently following the card', (done) ->
       @tester.request {orgid, cardid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {users} = res.result
-        expect(users).to.exist()
+        expect(users).to.exist
         expect(users).to.have.length(2)
         expect(_.pluck(users, 'id')).to.have.members ['user-charlie', 'user-mac']
         done()

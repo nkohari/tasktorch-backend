@@ -1,16 +1,16 @@
-_                          = require 'lodash'
-expect                     = require('chai').expect
-TestHarness                = require 'test/framework/TestHarness'
-ListMyFollowedCardsHandler = require 'apps/api/handlers/me/ListMyFollowedCardsHandler'
+_                           = require 'lodash'
+expect                      = require('chai').expect
+TestHarness                 = require 'test/framework/TestHarness'
+ListMembershipsByOrgHandler = require 'apps/api/handlers/memberships/ListMembershipsByOrgHandler'
 
-describe 'me:ListMyFollowedCardsHandler', ->
+describe 'memberships:ListMembershipsByOrgHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
   before (ready) ->
     TestHarness.start (err) =>
       return ready(err) if err?
-      @tester = TestHarness.createTester(ListMyFollowedCardsHandler, 'user-charlie')
+      @tester = TestHarness.createTester(ListMembershipsByOrgHandler, 'user-charlie')
       ready()
 
 #---------------------------------------------------------------------------------------------------
@@ -26,18 +26,28 @@ describe 'me:ListMyFollowedCardsHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
+  describe 'when called for a non-existent org', ->
+
+    orgid = 'doesnotexist'
+
+    it 'returns 404 not found', (done) ->
+      @tester.request {orgid}, (res) =>
+        expect(res.statusCode).to.equal(404)
+        done()
+
+#---------------------------------------------------------------------------------------------------
+
   describe 'when called for an org of which the requester is a member', ->
 
     orgid = 'org-paddys'
 
-    it 'returns an array of cards followed by the requester in that org', (done) ->
+    it 'returns the list of memberships', (done) ->
       @tester.request {orgid}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist
-        {cards} = res.result
-        expect(cards).to.be.an('array')
-        expect(cards).to.have.length(2)
-        expect(_.pluck(cards, 'id')).to.have.members ['card-takedbaby', 'card-boildenim']
+        {memberships} = res.result
+        expect(memberships).to.have.length(5)
+        expect(_.pluck(memberships, 'user')).to.have.members ['user-charlie', 'user-mac', 'user-dennis', 'user-dee', 'user-frank']
         done()
 
 #---------------------------------------------------------------------------------------------------

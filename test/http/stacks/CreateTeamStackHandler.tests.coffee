@@ -91,7 +91,7 @@ describe 'stacks:CreateTeamStackHandler', ->
     it 'creates and returns a backlog stack owned by the team', (done) ->
       @tester.request {orgid, teamid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {stack} = res.result
         expect(stack.name).to.equal(payload.name)
         expect(stack.team).to.equal(teamid)

@@ -1,9 +1,7 @@
 _                    = require 'lodash'
 cookie               = require 'cookie'
 expect               = require('chai').expect
-TestData             = require 'test/framework/TestData'
 TestHarness          = require 'test/framework/TestHarness'
-CommonBehaviors      = require 'test/framework/CommonBehaviors'
 CreateSessionHandler = require 'apps/api/handlers/sessions/CreateSessionHandler'
 
 describe 'sessions:CreateSessionHandler', ->
@@ -70,9 +68,9 @@ describe 'sessions:CreateSessionHandler', ->
     it 'returns the created session', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {session} = res.result
-        expect(session).to.exist()
+        expect(session).to.exist
         expect(session.user).to.equal('user-charlie')
         done()
 
@@ -95,9 +93,9 @@ describe 'sessions:CreateSessionHandler', ->
     it 'returns the created session', (done) ->
       @tester.request {payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {session} = res.result
-        expect(session).to.exist()
+        expect(session).to.exist
         expect(session.user).to.equal('user-charlie')
         done()
 

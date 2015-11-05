@@ -33,7 +33,7 @@ describe 'me:ListMyTeamsHandler', ->
     it 'returns an array of teams owned by the requester in that org', (done) ->
       @tester.request {orgid}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {teams} = res.result
         expect(teams).to.be.an('array')
         expect(teams).to.have.length(2)

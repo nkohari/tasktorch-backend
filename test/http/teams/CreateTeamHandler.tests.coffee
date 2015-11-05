@@ -1,8 +1,6 @@
 _                 = require 'lodash'
 expect            = require('chai').expect
-TestData          = require 'test/framework/TestData'
 TestHarness       = require 'test/framework/TestHarness'
-CommonBehaviors   = require 'test/framework/CommonBehaviors'
 CreateTeamHandler = require 'apps/api/handlers/teams/CreateTeamHandler'
 
 describe 'teams:CreateTeamHandler', ->
@@ -159,7 +157,7 @@ describe 'teams:CreateTeamHandler', ->
     it 'creates and returns the team, adding the requester as the sole leader and member', (done) ->
       @tester.request {orgid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {team} = res.result
         expect(team.name).to.equal(payload.name)
         expect(team.members).to.have.length(1)
@@ -178,7 +176,7 @@ describe 'teams:CreateTeamHandler', ->
     it 'creates and returns the team', (done) ->
       @tester.request {orgid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {team} = res.result
         expect(team.name).to.equal(payload.name)
         expect(team.leaders).to.have.length(1)

@@ -1,5 +1,4 @@
 expect              = require('chai').expect
-TestData            = require 'test/framework/TestData'
 TestHarness         = require 'test/framework/TestHarness'
 CreateActionHandler = require 'apps/api/handlers/actions/CreateActionHandler'
 
@@ -80,7 +79,7 @@ describe 'actions:CreateActionHandler', ->
     it 'creates an action with null text in the specified checklist of the specified card', (done) ->
       @tester.request {orgid, checklistid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {action} = res.result
         expect(action.card).to.equal(cardid)
         expect(action.checklist).to.equal(checklistid)
@@ -101,7 +100,7 @@ describe 'actions:CreateActionHandler', ->
     it 'creates an action with the specified text in the specified checklist of the specified card', (done) ->
       @tester.request {orgid, checklistid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
-        expect(res.result).to.exist()
+        expect(res.result).to.exist
         {action} = res.result
         expect(action.card).to.equal(cardid)
         expect(action.checklist).to.equal(checklistid)
