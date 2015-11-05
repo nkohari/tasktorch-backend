@@ -6,7 +6,7 @@ GetMembershipByOrgAndUserQuery = require 'data/queries/memberships/GetMembership
 GetInviteQuery                 = require 'data/queries/invites/GetInviteQuery'
 GetTokenQuery                  = require 'data/queries/tokens/GetTokenQuery'
 
-describe 'CreateUserHandler', ->
+describe 'users:CreateUserHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
@@ -174,10 +174,11 @@ describe 'CreateUserHandler', ->
         query = new GetMembershipByOrgAndUserQuery('org-paddys', user.id)
         @database.execute query, (err, result) =>
           expect(err).to.not.exist()
-          console.log(result)
-          expect(result.membership).to.exist()
-          expect(result.membership.org).to.equal('org-paddys')
-          expect(result.membership.user).to.equal(user.id)
+          expect(result).to.exist()
+          {membership} = result
+          expect(membership).to.exist()
+          expect(membership.org).to.equal('org-paddys')
+          expect(membership.user).to.equal(user.id)
           done()
 
 #---------------------------------------------------------------------------------------------------

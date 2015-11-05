@@ -238,10 +238,17 @@ TestData.invites = table [
 
 TestData.kinds = table [
   record {
+    id:         'onboarding-kind'
+    name:       'Onboarding Example'
+    color:      'Blue'
+    stages:     ['onboarding-stage-setup', 'onboarding-stage-learn', 'onboarding-stage-nextsteps']
+    nextNumber: 0
+  }
+  record {
     id:         'kind-scheme'
     org:        'org-paddys'
     name:       'Scheme'
-    color:      '#999999'
+    color:      'Blue'
     stages:     ['stage-scheme-plan', 'stage-scheme-do', 'stage-scheme-drink']
     nextNumber: 4
   }
@@ -249,7 +256,7 @@ TestData.kinds = table [
     id:         'kind-task'
     org:        'org-sudz'
     name:       'Task'
-    color:      '#999999'
+    color:      'Blue'
     stages:     ['stage-task-do']
     nextNumber: 2
   }
@@ -516,6 +523,21 @@ TestData.stacks = table [
 #---------------------------------------------------------------------------------------------------
 
 TestData.stages = [
+  record {
+    id:   'onboarding-stage-setup'
+    kind: 'onboarding-kind'
+    name: 'Setup'
+  }
+  record {
+    id:   'onboarding-stage-learn'
+    kind: 'onboarding-kind'
+    name: 'Learn'
+  }
+  record {
+    id:   'onboarding-stage-nextsteps'
+    kind: 'onboarding-kind'
+    name: 'Next Steps'
+  }
   record {
     id:   'stage-scheme-plan'
     org:  'org-paddys'

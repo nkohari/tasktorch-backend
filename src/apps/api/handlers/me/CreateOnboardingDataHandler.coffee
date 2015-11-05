@@ -15,7 +15,7 @@ class CreateOnboardingDataHandler extends Handler
   handle: (request, reply) ->
     {org}  = request.pre
     {user} = request.auth.credentials
-    @onboarder.createSampleCard user, org, (err, callback) ->
+    @onboarder.createSampleCard user, org.id, (err, callback) ->
       return reply err if err?
       reply()
 

@@ -43,15 +43,15 @@ class CreateOrgHandler extends Handler
         return reply err if err?
         @createMembership user, org, (err) =>
           return reply err if err?
-          @onboarder.createSampleCardIfNecessary user, org, (err) =>
+          @onboarder.createSampleCardIfNecessary user, org.id, (err) =>
             return reply err if err?
             return reply @response(org)
 
   createMembership: (user, org, callback) ->
 
     membership = new Membership {
-      user:  user
-      org:   org
+      user:  user.id
+      org:   org.id
       level: MembershipLevel.Leader
     }
 
@@ -61,11 +61,11 @@ class CreateOrgHandler extends Handler
   createDefaultKind: (user, org, callback) ->
 
     kind = new Kind {
-      id: uuid()
-      org: org.id
-      name: 'Task'
+      id:          uuid()
+      org:         org.id
+      name:        'Task'
       description: 'General purpose, can be used to track anything',
-      color: KindColor.Blue
+      color:       KindColor.Blue
     }
 
     stages = [

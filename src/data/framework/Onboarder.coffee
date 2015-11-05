@@ -29,7 +29,7 @@ class Onboarder
 
   constructor: (@log, @database, @processor) ->
 
-  createSampleCardIfNecessary: (user, org, callback) ->
+  createSampleCardIfNecessary: (user, orgid, callback) ->
     query = new GetAllActiveMembershipsByUserQuery(user.id)
     @database.execute query, (err, result) =>
       return callback err if err?
@@ -39,16 +39,16 @@ class Onboarder
       if memberships.length > 1
         return callback()
       else
-        @createSampleCard(user, org, callback)
+        @createSampleCard(user, orgid, callback)
 
-  createSampleCard: (user, org, callback) ->
+  createSampleCard: (user, orgid, callback) ->
 
     query = new GetKindQuery(SAMPLE_CARD.kind)
     @database.execute query, (err, result) =>
       return callback err if err?
       {kind} = result
 
-      query = new GetSpecialStackByUserQuery(org.id, user.id, StackType.Queue)
+      query = new GetSpecialStackByUserQuery(orgid, user.id, StackType.Queue)
       @database.execute query, (err, result) =>
         return callback err if err?
         {stack} = result
@@ -59,7 +59,7 @@ class Onboarder
           {stages} = result
 
           card = new Card {
-            org:     org.id
+            org:     orgid
             creator: user.id
             user:    user.id
             kind:    kind.id
@@ -80,7 +80,7 @@ class Onboarder
 
               actions = _.map SAMPLE_CARD.actions, (data) =>
                 new Action {
-                  org:       org.id
+                  org:       orgid
                   card:      card.id
                   checklist: checklists[data.stage].id
                   stage:     data.stage
