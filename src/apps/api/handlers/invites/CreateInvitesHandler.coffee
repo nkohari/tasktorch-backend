@@ -2,6 +2,7 @@ _                     = require 'lodash'
 Handler               = require 'apps/api/framework/Handler'
 DocumentArrayResponse = require 'apps/api/framework/DocumentArrayResponse'
 Invite                = require 'data/documents/Invite'
+MembershipLevel       = require 'data/enums/MembershipLevel'
 CreateInvitesCommand  = require 'domain/commands/invites/CreateInvitesCommand'
 
 class CreateInvitesHandler extends Handler
@@ -10,16 +11,16 @@ class CreateInvitesHandler extends Handler
   
   @ensure
     payload:
-      invites: @mustBe.array().items(
+      invites: @mustBe.array().required().min(1).items(
         @mustBe.object().keys {
-          email:  @mustBe.string().required()
-          leader: @mustBe.boolean()
+          email: @mustBe.string().required()
+          level: @mustBe.valid(_.keys(MembershipLevel)).default(MembershipLevel.Member)
         }
       )
 
   @before [
     'resolve org'
-    'ensure requester can access org'
+    'ensure requester is leader of org'
   ]
 
   constructor: (@processor) ->
@@ -36,7 +37,7 @@ class CreateInvitesHandler extends Handler
         orgName: org.name
         creator: user.id
         email:   invite.email
-        leader:  invite.leader
+        level:   invite.level
       }
 
     command = new CreateInvitesCommand(user, invites)

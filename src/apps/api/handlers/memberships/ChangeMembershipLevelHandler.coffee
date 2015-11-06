@@ -14,7 +14,8 @@ class ChangeMembershipLevelHandler extends Handler
   @before [
     'resolve org'
     'resolve membership'
-    'ensure requester can access org'
+    'ensure membership belongs to org'
+    'ensure requester is leader of org'
   ]
 
   constructor: (@processor) ->
@@ -23,7 +24,7 @@ class ChangeMembershipLevelHandler extends Handler
 
     user              = request.auth.credentials.user
     {org, membership} = request.pre
-    level             = request.payload
+    {level}           = request.payload
 
     if user.id == membership.user
       return reply @error.badRequest("You can't change your own membership level")

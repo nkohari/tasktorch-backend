@@ -232,6 +232,15 @@ TestData.invites = table [
     level:   'Member'
     status:  'Pending'
   }
+  record {
+    id:      'invite-amanda'
+    org:     'org-sudz'
+    creator: 'user-greg'
+    orgName: 'Sudz'
+    email:   'amanda@sudz.com'
+    level:   'Member'
+    status:  'Pending'
+  }
 ]
 
 #---------------------------------------------------------------------------------------------------

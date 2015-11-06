@@ -1,5 +1,5 @@
-Precondition = require 'apps/api/framework/Precondition'
-GetOrgQuery  = require 'data/queries/orgs/GetOrgQuery'
+Precondition       = require 'apps/api/framework/Precondition'
+GetMembershipQuery = require 'data/queries/memberships/GetMembershipQuery'
 
 class ResolveMembership extends Precondition
 

@@ -21,8 +21,7 @@ class GetStackHandler extends Handler
     query = new GetStackQuery(stackid, options)
     @database.execute query, (err, result) =>
       return reply err if err?
-      return reply @error.notFound() unless result.stack?
-      return reply @error.notFound() unless result.stack.org == org.id
+      return reply @error.notFound() unless result.stack?.org == org.id
       reply @response(result)
 
 module.exports = GetStackHandler
