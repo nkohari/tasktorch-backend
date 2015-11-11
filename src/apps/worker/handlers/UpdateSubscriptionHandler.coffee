@@ -1,5 +1,6 @@
 _                                 = require 'lodash'
 JobHandler                        = require 'apps/worker/framework/JobHandler'
+GetOrgQuery                       = require 'data/queries/orgs/GetOrgQuery'
 GetAllActiveMembershipsByOrgQuery = require 'data/queries/memberships/GetAllActiveMembershipsByOrgQuery'
 UpdateSubscriptionJob             = require 'domain/jobs/UpdateSubscriptionJob'
 
@@ -15,23 +16,33 @@ class UpdateSubscriptionHandler extends JobHandler
 
     {orgid} = job
 
-    query = new GetAllActiveMembershipsByOrgQuery(orgid)
+    query = new GetOrgQuery(orgid)
     @database.execute query, (err, result) =>
 
       if err?
-        @log.error("Error getting memberships for org #{orgid}: #{err.stack ? err}")
+        @log.error("Error getting org #{orgid}: #{err.stack ? err}")
         return callback(err)
 
-      {memberships} = result
-      @log.debug "Org #{orgid} now has #{memberships.length} active memberships"
+      {org} = result
+      @log.debug "Updating subscription for org #{org.id}"
 
-      @updateSubscriptionIfNecessary org, memberships.length, (err) =>
+      query = new GetAllActiveMembershipsByOrgQuery(org.id)
+      @database.execute query, (err, result) =>
 
         if err?
-          @log.error("Error updating subscription for org #{orgid}: #{err.stack ? err}")
+          @log.error("Error getting memberships for org #{org.id}: #{err.stack ? err}")
           return callback(err)
 
-        callback()
+        {memberships} = result
+        @log.debug "Org #{org.id} now has #{memberships.length} active memberships"
+
+        @updateSubscriptionIfNecessary org, memberships, (err) =>
+
+          if err?
+            @log.error("Error updating subscription for org #{org.id}: #{err.stack ? err}")
+            return callback(err)
+
+          callback()
 
   updateSubscriptionIfNecessary: (org, memberships, callback) ->
 

@@ -71,7 +71,7 @@ class CreateSessionHandler extends Handler
     command = new CreateMembershipCommand(user, membership)
     @processor.execute command, (err) =>
       return callback(err) if err?
-      command = new AcceptInviteCommand(user, user, invite)
+      command = new AcceptInviteCommand(user, invite)
       @processor.execute(command, callback)
 
 module.exports = CreateSessionHandler

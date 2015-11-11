@@ -7,6 +7,7 @@ class ListMembershipsByOrgHandler extends Handler
 
   @before [
     'resolve org'
+    'resolve query options'
     'ensure requester can access org'
   ]
 

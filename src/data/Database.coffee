@@ -1,3 +1,4 @@
+DocTypes     = require 'data/framework/DocTypes'
 Subscription = require 'data/framework/Subscription'
 
 class Database

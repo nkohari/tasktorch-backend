@@ -9,12 +9,9 @@ class GetAllOrgsByUserQuery extends Query
   constructor: (userid, options) ->
     super(Org, options)
 
-    orgids = r.table(Membership.getSchema().table)
-      .getAll(userid, {index: 'user'})
+    @rql = r.table(Membership.getSchema().table).getAll(userid, {index: 'user'})
       .filter({status: MembershipStatus.Normal})
-      .default([])
-      .coerceTo('array')('org')
-
-    @rql = r.table(@schema.table).getAll(r.args(orgids)).coerceTo('array')
+      .eqJoin('org', r.table(@schema.table))('right')
+      .coerceTo('array')
 
 module.exports = GetAllOrgsByUserQuery
