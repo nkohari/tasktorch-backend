@@ -19,6 +19,7 @@ class CreateTeamHandler extends Handler
     'resolve org'
     'resolve members argument'
     'resolve leaders argument'
+    'ensure org has active subscription'
     'ensure requester can access org'
   ]
 

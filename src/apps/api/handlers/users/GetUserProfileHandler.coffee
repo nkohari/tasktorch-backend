@@ -9,6 +9,7 @@ class GetUserProfileHandler extends Handler
   @before [
     'resolve org'
     'resolve user'
+    'ensure org has active subscription'
     'ensure user is member of org'
     'ensure requester can access org'
   ]

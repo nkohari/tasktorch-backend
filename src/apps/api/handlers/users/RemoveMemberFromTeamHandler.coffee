@@ -9,6 +9,8 @@ class RemoveMemberFromTeamHandler extends Handler
     'resolve org'
     'resolve team'
     'resolve user'
+    'ensure org has active subscription'
+    'ensure team belongs to org'
     'ensure requester can access team'
   ]
 

@@ -27,6 +27,18 @@ describe 'stages:ListStagesByKindHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
+  describe 'when called for an org with a canceled subscription', ->
+
+    orgid  = 'org-oldiesrockcafe'
+    kindid = 'kind-scheme'
+
+    it 'returns 402 payment required', (done) ->
+      @tester.request {orgid, kindid}, (res) ->
+        expect(res.statusCode).to.equal(402)
+        done()
+        
+#---------------------------------------------------------------------------------------------------
+
   describe 'when called for a non-existent org', ->
 
     orgid  = 'doesnotexist'

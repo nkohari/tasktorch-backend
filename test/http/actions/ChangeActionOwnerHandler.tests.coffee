@@ -21,11 +21,26 @@ describe 'actions:ChangeActionOwnerHandler', ->
 
   describe 'when called without credentials', ->
 
-    orgid = 'org-paddys'
+    orgid    = 'org-paddys'
+    actionid = 'action-takedbaby'
+    payload  = {user: 'user-dee'}
 
     it 'returns 401 unauthorized', (done) ->
-      @tester.request {orgid, credentials: false}, (res) ->
+      @tester.request {orgid, actionid, payload, credentials: false}, (res) ->
         expect(res.statusCode).to.equal(401)
+        done()
+
+#---------------------------------------------------------------------------------------------------
+
+  describe 'when called for an org with a canceled subscription', ->
+
+    orgid    = 'org-oldiesrockcafe'
+    actionid = 'action-takedbaby'
+    payload  = {user: 'user-dee'}
+
+    it 'returns 402 payment required', (done) ->
+      @tester.request {orgid, actionid, payload}, (res) ->
+        expect(res.statusCode).to.equal(402)
         done()
 
 #---------------------------------------------------------------------------------------------------

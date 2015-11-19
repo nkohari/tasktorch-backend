@@ -8,6 +8,7 @@ class GetGoalHandler extends Handler
   @before [
     'resolve org'
     'resolve query options'
+    'ensure org has active subscription'
     'ensure requester can access org'
   ]
 

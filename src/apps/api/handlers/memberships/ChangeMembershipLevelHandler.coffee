@@ -14,6 +14,7 @@ class ChangeMembershipLevelHandler extends Handler
   @before [
     'resolve org'
     'resolve membership'
+    'ensure org has active subscription'
     'ensure membership belongs to org'
     'ensure requester is leader of org'
   ]

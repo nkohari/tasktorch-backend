@@ -8,26 +8,28 @@ class GetOrgHandler extends Handler
   @route 'get /{orgid}'
 
   @before [
+    'resolve org'
     'resolve query options'
+    'ensure org has active subscription'
+    'ensure requester can access org'
   ]
 
   constructor: (@database, @gatekeeper, @spool) ->
 
   handle: (request, reply) ->
 
-    {options} = request.pre
-    {orgid}   = request.params
-    {user}    = request.auth.credentials
+    {org, options} = request.pre
+    {user}         = request.auth.credentials
 
-    @spool.write new GetOrgEvent(user.id, orgid)
+    @spool.write new GetOrgEvent(user.id, org.id)
 
-    query = new GetOrgQuery(orgid, options)
+    # TODO: The preconditions load the org to check its subscription,
+    # but we need to load it again to ensure query options are used.
+    # Revisit this to avoid the double-query.
+
+    query = new GetOrgQuery(org.id, options)
     @database.execute query, (err, result) =>
       return reply err if err?
-      return reply @error.notFound() unless result.org?
-      @gatekeeper.canUserAccess result.org, user, (err, canAccess) =>
-        return reply err if err?
-        return reply @error.forbidden() unless canAccess
-        reply @response(result)
+      reply @response(result)
 
 module.exports = GetOrgHandler

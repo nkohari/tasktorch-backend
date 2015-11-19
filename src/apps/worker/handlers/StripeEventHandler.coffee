@@ -1,19 +1,25 @@
 JobHandler                       = require 'apps/worker/framework/JobHandler'
+GetOrgByAccountIdQuery           = require 'data/queries/orgs/GetOrgByAccountIdQuery' 
+AccountDiscount                  = require 'data/structs/AccountDiscount'
 AccountInfo                      = require 'data/structs/AccountInfo'
 AccountInvoice                   = require 'data/structs/AccountInvoice'
 AccountSource                    = require 'data/structs/AccountSource'
 AccountSubscription              = require 'data/structs/AccountSubscription'
+Model                            = require 'domain/framework/Model'
+SendEmailJob                     = require 'domain/jobs/SendEmailJob'
 StripeEventJob                   = require 'domain/jobs/StripeEventJob'
 AddOrChangeAccountInvoiceCommand = require 'domain/commands/accounts/AddOrChangeAccountInvoiceCommand'
+ChangeAccountDiscountCommand     = require 'domain/commands/accounts/ChangeAccountDiscountCommand'
 ChangeAccountInfoCommand         = require 'domain/commands/accounts/ChangeAccountInfoCommand'
 ChangeAccountSubscriptionCommand = require 'domain/commands/accounts/ChangeAccountSubscriptionCommand'
 ChangeAccountSourceCommand       = require 'domain/commands/accounts/ChangeAccountSourceCommand'
+DeleteAccountDiscountCommand     = require 'domain/commands/accounts/DeleteAccountDiscountCommand'
 
 class StripeEventHandler extends JobHandler
 
   handles: StripeEventJob
 
-  constructor: (@log, @processor, stripe) ->
+  constructor: (@log, @database, @processor, @jobQueue, stripe) ->
     super()
     @stripe = stripe.createClient()
 
@@ -24,33 +30,93 @@ class StripeEventHandler extends JobHandler
     @log.debug "[stripe] Received event #{event.id} of type #{event.type}"
     @log.inspect(event, 999)
 
-    command = @createCommand(event)
-    unless command?
-      @log.debug "[stripe] No command defined for event of type #{event.type}, ignoring"
-      return callback()
+    @updateAccount event, (err) =>
+      if err?
+        @log.error "[stripe] Error processing event of type #{event.type}"
+        return callback(err)
+      @sendEmail event, (err) =>
+        if err?
+          @log.error "[stripe] Error queueing email jobs for event of type #{event.type}"
+          return callback(err)
+        callback()
 
-    @processor.execute(command, callback)
-
-  createCommand: (event) ->
+  updateAccount: (event, callback) ->
 
     switch event.type
 
       when 'customer.created', 'customer.updated'
         customer = event.data.object
-        return new ChangeAccountInfoCommand(customer.metadata.org, new AccountInfo(customer))
+        if not customer.metadata?.org?
+          @log.warn "[stripe] Received event of type #{event.type} without metadata, ignoring"
+        else
+          command = new ChangeAccountInfoCommand(customer.metadata.org, new AccountInfo(customer))
 
       when 'customer.subscription.created', 'customer.subscription.updated'
         subscription = event.data.object
-        return new ChangeAccountSubscriptionCommand(subscription.customer, new AccountSubscription(subscription))
+        command = new ChangeAccountSubscriptionCommand(subscription.customer, new AccountSubscription(subscription))
+
+      when 'customer.discount.created', 'customer.discount.updated'
+        discount = event.data.object
+        command = new ChangeAccountDiscountCommand(discount.customer, new AccountDiscount(discount.coupon))
+
+      when 'customer.discount.deleted'
+        discount = event.data.object
+        command = new DeleteAccountDiscountCommand(discount.customer)
 
       when 'customer.source.created', 'customer.source.updated'
         source = event.data.object
-        return new ChangeAccountSourceCommand(source.customer, new AccountSource(source))
+        command = new ChangeAccountSourceCommand(source.customer, new AccountSource(source))
 
       when 'invoice.created', 'invoice.updated', 'invoice.payment_succeeded', 'invoice.payment_failed'
         invoice = event.data.object
-        return new AddOrChangeAccountInvoiceCommand(invoice.customer, new AccountInvoice(invoice))
+        command = new AddOrChangeAccountInvoiceCommand(invoice.customer, new AccountInvoice(invoice))
 
-    return null
+    if not command?
+      callback()
+    else
+      @processor.execute(command, callback)
+
+  sendEmail: (event, callback) ->
+
+    if event.type == 'customer.subscription.trial_will_end'
+      subscription = event.data.object
+      @getOrgByAccountId subscription.customer, (err, org) =>
+        return callback(err) if err?
+        job = new SendEmailJob('trial-warning', {to: org.email}, {
+          org: Model.create(org)
+        })
+        @jobQueue.enqueue(job, callback)
+
+    else if event.type == 'invoice.payment_succeeded'
+      invoice = event.data.object
+      @getOrgByAccountId invoice.customer, (err, org) =>
+        return callback(err) if err?
+        job = new SendEmailJob('receipt', {to: org.email}, {
+          org:     Model.create(org)
+          invoice: invoice
+        })
+        @jobQueue.enqueue(job, callback)
+
+    else if event.type == 'invoice.payment_failed'
+      invoice = event.data.object
+      @getOrgByAccountId invoice.customer, (err, org) =>
+        return callback(err) if err?
+        job = new SendEmailJob('payment-failed', {to: org.email}, {
+          org:     Model.create(org)
+          invoice: invoice
+        })
+        @jobQueue.enqueue(job, callback)
+
+    else
+      callback()
+
+  getOrgByAccountId: (accountId, callback) ->
+    query = new GetOrgByAccountIdQuery(accountId)
+    @database.execute query, (err, result) =>
+      return callback(err) if err?
+      unless result.org?
+        callback(new Error("Couldn't find an org with account id #{accountId}"))
+      else
+        callback(null, result.org)
 
 module.exports = StripeEventHandler

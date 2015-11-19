@@ -12,6 +12,7 @@ class ChangeStageDefaultActionsHandler extends Handler
   @before [
     'resolve org'
     'resolve stage'
+    'ensure org has active subscription'
     'ensure stage belongs to org'
     'ensure requester can access stage'
   ]

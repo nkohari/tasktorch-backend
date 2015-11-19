@@ -14,6 +14,7 @@ class CreateActionHandler extends Handler
   @before [
     'resolve org'
     'resolve checklist'
+    'ensure org has active subscription'
     'ensure checklist belongs to org'
     'ensure requester can access checklist'
   ]

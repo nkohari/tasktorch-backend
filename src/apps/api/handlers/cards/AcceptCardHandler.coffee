@@ -14,6 +14,7 @@ class AcceptCardHandler extends Handler
   @before [
     'resolve org'
     'resolve card'
+    'ensure org has active subscription'
     'ensure card belongs to org'
     'ensure requester can access card'
   ]

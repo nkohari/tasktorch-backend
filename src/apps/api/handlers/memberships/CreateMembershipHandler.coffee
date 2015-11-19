@@ -17,6 +17,7 @@ class AddMemberToOrgHandler extends Handler
   @before [
     'resolve org'
     'resolve user argument'
+    'ensure org has active subscription'
     'ensure requester is leader of org'
   ]
 

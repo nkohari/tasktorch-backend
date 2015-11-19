@@ -9,6 +9,7 @@ class ListCardsByGoalHandler extends Handler
     'resolve org'
     'resolve goal'
     'resolve query options'
+    'ensure org has active subscription'
     'ensure goal belongs to org'
     'ensure requester can access org'
   ]

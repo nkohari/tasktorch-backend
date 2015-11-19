@@ -13,6 +13,7 @@ class AddCardToGoalHandler extends Handler
     'resolve org'
     'resolve card'
     'resolve goal argument'
+    'ensure org has active subscription'
     'ensure card belongs to org'
     'ensure goal belongs to org'
     'ensure requester can access goal'

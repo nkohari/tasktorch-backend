@@ -27,6 +27,18 @@ describe 'stacks:GetStackHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
+  describe 'when called for an org with a canceled subscription', ->
+
+    orgid   = 'org-oldiesrockcafe'
+    stackid = 'stack-charlie-inbox'
+
+    it 'returns 402 payment required', (done) ->
+      @tester.request {orgid, stackid}, (res) ->
+        expect(res.statusCode).to.equal(402)
+        done()
+        
+#---------------------------------------------------------------------------------------------------
+
   describe 'when called for a non-existent org', ->
 
     orgid   = 'doesnotexist'

@@ -27,6 +27,18 @@ describe 'goals:GetGoalHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
+  describe 'when called for an org with a canceled subscription', ->
+
+    orgid  = 'org-oldiesrockcafe'
+    goalid = 'goal-gascrisis'
+
+    it 'returns 402 payment required', (done) ->
+      @tester.request {orgid, goalid}, (res) ->
+        expect(res.statusCode).to.equal(402)
+        done()
+        
+#---------------------------------------------------------------------------------------------------
+
   describe 'when called for a non-existent org', ->
 
     orgid  = 'doesnotexist'

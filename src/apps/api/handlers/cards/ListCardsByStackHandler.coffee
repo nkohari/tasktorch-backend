@@ -9,6 +9,7 @@ class ListCardsByStackHandler extends Handler
     'resolve org'
     'resolve stack'
     'resolve query options'
+    'ensure org has active subscription'
     'ensure stack belongs to org'
     'ensure requester can access stack'
   ]

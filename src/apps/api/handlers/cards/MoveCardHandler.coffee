@@ -17,6 +17,7 @@ class MoveCardHandler extends Handler
     'resolve card'
     'resolve stack argument'
     'resolve team by stack'
+    'ensure org has active subscription'
     'ensure requester can access card'
     'ensure requester can access stack'    
     'ensure position argument is valid'

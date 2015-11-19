@@ -342,10 +342,23 @@ TestData.orgs = table [
   record {
     id:   'org-paddys'
     name: "Paddy's Pub"
+    account:
+      subscription:
+        status: 'Active'
   }
   record {
     id:   'org-sudz'
     name: 'Sudz'
+    account:
+      subscription:
+        status: 'Active'
+  }
+  record {
+    id:   'org-oldiesrockcafe'
+    name: 'Oldies Rock Cafe'
+    account:
+      subscription:
+        status: 'Canceled'
   }
 ]
 #---------------------------------------------------------------------------------------------------

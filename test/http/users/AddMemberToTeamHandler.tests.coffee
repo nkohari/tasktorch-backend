@@ -30,6 +30,19 @@ describe 'users:AddMemberToTeamHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
+  describe 'when called for an org with a canceled subscription', ->
+
+    orgid   = 'org-oldiesrockcafe'
+    teamid  = 'team-gruesometwosome'
+    payload = {user: 'user-mac'}
+
+    it 'returns 402 payment required', (done) ->
+      @tester.request {orgid, teamid, payload}, (res) ->
+        expect(res.statusCode).to.equal(402)
+        done()
+        
+#---------------------------------------------------------------------------------------------------
+
   describe 'when called for a non-existent org', ->
 
     orgid   = 'doesnotexist'

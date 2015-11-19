@@ -12,6 +12,7 @@ class ChangeGoalNameHandler extends Handler
   @before [
     'resolve org'
     'resolve goal'
+    'ensure org has active subscription'
     'ensure goal belongs to org'
     'ensure requester can access goal'
   ]

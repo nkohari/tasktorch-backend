@@ -18,58 +18,95 @@ describe 'actions:ChangeActionStatusHandler', ->
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called without credentials', ->
+
+    orgid    = 'org-paddys'
+    actionid = 'action-takedbaby'
+
     it 'returns 401 unauthorized', (done) ->
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', credentials: false}, (res) ->
+      @tester.request {orgid, actionid, credentials: false}, (res) ->
         expect(res.statusCode).to.equal(401)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
+  describe 'when called for an org with a canceled subscription', ->
+
+    orgid    = 'org-oldiesrockcafe'
+    actionid = 'action-takedbaby'
+    payload  = {status: 'InProgress'}
+
+    it 'returns 402 payment required', (done) ->
+      @tester.request {orgid, actionid, payload}, (res) ->
+        expect(res.statusCode).to.equal(402)
+        done()
+        
+#---------------------------------------------------------------------------------------------------
+
   describe 'when called for a non-existent org', ->
+
+    orgid    = 'doesnotexist'
+    actionid = 'action-takedbaby'
+    payload  = {status: 'InProgress'}
+
     it 'returns 404 not found', (done) ->
-      payload = {status: 'InProgress'}
-      @tester.request {orgid: 'doesnotexist', actionid: 'action-takedbaby', payload}, (res) =>
+      @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent action', ->
+
+    orgid    = 'org-paddys'
+    actionid = 'doesnotexist'
+    payload  = {status: 'InProgress'}
+
     it 'returns 404 not found', (done) ->
-      payload = {status: 'InProgress'}
-      @tester.request {orgid: 'org-paddys', actionid: 'doesnotexist', payload}, (res) =>
+      @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called without a status argument', ->
+
+    orgid    = 'org-paddys'
+    actionid = 'action-takedbaby'
+    payload  = {}
+
     it 'returns 400 bad request', (done) ->
-      payload = {}
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', payload}, (res) =>
+      @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with an invalid status argument', ->
+
+    orgid    = 'org-paddys'
+    actionid = 'action-takedbaby'
+    payload  = {status: 'doesnotexist'}
+
     it 'returns 400 bad request', (done) ->
-      payload = {status: 'doesnotexist'}
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', payload}, (res) =>
+      @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(400)
         done()
 
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called with a valid status argument', ->
+
+    orgid    = 'org-paddys'
+    actionid = 'action-takedbaby'
+    payload  = {status: 'InProgress'}
+
     it 'changes the status to the specified status', (done) ->
-      payload = {status: 'InProgress'}
-      @tester.request {orgid: 'org-paddys', actionid: 'action-takedbaby', payload}, (res) =>
+      @tester.request {orgid, actionid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist
         {action} = res.result
-        expect(action.id).to.equal('action-takedbaby')
-        expect(action.status).to.equal('InProgress')
+        expect(action.id).to.equal(actionid)
+        expect(action.status).to.equal(payload.status)
         done()
 
 #---------------------------------------------------------------------------------------------------

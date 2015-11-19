@@ -13,6 +13,7 @@ class AddLeaderToTeamHandler extends Handler
     'resolve org'
     'resolve team'
     'resolve user argument'
+    'ensure org has active subscription'
     'ensure team belongs to org'
     'ensure requester can access team'
     'ensure user argument is member of org'

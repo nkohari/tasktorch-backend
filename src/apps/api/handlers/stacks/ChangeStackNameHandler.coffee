@@ -13,6 +13,7 @@ class ChangeStackNameHandler extends Handler
   @before [
     'resolve org'
     'resolve stack'
+    'ensure org has active subscription'
     'ensure stack belongs to org'
     'ensure requester can access stack'
   ]

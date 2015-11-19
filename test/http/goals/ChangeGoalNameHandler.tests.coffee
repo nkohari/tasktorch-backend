@@ -30,6 +30,19 @@ describe 'goals:ChangeGoalNameHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
+  describe 'when called for an org with a canceled subscription', ->
+
+    orgid   = 'org-oldiesrockcafe'
+    goalid  = 'goal-gascrisis'
+    payload = {name: 'Test'}
+
+    it 'returns 402 payment required', (done) ->
+      @tester.request {orgid, goalid, payload}, (res) ->
+        expect(res.statusCode).to.equal(402)
+        done()
+        
+#---------------------------------------------------------------------------------------------------
+
   describe 'when called for a non-existent org', ->
 
     orgid   = 'doesnotexist'

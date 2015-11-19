@@ -1,0 +1,39 @@
+subject: Action Required: Your TaskTorch Trial is Ending
+from:    TaskTorch <billing@mail.tasktorch.com>
+replyTo: help@tasktorch.com
+---
+
+{% extends '_action.html' %}
+
+{% block body %}
+<meta itemprop="name" content="Your Trial is Ending!"/>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="aligncenter content-block">
+      <h1>Your Trial is Ending!</h1>
+    </td>
+  </tr>
+  <tr>
+    <td class="content-block">
+      <p>
+        Your TaskTorch free trial period ends on 
+        <strong>{{ org.account.subscription.trial_end | date('M j, Y') }}</strong>,
+        but you haven't yet provided your credit card details. To avoid interrupted
+        service, please be sure to add a credit card to your account before your trial ends!
+      </p>
+      <p>
+        Haven't had a chance to really dig in and try out TaskTorch?
+        Still aren't convinced that we can improve your efficiency
+        and help you work better as a team? We'd be happy to extend
+        your trial period to give you the time you need. Just reply
+        to this email and let us know what's holding you back. 
+      </p>
+  </tr>
+  <tr>
+    <td class="content-block">
+      <p>Thanks!</p>
+      <p>&mdash; Niki &amp; Nate, The TaskTorch Team</p>
+    </td>
+  </tr>
+</table>
+{% endblock %}

@@ -9,6 +9,12 @@ stylus    = require 'stylus'
 yaml      = require 'yamljs'
 Email     = require './Email'
 
+swig.setFilter 'currency', (value) ->
+  if value < 0
+    "($#{(Math.abs(value)/100).toFixed(2)})"
+  else  
+    "$#{(Math.abs(value)/100).toFixed(2)}"
+
 class EmailRenderer
 
   constructor: (@log, @config) ->

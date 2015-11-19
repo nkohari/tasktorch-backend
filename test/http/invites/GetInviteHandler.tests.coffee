@@ -23,7 +23,7 @@ describe 'invites:GetInviteHandler', ->
       @tester.request {inviteid}, (res) =>
         expect(res.statusCode).to.equal(404)
         done()
-
+        
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a valid invite', ->

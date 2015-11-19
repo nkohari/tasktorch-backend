@@ -26,6 +26,17 @@ describe 'me:ListMyTeamsHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
+  describe 'when called for an org with a canceled subscription', ->
+
+    orgid = 'org-oldiesrockcafe'
+
+    it 'returns 402 payment required', (done) ->
+      @tester.request {orgid}, (res) ->
+        expect(res.statusCode).to.equal(402)
+        done()
+        
+#---------------------------------------------------------------------------------------------------
+
   describe 'when called for an org of which the requester is a member', ->
 
     orgid = 'org-paddys'

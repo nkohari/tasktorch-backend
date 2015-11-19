@@ -26,6 +26,7 @@ class CreateKindHandler extends Handler
 
   @before [
     'resolve org'
+    'ensure org has active subscription'
     'ensure requester can access org'
   ]
 

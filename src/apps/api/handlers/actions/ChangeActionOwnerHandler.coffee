@@ -13,6 +13,7 @@ class ChangeActionOwnerHandler extends Handler
     'resolve org'
     'resolve action'
     'resolve optional user argument'
+    'ensure org has active subscription'
     'ensure action belongs to org'
     'ensure requester can access action'
     'ensure user argument is member of org'

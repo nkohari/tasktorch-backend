@@ -8,6 +8,7 @@ class GetCardHandler extends Handler
   @before [
     'resolve org'
     'resolve query options'
+    'ensure org has active subscription'
     'ensure card belongs to org'
     'ensure requester can access org'
   ]

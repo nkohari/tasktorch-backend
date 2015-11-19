@@ -9,6 +9,7 @@ class ListActionsByChecklistHandler extends Handler
     'resolve org'
     'resolve checklist'
     'resolve query options'
+    'ensure org has active subscription'
     'ensure checklist belongs to org'
     'ensure requester can access checklist'
   ]

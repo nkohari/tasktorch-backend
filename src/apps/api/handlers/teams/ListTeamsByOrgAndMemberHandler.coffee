@@ -9,6 +9,7 @@ class ListTeamsByOrgAndMemberHandler extends Handler
     'resolve org'
     'resolve user'
     'resolve query options'
+    'ensure org has active subscription'
     'ensure user is member of org'
     'ensure requester can access org'
   ]

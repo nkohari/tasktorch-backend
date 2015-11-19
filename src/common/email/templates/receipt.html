@@ -1,0 +1,80 @@
+subject: TaskTorch Receipt
+from:    TaskTorch <billing@mail.tasktorch.com>
+replyTo: help@tasktorch.com
+---
+
+{% extends '_action.html' %}
+
+{% block body %}
+<meta itemprop="name" content="{{ invoice.amount_due | currency }} Paid"/>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="aligncenter content-block">
+      <h1>{{ invoice.amount_due | currency }} Paid</h1>
+    </td>
+  </tr>
+  <tr>
+    <td class="aligncenter content-block">
+      <table class="invoice">
+        <tr>
+          <th class="aligncenter">
+            {{ org.name }}<br/>
+            {{ (invoice.period_start * 1000) | date('M j, Y')}} &mdash; {{ (invoice.period_end * 1000) | date('M j, Y')}}
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <table class="invoice-items" cellpadding="0" cellspacing="0">
+              {% for item in invoice.lines.data %}
+              <tr>
+                <td>
+                  {% if item.type == 'invoiceitem' %}
+                  Partial month fees/credits
+                  {% else %}
+                  {{ item.quantity }} users @ {{ item.plan.amount | currency }} each
+                  {% endif %}
+                </td>
+                <td class="alignright">
+                  {{ item.amount | currency }}
+                </td>
+              </tr>
+              {% endfor %}
+              <tr class="subtotal">
+                <td>
+                  Total
+                </td>
+                <td class="alignright">
+                  {{ invoice.total | currency }}
+                </td>
+              </tr>
+              {% if invoice.starting_balance != 0 %}
+              <tr>
+                <td>
+                  Account credits
+                </td>
+                <td class="alignright">
+                 {{ invoice.starting_balance | currency }}
+                </td>
+              </tr>
+              {% endif %}
+              <tr class="total">
+                <td>
+                  Amount due
+                </td>
+                <td class="alignright">
+                  {{ invoice.amount_due | currency }}
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+  </tr>
+  <tr>
+    <td class="content-block">
+      <p>Thanks!</p>
+      <p>&mdash; Niki &amp; Nate, The TaskTorch Team</p>
+    </td>
+  </tr>
+</table>
+{% endblock %}

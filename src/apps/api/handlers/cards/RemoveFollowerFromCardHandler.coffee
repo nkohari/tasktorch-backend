@@ -10,6 +10,7 @@ class RemoveFollowerFromCardHandler extends Handler
     'resolve org'
     'resolve card'
     'resolve user'
+    'ensure org has active subscription'
     'ensure card belongs to org'
     'ensure requester is user'
     'ensure requester can access card'

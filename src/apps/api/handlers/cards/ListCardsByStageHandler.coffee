@@ -10,6 +10,7 @@ class ListCardsByStageHandler extends Handler
     'resolve org'
     'resolve stage'
     'resolve query options'
+    'ensure org has active subscription'
     'ensure stage belongs to org'
     'ensure requester can access org'
   ]

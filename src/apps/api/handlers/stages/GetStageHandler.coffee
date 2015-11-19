@@ -8,6 +8,7 @@ class GetStageHandler extends Handler
   @before [
     'resolve org'
     'resolve query options'
+    'ensure org has active subscription'
     'ensure stage belongs to org'
     'ensure requester can access org'
   ]

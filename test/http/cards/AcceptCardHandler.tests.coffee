@@ -32,6 +32,18 @@ describe 'cards:AcceptCardHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
+  describe 'when called for an org with a canceled subscription', ->
+
+    orgid  = 'org-oldiesrockcafe'
+    cardid = 'card-takedbaby'
+
+    it 'returns 402 payment required', (done) ->
+      @tester.request {orgid, cardid}, (res) ->
+        expect(res.statusCode).to.equal(402)
+        done()
+        
+#---------------------------------------------------------------------------------------------------
+
   describe 'when called for a non-existent org', ->
 
     orgid  = 'doesnotexist'

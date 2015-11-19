@@ -10,6 +10,7 @@ class RestoreCardHandler extends Handler
   @before [
     'resolve org'
     'resolve card even if deleted'
+    'ensure org has active subscription'
     'ensure card belongs to org'
     'ensure requester can access card'
   ]

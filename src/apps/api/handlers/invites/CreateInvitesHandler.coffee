@@ -20,6 +20,7 @@ class CreateInvitesHandler extends Handler
 
   @before [
     'resolve org'
+    'ensure org has active subscription'
     'ensure requester is leader of org'
   ]
 

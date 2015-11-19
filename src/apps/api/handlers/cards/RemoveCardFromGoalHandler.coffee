@@ -9,6 +9,7 @@ class RemoveCardFromGoalHandler extends Handler
     'resolve org'
     'resolve goal'
     'resolve card'
+    'ensure org has active subscription'
     'ensure card belongs to org'
     'ensure goal belongs to org'
     'ensure requester can access goal'

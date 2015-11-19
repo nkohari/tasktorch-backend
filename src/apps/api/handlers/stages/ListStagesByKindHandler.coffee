@@ -9,6 +9,7 @@ class ListStagesByKindHandler extends Handler
     'resolve org'
     'resolve kind'
     'resolve query options'
+    'ensure org has active subscription'
     'ensure kind belongs to org'
     'ensure requester can access org'
   ]

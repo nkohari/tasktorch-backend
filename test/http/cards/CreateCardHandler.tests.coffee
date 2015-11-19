@@ -23,13 +23,24 @@ describe 'cards:CreateCardHandler', ->
   describe 'when called without credentials', ->
 
     orgid  = 'org-paddys'
-    cardid = 'card-takedbaby'
 
     it 'returns 401 unauthorized', (done) ->
-      @tester.request {orgid, cardid, credentials: false}, (res) ->
+      @tester.request {orgid, credentials: false}, (res) ->
         expect(res.statusCode).to.equal(401)
         done()
 
+#---------------------------------------------------------------------------------------------------
+
+  describe 'when called for an org with a canceled subscription', ->
+
+    orgid   = 'org-oldiesrockcafe'
+    payload = {kind: 'kind-scheme'}
+
+    it 'returns 402 payment required', (done) ->
+      @tester.request {orgid, payload}, (res) ->
+        expect(res.statusCode).to.equal(402)
+        done()
+        
 #---------------------------------------------------------------------------------------------------
 
   describe 'when called for a non-existent org', ->

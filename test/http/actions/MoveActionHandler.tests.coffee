@@ -32,6 +32,19 @@ describe 'actions:MoveActionHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
+  describe 'when called for an org with a canceled subscription', ->
+
+    orgid    = 'org-oldiesrockcafe'
+    actionid = 'action-takedbaby'
+    payload  = {checklist: 'checklist-takedbaby-drink', position: 'append'}
+    
+    it 'returns 402 payment required', (done) ->
+      @tester.request {orgid, actionid, payload}, (res) ->
+        expect(res.statusCode).to.equal(402)
+        done()
+        
+#---------------------------------------------------------------------------------------------------
+
   describe 'when called for a non-existent org', ->
 
     actionid = 'action-takedbaby'

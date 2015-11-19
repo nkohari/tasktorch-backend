@@ -32,6 +32,19 @@ describe 'cards:PassCardHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
+  describe 'when called for an org with a canceled subscription', ->
+
+    orgid   = 'org-oldiesrockcafe'
+    cardid  = 'card-takedbaby'
+    payload = {user: 'user-dee'}
+
+    it 'returns 402 payment required', (done) ->
+      @tester.request {orgid, cardid, payload}, (res) ->
+        expect(res.statusCode).to.equal(402)
+        done()
+        
+#---------------------------------------------------------------------------------------------------
+
   describe 'when called for a non-existent org', ->
 
     orgid   = 'doesnotexist'

@@ -12,6 +12,7 @@ class ChangeKindDescriptionHandler extends Handler
   @before [
     'resolve org'
     'resolve kind'
+    'ensure org has active subscription'
     'ensure kind belongs to org'
     'ensure requester can access kind'
   ]

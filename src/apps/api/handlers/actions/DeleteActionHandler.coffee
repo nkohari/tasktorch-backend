@@ -8,6 +8,7 @@ class DeleteActionHandler extends Handler
   @before [
     'resolve org'
     'resolve action'
+    'ensure org has active subscription'
     'ensure action belongs to org'
     'ensure requester can access action'
   ]

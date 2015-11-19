@@ -14,6 +14,7 @@ class CreateTeamStackHandler extends Handler
   @before [
     'resolve org'
     'resolve team'
+    'ensure org has active subscription'
     'ensure team belongs to org'
     'ensure requester can access org'
     'ensure requester can access team'

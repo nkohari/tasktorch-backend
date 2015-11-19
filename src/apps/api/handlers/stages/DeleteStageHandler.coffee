@@ -13,6 +13,7 @@ class DeleteStageHandler extends Handler
     'resolve org'
     'resolve stage'
     'resolve inheritor stage argument'
+    'ensure org has active subscription'
     'ensure stage belongs to org'
     'ensure inheritor stage belongs to org'
     'ensure requester can access stage'

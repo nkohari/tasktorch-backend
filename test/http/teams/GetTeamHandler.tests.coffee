@@ -27,6 +27,18 @@ describe 'teams:GetTeamHandler', ->
 
 #---------------------------------------------------------------------------------------------------
 
+  describe 'when called for an org with a canceled subscription', ->
+
+    orgid  = 'org-oldiesrockcafe'
+    teamid = 'team-thegang'
+
+    it 'returns 402 payment required', (done) ->
+      @tester.request {orgid, teamid}, (res) ->
+        expect(res.statusCode).to.equal(402)
+        done()
+        
+#---------------------------------------------------------------------------------------------------
+
   describe 'when called for a non-existent org', ->
 
     orgid  = 'doesnotexist'

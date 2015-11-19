@@ -1,0 +1,38 @@
+subject: Action Required: TaskTorch Payment Problem
+from:    TaskTorch <billing@mail.tasktorch.com>
+replyTo: help@tasktorch.com
+---
+
+{% extends '_action.html' %}
+
+{% block body %}
+<meta itemprop="name" content="Payment Problem"/>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="aligncenter content-block">
+      <h1>Payment Problem</h1>
+    </td>
+  </tr>
+  <tr>
+    <td class="content-block">
+      <p>
+        Hi there! We tried to charge you for your latest TaskTorch invoice,
+        but something went wrong. Either we don't have a valid credit card
+        to charge, or the payment didn't go through. We understand, it happens!
+        Please double-check your credit card details and we'll get it sorted out.
+      </p>
+      <p>
+        This was attempt <strong>#{{ invoice.attempt_count }}</strong> to charge
+        your account. We'll try to charge you 3 times, after which your subscription
+        will be automatically canceled. If you have any questions, just reply to
+        this email and we'll be happy to help!
+      </p>
+  </tr>
+  <tr>
+    <td class="content-block">
+      <p>Thanks!</p>
+      <p>&mdash; Niki &amp; Nate, The TaskTorch Team</p>
+    </td>
+  </tr>
+</table>
+{% endblock %}
