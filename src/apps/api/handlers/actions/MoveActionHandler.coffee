@@ -19,6 +19,7 @@ class MoveActionHandler extends Handler
     'resolve checklist argument'
     'ensure org has active subscription'
     'ensure action belongs to org'
+    'ensure checklist belongs to org'
     'ensure requester can access action'
     'ensure requester can access checklist'
     'ensure position argument is valid'

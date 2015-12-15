@@ -4,5 +4,6 @@ module.exports = arrayEnum [
   'Trial'
   'Active'
   'PastDue'
+  'CancellationPending'
   'Canceled'
 ]

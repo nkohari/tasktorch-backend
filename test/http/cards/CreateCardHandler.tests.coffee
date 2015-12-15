@@ -84,7 +84,7 @@ describe 'cards:CreateCardHandler', ->
     orgid   = 'org-paddys'
     payload = {kind: 'kind-scheme'}
 
-    it "creates the card and adds it to end of the requester's drafts stack", (done) ->
+    it "creates the card and adds it to end of the requester's inbox", (done) ->
       @tester.request {orgid, payload}, (res) =>
         expect(res.statusCode).to.equal(200)
         expect(res.result).to.exist
@@ -92,7 +92,7 @@ describe 'cards:CreateCardHandler', ->
         expect(card).to.exist
         expect(card.org).to.equal(orgid)
         expect(card.user).to.equal('user-charlie')
-        expect(card.stack).to.equal('stack-charlie-drafts')
+        expect(card.stack).to.equal('stack-charlie-inbox')
         query = new GetStackQuery(card.stack)
         @database.execute query, (err, result) =>
           expect(err).to.not.exist

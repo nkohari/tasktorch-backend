@@ -1,6 +1,6 @@
-JobHandler                  = require 'apps/worker/framework/JobHandler'
-GetAllMembershipsByOrgQuery = require 'data/queries/memberships/GetAllMembershipsByOrgQuery'
-CreateStripeCustomerJob     = require 'domain/jobs/CreateStripeCustomerJob'
+JobHandler                        = require 'apps/worker/framework/JobHandler'
+GetAllActiveMembershipsByOrgQuery = require 'data/queries/memberships/GetAllActiveMembershipsByOrgQuery'
+CreateStripeCustomerJob           = require 'domain/jobs/CreateStripeCustomerJob'
 
 PLAN_ID = 'oct2015'
 
@@ -18,7 +18,7 @@ class CreateStripeCustomerHandler extends JobHandler
 
     @log.debug "[stripe] Creating Stripe customer for org #{org.id}"
 
-    query = new GetAllMembershipsByOrgQuery(org.id)
+    query = new GetAllActiveMembershipsByOrgQuery(org.id)
     @database.execute query, (err, result) =>
 
       if err?

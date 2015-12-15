@@ -92,10 +92,9 @@ describe 'orgs:CreateOrgHandler', ->
           expect(err).not.to.exist
           expect(result).to.exist
           {stacks} = result
-          expect(stacks).to.have.length(3)
+          expect(stacks).to.have.length(2)
           expect(_.any(stacks, (s) -> s.type == 'Inbox'))
           expect(_.any(stacks, (s) -> s.type == 'Queue'))
-          expect(_.any(stacks, (s) -> s.type == 'Drafts'))
           done()
 
     it 'adds the requester as a member', (done) ->

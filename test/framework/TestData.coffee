@@ -290,7 +290,7 @@ TestData.notes = table [
     created: Date.UTC(2015, 1, 15)
     user:    'user-charlie'
     content:
-      from: {user: 'user-charlie', stack: 'stack-charlie-drafts'}
+      from: {user: 'user-charlie', stack: 'stack-charlie-inbox'}
       to:   {user: 'user-dee',     stack: 'stack-dee-inbox'}
   }
 ]
@@ -380,13 +380,6 @@ TestData.stacks = table [
     cards: []
   }
   record {
-    id:    "stack-charlie-drafts"
-    org:   'org-paddys'
-    type:  'Drafts'
-    user:  'user-charlie'
-    cards: []
-  }
-  record {
     id:    "stack-charlie-dreams"
     org:   'org-paddys'
     type:  'Backlog'
@@ -409,13 +402,6 @@ TestData.stacks = table [
     user:  'user-dee'
     cards: []
   }
-  record {
-    id:    "stack-dee-drafts"
-    org:   'org-paddys'
-    type:  'Drafts'
-    user:  'user-dee'
-    cards: []
-  }
   # Dennis
   record {
     id:    "stack-dennis-inbox"
@@ -428,13 +414,6 @@ TestData.stacks = table [
     id:    "stack-dennis-queue"
     org:   'org-paddys'
     type:  'Queue'
-    user:  'user-dennis'
-    cards: []
-  }
-  record {
-    id:    "stack-dennis-drafts"
-    org:   'org-paddys'
-    type:  'Drafts'
     user:  'user-dennis'
     cards: []
   }
@@ -453,13 +432,6 @@ TestData.stacks = table [
     user:  'user-frank'
     cards: []
   }
-  record {
-    id:    "stack-frank-drafts"
-    org:   'org-paddys'
-    type:  'Drafts'
-    user:  'user-frank'
-    cards: []
-  }
   # Mac
   record {
     id:    "stack-mac-inbox"
@@ -475,13 +447,6 @@ TestData.stacks = table [
     user:  'user-mac'
     cards: ['card-buygas']
   }
-  record {
-    id:    "stack-mac-drafts"
-    org:   'org-paddys'
-    type:  'Drafts'
-    user:  'user-mac'
-    cards: []
-  }
   # Greg
   record {
     id:    "stack-greg-inbox"
@@ -496,13 +461,6 @@ TestData.stacks = table [
     type:  'Queue'
     user:  'user-greg'
     cards: ['card-ringbell']
-  }
-  record {
-    id:    "stack-greg-drafts"
-    org:   'org-sudz'
-    type:  'Drafts'
-    user:  'user-greg'
-    cards: []
   }
   # Teams
   record {

@@ -36,9 +36,6 @@ class CreateUserHandler extends Handler
     {token, invite} = request.pre
     {name, username, password, email} = request.payload
 
-    if not token? and not invite?
-      return reply @error.badRequest("Either an invite or a token must be provided")
-
     user = new User {
       name:     name
       username: username

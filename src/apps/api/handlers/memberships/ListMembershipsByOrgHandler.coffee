@@ -17,7 +17,6 @@ class ListMembershipsByOrgHandler extends Handler
   handle: (request, reply) ->
     
     {org, options} = request.pre
-    {suggest}      = request.query
 
     query = new GetAllMembershipsByOrgQuery(org.id, options)
     @database.execute query, (err, result) =>

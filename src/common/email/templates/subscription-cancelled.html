@@ -1,0 +1,33 @@
+subject: TaskTorch Subscription Ended
+from:    TaskTorch <billing@mail.tasktorch.com>
+replyTo: help@tasktorch.com
+---
+
+{% extends '_action.html' %}
+
+{% block body %}
+<meta itemprop="name" content="Your TaskTorch Subscription"/>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="aligncenter content-block">
+      <h1>Your TaskTorch Subscription</h1>
+    </td>
+  </tr>
+  <tr>
+    <td class="content-block">
+      <p>
+        Thank you for using TaskTorch! This email is to confirm that your subscription
+        has been cancelled and you will no longer be billed.
+      </p>
+      <p>
+        We're sorry to see you go! If there's anything we can do to change your
+        mind, feel free to reply to this email and we'll do our best to help!
+      </p>
+  </tr>
+  <tr>
+    <td class="content-block">
+      <p>&mdash; Niki &amp; Nate, The TaskTorch Team</p>
+    </td>
+  </tr>
+</table>
+{% endblock %}

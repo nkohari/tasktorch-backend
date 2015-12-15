@@ -2,8 +2,9 @@ _ = require 'lodash'
 
 class AccountInvoice
 
-  constructor: (data) ->
+  constructor: (org, data) ->
     @id              = data.id
+    @org             = org
     @timestamp       = new Date(data.date * 1000)
     @startingBalance = data.starting_balance
     @endingBalance   = data.ending_balance
@@ -14,7 +15,6 @@ class AccountInvoice
     @closed          = data.closed
     @forgiven        = data.forgiven
     @paid            = data.paid
-    @receipt         = data.receipt_number
     @periodStart     = new Date(data.period_start * 1000)
     @periodEnd       = new Date(data.period_end * 1000)
 

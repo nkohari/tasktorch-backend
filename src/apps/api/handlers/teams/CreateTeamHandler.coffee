@@ -1,8 +1,8 @@
-_                           = require 'lodash'
-Handler                     = require 'apps/api/framework/Handler'
-Team                        = require 'data/documents/Team'
-CreateTeamCommand           = require 'domain/commands/teams/CreateTeamCommand'
-GetAllMembershipsByOrgQuery = require 'data/queries/memberships/GetAllMembershipsByOrgQuery'
+_                                 = require 'lodash'
+Handler                           = require 'apps/api/framework/Handler'
+Team                              = require 'data/documents/Team'
+CreateTeamCommand                 = require 'domain/commands/teams/CreateTeamCommand'
+GetAllActiveMembershipsByOrgQuery = require 'data/queries/memberships/GetAllActiveMembershipsByOrgQuery'
 
 class CreateTeamHandler extends Handler
 
@@ -41,7 +41,7 @@ class CreateTeamHandler extends Handler
     else
       leaders = [user.id]
 
-    query = new GetAllMembershipsByOrgQuery(org.id)
+    query = new GetAllActiveMembershipsByOrgQuery(org.id)
     @database.execute query, (err, result) =>
       return reply err if err?
 

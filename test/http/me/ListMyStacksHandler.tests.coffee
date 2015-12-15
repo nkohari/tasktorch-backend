@@ -48,7 +48,7 @@ describe 'me:ListMyStacksHandler', ->
         {stacks} = res.result
         expect(stacks).to.be.an('array')
         expect(stacks).to.have.length(4)
-        expect(_.pluck(stacks, 'id')).to.have.members ['stack-charlie-inbox', 'stack-charlie-queue', 'stack-charlie-drafts', 'stack-charlie-dreams']
+        expect(_.pluck(stacks, 'id')).to.have.members ['stack-charlie-inbox', 'stack-charlie-queue', 'stack-charlie-dreams']
         done()
 
 #---------------------------------------------------------------------------------------------------

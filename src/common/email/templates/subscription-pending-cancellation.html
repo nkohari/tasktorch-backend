@@ -1,0 +1,35 @@
+subject: Sorry to see you go!
+from:    TaskTorch <billing@mail.tasktorch.com>
+replyTo: help@tasktorch.com
+---
+
+{% extends '_action.html' %}
+
+{% block body %}
+<meta itemprop="name" content="Your TaskTorch Subscription"/>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="aligncenter content-block">
+      <h1>Your TaskTorch Subscription</h1>
+    </td>
+  </tr>
+  <tr>
+    <td class="content-block">
+      <p>
+        Your TaskTorch subscription has been marked for cancellation.
+        Your account will remain active until <strong>{{ (endDate * 1000) | date('M j, Y')}}</strong>,
+        after which your organization will no longer be accessible and your data
+        will be marked for deletion. Please be sure to save any data you wish to keep before this date.
+      </p>
+      <p>
+        Thanks for using TaskTorch. We're sorry to see you go! If there's anything
+        we can do to change your mind, feel free to reply to this email and we'll do our best to help!
+      </p>
+  </tr>
+  <tr>
+    <td class="content-block">
+      <p>&mdash; Niki &amp; Nate, The TaskTorch Team</p>
+    </td>
+  </tr>
+</table>
+{% endblock %}

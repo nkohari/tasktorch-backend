@@ -8,7 +8,6 @@ AccountSubscription              = require 'data/structs/AccountSubscription'
 Model                            = require 'domain/framework/Model'
 SendEmailJob                     = require 'domain/jobs/SendEmailJob'
 StripeEventJob                   = require 'domain/jobs/StripeEventJob'
-AddOrChangeAccountInvoiceCommand = require 'domain/commands/accounts/AddOrChangeAccountInvoiceCommand'
 ChangeAccountDiscountCommand     = require 'domain/commands/accounts/ChangeAccountDiscountCommand'
 ChangeAccountInfoCommand         = require 'domain/commands/accounts/ChangeAccountInfoCommand'
 ChangeAccountSubscriptionCommand = require 'domain/commands/accounts/ChangeAccountSubscriptionCommand'
@@ -51,7 +50,7 @@ class StripeEventHandler extends JobHandler
         else
           command = new ChangeAccountInfoCommand(customer.metadata.org, new AccountInfo(customer))
 
-      when 'customer.subscription.created', 'customer.subscription.updated'
+      when 'customer.subscription.created', 'customer.subscription.updated', 'customer.subscription.deleted'
         subscription = event.data.object
         command = new ChangeAccountSubscriptionCommand(subscription.customer, new AccountSubscription(subscription))
 
@@ -66,10 +65,6 @@ class StripeEventHandler extends JobHandler
       when 'customer.source.created', 'customer.source.updated'
         source = event.data.object
         command = new ChangeAccountSourceCommand(source.customer, new AccountSource(source))
-
-      when 'invoice.created', 'invoice.updated', 'invoice.payment_succeeded', 'invoice.payment_failed'
-        invoice = event.data.object
-        command = new AddOrChangeAccountInvoiceCommand(invoice.customer, new AccountInvoice(invoice))
 
     if not command?
       callback()
@@ -89,6 +84,7 @@ class StripeEventHandler extends JobHandler
 
     else if event.type == 'invoice.payment_succeeded'
       invoice = event.data.object
+      return callback() unless invoice.amount_due > 0
       @getOrgByAccountId invoice.customer, (err, org) =>
         return callback(err) if err?
         job = new SendEmailJob('receipt', {to: org.email}, {
@@ -104,6 +100,26 @@ class StripeEventHandler extends JobHandler
         job = new SendEmailJob('payment-failed', {to: org.email}, {
           org:     Model.create(org)
           invoice: invoice
+        })
+        @jobQueue.enqueue(job, callback)
+
+    else if event.type == 'customer.subscription.updated'
+      subscription = event.data.object
+      return callback() unless subscription.cancel_at_period_end
+      @getOrgByAccountId subscription.customer, (err, org) =>
+        return callback(err) if err?
+        job = new SendEmailJob('subscription-pending-cancellation', {to: org.email}, {
+          org:     Model.create(org)
+          endDate: subscription.current_period_end
+        })
+        @jobQueue.enqueue(job, callback)
+
+    else if event.type == 'customer.subscription.deleted'
+      subscription = event.data.object
+      @getOrgByAccountId subscription.customer, (err, org) =>
+        return callback(err) if err?
+        job = new SendEmailJob('subscription-cancelled', {to: org.email}, {
+          org: Model.create(org)
         })
         @jobQueue.enqueue(job, callback)
 

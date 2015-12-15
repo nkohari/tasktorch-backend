@@ -12,15 +12,18 @@ class CreateCardHandler extends Handler
 
   @ensure
     payload:
+      stack:   @mustBe.string().allow(null)
       kind:    @mustBe.string().required()
       title:   @mustBe.string().allow(null)
       summary: @mustBe.string().allow(null)
 
   @before [
     'resolve org'
+    'resolve optional stack argument'
     'resolve kind argument'
     'ensure org has active subscription'
     'ensure kind belongs to org'
+    'ensure stack belongs to org'
     'ensure requester can access org'
   ]
 
@@ -28,14 +31,12 @@ class CreateCardHandler extends Handler
 
   handle: (request, reply) ->
 
-    {org, kind}      = request.pre
-    {title, summary} = request.payload
-    {user}           = request.auth.credentials
+    {org, kind, stack} = request.pre
+    {title, summary}   = request.payload
+    {user}             = request.auth.credentials
 
-    query = new GetSpecialStackByUserQuery(org.id, user.id, StackType.Drafts)
-    @database.execute query, (err, result) =>
+    @resolveStack org, user, stack, (err, stack) =>
       return reply err if err?
-      {stack} = result
 
       query = new GetAllStagesByKindQuery(kind.id)
       @database.execute query, (err, result) =>
@@ -57,5 +58,13 @@ class CreateCardHandler extends Handler
         @processor.execute command, (err, card) =>
           return reply err if err?
           reply @response(card)
+
+  resolveStack: (org, user, requestedStack, callback) ->
+    return callback(null, requestedStack) if requestedStack?
+    query = new GetSpecialStackByUserQuery(org.id, user.id, StackType.Inbox)
+    @database.execute query, (err, result) =>
+      return callback(err) if err?
+      {stack} = result
+      callback(null, stack)
 
 module.exports = CreateCardHandler

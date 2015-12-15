@@ -8,7 +8,6 @@ class CreateDefaultUserStacksStatement extends BulkCreateStatement
     stacks = [
       new Stack { org: orgid, user: userid, type: StackType.Inbox  }
       new Stack { org: orgid, user: userid, type: StackType.Queue  }
-      new Stack { org: orgid, user: userid, type: StackType.Drafts }
     ]
     super(Stack, stacks)
 
