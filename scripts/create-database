@@ -6,7 +6,7 @@ var fs = require('fs');
 var path = require('path');
 var DatabaseCreator = require('../test/framework/DatabaseCreator');
 
-if (process.argv.length <= 4) {
+if (process.argv.length < 4) {
   console.error("Usage: create-database <dbname> <host:port> [<authkey> <pubkey>]");
   process.exit(1);
 }
