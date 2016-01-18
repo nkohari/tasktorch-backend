@@ -32,8 +32,8 @@ r.connect {host, port, authKey, ssl}, (err, conn) ->
     process.exit(1)
 
   conn.use('tasktorch')
-  r.table('orgs').getAll('3vEYc0KDA8TKgPEKwA6aJO').coerceTo('array').run conn, (err, orgs) ->
-  #r.table('orgs').filter(r.row.hasFields('account').not()).coerceTo('array').run conn, (err, orgs) ->
+  #r.table('orgs').getAll('3vEYc0KDA8TKgPEKwA6aJO').coerceTo('array').run conn, (err, orgs) ->
+  r.table('orgs').filter(r.row.hasFields('account').not()).coerceTo('array').run conn, (err, orgs) ->
 
     console.log("Creating #{orgs.length} CreateStripeCustomerJobs")
     jobs = _.map orgs, (org) -> new CreateStripeCustomerJob(org)
