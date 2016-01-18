@@ -2,7 +2,7 @@ JobHandler                        = require 'apps/worker/framework/JobHandler'
 GetAllActiveMembershipsByOrgQuery = require 'data/queries/memberships/GetAllActiveMembershipsByOrgQuery'
 CreateStripeCustomerJob           = require 'domain/jobs/CreateStripeCustomerJob'
 
-PLAN_ID = 'oct2015'
+PLAN_ID = 'jan2016'
 
 class CreateStripeCustomerHandler extends JobHandler
 
