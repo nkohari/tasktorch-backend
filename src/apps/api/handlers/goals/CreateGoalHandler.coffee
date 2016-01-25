@@ -8,7 +8,9 @@ class CreateGoalHandler extends Handler
 
   @ensure
     payload:
-      name:  @mustBe.string().required()
+      name:        @mustBe.string().required()
+      description: @mustBe.string().allow(null, '')
+      timeframe:   @mustBe.object().keys(from: @mustBe.date(), to: @mustBe.date())
 
   @before [
     'resolve org'
@@ -22,11 +24,13 @@ class CreateGoalHandler extends Handler
 
     {org}  = request.pre
     {user} = request.auth.credentials
-    {name} = request.payload
+    {name, description, timeframe} = request.payload
 
     goal = new Goal {
-      org:  org.id
-      name: name
+      org:         org.id
+      name:        name
+      description: description ? null
+      timeframe:   timeframe   ? null
     }
 
     command = new CreateGoalCommand(user, goal)

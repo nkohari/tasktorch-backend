@@ -16,6 +16,8 @@ class CardModel extends Model
     @stack     = card.stack
     @goals     = card.goals
     @stages    = card.stages
+    @due       = card.due    if card.due?
+    @effort    = card.effort if card.effort?
     @moves     = card.moves
 
 module.exports = CardModel

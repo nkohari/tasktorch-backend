@@ -14,6 +14,8 @@ class Card extends Document
   @field   'title',     {default: null}
   @field   'summary',   {default: null}
   @field   'number'
+  @field   'due',       {default: null}
+  @field   'effort',    {default: null}
   @field   'moves',     {default: []}
 
   @hasOne  'creator',   {type: 'User'}

@@ -7,8 +7,12 @@ class GetAllMembersByTeamQuery extends Query
 
   constructor: (teamid, options) ->
     super(User, options)
-    @rql = r.table(@schema.table).getAll(
-      r.args(r.table(Team.getSchema().table).get(teamid)('members'))
-    ).coerceTo('array')
+
+    @rql = r.table(Team.getSchema().table).get(teamid).do (team) =>
+      r.branch(
+        team('members').count().eq(0),
+        [],
+        r.table(@schema.table).getAll(r.args(team('members'))).coerceTo('array')
+      )
 
 module.exports = GetAllMembersByTeamQuery

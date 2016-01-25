@@ -1,6 +1,6 @@
-_              = require 'lodash'
-Document       = require 'data/framework/Document'
-DocumentStatus = require 'data/enums/DocumentStatus'
+_          = require 'lodash'
+Document   = require 'data/framework/Document'
+KindStatus = require 'data/enums/KindStatus'
 
 class Kind extends Document
 
@@ -11,7 +11,7 @@ class Kind extends Document
   @field   'version'
   @field   'created'
   @field   'updated'
-  @field   'status',         {default: DocumentStatus.Normal}
+  @field   'status',         {default: KindStatus.Normal}
   @field   'name'
   @field   'description',    {default: ''}
   @field   'color'

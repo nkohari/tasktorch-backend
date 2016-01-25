@@ -1,5 +1,5 @@
-Document       = require 'data/framework/Document'
-DocumentStatus = require 'data/enums/DocumentStatus'
+Document   = require 'data/framework/Document'
+GoalStatus = require 'data/enums/DocumentStatus'
 
 class Goal extends Document
 
@@ -10,8 +10,10 @@ class Goal extends Document
   @field  'version'
   @field  'created'
   @field  'updated'
-  @field  'status',  {default: DocumentStatus.Normal}
+  @field  'status',      {default: GoalStatus.Normal}
   @field  'name'
+  @field  'description', {default: null}
+  @field  'timeframe',   {default: null}
 
   @hasOne  'org',   {type: 'Org'}
   @hasMany 'cards', {type: 'Card', default: []}
