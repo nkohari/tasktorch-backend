@@ -10,7 +10,7 @@ class CreateGoalHandler extends Handler
     payload:
       name:        @mustBe.string().required()
       description: @mustBe.string().allow(null, '')
-      timeframe:   @mustBe.object().keys(from: @mustBe.date(), to: @mustBe.date())
+      timeframe:   @mustBe.object().keys(from: @mustBe.date(), to: @mustBe.date()).allow(null)
 
   @before [
     'resolve org'
