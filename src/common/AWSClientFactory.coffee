@@ -4,6 +4,10 @@ class AWSClientFactory
 
   constructor: (@config) ->
 
+  createS3Client: ->
+    {region, apiVersion} = @config.aws
+    new aws.S3 {region, apiVersion, logger: process.stdout}
+
   createSESClient: ->
     {region, apiVersion} = @config.aws
     new aws.SES {region, apiVersion}

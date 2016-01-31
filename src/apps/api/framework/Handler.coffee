@@ -19,6 +19,10 @@ class Handler
 
   @before: (preconditions) ->
     (@options ?= {}).preconditions = preconditions
+
+  @config: (config = {}) ->
+    @options ?= {}
+    @options.config = _.extend {}, @options.config, config
     
   @auth: (auth) ->
     @options ?= {}

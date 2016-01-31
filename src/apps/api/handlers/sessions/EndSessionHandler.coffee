@@ -16,7 +16,7 @@ class EndSessionHandler extends Handler
       return reply @error.notFound() if err is Error.DocumentNotFound
       return reply @error.conflict() if err is Error.VersionMismatch
       return reply err if err?
-      request.auth.session.clear()
+      request.cookieAuth.clear()
       reply.unstate('tt-userid')
       reply()
 

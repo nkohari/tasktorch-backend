@@ -42,7 +42,7 @@ class CreateSessionHandler extends Handler
           command = new CreateSessionCommand(user, session)
           @processor.execute command, (err, session) =>
             return reply err if err?
-            request.auth.session.set {userid: user.id, sessionid: session.id}
+            request.cookieAuth.set {userid: user.id, sessionid: session.id}
             reply.state('tt-userid', user.id)
             reply @response(session)
 

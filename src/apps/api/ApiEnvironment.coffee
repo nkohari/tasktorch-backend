@@ -9,6 +9,7 @@ JobQueue            = require 'common/JobQueue'
 Log                 = require 'common/Log'
 PusherClient        = require 'common/PusherClient'
 StripeClientFactory = require 'common/StripeClientFactory'
+Thumbnailer         = require 'common/Thumbnailer'
 Database            = require 'data/Database'
 ConnectionPool      = require 'data/framework/ConnectionPool'
 Onboarder           = require 'data/framework/Onboarder'
@@ -32,6 +33,7 @@ class ApiEnvironment
     forge.bind('aws').to.type(AWSClientFactory)
     forge.bind('pusher').to.type(PusherClient)
     forge.bind('stripe').to.type(StripeClientFactory)
+    forge.bind('thumbnailer').to.type(Thumbnailer)
 
     forge.bind('connectionPool').to.type(ConnectionPool)
     forge.bind('database').to.type(Database)

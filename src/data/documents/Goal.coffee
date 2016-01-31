@@ -1,5 +1,5 @@
 Document   = require 'data/framework/Document'
-GoalStatus = require 'data/enums/DocumentStatus'
+GoalStatus = require 'data/enums/GoalStatus'
 
 class Goal extends Document
 

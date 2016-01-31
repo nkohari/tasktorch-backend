@@ -35,6 +35,11 @@ Tables.events = [
   r.table('events').indexCreate('org')
 ]
 
+Tables.files = [
+  r.tableCreate('files')
+  r.table('files').indexCreate('org')
+]
+
 Tables.goals = [
   r.tableCreate('goals')
   r.table('goals').indexCreate('org')

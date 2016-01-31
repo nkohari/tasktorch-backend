@@ -22,6 +22,7 @@ class Card extends Document
   @hasMany 'followers', {type: 'User',  default: []}
   @hasMany 'goals',     {type: 'Goal',  default: []}
   @hasMany 'stages',    {type: 'Stage', default: []}
+  @hasMany 'files',     {type: 'File',  default: []}
   @hasOne  'kind',      {type: 'Kind'}
   @hasOne  'org',       {type: 'Org'}
   @hasOne  'user',      {type: 'User',  default: null}
