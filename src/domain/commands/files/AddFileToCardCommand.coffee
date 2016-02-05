@@ -1,7 +1,9 @@
-r               = require 'rethinkdb'
-Card            = require 'data/documents/Card'
-UpdateStatement = require 'data/statements/UpdateStatement'
-Command         = require 'domain/framework/Command'
+r                   = require 'rethinkdb'
+Card                = require 'data/documents/Card'
+FileAddedToCardNote = require 'data/documents/notes/FileAddedToCardNote'
+CreateStatement     = require 'data/statements/CreateStatement'
+UpdateStatement     = require 'data/statements/UpdateStatement'
+Command             = require 'domain/framework/Command'
 
 class AddFileToCardCommand extends Command
 
@@ -13,6 +15,10 @@ class AddFileToCardCommand extends Command
     })
     conn.execute statement, (err, card) =>
       return callback(err) if err?
-      callback(null, card)
+      note = FileAddedToCardNote.create(@user, @card, @file)
+      statement = new CreateStatement(note)
+      conn.execute statement, (err) =>
+        return callback(err) if err?
+        callback(null, card)
 
 module.exports = AddFileToCardCommand
