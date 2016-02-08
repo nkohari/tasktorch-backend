@@ -8,7 +8,7 @@ class PasswordHasher
 
   hash: (plaintext) ->
     return "" unless plaintext?.length > 0
-    buf = scrypt.kdfSync(new Buffer(attempt, 'utf8'), @params)
+    buf = scrypt.kdfSync(new Buffer(plaintext, 'utf8'), @params)
     return buf.toString('base64')
 
   verify: (hash, attempt) ->
