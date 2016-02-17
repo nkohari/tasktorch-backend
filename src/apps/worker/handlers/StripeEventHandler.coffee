@@ -97,6 +97,8 @@ class StripeEventHandler extends JobHandler
       invoice = event.data.object
       @getOrgByAccountId invoice.customer, (err, org) =>
         return callback(err) if err?
+        # Don't send an email unless the customer has a credit card on their account.
+        return callback() unless org.account?.source?
         job = new SendEmailJob('payment-failed', {to: org.email}, {
           org:     Model.create(org)
           invoice: invoice
